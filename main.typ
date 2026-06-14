@@ -64,6 +64,9 @@
 #outline(title: [Indhold], depth: 3, indent: auto)
 #pagebreak()
 
+// --- clickable index of every exam problem ---
+#include "chapters/problem-index.typ"
+
 // ============================================================
 #part[Del I — Diskret matematik]
 #include "chapters/logic.typ"

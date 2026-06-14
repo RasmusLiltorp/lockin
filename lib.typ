@@ -45,6 +45,8 @@
 #let qcard(source: "", prompt: [], options: (), answer: [], worked: []) = block(
   width: 100%, breakable: true, above: 18pt, below: 18pt,
 )[
+  // Register this question so the problem index can list and link to it.
+  #metadata((source: source, prompt: prompt)) <qcard>
   #line(length: 100%, stroke: 0.4pt + hair)
   #v(7pt)
   #text(size: 9pt, fill: soft)[#source]
