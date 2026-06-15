@@ -17,12 +17,12 @@ jobs:
         uses: typst-community/setup-typst@v4
 
       - name: Compile PDF
-        run: typst compile main.typ main.pdf
+        run: typst compile main.typ "SE4-DMAD-compendium.pdf"
 
       - name: Create release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: build-${{ github.run_number }}
-          name: Build ${{ github.run_number }}
-          body: Compiled from ${{ github.sha }}
-          files: main.pdf
+          tag_name: latest
+          name: SE4-DMAD compendium
+          body: Latest compiled PDF (${{ github.sha }})
+          files: SE4-DMAD-compendium.pdf
