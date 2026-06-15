@@ -8,22 +8,26 @@ Eksamen spørger på to måder: om en påstand som "$f(n)$ er $O(g(n))$" er sand
 
 === Sådan løser du den
 
-Del de to funktioner og se hvad der sker langt ude. Lad
+En påstand som "$f(n)$ er $O(g(n))$" spørger kun om én ting: *vokser $f$ højst lige så hurtigt som $g$?* Det eneste værktøj du behøver er vækststigen — langsomst til venstre, hurtigst til højre:
 
-#eq[$ L = lim_(n -> infinity) f(n) / g(n). $]
+#eq[$ 1 < log n < sqrt(n) < n < n log n < n^2 < n^3 < 2^n < n^n. $]
 
-Grænseværdien $L$ giver relationen.
+To huskeregler dækker næsten alt: en *eksponentiel* ($2^n$, $3^n$) slår altid en *potens* ($n^2$, $n^3$, …), og en *$log$-faktor* rykker dig kun en lillebitte smule på stigen.
 
 #recipe(
   title: "Afgør en påstand f er O / Ω / Θ af g",
-  [Skriv forholdet $f(n) slash g(n)$.],
-  [Forenkl med vækstrækkefølgen. En sum beholder kun sit hurtigste led.],
-  [Aflæs $L$ og oversæt til relationen.],
+  [Find $f$ (venstre) og $g$ (inde i parentesen).],
+  [Placér begge på vækststigen — hvem står længst til højre (vokser hurtigst)?],
+  [Slå relationen op: står $f$ til *venstre for* $g$, er $f = O(g)$ og $o(g)$; *samme plads*, $Theta(g)$; *højre for*, $Omega(g)$ og $omega(g)$.],
 )
 
-Vækstrækkefølgen, langsomst til hurtigst:
+For et hurtigt blik: er $f$ under eller lig med $g$ på stigen, holder "$f = O(g)$"; er $f$ over $g$, gør den ikke.
 
-#eq[$ 1 < log n < sqrt(n) < n < n log n < n^2 < n^3 < 2^n < n^n. $]
+*Den præcise metode (hvis stigen ikke rækker):* del de to funktioner og se hvad forholdet går mod langt ude. Lad
+
+#eq[$ L = lim_(n -> infinity) f(n) / g(n). $]
+
+Grænseværdien $L$ giver relationen (en sum beholder kun sit hurtigste led, så forenkl først).
 
 Fra grænseværdi til relation:
 
@@ -34,6 +38,30 @@ L -> infinity quad &=> quad f = omega(g) " (og dermed " Omega(g) ")"
 $]
 
 Tænk på symbolerne som tal-sammenligninger: $O$ er $<=$, $Omega$ er $>=$, $Theta$ er $=$, $o$ er $<$, $omega$ er $>$. $Theta$ kræver et positivt endeligt $L$. $O$ holder så længe forholdet ikke vokser uden grænse, så det dækker også $L -> 0$.
+
+Hele opslaget på én tabel — regn $L = lim f(n) slash g(n)$ og slå op:
+
+#block(above: 14pt, below: 14pt)[
+  #align(center)[
+    #table(
+      columns: 4,
+      align: (center, center, center, left),
+      stroke: none,
+      inset: (x: 14pt, y: 7pt),
+      table.header(
+        [*Påstand*], [*Betyder*], [*Sand når $L$ er*], [*Eksempel (sand)*],
+      ),
+      table.hline(stroke: 0.4pt + hair),
+      [$f = O(g)$], [$f <= g$], [$0$ eller en konstant], [$n = O(n^2)$],
+      [$f = o(g)$], [$f < g$], [$0$], [$n = o(n^2)$],
+      [$f = Theta(g)$], [$f = g$], [en konstant $> 0$], [$3n = Theta(n)$],
+      [$f = Omega(g)$], [$f >= g$], [en konstant eller $infinity$], [$n^2 = Omega(n)$],
+      [$f = omega(g)$], [$f > g$], [$infinity$], [$n^2 = omega(n)$],
+    )
+  ]
+]
+
+Kort sagt: er $f$ *under* $g$ på vækststigen, så er $f = O(g)$ (og $o(g)$). *Over*: $Omega(g)$ (og $omega(g)$). *Samme plads*: $Theta(g)$ — og så gælder både $O$ og $Omega$ samtidig.
 
 #note[To kendsgerninger afgør næsten alt. Ethvert polynomium slår enhver eksponentialfunktion: $n^a slash b^n -> 0$ for $a > 0$ og $b > 1$. Og enhver rod slår enhver polylog: $(log n)^a slash n^d -> 0$ for $a, d > 0$.]
 
