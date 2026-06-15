@@ -14,6 +14,8 @@ En påstand som "$f(n)$ er $O(g(n))$" spørger kun om én ting: *vokser $f$ høj
 
 To huskeregler dækker næsten alt: en *eksponentiel* ($2^n$, $3^n$) slår altid en *potens* ($n^2$, $n^3$, …), og en *$log$-faktor* rykker dig kun en lillebitte smule på stigen.
 
+#note[Det yderste $1$ på stigen er *alle konstanter*: $2$, $3$, $100$ vokser ikke med $n$, så de sidder alle på samme plads. Derfor er enhver konstant $O$ (endda $Theta$) af enhver anden — fx er $3 = O(2)$ sand, og $O(2)$ betyder bare $O(1)$.]
+
 #recipe(
   title: "Afgør en påstand f er O / Ω / Θ af g",
   [Find $f$ (venstre) og $g$ (inde i parentesen).],
