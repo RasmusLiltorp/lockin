@@ -59,6 +59,7 @@ Tabellen rummer kun den optimale værdi. Vil du have løsningen, så gem det vin
 === Tilbagevendende eksamensspørgsmål
 
 #qcard(
+  tag: [DP: aflæs køretid af given rekursion],
   source: "MCQ juni 2017, Spm. 25",
   prompt: [For et optimeringsproblem er inputtet en omkostning $c_(i j)$ for alle $i$ og $j$. En løsning $b(i,j)$ kan beskrives ved rekursionen
   #eq[$ b(i,j) = cases(
@@ -76,6 +77,7 @@ Tabellen rummer kun den optimale værdi. Vil du have løsningen, så gem det vin
 )
 
 #qcard(
+  tag: [DP: mindste pladsforbrug for given rekursion],
   source: "MCQ juni 2017, Spm. 26",
   prompt: [Samme problem og samme rekursion for $b(i,j)$. Hvis $b(#swap[$m$], #swap[$n$])$ findes ved dynamisk programmering, hvad er det mindste pladsforbrug, der kan opnås?],
   options: (
@@ -87,6 +89,7 @@ Tabellen rummer kun den optimale værdi. Vil du have løsningen, så gem det vin
 )
 
 #qcard(
+  tag: [DP: aflæs køretid af given rekursion],
   source: "MCQ juni 2025, Spm. 30",
   prompt: [Find $B(n)$, antallet af binære træer med $n$ knuder (fx $B(3) = 5$), ved rekursionen
   #eq[$ B(0) = 1, quad B(n) = sum_(i=0)^(n-1) B(i) dot B(n-i-1) "for " n > 0 $]
@@ -102,6 +105,7 @@ Tabellen rummer kun den optimale værdi. Vil du have løsningen, så gem det vin
 )
 
 #qcard(
+  tag: [DP: aflæs køretid af given rekursion (trekant)],
   source: "MCQ juni 2019, Spm. 29",
   prompt: [For et optimeringsproblem er inputtet værdier $c_k$ for $k = 1, 2, ..., n$. En løsning $L(i,j)$ kan beskrives ved rekursionen
   #eq[$ L(i,j) = cases(

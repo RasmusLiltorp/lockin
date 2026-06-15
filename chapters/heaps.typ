@@ -46,6 +46,7 @@ Til eksamen skal du afgøre om et array er en heap, og trace `Extract`, `Increas
 === Tilbagevendende eksamensspørgsmål
 
 #qcard(
+  tag: [Heap: er arrayet en (min-)heap?],
   source: "DM507 juni 2012, Opg. 2a (5%)",
   prompt: [Hvilke af følgende arrays af størrelse $#swap[$10$]$ er min-heaps? \
     A1 $= [7,4,9,2,6,8,10,1,3,5]$ \
@@ -57,6 +58,7 @@ Til eksamen skal du afgøre om et array er en heap, og trace `Extract`, `Increas
 )
 
 #qcard(
+  tag: [Heap: trace Extract-Min skridt for skridt],
   source: "MCQ juni 2023, Spm. 7",
   prompt: [Udfør Extract-Min på min-heapen $A = #swap[$[3,5,6,10,11,8,7,18,16,15]$]$ (1-indekseret, positioner $1..10$). Hvilken position i $A$ ender $#swap[$15$]$ på bagefter?],
   options: ([$1$], [$2$], [$3$], [$4$], [$5$], [$8$], [$9$]),
@@ -65,6 +67,7 @@ Til eksamen skal du afgøre om et array er en heap, og trace `Extract`, `Increas
 )
 
 #qcard(
+  tag: [Heap: trace Increase-Key + Extract-Max],
   source: "MCQ juni 2015, Spm. 6",
   prompt: [Udfør først Heap-Increase-Key$(A, #swap[$9$], #swap[$15$])$ og derefter Heap-Extract-Max$(A)$ på max-heapen $A$ herunder. $A$ (positioner $1..9$) $= #swap[$[18,9,16,4,8,12,13,1,2]$]$. Hvilket af svarene viser heapen efter de to operationer?],
   options: (
@@ -78,6 +81,7 @@ Til eksamen skal du afgøre om et array er en heap, og trace `Extract`, `Increas
 )
 
 #qcard(
+  tag: [Heapsort: køretid på ens elementer],
   source: "MCQ juni 2019, Spm. 28",
   prompt: [Hvad er worst-case køretiden for Heapsort, når den køres på $#swap[$n$]$ identiske elementer?],
   options: ([$O(1)$], [$O(log n)$], [$O(n)$], [$O(n log n)$], [$O(n^2)$]),

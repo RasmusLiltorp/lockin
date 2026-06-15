@@ -18,6 +18,8 @@ mod arbejdet uden for, $f(n)$. Den, der vokser hurtigst, bestemmer svaret.
 
 #note[Skelseksponenten $alpha = log_b a$ er det samme som $p$ i eksamenens svar: skriver opgaven $Theta(n^p)$, så er $p = alpha = log_b a$. Du regner altså $p$ ved at tage $log$ af $a$ med grundtal $b$ — fx $T(n) = 5 T(n/2) + n^2$ giver $p = log_2 5$. Pas på rækkefølgen: det er $log_b a$, ikke $log_a b$.]
 
+#note[*$p$ optræder kun når svaret er $n^alpha$ (tilfælde 1).* Vinder $f(n)$ (tilfælde 3), er svaret $f(n)$ selv — fx $Theta(n^(1/2))$ — uden noget $p$. Tommelfinger: ser du "$p = log_b a$", er det tilfælde 1; ser du en ren funktion som $n^(1/2)$ eller $n^2$, er det tilfælde 3.]
+
 #recipe(
   title: "Master Theorem (Cormen et al., 4. udg.)",
   [Aflæs #swap[$a$], #swap[$b$] og #swap[$f(n)$] fra ligningen. Kun de tre skifter fra år til år.],
@@ -71,11 +73,30 @@ I tilfælde 3 skal du tjekke regularitetsbetingelsen: at et $c < 1$ opfylder $a 
 
 #note[MCQ'en har samme faste svarmenu hvert år: $Theta(1)$, $Theta(log n)$, $Theta(n^(log_4 3))$, $Theta(n)$, $Theta(n log n)$, $Theta(n^(log_3 4))$, $Theta(n^2)$, $Theta(n^2 log n)$, $Theta(n^3)$ og "kan ikke løses med Master Theorem". Løs ligningen, og find svaret i menuen.]
 
-#trap[Master Theorem kræver, at alle kald har samme størrelse $n/b$. En ligning som $T(n) = T(n/3) + T(2n/3) + n$ har to størrelser, så sætningen gælder ikke — derfor findes svaret "kan ikke løses". Brug et rekursionstræ.]
+Tre situationer giver svaret *"kan ikke løses med Master Theorem"*:
+
+#block(above: 14pt, below: 14pt)[
+  #align(center)[
+    #table(
+      columns: 3,
+      align: (left, left, left),
+      stroke: none,
+      inset: (x: 12pt, y: 8pt),
+      table.header(
+        [*Fælde*], [*Eksempel*], [*Hvorfor*],
+      ),
+      table.hline(stroke: 0.4pt + hair),
+      [Hullet ($log$-faktor)], [$2 T(n/2) + n log n$], [$f(n)$ kun et $log$ større end $n^alpha$ — for stor til tilfælde 2, for lille til tilfælde 3],
+      [Ulige stykker], [$T(n/3) + T(2n/3) + n$], [kaldene har ikke samme størrelse $n/b$],
+      [Subtraktion], [$2 T(n-2) + n$], [problemet divideres ikke ($T(n-c)$, ikke $T(n/b)$) — der findes intet $b$],
+    )
+  ]
+]
 
 === Tilbagevendende eksamensspørgsmål
 
 #qcard(
+  tag: [Master Theorem: løs rekursionsligning],
   source: "MCQ juni 2025, Spm. 1 (samme type 2015–2023)",
   prompt: [Hvilket af nedenstående svar gælder for følgende rekursionsligning? $T(n) = #swap[$2$] dot T(n\/#swap[$4$]) + #swap[$n^2$]$],
   options: (
@@ -97,6 +118,7 @@ I tilfælde 3 skal du tjekke regularitetsbetingelsen: at et $c < 1$ opfylder $a 
 )
 
 #qcard(
+  tag: [Master Theorem: løs rekursionsligning],
   source: "MCQ juni 2025, Spm. 2",
   prompt: [Hvilket af nedenstående svar gælder for følgende rekursionsligning? $T(n) = #swap[$4$] dot T(n\/#swap[$2$]) + #swap[$n^2$]$],
   options: (
@@ -118,6 +140,7 @@ I tilfælde 3 skal du tjekke regularitetsbetingelsen: at et $c < 1$ opfylder $a 
 )
 
 #qcard(
+  tag: [Master Theorem: løs rekursionsligning],
   source: "MCQ juni 2025, Spm. 3",
   prompt: [Hvilket af nedenstående svar gælder for følgende rekursionsligning? $T(n) = #swap[$4$] dot T(n\/#swap[$3$]) + #swap[$n$]$],
   options: (
@@ -139,6 +162,7 @@ I tilfælde 3 skal du tjekke regularitetsbetingelsen: at et $c < 1$ opfylder $a 
 )
 
 #qcard(
+  tag: [Master Theorem: løs rekursionsligning],
   source: "MCQ juni 2025, Spm. 4",
   prompt: [Hvilket af nedenstående svar gælder for følgende rekursionsligning? $T(n) = T(n\/#swap[$4$]) + #swap[$1$]$],
   options: (
@@ -160,6 +184,7 @@ I tilfælde 3 skal du tjekke regularitetsbetingelsen: at et $c < 1$ opfylder $a 
 )
 
 #qcard(
+  tag: [Master Theorem: kan den løses?],
   source: "MCQ juni 2025, Spm. 2 (samme menu)",
   prompt: [Hvilket af nedenstående svar gælder for følgende rekursionsligning? $T(n) = #swap[$5$] dot T(n\/#swap[$5$]) + #swap[$n log n$]$],
   options: (

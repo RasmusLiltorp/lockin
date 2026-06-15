@@ -46,6 +46,7 @@ Tjek at to sider er lig hinanden, før du kæder dem sammen.]
 === Tilbagevendende eksamensspørgsmål
 
 #qcard(
+  tag: [Induktion: hvilke kandidatbeviser er gyldige?],
   source: "MCQ juni 2025, Spm. 34 (samme som DM547 jan 2019, Spm. 3)",
   prompt: [Bevis at #swap[$3^n - 1$ er lige] for alle $n in NN$. Hvilke argumenter er gyldige induktionsbeviser? (en eller flere korrekte)],
   options: (
@@ -65,6 +66,7 @@ Tjek at to sider er lig hinanden, før du kæder dem sammen.]
 )
 
 #qcard(
+  tag: [Induktion: hvilke kandidatbeviser er gyldige?],
   source: "DM547 jan 2021, Spm. 5 (12%)",
   prompt: [Påstand: #swap[$2^n + 3^n < 4^n$] for $n >= #swap[$2$]$. Hvilke af 5.a–5.g er gyldige induktionsbeviser?],
   options: (
@@ -88,6 +90,7 @@ Tjek at to sider er lig hinanden, før du kæder dem sammen.]
 )
 
 #qcard(
+  tag: [Induktion: hvilke kandidatbeviser er gyldige?],
   source: "MCQ juni 2023, Spm. 35",
   prompt: [Hvilke er korrekte induktionsbeviser for #swap[$sum_(i=1)^n ((1/2)^(i-1) - (1/2)^i) = 1 - (1/2)^n$] for alle $n >= 1$? (en eller flere korrekte)],
   options: (

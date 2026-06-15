@@ -75,6 +75,7 @@ Tallene gælder for $n$ $"Make-Set"$, $n-1$ $"Union"$ og $m$ $"Find-Set"$.
 === Tilbagevendende eksamensspørgsmål
 
 #qcard(
+  tag: [Union-Find: tegn skoven efter operationerne],
   source: "MCQ juni 2025, Spm. 25",
   prompt: [Disjunkt-mængde-skov med union by rank og path compression (Cormen 4. udg.). Fra tom: Make-Set på $a, b, c, d, e, f$, derefter
     #swap[$"Union"(f,e)$, $"Union"(b,f)$, $"Union"(d,a)$, $"Union"(f,d)$, $"Union"(b,c)$, $"Find-Set"(a)$].
@@ -99,6 +100,7 @@ Tallene gælder for $n$ $"Make-Set"$, $n-1$ $"Union"$ og $m$ $"Find-Set"$.
 )
 
 #qcard(
+  tag: [Union-Find: tegn skoven (med/uden komprimering)],
   source: "DM507 juni 2008, Opgave 3b/3c",
   prompt: [Kør instruktionerne
     #swap[$"Union"(b,a)$, $"Union"(b,c)$, $"Union"(e,d)$, $"Union"(e,c)$, $"Union"(g,f)$, $"Union"(e,g)$]
@@ -120,6 +122,7 @@ Tallene gælder for $n$ $"Make-Set"$, $n-1$ $"Union"$ og $m$ $"Find-Set"$.
 )
 
 #qcard(
+  tag: [Union-Find i Kruskal: næste kant + skoven],
   source: "DM02 jan 2006, Opg 3a",
   prompt: [De første #swap[5] Kruskal-kanter er valgt, så grupperne er ${E,F,H,I}$, ${D,G}$, ${A,B}$, ${C}$. Hvilken kant tilføjer Kruskal som den #swap[6.], og hvordan ser disjunkt-mængde-skoven ud bagefter, med union by rank + path compression?],
   answer: [Næste kant er #swap[$D"-"H$] (vægt #swap[4]). $D$ hænges under $E$.],

@@ -85,6 +85,7 @@ MaxSum3(n)                              // Kadane, Theta(n)
 === Tilbagevendende eksamensspørgsmål
 
 #qcard(
+  tag: [Strassen: køretid for naiv blokmultiplikation],
   source: "Strassen slides (SE4-DMAD F26)",
   prompt: [Naiv rekursiv matrixmultiplikation deler hver $n times n$-matrix i fire blokke og kalder rekursivt med #swap[$8$] delmultiplikationer:
   #eq[$ T(n) = #swap[$8$] thin T(n\/#swap[$2$]) + n^2 $]
@@ -96,6 +97,7 @@ MaxSum3(n)                              // Kadane, Theta(n)
 )
 
 #qcard(
+  tag: [Strassen: køretid med 7 delprodukter],
   source: "Strassen slides (SE4-DMAD F26)",
   prompt: [Strassen regner de fire outputblokke ud med #swap[$7$] delmultiplikationer i stedet for 8:
   #eq[$ T(n) = #swap[$7$] thin T(n\/#swap[$2$]) + n^2 $]
@@ -107,6 +109,7 @@ MaxSum3(n)                              // Kadane, Theta(n)
 )
 
 #qcard(
+  tag: [Max-sum: køretid og plads for Kadane],
   source: "Max-sum slides (SE4-DMAD F26)",
   prompt: [Hvad er køretid og ekstra pladsforbrug for #swap[Kadanes algoritme (MaxSum3)] til maximum subarray-problemet?],
   answer: [$Theta(n)$ tid, $O(1)$ plads.],
@@ -114,6 +117,7 @@ MaxSum3(n)                              // Kadane, Theta(n)
 )
 
 #qcard(
+  tag: [Master Theorem: løs rekursionsligning],
   source: "MCQ juni 2023, Spm. 2",
   prompt: [Hvilket af nedenstående svar gælder for følgende rekursionsligning?
   #eq[$ T(n) = #swap[$1$] thin T(n\/#swap[$2$]) + #swap[$n^(1\/2)$] $]],

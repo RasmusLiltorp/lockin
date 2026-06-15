@@ -50,6 +50,7 @@ Vending-reglerne er:
 === Tilbagevendende eksamensspørgsmål
 
 #qcard(
+  tag: [Kvantorer: hvilke udsagn er sande?],
   source: "MCQ juni 2025, Spm. 33 (flere rigtige)",
   prompt: [Hvilke udsagn er sande? (Et eller flere korrekte svar.)],
   options: (
@@ -72,6 +73,7 @@ Vending-reglerne er:
 )
 
 #qcard(
+  tag: [Kvantorer: hvilke udsagn er sande? (+ fornægtelse)],
   source: "MCQ juni 2023, Spm. 34 (flere rigtige)",
   prompt: [Domæne $ZZ$. Hvilke udsagn er sande? (Et eller flere korrekte svar.)],
   options: (
@@ -96,6 +98,7 @@ Vending-reglerne er:
 )
 
 #qcard(
+  tag: [Kvantorer: hvilke udsagn er sande? (+ fornægtelse)],
   source: "MCQ juni 2021, Spm. 35 (flere rigtige)",
   prompt: [Domæne $ZZ$. Hvilke udsagn er sande? (Et eller flere korrekte svar.)],
   options: (
@@ -124,6 +127,7 @@ Vending-reglerne er:
 )
 
 #qcard(
+  tag: [Kvantorer: sandhedsværdi + fornægt uden ¬],
   source: "Eksamen feb 2015, Opg. 4 (DM03 Opg. 4)",
   prompt: [$NN = {0,1,2,dots}$. Først (4a): hvilke af i og ii er sande?
     + $forall x in NN : exists y in NN : x < y$

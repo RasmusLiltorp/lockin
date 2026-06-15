@@ -53,6 +53,7 @@ Et fjerde greb dækker "bevis eller modbevis" om en for-alle-påstand: ét modek
 === Tilbagevendende eksamensspørgsmål
 
 #qcard(
+  tag: [Bevismetode: direkte bevis om lige/ulige],
   source: "DM04 Opg 1 (Rosen 1.7 #1)",
   prompt: [Brug et direkte bevis til at vise, at #swap[summen] af to #swap[ulige] heltal er #swap[lige].],
   answer: [Sandt. Summen af to ulige tal er $2(a+b+1)$, altså lige.],
@@ -62,6 +63,7 @@ Et fjerde greb dækker "bevis eller modbevis" om en for-alle-påstand: ét modek
 )
 
 #qcard(
+  tag: [Bevismetode: kontraposition og modstrid],
   source: "DM04 Opg 17 (Rosen 1.7 #17)",
   prompt: [Vis, at hvis $n$ er et heltal og #swap[$n^3 + 5$] er ulige, så er #swap[$n$] lige — ved (a) kontraposition, (b) modstrid.],
   answer: [Begge virker. Ulige $n$ gør $n^3$ ulige, så $n^3 + 5 = "ulige" + "ulige" = "lige"$.],
@@ -74,6 +76,7 @@ Et fjerde greb dækker "bevis eller modbevis" om en for-alle-påstand: ét modek
 )
 
 #qcard(
+  tag: [Bevismetode: modstrid om rationalt/irrationelt],
   source: "DM04 Opg 41 (Rosen 1.7 #41)",
   prompt: [Bevis eller modbevis: produktet af et #swap[rationalt tal forskelligt fra nul] og et #swap[irrationelt] tal er irrationelt.],
   answer: [Sandt. Bevises ved modstrid.],
@@ -83,6 +86,7 @@ Et fjerde greb dækker "bevis eller modbevis" om en for-alle-påstand: ét modek
 )
 
 #qcard(
+  tag: [Bevismetode: vælg det gyldige bevis],
   source: "MCQ juni 2021, Spm. 36",
   prompt: [Angiv et korrekt bevis for: $a + b > c arrow.r a > #swap[$c/2$] or b > #swap[$c/2$]$.],
   options: (

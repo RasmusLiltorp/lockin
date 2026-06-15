@@ -55,6 +55,7 @@ Skal du *bevise* greedy optimal, brug et ombytningsargument: tag en vilkårlig o
 === Tilbagevendende eksamensspørgsmål
 
 #qcard(
+  tag: [Huffman: kodeordslængde for et symbol],
   source: "MCQ juni 2025, Spm. 13 (samme skabelon juni 2019/2021/2023)",
   prompt: [En fil indeholder tegn med hyppigheder: o=#swap[$150$], p=#swap[$100$], q=#swap[$25$], r=#swap[$125$], s=#swap[$200$], t=#swap[$50$], u=#swap[$75$]. Byg et Huffman-træ. Hvor mange bit er der i kodeordet for #swap[$q$]?],
   options: ([$1$], [$2$], [$3$], [$4$], [$5$], [$6$]),
@@ -63,6 +64,7 @@ Skal du *bevise* greedy optimal, brug et ombytningsargument: tag en vilkårlig o
 )
 
 #qcard(
+  tag: [Huffman: samlet antal bit],
   source: "MCQ juni 2025, Spm. 14",
   prompt: [Et Huffman-træ for en fil med hyppigheder o=#swap[$150$], p=#swap[$100$], q=#swap[$25$], r=#swap[$125$], s=#swap[$200$], t=#swap[$50$], u=#swap[$75$] (i alt #swap[$725$] symboler). Hvor mange bit fylder de 725 symboler tilsammen Huffman-kodet?],
   options: ([$1800$], [$1825$], [$1900$], [$1925$], [$2000$], [$2075$], [$2100$]),
@@ -71,6 +73,7 @@ Skal du *bevise* greedy optimal, brug et ombytningsargument: tag en vilkårlig o
 )
 
 #qcard(
+  tag: [Huffman: kodeordslængde for et symbol],
   source: "MCQ juni 2021, Spm. 12",
   prompt: [En fil indeholder tegnene med hyppigheder: a=#swap[$200$], b=#swap[$250$], c=#swap[$100$], d=#swap[$350$], e=#swap[$400$]. Byg et Huffman-træ. Hvor mange bit er der i kodeordet for #swap[$d$]?],
   options: ([$1$], [$2$], [$3$], [$4$]),
@@ -79,6 +82,7 @@ Skal du *bevise* greedy optimal, brug et ombytningsargument: tag en vilkårlig o
 )
 
 #qcard(
+  tag: [Huffman: hvilke optimale træer er producerbare?],
   source: "DM507 juni 2012, Opg. 5c",
   prompt: [Frekvenser a=#swap[$100$], b=#swap[$150$], c=#swap[$150$], d=#swap[$250$], e=#swap[$350$] (i alt 1000). Alle de viste træer er optimale (pris 2250 bit). Hvilke af træerne H2–H5 kan Huffman faktisk producere?],
   options: (

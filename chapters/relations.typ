@@ -65,6 +65,7 @@ Et *Hasse-diagram* tegner en partiel ordning uden støj. Fjern alle løkker og h
 === Tilbagevendende eksamensspørgsmål
 
 #qcard(
+  tag: [Relation: hvilke egenskaber har den?],
   source: "MCQ juni 2025, Spm. 35 (flere korrekte)",
   prompt: [Lad $R = #swap[${(a,a),(a,b),(b,a),(c,c)}$]$ være en relation på ${a,b,c}$. Hvilke udsagn er sande?],
   options: (
@@ -80,6 +81,7 @@ Et *Hasse-diagram* tegner en partiel ordning uden støj. Fjern alle løkker og h
 )
 
 #qcard(
+  tag: [Lukninger: er den angivne lukning korrekt?],
   source: "MCQ juni 2025, Spm. 36 (flere korrekte)",
   prompt: [Lad $A = {a,b,c,d}$. Hvilke udsagn er sande?],
   options: (
@@ -95,6 +97,7 @@ Et *Hasse-diagram* tegner en partiel ordning uden støj. Fjern alle løkker og h
 )
 
 #qcard(
+  tag: [Lukning: udregn den transitive lukning],
   source: "MCQ juni 2023, Spm. 36 (3 point)",
   prompt: [Betragt relationen på ${a,b,c}$: $R = #swap[${(a,b),(b,a),(b,b),(b,c)}$]$. Angiv den transitive lukning af $R$.],
   answer: [$t(R) = {(a,a),(a,b),(a,c),(b,a),(b,b),(b,c)}$.],
@@ -102,6 +105,7 @@ Et *Hasse-diagram* tegner en partiel ordning uden støj. Fjern alle løkker og h
 )
 
 #qcard(
+  tag: [Lukning: udregn den symmetriske lukning],
   source: "DM547 januar 2021, Spørgsmål 7 (3%)",
   prompt: [Angiv den symmetriske lukning af $T = #swap[${(a,b),(b,b),(c,d),(d,e)}$]$.],
   answer: [$s(T) = {(a,b),(b,a),(b,b),(c,d),(d,c),(d,e),(e,d)}$.],
@@ -109,6 +113,7 @@ Et *Hasse-diagram* tegner en partiel ordning uden støj. Fjern alle løkker og h
 )
 
 #qcard(
+  tag: [Relation: hvilke egenskaber har den? (digraf)],
   source: "DM547 januar 2021, Spørgsmål 6 (8%)",
   prompt: [En digraf for relationen $S$ på ${a,b,c,d,e,f}$ har løkker på $a,b,e,f$, kanterne $a->b$, $a->c$, $a->d$, $a->e$, $b->e$, $c->d$, $f->d$, og tovejsparret $e<->f$. Hvilke af følgende gælder: refleksiv, symmetrisk, antisymmetrisk, transitiv, ækvivalensrelation, partiel ordning, total ordning?],
   answer: [Ingen af dem.],
@@ -116,6 +121,7 @@ Et *Hasse-diagram* tegner en partiel ordning uden støj. Fjern alle løkker og h
 )
 
 #qcard(
+  tag: [Relation: hvilke er ækvivalensrelationer?],
   source: "SE4-DMAD juni 2024, Spm. 6 (4%)",
   prompt: [På ${a,b,c}$, hvilke af disse er ækvivalensrelationer?],
   options: (

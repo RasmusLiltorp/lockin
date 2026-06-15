@@ -42,11 +42,11 @@
 // `prompt` = the question text (verbatim). `options` = array of answer choices
 // shown exactly as on the exam (optional). `answer` = the correct choice.
 // `worked` = a short solution.
-#let qcard(source: "", prompt: [], options: (), answer: [], worked: []) = block(
+#let qcard(source: "", prompt: [], options: (), answer: [], worked: [], tag: "") = block(
   width: 100%, breakable: true, above: 18pt, below: 18pt,
 )[
   // Register this question so the problem index can list and link to it.
-  #metadata((source: source, prompt: prompt)) <qcard>
+  #metadata((source: source, prompt: prompt, tag: tag)) <qcard>
   #line(length: 100%, stroke: 0.4pt + hair)
   #v(7pt)
   #text(size: 9pt, fill: soft)[#source]

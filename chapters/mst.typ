@@ -48,6 +48,7 @@ Hver tagen kant smelter to komponenter til én, så efter $k$ kanter gælder:
 === Tilbagevendende eksamensspørgsmål
 
 #qcard(
+  tag: [Kruskal: hvilken kant tilføjes sidst?],
   source: "MCQ juni 2025, Spm. 21",
   prompt: [Brug Kruskals algoritme til at finde et MST (læs næste spørgsmål først). Knuder $a, b, c, e, f, g, h, i, j$. Kanter med vægte: $(a,c)=#swap[$2$]$, $(a,b)=#swap[$15$]$, $(b,e)=5$, $(b,f)=8$, $(c,e)=20$, $(c,j)=17$, $(e,h)=11$, $(e,j)=9$, $(f,h)=6$, $(f,g)=3$, $(g,i)=19$, $(h,i)=16$, $(h,j)=21$, $(i,j)=14$. Hvilken kant tilføjes sidst til MST'et?],
   options: ([$(a, b)$], [$(i, j)$], [$(h, j)$], [$(e, h)$], [$(h, i)$], [$(e, j)$]),
@@ -56,6 +57,7 @@ Hver tagen kant smelter to komponenter til én, så efter $k$ kanter gælder:
 )
 
 #qcard(
+  tag: [Kruskal: antal komponenter ved første forkastning],
   source: "MCQ juni 2025, Spm. 22",
   prompt: [Fortsæt med Kruskals algoritme på samme graf. I det første øjeblik hvor en undersøgt kant ikke tages med, hvor mange sammenhængskomponenter har $(V, A)$? ($V$ er alle knuder, $A$ er de kanter der er taget indtil nu.)],
   options: ([$1$], [$2$], [$3$], [$4$], [$5$], [$6$]),
@@ -64,6 +66,7 @@ Hver tagen kant smelter to komponenter til én, så efter $k$ kanter gælder:
 )
 
 #qcard(
+  tag: [Prim: hvilken knude tilføjes sidst?],
   source: "MCQ juni 2023, Spm. 20",
   prompt: [Brug Prims algoritme til at finde et MST med start i knude #swap[$a$]. Urettede vægtede kanter: $b c=5$, $c a=11$, $a f=10$, $f e=7$, $b d=13$, $c h=9$, $a h=2$, $a i=3$, $f i=4$, $e g=8$, $d h=1$, $h i=6$, $i g=12$. Hvilken knude tilføjes sidst til MST'et?],
   options: ([$b$], [$d$], [$e$], [$g$]),
@@ -72,6 +75,7 @@ Hver tagen kant smelter to komponenter til én, så efter $k$ kanter gælder:
 )
 
 #qcard(
+  tag: [Kruskal: hvilken kant forkastes først?],
   source: "MCQ juni 2019, Spm. 17",
   prompt: [Kør Kruskals algoritme på grafen $G_3$. Knuder $a, b, c, d, e, f, g, h, i$ med vægtede kanter: $(a,f)=3$, $(a,b)=4$, $(f,g)=8$, $(f,b)=5$, $(g,b)=2$, $(g,c)=6$, $(b,c)=1$, $(h,c)=9$, $(h,d)=6$, $(h,i)=9$, $(i,d)=7$, $(i,e)=1$, $(c,d)=8$, $(d,e)=7$. Hvilken kant er den første der undersøges af algoritmen, men ikke tages med i MST'et?],
   options: ([Kanten $(b, f)$], [Kanten $(c, g)$], [Kanten $(d, i)$], [Kanten $(d, e)$], [Kanten $(f, g)$], [Kanten $(h, i)$]),

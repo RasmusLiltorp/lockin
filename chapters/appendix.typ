@@ -71,6 +71,7 @@ Hvert ciffer koster $O(1)$, og du deler $N$ ned til 0, så omregningen tager $Th
 === Tilbagevendende eksamensspørgsmål
 
 #qcard(
+  tag: [O-notation: er X = O(Y)?],
   source: "MCQ juni 2021, Spm. 5",
   prompt: [Hvilke udsagn er sande? $log n$ er base to. (Et eller flere svar.)],
   options: (
@@ -87,6 +88,7 @@ Hvert ciffer koster $O(1)$, og du deler $N$ ned til 0, så omregningen tager $Th
 )
 
 #qcard(
+  tag: [Asymptotik: O / Ω / Θ / o / ω sand?],
   source: "MCQ juni 2021, Spm. 6",
   prompt: [Hvilke udsagn er sande? $log n$ er base to. (Et eller flere svar.)],
   options: (
@@ -103,6 +105,7 @@ Hvert ciffer koster $O(1)$, og du deler $N$ ned til 0, så omregningen tager $Th
 )
 
 #qcard(
+  tag: [Talrepræsentation: omregn til binær],
   source: "DM573, talReprSlides (omregningsøvelse)",
   prompt: [Omregn $N = #swap[$25$]$ til binær.],
   answer: [$25 = 11001_2$.],
@@ -121,6 +124,7 @@ Hvert ciffer koster $O(1)$, og du deler $N$ ned til 0, så omregningen tager $Th
 )
 
 #qcard(
+  tag: [Køretid: tæl løkkernes gennemløb],
   source: "DM507 juni 2010, Opg. 3d",
   prompt: [Algoritmen finder de binære cifre $b_i$ for et positivt heltal $n$ (her $n = #swap[$55$]$). Identiteten $x = y dot (x "div" y) + (x "mod" y)$ gælder for alle heltal. Hvad er køretiden?
     ```

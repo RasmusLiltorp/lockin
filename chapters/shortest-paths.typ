@@ -82,6 +82,7 @@ Tæt graf ($m = Theta(n^2)$): $n$ kørsler af Dijkstra giver $O(n^3 log n)$, så
 === Tilbagevendende eksamensspørgsmål
 
 #qcard(
+  tag: [Korteste veje: vælg algoritme til grafen],
   source: "MCQ juni 2015, Spm. 13",
   prompt: [Which of the following algorithms can be used to find shortest paths on this graph? (Et eller flere svar.) $G_1$ er orienteret med knuder $a,b,c,d,e$ og *alle vægte* #swap[$1$], og grafen *har kredse*: $b arrow.r a$, $a arrow.r d$, $a arrow.r e$, $b arrow.r e$, $e arrow.r d$, $c arrow.r b$, $c arrow.r e$, $c arrow.r d$.],
   options: (
@@ -96,6 +97,7 @@ Tæt graf ($m = Theta(n^2)$): $n$ kørsler af Dijkstra giver $O(n^3 log n)$, så
 )
 
 #qcard(
+  tag: [Korteste veje: vælg algoritme (DAG, negative vægte)],
   source: "MCQ juni 2015, Spm. 14",
   prompt: [Which of the following algorithms can be used to find shortest paths on this graph? (Et eller flere svar.) $G_2$ er orienteret med knuder $a,b,c,d,e$, *nogle vægte* #swap[$-1$], og grafen er en *DAG* (topologisk orden $c,b,a,e,d$): $b arrow.r a (1)$, $a arrow.r d (-1)$, $a arrow.r e (1)$, $b arrow.r e (-1)$, $e arrow.r d (1)$, $c arrow.r b (1)$, $c arrow.r e (-1)$, $c arrow.r d (1)$.],
   options: (
@@ -110,6 +112,7 @@ Tæt graf ($m = Theta(n^2)$): $n$ kørsler af Dijkstra giver $O(n^3 log n)$, så
 )
 
 #qcard(
+  tag: [Dijkstra: udtrækningsrækkefølge i hånden],
   source: "MCQ juni 2017, Spm. 15",
   prompt: [Run Dijkstra's algorithm on graph $G_2$ below, starting at node #swap[$a$]. The first node extracted from the priority queue (via EXTRACT-MIN) during the run is node $a$. Which node is the #swap[sixth] one extracted? (Ved uafgjort: alfabetisk mindste navn.) Kanter: $a arrow.r b (1)$, $a arrow.r d (3)$, $d arrow.r g (1)$, $d arrow.r e (3)$, $g arrow.r h (3)$, $g arrow.r e (1)$, $h arrow.r i (1)$, $b arrow.r d (1)$, $b arrow.r e (3)$, $b arrow.r c (2)$, $e arrow.r h (1)$, $e arrow.r f (2)$, $c arrow.r e (1)$, $c arrow.r f (3)$, $f arrow.r h (2)$, $f arrow.r i (3)$.],
   options: (
@@ -124,6 +127,7 @@ Tæt graf ($m = Theta(n^2)$): $n$ kørsler af Dijkstra giver $O(n^3 log n)$, så
 )
 
 #qcard(
+  tag: [Bellman-Ford: find alle afstande i hånden],
   source: "DM507 juni 2012, Opg. 4a",
   prompt: [Kør Bellman-Ford fra #swap[$a$] på den orienterede graf $G_1$ og angiv den endelige $v.d$ for alle knuder. Kanter: $a arrow.r e (8)$, $a arrow.r f (10)$, $a arrow.r b (17)$, $e arrow.r h (-4)$, $f arrow.r h (-10)$, $f arrow.r g (25)$, $g arrow.r h (-12)$, $g arrow.r c (-3)$, $b arrow.r g (-5)$, $c arrow.r b (19)$, $c arrow.r d (2)$, $d arrow.r e (6)$, $h arrow.r d (1)$.],
   answer: [

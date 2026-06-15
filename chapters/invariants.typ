@@ -35,6 +35,7 @@ Initialisering er basistilfældet, vedligeholdelse er induktionsskridtet, og ter
 === Tilbagevendende eksamensspørgsmål
 
 #qcard(
+  tag: [Løkkeinvariant: bevis invariant + aflæs output],
   source: "DM507 juni 2009, Opg. 2",
   prompt: [
     Betragt `KvadratRod(n)`:
@@ -60,6 +61,7 @@ Initialisering er basistilfældet, vedligeholdelse er induktionsskridtet, og ter
 )
 
 #qcard(
+  tag: [Løkkeinvariant: hvilke udsagn er invarianter?],
   source: "DM507 juni 2013, Opg. 6",
   prompt: [
     Betragt `Factorial(n)`:
@@ -89,6 +91,7 @@ Initialisering er basistilfældet, vedligeholdelse er induktionsskridtet, og ter
 )
 
 #qcard(
+  tag: [Løkkeinvariant: bevis invariant + aflæs output],
   source: "DM507 juni 2012, Opg. 6",
   prompt: [
     `IntegerLog(n)` beregner $floor(log n)$:
@@ -114,6 +117,7 @@ Initialisering er basistilfældet, vedligeholdelse er induktionsskridtet, og ter
 )
 
 #qcard(
+  tag: [Løkkeinvariant: hvilke udsagn er invarianter?],
   source: "MCQ juni 2017, Spm. 23",
   prompt: [
     `LogBaseTo(n)` beregner $ceil(log_2 n)$:

@@ -94,6 +94,7 @@ Valget mellem de to strukturer afgøres af spørgsmålstypen:
 === Tilbagevendende eksamensspørgsmål
 
 #qcard(
+  tag: [Augmenteret BST: vælg opdateringsligninger],
   source: "MCQ juni 2015, Spm. 25",
   prompt: [En mængde punkter i planen gemmes i et balanceret binært søgetræ (BST) med punkternes #swap[$x$]-koordinat som nøgle. Hver knude svarer til et punkt og gemmer derudover fire felter for hele sit deltræ: `v.xmax`, `v.xmin`, `v.ymax`, `v.ymin`. Hvilket sæt opdateringsligninger vedligeholder felterne korrekt i knude $v$ ud fra dens børn `v.left`, `v.right` og dens egne koordinater `v.x`, `v.y`?],
   options: (
@@ -107,6 +108,7 @@ Valget mellem de to strukturer afgøres af spørgsmålstypen:
 )
 
 #qcard(
+  tag: [Augmenteret BST: hvorfor bevares O(log n)?],
   source: "MCQ juni 2015, Spm. 26",
   prompt: [Lad nu søgetræet være et rød-sort træ. Hvilke af følgende er korrekte argumenter for, at informationen i træets knuder kan vedligeholdes under indsættelser og sletninger, uden at ændre de rød-sorte træers køretid på $O(log n)$ for indsættelser og sletninger?],
   options: (
@@ -121,6 +123,7 @@ Valget mellem de to strukturer afgøres af spørgsmålstypen:
 )
 
 #qcard(
+  tag: [Hashing: hvilke h'-værdier passer? (linear probing)],
   source: "MCQ juni 2021, Spm. 9 (samme type 2015/2017/2019/2023)",
   prompt: [En hashtabel $H$ bruger linear probing og en hjælpe-hashfunktion $h'(x)$. Tabellen er nu (indeks 0..6): plads 0 $=$ #swap[12], plads 1 tom, plads 2 $=$ #swap[10], plads 3 tom, plads 4 $=$ #swap[22], plads 5 tom, plads 6 $=$ #swap[31]. Derefter indsættes #swap[97], og tabellen er bagefter: plads 0 $=$ 12, plads 1 $=$ 97, plads 2 $=$ 10, plads 3 tom, plads 4 $=$ 22, plads 5 tom, plads 6 $=$ 31. Tabelstørrelse #swap[$m = 7$]. Hvilke værdier af $h'(97)$ er mulige? (et eller flere svar)],
   options: (
@@ -137,6 +140,7 @@ Valget mellem de to strukturer afgøres af spørgsmålstypen:
 )
 
 #qcard(
+  tag: [Sortering: hvilke er Θ(n²) i værste fald?],
   source: "MCQ juni 2019, Spm. 27 (worst-case sortering, går igen bredt)",
   prompt: [Vi betragter sortering af #swap[$n$] heltal med værdier i intervallet $[0, #swap[$n^2$])$. Med TreeSort menes algoritmen, der indsætter tallene ét ad gangen i et søgetræ og derefter laver et inorder-gennemløb. Hvilke af følgende algoritmer har worst-case-køretid $Theta(n^2)$? (et eller flere svar)],
   options: (

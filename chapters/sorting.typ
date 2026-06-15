@@ -75,6 +75,7 @@ PARTITION(A, p, r)
 === Tilbagevendende eksamensspørgsmål
 
 #qcard(
+  tag: [Sortering: værste-falds-køretid for CountingSort],
   source: "MCQ juni 2023, Spm. 27",
   prompt: [Vi betragter sortering af #swap[$n$] heltal med værdier i intervallet #swap[$[0, n^3)$]. Hvad er værste-falds-køretiden for CountingSort på dette input?],
   options: (
@@ -89,6 +90,7 @@ PARTITION(A, p, r)
 )
 
 #qcard(
+  tag: [Sortering: værste-falds-køretid for RadixSort],
   source: "MCQ juni 2023, Spm. 28",
   prompt: [Vi betragter sortering af #swap[$n$] heltal med værdier i intervallet #swap[$[0, n^3)$]. Hvad er værste-falds-køretiden for RadixSort, når heltallene behandles som tre cifre med værdier i intervallet $[0, n)$?],
   options: (
@@ -103,6 +105,7 @@ PARTITION(A, p, r)
 )
 
 #qcard(
+  tag: [Sortering: værste-falds-køretid for QuickSort],
   source: "MCQ juni 2023, Spm. 29",
   prompt: [Vi betragter sortering af #swap[$n$] heltal med værdier i intervallet #swap[$[0, n^3)$]. Hvad er værste-falds-køretiden for QuickSort på dette input?],
   options: (
@@ -117,6 +120,7 @@ PARTITION(A, p, r)
 )
 
 #qcard(
+  tag: [Sortering: hvilke er Θ(n²) i værste fald?],
   source: "MCQ juni 2019, Spm. 27",
   prompt: [Vi betragter sortering af #swap[$n$] heltal med værdier i intervallet #swap[$[0, n^2)$]. Ved TreeSort menes algoritmen, der indsætter tallene ét ad gangen i et søgetræ og derefter laver et inorder-gennemløb. Hvilke af algoritmerne nedenfor har værste-falds-køretid $Theta(n^2)$? (Et eller flere svar.)],
   options: (
@@ -140,6 +144,7 @@ PARTITION(A, p, r)
 )
 
 #qcard(
+  tag: [QuickSort: kør PARTITION i hånden],
   source: "MCQ juni 2019, Spm. 11",
   prompt: [Kør PARTITION($A$, 1, 7) på arrayet $A = #swap[$[6, 2, 4, 5, 1, 7, 3]$]$ (indeks 1..7). Hvilken mulighed viser $A$ bagefter? (Standard CLRS Lomuto-partition; pivot er sidste element $A[7] = 3$.)],
   options: (
@@ -161,6 +166,7 @@ PARTITION(A, p, r)
 )
 
 #qcard(
+  tag: [CountingSort: trace tælle-arrayet C],
   source: "MCQ juni 2023, Spm. 11",
   prompt: [Et array af ni heltal med værdier $0..6$: $A = #swap[$[2, 0, 6, 2, 3, 5, 5, 1, 2]$]$ (indeks 1..9). Kør COUNTING-SORT($A$, 9, 6) med et array $C$ med syv pladser (0..6). Hvad er summen af de syv heltal i $C$ ved terminering?],
   options: (

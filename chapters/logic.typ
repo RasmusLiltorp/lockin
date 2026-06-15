@@ -65,6 +65,7 @@ Biimplikation:
 === Tilbagevendende eksamensspørgsmål
 
 #qcard(
+  tag: [Udsagnslogik: hvilke udsagn er sande?],
   source: "MCQ juni 2023, Spm. 33",
   prompt: [Lad $p,q,r$ være udsagn. Hvilke af nedenstående udsagn er sande? (Et eller flere svar.)],
   options: (
@@ -84,6 +85,7 @@ Biimplikation:
 )
 
 #qcard(
+  tag: [Udsagnslogik: hvilke udsagn er sande?],
   source: "MCQ juni 2021, Spm. 34",
   prompt: [Lad $p,q,r,s$ være udsagn. Hvilke af følgende sammensatte udsagn er sande? (Et eller flere svar.)],
   options: (
@@ -113,6 +115,7 @@ Biimplikation:
 )
 
 #qcard(
+  tag: [Udsagnslogik: hvilke udsagn er sande?],
   source: "MCQ juni 2025, Spm. 32",
   prompt: [Lad $p,q,r$ være udsagn. Hvilke sammensatte udsagn er sande? (Et eller flere svar.)],
   options: (
@@ -138,6 +141,7 @@ Biimplikation:
 )
 
 #qcard(
+  tag: [Udsagnslogik: find de ækvivalente udsagn],
   source: "DM547 Reeksamen marts 2019, Spm. 3",
   prompt: [Hvilke udsagn er ækvivalente med #swap[$not(p and q)$]?],
   options: (

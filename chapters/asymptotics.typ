@@ -53,6 +53,7 @@ For løkker tæller du to ting hver for sig: hvor mange gange den ydre løkke k�
 === Tilbagevendende eksamensspørgsmål
 
 #qcard(
+  tag: [O-notation: er X = O(Y)?],
   source: "MCQ juni 2023, Spm. 5",
   prompt: [Hvilke af følgende er sande? (Et eller flere svar.)],
   options: (
@@ -69,6 +70,7 @@ For løkker tæller du to ting hver for sig: hvor mange gange den ydre løkke k�
 )
 
 #qcard(
+  tag: [Asymptotik: O / Ω / Θ / o / ω sand?],
   source: "MCQ juni 2023, Spm. 6",
   prompt: [Hvilke af følgende er sande? (Et eller flere svar.)],
   options: (
@@ -85,6 +87,7 @@ For løkker tæller du to ting hver for sig: hvor mange gange den ydre løkke k�
 )
 
 #qcard(
+  tag: [Køretid: tæl løkkernes gennemløb],
   source: "MCQ juni 2023, Spm. 25",
   prompt: [Hvad er den asymptotiske køretid i $Theta$-notation? \
     `ALGORITME3(n): i = 1; while i <= n: { j = n; while j > 1: j = j - 1; i = `#swap[$2$]`*i }`],
@@ -101,6 +104,7 @@ For løkker tæller du to ting hver for sig: hvor mange gange den ydre løkke k�
 )
 
 #qcard(
+  tag: [Køretid: løkke-fælde (tæller nulstilles ikke)],
   source: "MCQ juni 2023, Spm. 24",
   prompt: [Hvad er den asymptotiske køretid i $Theta$-notation? \
     `ALGORITME2(n): i = 1; j = 1; while i <= n: { i = i + `#swap[$5$]`; while j < i: j = j + 1 }`],

@@ -25,7 +25,8 @@ Hver gennemregnet eksamensopgave står her, sorteret efter opgavetype. Find den 
       groups.push((key: key, chapter: chap, items: ()))
     }
     let i = order.position(k => k == key)
-    groups.at(i).items.push((loc: loc, prompt: c.value.prompt))
+    let tag = if "tag" in c.value { c.value.tag } else { "" }
+    groups.at(i).items.push((loc: loc, prompt: c.value.prompt, tag: tag))
   }
 
   for g in groups {
@@ -41,7 +42,15 @@ Hver gennemregnet eksamensopgave står her, sorteret efter opgavetype. Find den 
             columns: (auto, 1fr),
             gutter: 6pt,
             text(fill: soft)[#sym.triangle.r.filled],
-            text(size: 10pt, fill: ink)[#it.prompt],
+            if it.tag != "" {
+              stack(
+                spacing: 3pt,
+                text(size: 10pt, weight: "bold", fill: ink)[#it.tag],
+                text(size: 8.5pt, fill: soft)[#it.prompt],
+              )
+            } else {
+              text(size: 10pt, fill: ink)[#it.prompt]
+            },
           )
         ]
       ]

@@ -65,6 +65,7 @@ Hver knude får et interval $[d, f]$. To tik per knude giver sidste afslutningst
 === Tilbagevendende eksamensspørgsmål
 
 #qcard(
+  tag: [BFS: kør i hånden, find afstand/rækkefølge],
   source: "MCQ juni 2023, spm. 14",
   prompt: [Udfør BFS($G$, $a$) med start i knude $a$ og nabolister sorteret alfabetisk. Orienterede kanter: $f arrow g$, $g arrow j$, $i arrow j$, $c arrow f$, $c arrow g$, $d arrow g$, $d arrow i$, $h arrow c$, $b arrow c$, $e arrow b$, $e arrow j$, $a arrow d$, $a arrow e$. Hvilken knude er den første, der får tildelt $d$-værdi (afstand) #swap[$4$]?],
   options: ([$c$], [$f$], [$h$], [$i$], [$j$]),
@@ -73,6 +74,7 @@ Hver knude får et interval $[d, f]$. To tik per knude giver sidste afslutningst
 )
 
 #qcard(
+  tag: [DFS: klassificér kanter (tæl forward/back/cross)],
   source: "MCQ juni 2023, spm. 16",
   prompt: [DFS-Visit($G$, $a$) på den orienterede graf med kanter $a arrow b$, $b arrow c$, $c arrow d$, $a arrow e$, $b arrow f$, $c arrow f$, $c arrow g$, $f arrow a$, $f arrow g$, $d arrow h$, $h arrow g$. Hvor mange #swap[forward-kanter] er der i dette gennemløb?],
   options: ([$0$], [$1$], [$2$], [$3$], [$4$]),
@@ -81,6 +83,7 @@ Hver knude får et interval $[d, f]$. To tik per knude giver sidste afslutningst
 )
 
 #qcard(
+  tag: [Topologisk sortering: er rækkefølgen gyldig?],
   source: "MCQ juni 2023, spm. 17",
   prompt: [Orienteret graf med kanter $a arrow b$, $a arrow d$, $b arrow c$, $b arrow d$, $b arrow e$, $c arrow f$, $e arrow f$, $g arrow c$, $g arrow f$. Hvilke lister er en topologisk sortering? (Et eller flere svar.)],
   options: (
@@ -95,6 +98,7 @@ Hver knude får et interval $[d, f]$. To tik per knude giver sidste afslutningst
 )
 
 #qcard(
+  tag: [DFS: kør i hånden, find opdagelses-/afslutningstid],
   source: "MCQ juni 2015, spm. 10",
   prompt: [Udfør DFS med start i $i$ med nabolisterne sorteret alfabetisk. Hvilken knude får opdagelsestid (starttid) #swap[$12$]? Hjulgraf med center $i$ og ydre knuder $a$ til $h$. Eger: $i arrow a$, $i arrow b$, $c arrow i$, $i arrow d$, $e arrow i$, $f arrow i$, $i arrow g$, $i arrow h$. Ydre kanter: $h arrow a$, $b arrow a$, $b arrow c$, $d arrow c$, $e arrow d$, $f arrow e$, $g arrow f$, $g arrow h$.],
   options: (
