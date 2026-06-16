@@ -104,7 +104,29 @@ Valget mellem de to strukturer afgøres af spørgsmålstypen:
     [`v.xmax = v.right.xmax`; `v.xmin = v.left.xmin`; `v.ymax = max(v.left.ymax, v.right.ymax, v.y)`; `v.ymin = min(v.left.ymin, v.right.ymin, v.y)`],
   ),
   answer: [Mulighed (d).],
-  worked: [Træet er sorteret efter $x$, så `xmax` kommer fra højre barn og `xmin` fra venstre. $y$ er ikke ordnet af træet, så `ymax` og `ymin` kombineres over begge børn og knuden selv. (a) bytter $x$-siderne, (b) bytter $max$ og $min$ på $y$, (c) henter $y$ fra ét fast barn. Kun (d) er rigtig.],
+  blueprint: [
+    Først finder du ud af, om feltet hænger på nøglen eller ikke. Det afgør formlen.
+
+    + *Hvad er træet sorteret efter?* Her er nøglen #swap[$x$]. Et ekstremum af selve nøglen ligger fast: største #swap[$x$] er den højreste knude, mindste #swap[$x$] den venstreste.
+    + *Nøglefelt.* Største nøgle hentes direkte fra højre barn, mindste fra venstre barn. Ingen sammenligning med knuden selv.
+    + *Ikke-nøglefelt.* Et felt på en anden koordinat (#swap[$y$]) er ikke ordnet af træet. Tag $max$ eller $min$ over begge børn og knudens egen værdi.
+    + *Sortér svarene fra.* Smid de muligheder ud, der bytter venstre/højre på nøglefeltet, eller bytter $max$ og $min$, eller henter et ikke-nøglefelt fra kun ét barn.
+  ],
+  worked: [
+    Nøglen er $x$, og felterne er `xmax`, `xmin`, `ymax`, `ymin`.
+
+    + `xmax` og `xmin` hænger på nøglen. Største $x$ ligger længst til højre, så `xmax = v.right.xmax`. Mindste $x$ ligger længst til venstre, så `xmin = v.left.xmin`.
+    + `ymax` og `ymin` hænger på $y$, som træet ikke sorterer efter. Begge børn og knuden selv kan have ekstremet, så `ymax = max(v.left.ymax, v.right.ymax, v.y)` og `ymin = min(...)`.
+
+    Nu tjekker jeg de fire muligheder mod det:
+
+    - (a) bytter venstre og højre på $x$-felterne. Forkert.
+    - (b) bytter $max$ og $min$ på $y$. Forkert.
+    - (c) henter $y$ fra ét fast barn, som var $y$ sorteret. Forkert.
+    - (d) rammer alle fire formler. Rigtig.
+
+    Svar: mulighed (d).
+  ],
 )
 
 #qcard(
@@ -119,7 +141,31 @@ Valget mellem de to strukturer afgøres af spørgsmålstypen:
     [Efter ændringer kan et inorder-gennemløb af træet genoprette informationen i alle knuder i tid $O(log n)$.],
   ),
   answer: [Mulighed (d).],
-  worked: [En indsæt eller slet ændrer kun knuder på én rod-til-blad-sti plus $O(1)$ rotationer, og hver rotation ændrer lokalt $O(1)$ felter, der kan genfindes fra børnene. Genberegning nedefra og op koster $O(log n) =$ træets højde. (a) falsk: info ændres. (b) falsk: mere end roden. (c) falsk: sletninger kræver også opdatering. (e) falsk: inorder er $O(n)$.],
+  blueprint: [
+    Argumentet skal vise to ting: kun få knuder rører sig, og hver opdatering er billig.
+
+    + *Hvilke knuder ændrer felt?* Kun knuderne på #swap[stien fra det berørte blad op til roden], plus de $O(1)$ rotationer balanceringen laver. Resten af træet er urørt.
+    + *Kan feltet genberegnes lokalt?* Ja, hvis det kun afhænger af knudens egen værdi og de to børns felter. Så koster én knude $O(1)$.
+    + *Saml regnestykket.* Stien er højst træets højde, altså $O(log n)$ knuder, hver til $O(1)$. I alt $O(log n)$, samme som indsæt og slet i forvejen.
+    + *Sortér svarene fra.* Et svar, der siger "ingen opdatering", "kun roden" eller "kun ved indsæt", overser stien. Et inorder-gennemløb rører alle knuder og er $O(n)$, ikke $O(log n)$.
+  ],
+  worked: [
+    Træet er rød-sort, så højden er $O(log n)$.
+
+    + En indsæt eller slet ændrer kun knuder på én sti fra blad til rod, plus $O(1)$ rotationer. Hver rotation flytter lokalt på $O(1)$ felter.
+    + Hvert felt kan genfindes fra knudens egen værdi og de to børn, så én knude koster $O(1)$.
+    + Genberegning nedefra og op langs stien rører $O(log n)$ knuder. Samlet $O(log n)$.
+
+    Mulighederne:
+
+    - (a) påstår at intet felt ændres. Falsk, de gør.
+    - (b) siger kun roden. Falsk, hele stien.
+    - (c) glemmer at sletninger også skal opdatere. Falsk.
+    - (d) rammer stien og genberegningen nedefra og op. Rigtig.
+    - (e) bruger inorder, som er $O(n)$. Falsk.
+
+    Svar: mulighed (d).
+  ],
 )
 
 #qcard(
@@ -136,7 +182,31 @@ Valget mellem de to strukturer afgøres af spørgsmålstypen:
     [$h'(97) = 6$],
   ),
   answer: [Mulighederne (a), (b) og (g): $h'(97) in #swap[${0, 1, 6}$]$.],
-  worked: [Optagne pladser: $#swap[${0,2,4,6}$]$, tomme: $#swap[${1,3,5}$]$, og 97 landede i plads #swap[1]. Prob hver startværdi til første tomme plads. $h'=0$: 0 optaget, lander 1. $h'=1$: lander 1. $h'=2 ->$ 3. $h'=3 ->$ 3. $h'=4 ->$ 5. $h'=5 ->$ 5. $h'=6$: 6 og 0 optaget, lander 1. Kun $0, 1, 6$ rammer plads 1.],
+  blueprint: [
+    Du kender landingspladsen og skal finde, hvilke startværdier der kunne ende der. Prøv dem alle.
+
+    + *Aflæs tabellen.* Noter hvilke pladser der var optaget før indsættelsen, og hvilken plads den nye nøgle endte på.
+    + *Linear probing.* Probe-sekvensen er $h(k,i) = (h'(k) + i) mod m$, altså start ved #swap[$h'$] og gå ét skridt frem ad gangen til første tomme plads.
+    + *Prøv hver kandidat.* For hvert mulige $h'$ følger du sekvensen fra den startplads, til du rammer en tom plads. Lander den på den observerede plads, er kandidaten gyldig.
+    + *Saml svaret.* Behold de startværdier, hvis sekvens ender på den rigtige plads.
+  ],
+  worked: [
+    Optagne pladser før indsættelsen: $#swap[${0,2,4,6}$]$. Tomme: $#swap[${1,3,5}$]$. Nøglen 97 endte på plads #swap[1], og $m = #swap[7]$.
+
+    Jeg prober hver startværdi frem til første tomme plads:
+
+    - $h'=0$: plads 0 er optaget, gå til 1. Tom, lander på 1. Passer.
+    - $h'=1$: plads 1 er tom, lander på 1. Passer.
+    - $h'=2$: 2 optaget, gå til 3. Tom, lander på 3. Forkert.
+    - $h'=3$: 3 tom, lander på 3. Forkert.
+    - $h'=4$: 4 optaget, gå til 5. Tom, lander på 5. Forkert.
+    - $h'=5$: 5 tom, lander på 5. Forkert.
+    - $h'=6$: 6 optaget, gå til 0 (wrap), også optaget, gå til 1. Tom, lander på 1. Passer.
+
+    Kun $0$, $1$ og $6$ rammer plads 1.
+
+    Svar: $h'(97) in {0, 1, 6}$, altså (a), (b) og (g).
+  ],
 )
 
 #qcard(
@@ -153,5 +223,26 @@ Valget mellem de to strukturer afgøres af spørgsmålstypen:
     [InsertionSort],
   ),
   answer: [Mulighederne (a), (e), (f) og (g): CountingSort, ubalanceret TreeSort, QuickSort og InsertionSort.],
-  worked: [CountingSort med univers $k = n^2$ er $Theta(n + n^2) = Theta(n^2)$. RadixSort med 2 cifre i base $n$ er to CountingSort-pas med $k = n$, altså $Theta(n)$. MergeSort er altid $Theta(n log n)$. TreeSort på et rød-sort træ er $n$ indsættelser à $O(log n)$ plus et $O(n)$-gennemløb, altså $Theta(n log n)$. TreeSort på et ubalanceret BST degenererer ved sorteret input til en sti, hvor indsættelse $i$ koster $i$, så summen er $Theta(n^2)$. QuickSort og InsertionSort er $Theta(n^2)$ i worst case.],
+  blueprint: [
+    Gå hver algoritme igennem og find dens worst case. Pas på, at universets størrelse #swap[$k$] tæller med for de tællende sorteringer.
+
+    + *Tællende sorteringer.* CountingSort er $Theta(n + k)$, så et stort univers ($k = #swap[$n^2$]$) gør den langsom. RadixSort deler tallene i cifre og kører ét CountingSort-pas per ciffer med lille basis.
+    + *Sammenligningssorteringer med garanti.* MergeSort er altid $Theta(n log n)$, uanset input.
+    + *TreeSort afhænger af træet.* Balanceret træ giver $n$ indsættelser à $O(log n)$. Et ubalanceret BST kan degenerere til en sti ved sorteret input.
+    + *Sammenligningssorteringer uden garanti.* QuickSort og InsertionSort har $Theta(n^2)$ worst case.
+    + *Saml dem, der rammer $Theta(n^2)$.*
+  ],
+  worked: [
+    Vi sorterer $n$ heltal i intervallet $[0, n^2)$, så universet er $k = n^2$.
+
+    - *CountingSort:* $Theta(n + k) = Theta(n + n^2) = Theta(n^2)$. Rammer.
+    - *RadixSort, 2 cifre i base $n$:* to CountingSort-pas, hvert med $k = n$, altså $Theta(n)$. Rammer ikke.
+    - *MergeSort:* altid $Theta(n log n)$. Rammer ikke.
+    - *TreeSort, rød-sort træ:* $n$ indsættelser à $O(log n)$ plus et $O(n)$-gennemløb, altså $Theta(n log n)$. Rammer ikke.
+    - *TreeSort, ubalanceret BST:* sorteret input gør træet til en sti. Indsættelse nummer $i$ går $i$ skridt ned, og $sum_(i=1)^n i = Theta(n^2)$. Rammer.
+    - *QuickSort:* worst case $Theta(n^2)$. Rammer.
+    - *InsertionSort:* worst case $Theta(n^2)$. Rammer.
+
+    Svar: (a), (e), (f) og (g).
+  ],
 )

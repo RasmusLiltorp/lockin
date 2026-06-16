@@ -59,7 +59,29 @@ Hver tagen kant smelter to komponenter til én, så efter $k$ kanter gælder:
   prompt: [Brug Kruskals algoritme til at finde et MST (læs næste spørgsmål først). Knuder $a, b, c, e, f, g, h, i, j$. Kanter med vægte: $(a,c)=#swap[$2$]$, $(a,b)=#swap[$15$]$, $(b,e)=5$, $(b,f)=8$, $(c,e)=20$, $(c,j)=17$, $(e,h)=11$, $(e,j)=9$, $(f,h)=6$, $(f,g)=3$, $(g,i)=19$, $(h,i)=16$, $(h,j)=21$, $(i,j)=14$. Hvilken kant tilføjes sidst til MST'et?],
   options: ([$(a, b)$], [$(i, j)$], [$(h, j)$], [$(e, h)$], [$(h, i)$], [$(e, j)$]),
   answer: [(a) $(a, b)$.],
-  worked: [9 knuder, så 8 kanter. Letteste først: $a c (2)$, $f g (3)$, $b e (5)$, $f h (6)$, $b f (8)$, $e j (9)$, spring $e h (11)$ over (kreds), $i j (14)$. Til sidst binder $a b (15)$ ${a,c}$ til resten — den 8. og sidste kant.],
+  blueprint: [
+    Spørgsmålet om den sidst tilføjede kant er bare Kruskal kørt til ende. Den tungeste accepterede kant er svaret.
+
+    + *Tæl knuderne.* Du skal bruge #swap[$n - 1$] kanter, så ved $n$ knuder er det $n - 1$ stop.
+    + *Sortér kanterne efter vægt*, letteste først.
+    + *Gå listen igennem.* Tag en kant hvis dens to endepunkter ligger i hver sin komponent; ellers spring den over.
+    + *Bliv ved* til du har $n - 1$ kanter. Den sidste du tog, er svaret.
+  ],
+  worked: [
+    9 knuder, så jeg skal bruge 8 kanter.
+
+    + $a c (2)$ #sym.arrow.r tilføjes.
+    + $f g (3)$ #sym.arrow.r tilføjes.
+    + $b e (5)$ #sym.arrow.r tilføjes.
+    + $f h (6)$ #sym.arrow.r tilføjes.
+    + $b f (8)$ #sym.arrow.r tilføjes (binder ${b,e}$ og ${f,g,h}$ sammen).
+    + $e j (9)$ #sym.arrow.r tilføjes.
+    + $e h (11)$ #sym.arrow.r forkastes; $e$ og $h$ sidder allerede sammen via $e$–$b$–$f$–$h$.
+    + $i j (14)$ #sym.arrow.r tilføjes.
+    + $a b (15)$ #sym.arrow.r tilføjes; den hægter ${a,c}$ på resten og er kant nummer 8.
+
+    Svar: $(a,b)$, den sidste kant ind.
+  ],
 )
 
 #qcard(
@@ -68,7 +90,23 @@ Hver tagen kant smelter to komponenter til én, så efter $k$ kanter gælder:
   prompt: [Fortsæt med Kruskals algoritme på samme graf. I det første øjeblik hvor en undersøgt kant ikke tages med, hvor mange sammenhængskomponenter har $(V, A)$? ($V$ er alle knuder, $A$ er de kanter der er taget indtil nu.)],
   options: ([$1$], [$2$], [$3$], [$4$], [$5$], [$6$]),
   answer: [(c) #swap[$3$].],
-  worked: [$n = 9$. Tagne kanter: $a c (2)$, $f g (3)$, $b e (5)$, $f h (6)$, $b f (8)$, $e j (9)$ — 6 stk. Næste, $e h (11)$, er den første forkastede ($e$ og $h$ allerede forbundet via $e$–$b$–$f$–$h$). Med 6 kanter: $9 - 6 = 3$ komponenter.],
+  blueprint: [
+    Hver tagen kant smelter to komponenter til én, så efter $k$ kanter er der $n - k$ komponenter. Du skal bare vide hvor mange kanter der er taget, lige før den første forkastelse.
+
+    + *Kør Kruskal* og tæl kanterne du tager med.
+    + *Stop ved den første kant der springes over* (begge endepunkter i samme komponent). Lad #swap[$k$] være antal tagne kanter på det tidspunkt.
+    + *Aflæs svaret* som $n - k$ komponenter.
+  ],
+  worked: [
+    Her er $n = 9$. Jeg tager kanterne i vægtrækkefølge og tæller med.
+
+    + $a c (2)$, $f g (3)$, $b e (5)$, $f h (6)$, $b f (8)$, $e j (9)$ #sym.arrow.r seks kanter taget.
+    + $e h (11)$ #sym.arrow.r forkastes; $e$ og $h$ hænger allerede sammen via $e$–$b$–$f$–$h$. Det er den første kant der ryger ud.
+
+    Med $k = 6$ tagne kanter: $9 - 6 = 3$.
+
+    Svar: 3 komponenter.
+  ],
 )
 
 #qcard(
@@ -77,7 +115,17 @@ Hver tagen kant smelter to komponenter til én, så efter $k$ kanter gælder:
   prompt: [Brug Prims algoritme til at finde et MST med start i knude #swap[$a$]. Urettede vægtede kanter: $b c=5$, $c a=11$, $a f=10$, $f e=7$, $b d=13$, $c h=9$, $a h=2$, $a i=3$, $f i=4$, $e g=8$, $d h=1$, $h i=6$, $i g=12$. Hvilken knude tilføjes sidst til MST'et?],
   options: ([$b$], [$d$], [$e$], [$g$]),
   answer: [(a) #swap[$b$].],
-  worked: [Voks $C$ fra $a$; hvert skridt tager den letteste kant ud af $C$ og trækker en ny knude ind. Den kant er en MST-kant:
+  blueprint: [
+    Den sidst tilføjede knude i Prim er den sidste der trækkes ind i træet $C$.
+
+    + *Start i* #swap[startknuden] og sæt $C$ til kun den knude.
+    + *Find den letteste kant* der går fra $C$ ud til en knude udenfor.
+    + *Tag kanten*, læg den nye knude ind i $C$, og noter rækkefølgen.
+    + *Gentag* til alle knuder er i $C$. Den knude der kom ind sidst, er svaret.
+  ],
+  worked: [
+    Jeg vokser $C$ ud fra $a$. Hvert skridt tager den letteste kant ud af $C$ og trækker en ny knude ind, og den kant er en MST-kant.
+
     #table(
       columns: 3,
       align: (center, center, left),
@@ -93,7 +141,10 @@ Hver tagen kant smelter to komponenter til én, så efter $k$ kanter gælder:
       [7], [$c$], [$c h = 9$],
       [8], [$b$], [$b c = 5$],
     )
-    De otte kanter i højre kolonne er MST'et (9 knuder giver 8 kanter). Sidste knude ind er $b$, så svaret er (a).],
+    De otte kanter i højre kolonne er MST'et (9 knuder giver 8 kanter).
+
+    Svar: $b$ kommer ind sidst, så (a).
+  ],
 )
 
 #qcard(
@@ -102,5 +153,23 @@ Hver tagen kant smelter to komponenter til én, så efter $k$ kanter gælder:
   prompt: [Kør Kruskals algoritme på grafen $G_3$. Knuder $a, b, c, d, e, f, g, h, i$ med vægtede kanter: $(a,f)=3$, $(a,b)=4$, $(f,g)=8$, $(f,b)=5$, $(g,b)=2$, $(g,c)=6$, $(b,c)=1$, $(h,c)=9$, $(h,d)=6$, $(h,i)=9$, $(i,d)=7$, $(i,e)=1$, $(c,d)=8$, $(d,e)=7$. Hvilken kant er den første der undersøges af algoritmen, men ikke tages med i MST'et?],
   options: ([Kanten $(b, f)$], [Kanten $(c, g)$], [Kanten $(d, i)$], [Kanten $(d, e)$], [Kanten $(f, g)$], [Kanten $(h, i)$]),
   answer: [(a) kanten $(b, f)$, vægt #swap[$5$].],
-  worked: [Letteste først: $b c (1)$, $i e (1)$, $g b (2)$, $a f (3)$, $a b (4)$ — nu er ${a,b,c,f,g}$ én komponent. Næste, $(f,b)=5$, har begge endepunkter i den komponent: en kreds, og den første forkastede kant.],
+  blueprint: [
+    Den først forkastede kant er den letteste kant hvis to endepunkter allerede ligger i samme komponent når Kruskal når frem til den.
+
+    + *Sortér kanterne efter vægt*, letteste først.
+    + *Gå listen igennem* og hold styr på hvilke knuder der hænger sammen.
+    + *Den første kant hvor begge endepunkter allerede sidder i samme komponent* laver en kreds. Den er svaret; stop der.
+  ],
+  worked: [
+    Jeg tager kanterne i vægtrækkefølge og holder øje med komponenterne.
+
+    + $b c (1)$ #sym.arrow.r tilføjes.
+    + $i e (1)$ #sym.arrow.r tilføjes.
+    + $g b (2)$ #sym.arrow.r tilføjes.
+    + $a f (3)$ #sym.arrow.r tilføjes.
+    + $a b (4)$ #sym.arrow.r tilføjes; nu er ${a,b,c,f,g}$ samlet i én komponent.
+    + $f b (5)$ #sym.arrow.r forkastes; både $f$ og $b$ ligger i den komponent, så kanten laver en kreds.
+
+    Svar: $(b,f)$ med vægt 5, den første kant der springes over.
+  ],
 )

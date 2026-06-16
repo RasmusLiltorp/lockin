@@ -62,13 +62,26 @@ Vending-reglerne er:
     [$not forall x in ZZ : exists y in ZZ : x dot y = x$],
   ),
   answer: [Sande: (a), (b), (d).],
+  blueprint: [
+    Du får flere kvantificerede udsagn over ét fast domæne, og hvert udsagn skal vurderes for sig.
+
+    + *Skriv domænet op.* Notér mængden #swap[$ZZ$] og hold fast i den. Det samme udsagn kan være sandt over $RR$ og falsk over $ZZ$.
+    + *Tag den yderste kvantor først.* Ved $forall$ leder du efter ét modeksempel. Ved $exists$ rækker det at finde ét vidne.
+    + *Ved $forall x exists y$:* hold $x$ fast og byg $y$ som en formel i $x$, fx $y = x+1$. Virker formlen for hvert $x$, er udsagnet sandt.
+    + *Ved $exists x forall y$:* find ét fast $x$, der holder for alle $y$, og test grænsetilfælde som $y = 0$. Over et ubegrænset domæne falder de fleste af disse.
+    + *Står der $not$ foran:* afgør først det indre udsagn, og vend så svaret.
+  ],
   worked: [
-    (a) For positive $x$ er $-x < 0 < x$. Sand. \
-    (b) $2x = x+2$ kun ved $x = 2$, så $forall$-udsagnet er falsk og fornægtelsen sand. \
-    (c) $x^2 = 5$ har ingen heltalsløsning. Falsk. \
-    (d) Hold $x$ fast, vælg $y = x + 101 > x + 100$. Vidnet bygges af $x$. Sand. \
-    (e) $y = 0$ giver $(x+0)^2 = x^2$, ikke $< x^2$. Intet $x$ virker for alle $y$. Falsk. \
-    (f) $y = 1$ giver $x dot 1 = x$ for hvert $x$, så det indre udsagn holder og fornægtelsen er falsk.
+    Domænet er $ZZ$ (i (a) dog $ZZ^+$). Hvert udsagn for sig:
+
+    + (a) For positive $x$ er $-x < 0 < x$, så $x > -x$ holder. Sand.
+    + (b) $2x = x+2$ gælder kun ved $x = 2$, så $forall$-udsagnet er falsk. Dermed er fornægtelsen sand.
+    + (c) $x^2 = 5$ har ingen heltalsløsning, for $sqrt(5)$ er ikke et heltal. Falsk.
+    + (d) Hold $x$ fast og vælg $y = x + 101$. Så er $y > x + 100$, og vidnet bygges af $x$. Sand.
+    + (e) Prøv $y = 0$: $(x+0)^2 = x^2$, og det er ikke $< x^2$. Intet fast $x$ virker for alle $y$. Falsk.
+    + (f) Vælg $y = 1$: så er $x dot 1 = x$ for hvert $x$. Det indre udsagn holder, så fornægtelsen er falsk.
+
+    Svar: sande er (a), (b), (d).
   ],
 )
 
@@ -86,14 +99,30 @@ Vending-reglerne er:
     [$not exists x exists y : x + y = 2x quad <==> quad forall x exists y : x + y != 2x$],
   ),
   answer: [Sande: (c), (d), (e).],
+  blueprint: [
+    Samme opgavetype som før, men nu er ét af udsagnene en påstået ækvivalens mellem en fornægtelse og en omskrivning.
+
+    + *Læs domænet og udsagnet,* og tag den yderste kvantor først som ved sandhedsværdi-opgaverne.
+    + *Afgør hvert udsagn for sig.* Ved $forall$ søger du et modeksempel; ved $exists$ et vidne.
+    + *Ved en påstået ækvivalens:* fornægt #swap[venstresiden] korrekt med De Morgan, hvor du vender alle kvantorer i rækken. Sammenlign så de to siders sandhedsværdi. Et bikonditional er kun sandt, når begge sider har samme værdi.
+  ],
   worked: [
-    (a) Fejler ved $x = 0$ ($0 > 0$ falsk). Falsk. \
-    (b) $x = 3$ giver $9 > 6$, så $exists$ holder og fornægtelsen er falsk. \
-    (c) Er $x < 5$, holder første led. Er $x >= 5$, er $x(x-2) > 0$, så $x^2 > 2x$. Sand. \
-    (d) $y = x$ giver $x + x = 2x$. Sand. \
-    (e) Det indre $forall y : x + y = 2x$ tvinger $y = x$ for hvert $y$ — umuligt. $exists x$ er falsk, fornægtelsen sand. \
-    (f) Fejler ved $x = 0, y = 1$. Falsk. \
-    (g) Venstresiden er falsk (vidne $x = y = 0$). Korrekt De Morgan af $not exists x exists y$ er $forall x forall y$, ikke $forall x exists y$. Højresiden er sand (vælg $y = x+1$). $F <==> T$ er falsk.
+    Domænet er $ZZ$. Hvert udsagn for sig:
+
+    + (a) Prøv $x = 0$: $0 > 0$ er falsk, så $forall$ fejler. Falsk.
+    + (b) $x = 3$ giver $9 > 6$, så $exists$ holder. Fornægtelsen er dermed falsk.
+    + (c) Er $x < 5$, holder første led. Er $x >= 5$, så er $x(x-2) > 0$, altså $x^2 > 2x$. Begge tilfælde holder. Sand.
+    + (d) Vælg $y = x$: så er $x + x = 2x$. Sand.
+    + (e) Det indre $forall y : x + y = 2x$ kræver $y = x$ for hvert $y$, og det kan ikke lade sig gøre. Så $exists x$ er falsk, og fornægtelsen er sand.
+    + (f) Prøv $x = 0, y = 1$: $0 + 1 = 0$ er falsk. Falsk.
+    + (g) Tjek de to sider:
+      - Venstresiden er falsk. Tag vidnet $x = y = 0$, så holder $x + y = 2x$, og $not exists x exists y$ er dermed falsk.
+      - Den korrekte De Morgan af $not exists x exists y$ er $forall x forall y$, ikke $forall x exists y$. Højresiden bruger den forkerte kvantor.
+      - Højresiden er sand: vælg $y = x+1$, så er $x + y != 2x$.
+
+      Venstre er falsk, højre er sand, så bikonditionalen er falsk.
+
+    Svar: sande er (c), (d), (e).
   ],
 )
 
@@ -113,16 +142,29 @@ Vending-reglerne er:
     [$not exists a in ZZ : forall b in ZZ : a^2 = b$],
   ),
   answer: [Sande: (a), (c), (f), (i).],
+  blueprint: [
+    Igen en stak udsagn over ét domæne, og igen gemmer der sig en påstået ækvivalens med en fornægtelse i bunken.
+
+    + *Læs domænet og tag den yderste kvantor først.* Ved $forall$ søger du et modeksempel; ved $exists$ et vidne.
+    + *Afgør hvert udsagn for sig.* Ved indlejring holder du den ydre variabel fast og bygger den indre som formel.
+    + *Ved en påstået ækvivalens:* fornægt #swap[den ene side] med De Morgan og vend alle kvantorer. Sammenlign så sandhedsværdierne; bikonditionalen er kun sand, når de er ens.
+  ],
   worked: [
-    (a) $a^2 = 81 => a = plus.minus 9 in ZZ$. Sand. \
-    (b) $a < 2a <==> 0 < a$, fejler for $a <= 0$. Falsk. \
-    (c) $a = b = 0$. Sand. \
-    (d) $2a > b$ for alle $b$ kræver $b$ begrænset opadtil, men $b$ løber over hele $ZZ$. Falsk. \
-    (e) $a = 2b$ kræver $a$ lige; ulige $a$ (fx 1) fejler. Falsk. \
-    (f) $b = a - 2$ findes altid. Sand. \
-    (g) Fejler når $a = b$. Falsk. \
-    (h) Korrekt fornægtelse af $exists a forall b : a^2 = b$ er $forall a exists b : a^2 != b$, ikke $exists a forall b : a^2 != b$. Bikonditionalen parrer to udsagn med forskellig sandhedsværdi. Falsk. \
-    (i) $exists a forall b : a^2 = b$ kræver ét $a$, hvis kvadrat er hvert heltal — umuligt. Udsagnet er falsk, fornægtelsen sand.
+    Domænet er $ZZ$. Hvert udsagn for sig:
+
+    + (a) $a^2 + 1 = 82$ giver $a^2 = 81$, altså $a = plus.minus 9$, og begge ligger i $ZZ$. Sand.
+    + (b) $a < 2a$ er det samme som $0 < a$, og det fejler for $a <= 0$ (fx $a = 0$). Falsk.
+    + (c) Vælg $a = b = 0$. Sand.
+    + (d) $2a > b$ for alle $b$ kræver, at $b$ er begrænset opadtil, men $b$ løber over hele $ZZ$. Intet fast $a$ rækker. Falsk.
+    + (e) $a = 2b$ kræver, at $a$ er lige. Et ulige $a$ som $1$ har intet $b$. Falsk.
+    + (f) Vælg $b = a - 2$; det findes for hvert $a$, og så er $a = b + 2$. Sand.
+    + (g) Prøv $a = b$: så er hverken $a < b$ eller $a > b$ opfyldt. Falsk.
+    + (h) Tjek de to sider:
+      - Den korrekte fornægtelse af $exists a forall b : a^2 = b$ er $forall a exists b : a^2 != b$, ikke $exists a forall b : a^2 != b$. Højresiden har den forkerte ydre kvantor.
+      - De to sider får ikke samme sandhedsværdi, så bikonditionalen er falsk.
+    + (i) $exists a forall b : a^2 = b$ kræver ét $a$, hvis kvadrat rammer hvert heltal, og det kan ikke lade sig gøre. Udsagnet er falsk, så fornægtelsen er sand.
+
+    Svar: sande er (a), (c), (f), (i).
   ],
 )
 
@@ -135,11 +177,23 @@ Vending-reglerne er:
 
   Dernæst (4b): angiv fornægtelsen af i uden $not$ i svaret.],
   answer: [4a: i er sand, ii er falsk. 4b: $#swap[$exists x in NN : forall y in NN : x >= y$]$.],
+  blueprint: [
+    Opgaven har to dele: først afgøre sandhed, så fornægte et udsagn uden at lade $not$ stå tilbage i svaret.
+
+    + *Afgør sandhed udsagn for udsagn,* med yderste kvantor først.
+    + *Til fornægtelsen:* skub $not$ ind én kvantor ad gangen, så hver kvantor vender. Byt til sidst #swap[relationen] ud med sin modsætning, så der ikke står $not$ tilbage; $not(a < b)$ bliver $a >= b$.
+    + *Tjek til slut,* at fornægtelsen har modsat sandhedsværdi af originalen.
+  ],
   worked: [
-    4a-i. Hold $x$ fast, vælg $y = x + 1$. Sand. \
-    4a-ii. Påstår ét $y$ større end hvert $x$ — et største naturligt tal. Tag $x = y$, så fejler $x < y$. Falsk. Samme prædikat, byttet rækkefølge, vendt sandhedsværdi. \
+    Domænet er $NN = {0,1,2,dots}$.
+
+    + 4a-i. Hold $x$ fast og vælg $y = x + 1$. Så er $x < y$, og vidnet findes for hvert $x$. Sand.
+    + 4a-ii. Her påstås ét $y$, der er større end hvert $x$, altså et største naturligt tal. Tag $x = y$, så fejler $x < y$. Falsk. Samme prædikat, byttet rækkefølge, vendt sandhedsværdi.
+
     4b. Skub $not$ ind og vend hver kvantor:
+
     #eq[$ not (forall x exists y : x < y) equiv exists x forall y : not(x < y) equiv exists x forall y : x >= y $]
-    I ord: "der findes et naturligt tal $x$ større end eller lig med hvert $y$" (et største tal). Falsk, som det skal være.
+
+    I ord: der findes et naturligt tal $x$, som er større end eller lig med hvert $y$, altså et største tal. Det er falsk, og originalen var sand, så fornægtelsen passer.
   ],
 )

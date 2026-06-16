@@ -57,9 +57,24 @@ Et fjerde greb dækker "bevis eller modbevis" om en for-alle-påstand: ét modek
   source: "DM04 Opg 1 (Rosen 1.7 #1)",
   prompt: [Brug et direkte bevis til at vise, at #swap[summen] af to #swap[ulige] heltal er #swap[lige].],
   answer: [Sandt. Summen af to ulige tal er $2(a+b+1)$, altså lige.],
-  worked: [Lad $m = 2a+1$ og $n = 2b+1$ for heltal $a, b$. Så er
-  #eq[$ m + n = (2a+1) + (2b+1) = 2a + 2b + 2 = 2(a+b+1). $]
-  $a+b+1$ er et heltal, så $m+n = 2 dot ("heltal")$ er lige. $qed$],
+  blueprint: [
+    Direkte bevis: antag forudsætningen og regn dig frem til konklusionen.
+
+    + *Oversæt til algebra.* Skriv hver #swap[ulige] størrelse som $2k+1$ med sit eget heltal, så $2a+1$ og $2b+1$.
+    + *Byg udtrykket op.* Stil det op, påstanden handler om, her #swap[summen] $m+n$.
+    + *Reducer til formen.* Saml led og sæt $2$ uden for parentes, så du står med $2 dot ("heltal")$ for #swap[lige].
+    + *Konkludér.* Udtrykket har formen, konklusionen kræver. $#sym.arrow.r$ påstanden gælder.
+  ],
+  worked: [
+    Her er $m = 2a+1$ og $n = 2b+1$ for heltal $a, b$.
+
+    + Læg de to sammen:
+      #eq[$ m + n = (2a+1) + (2b+1) = 2a + 2b + 2 = 2(a+b+1). $]
+    + $a+b+1$ er et heltal, kald det $t$, så $m + n = 2t$.
+    + Et tal på formen $2t$ er lige.
+
+    Svar: summen er lige. $qed$
+  ],
 )
 
 #qcard(
@@ -67,12 +82,35 @@ Et fjerde greb dækker "bevis eller modbevis" om en for-alle-påstand: ét modek
   source: "DM04 Opg 17 (Rosen 1.7 #17)",
   prompt: [Vis, at hvis $n$ er et heltal og #swap[$n^3 + 5$] er ulige, så er #swap[$n$] lige — ved (a) kontraposition, (b) modstrid.],
   answer: [Begge virker. Ulige $n$ gør $n^3$ ulige, så $n^3 + 5 = "ulige" + "ulige" = "lige"$.],
-  worked: [
-  *(a) Kontraposition.* Bevis "hvis $n$ er ulige, så er $n^3 + 5$ lige". Lad $n = 2k+1$. Så er $n^3$ ulige, sig $n^3 = 2j+1$, og
-  #eq[$ n^3 + 5 = 2j + 6 = 2(j+3) $]
-  er lige. Den kontraponerede holder, altså også det oprindelige. $qed$
+  blueprint: [
+    To veje til samme mål for en påstand $P #sym.arrow.r Q$.
 
-  *(b) Modstrid.* Antag $n^3 + 5$ ulige og $n$ ulige. Så er $n^3$ ulige, og $n^3 + 5 = "ulige" + "ulige" = "lige"$ — modstrid. Altså er $n$ lige. $qed$],
+    + *Kontraposition.* Vend påstanden til $not Q #sym.arrow.r not P$ og bevis den direkte.
+      + Negér hver side. Her bliver $not Q$ til "#swap[$n$ er ulige]" og $not P$ til "#swap[$n^3+5$ er lige]".
+      + Antag $not Q$, regn dig frem til $not P$. Det dækker det oprindelige.
+    + *Modstrid.* Antag både $P$ og $not Q$ på én gang og jagt en modstrid.
+      + Brug antagelserne til at udlede to ting, der ikke kan passe sammen.
+      + Når det krakelerer, må $not Q$ falde, så $Q$ står tilbage.
+  ],
+  worked: [
+    Påstand: er #swap[$n^3+5$] ulige, så er #swap[$n$] lige.
+
+    *(a) Kontraposition.* Vis i stedet: er $n$ ulige, så er $n^3+5$ lige.
+
+    + Sæt $n = 2k+1$. Så er $n^3$ ulige, sig $n^3 = 2j+1$.
+    + Læg $5$ til:
+      #eq[$ n^3 + 5 = 2j + 6 = 2(j+3), $]
+      som er lige.
+    + Den kontraponerede holder, så det oprindelige holder også. $qed$
+
+    *(b) Modstrid.* Antag $n^3+5$ ulige og samtidig $n$ ulige.
+
+    + Ulige $n$ gør $n^3$ ulige.
+    + Så er $n^3 + 5 = "ulige" + "ulige" = "lige"$.
+    + Det strider mod, at $n^3+5$ skulle være ulige.
+
+    Svar: $n$ er lige. $qed$
+  ],
 )
 
 #qcard(
@@ -80,9 +118,26 @@ Et fjerde greb dækker "bevis eller modbevis" om en for-alle-påstand: ét modek
   source: "DM04 Opg 41 (Rosen 1.7 #41)",
   prompt: [Bevis eller modbevis: produktet af et #swap[rationalt tal forskelligt fra nul] og et #swap[irrationelt] tal er irrationelt.],
   answer: [Sandt. Bevises ved modstrid.],
-  worked: [Lad $r$ være rationel og $!= 0$ og $x$ irrationel. Skriv $r = a/b$ med heltal $a != 0$, $b != 0$. Antag for modstrid, at $r x$ er rationel, $r x = c/d$ med heltal $c, d$ og $d != 0$. Så er
-  #eq[$ x = (r x)/r = (c\/d)/(a\/b) = (c b)/(d a). $]
-  Da $a != 0$ og $d != 0$, er $d a != 0$, og $c b, d a$ er heltal. Så er $x$ rationel. Modstrid. Altså er $r x$ irrationel. $qed$],
+  blueprint: [
+    Skal du vise, at noget er irrationelt, findes der ingen formel for "irrationel". Antag det modsatte i stedet.
+
+    + *Skriv det rationale på brøkform.* Det #swap[rationale tal] bliver $a/b$ med heltal og nævner $!= 0$.
+    + *Antag modstrid.* Antag, at #swap[hele produktet] også er rationelt, altså $= c/d$ med heltal og $d != 0$.
+    + *Isolér den faktor, der skulle være irrationel.* Løs ligningen, så den #swap[irrationelle] størrelse står alene.
+    + *Vis den kommer ud som brøk.* Hvis den ender som heltal over heltal med nævner $!= 0$, er den rationel. Det modsiger antagelsen, som dermed falder.
+  ],
+  worked: [
+    Lad $r$ være rationel og $!= 0$, og lad $x$ være irrationel.
+
+    + Skriv $r = a/b$ med heltal $a != 0$ og $b != 0$.
+    + Antag for modstrid, at $r x$ er rationel, sig $r x = c/d$ med heltal $c, d$ og $d != 0$.
+    + Isolér $x$:
+      #eq[$ x = (r x)/r = (c\/d)/(a\/b) = (c b)/(d a). $]
+    + Her er $d a != 0$, fordi $a != 0$ og $d != 0$, og både $c b$ og $d a$ er heltal. Så er $x$ rationel.
+    + Det strider mod, at $x$ er irrationel.
+
+    Svar: $r x$ er irrationel. $qed$
+  ],
 )
 
 #qcard(
@@ -97,7 +152,27 @@ Et fjerde greb dækker "bevis eller modbevis" om en for-alle-påstand: ét modek
     [$a < c/2 or b < c/2 arrow.r 2a < c or 2b < c arrow.r a + b < c$],
   ),
   answer: [Mulighed (d): $a <= c/2 and b <= c/2 arrow.r a+b <= c/2 + c/2 arrow.r a+b <= c$. Et gyldigt kontrapositionsbevis.],
-  worked: [Her er $P: a+b>c$ og $Q: a > c/2 or b > c/2$. Ved De Morgan er $not Q$ lig $a <= c/2 and b <= c/2$, og $not P$ er $a+b <= c$. Læg de to uligheder sammen:
-  #eq[$ a + b <= c/2 + c/2 = c, $]
-  altså $not P$. Forkast resten: (a) dropper $b$, (b) kludrer i De Morgan-negationen, (c) beviser den omvendte $Q arrow.r P$, og (e) bruger skarp $<$ og en forkert negation.],
+  blueprint: [
+    Skal du plukke det gyldige bevis ud af en menu, så tjek hver mulighed mod logikken i stedet for at lade dig friste af noget, der ligner.
+
+    + *Skriv $P$ og $Q$ ned.* Find forudsætningen og konklusionen i #swap[implikationen].
+    + *Negér begge med De Morgan.* Et #swap[*eller*] i $Q$ bliver til et *og* i $not Q$, og omvendt.
+    + *Find buddet, der viser $not Q #sym.arrow.r not P$.* Det er en gyldig kontraposition.
+    + *Sortér fælderne fra.* Pas på den omvendte $Q #sym.arrow.r P$, en sjusket negation og skarpe uligheder, der er smuttet ind.
+  ],
+  worked: [
+    Her er $P: a+b>c$ og $Q: a > c/2 or b > c/2$.
+
+    + Negér med De Morgan: $not Q$ er $a <= c/2 and b <= c/2$, og $not P$ er $a+b <= c$.
+    + Antag $not Q$ og læg de to uligheder sammen:
+      #eq[$ a + b <= c/2 + c/2 = c, $]
+      altså $not P$. Det er præcis mulighed (d).
+    + Tjek resten:
+      - (a) dropper $b$ undervejs.
+      - (b) negerer forkert med De Morgan.
+      - (c) beviser den omvendte $Q arrow.r P$.
+      - (e) bruger skarp $<$ og en forkert negation.
+
+    Svar: mulighed (d). $qed$
+  ],
 )

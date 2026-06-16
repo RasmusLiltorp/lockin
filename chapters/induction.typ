@@ -57,12 +57,25 @@ Tjek at to sider er lig hinanden, før du kæder dem sammen.]
     [Basis $3^0 - 1 = 0$ lige. Skridt ($n >= 1$): $3^n - 1 = 1/3 dot 3^(n+1) - 1 = 1/3 dot 2k = 2 dot k/3$, med $k/3 in ZZ$.],
   ),
   answer: [Gyldige: (a), (b) og (d).],
-  worked: [IA: $3^m - 1 = 2k$ for et $k in ZZ$.
-    - *(a) gyldig.* Basis $n = 0$ korrekt, skridtet går forlæns, $2$ sat uden for parentes.
-    - *(b) gyldig.* Den ekstra basis $n = 1$ er overflødig men harmløs. Skridtet dækker stadig alle $n$.
-    - *(c) ugyldig.* Basis starter ved $n = 2$, så $n = 0$ og $n = 1$ dækkes aldrig. Hul.
-    - *(d) gyldig.* Reversibel kæde fra IA der lander på $3^(n+1) - 1 = 2(3k+1)$, lige.
-    - *(e) ugyldig.* Kræver $3^(n+1) - 1 = 2k$, det der skal bevises, ikke IA. Og $k/3 in ZZ$ er ubegrundet.],
+  blueprint: [
+    Med flere kandidatbeviser for samme påstand gennemgår du dem ét ad gangen og leder efter de samme få fejltyper.
+
+    + *Basis.* Tjek at den starter ved mindste $n$, #swap[$n_0$]. Starter den højere, er der et hul.
+    + *Retning.* Skridtet skal udlede $P(k+1)$ ud fra $P(k)$, ikke omvendt.
+    + *Indeks.* IA må kun bruges ved $k$. Bruges den ved $k+1$, antager den det, der skal vises.
+    + *Algebra.* Tjek hver lighed for sig. Ét forkert led vælter beviset.
+  ],
+  worked: [
+    IA: vi antager $3^m - 1 = 2k$ for et $k in ZZ$.
+
+    - *(a) gyldig.* Basis $n = 0$ rammer rigtigt. Skridtet går forlæns, og $2$ er sat uden for parentes korrekt.
+    - *(b) gyldig.* Den ekstra basis $n = 1$ er overflødig, men gør ingen skade. Skridtet dækker stadig alle $n$.
+    - *(c) ugyldig.* Basis starter ved $n = 2$, så $n = 0$ og $n = 1$ bliver aldrig dækket. Hul i bunden.
+    - *(d) gyldig.* En reversibel kæde fra IA, der lander på $3^(n+1) - 1 = 2(3k+1)$, altså lige.
+    - *(e) ugyldig.* Skridtet kræver $3^(n+1) - 1 = 2k$, men det er jo netop påstanden, ikke IA. Og $k/3 in ZZ$ står uden begrundelse.
+
+    Svar: gyldige er (a), (b) og (d).
+  ],
 )
 
 #qcard(
@@ -79,14 +92,27 @@ Tjek at to sider er lig hinanden, før du kæder dem sammen.]
     [Skriver $2^n + 3^n = 1/2 dot 2^(n+1) + 1/3 dot 3^(n+1)$, og påstår $< 1/3 (2^(n+1) + 3^(n+1))$.],
   ),
   answer: [Kun (f) er gyldig.],
-  worked: [Basis: $2^n + 3^n < 4^n$ holder først ved $n = 2$ ($13 < 16$), fejler ved $n = 0, 1$. Så $n_0 = 2$.
-    - *(a) ugyldig.* $4(2^n + 3^n) != 2^(n+1) + 3^(n+1)$ (venstresiden er $2^(n+2) + dots$), så sidste implikation er ubegrundet.
+  blueprint: [
+    Påstanden er en ulighed, så skridtet går ud på at begrænse den ene side med IA og kendte fakta, ikke at omskrive en lighed.
+
+    + *Find startpunktet.* Sæt små $n$ ind og se hvor uligheden #swap[$2^n + 3^n < 4^n$] først holder. Det er $n_0$.
+    + *Basis.* Tjek uligheden ved $n_0$.
+    + *Skridt forlæns.* Skriv $(k+1)$-siden om, indsæt IA ved indeks $k$, og afgræns resten med sande uligheder ned til den ønskede øvre grænse.
+    + *Pas på gangetricket.* At gange IA med en konstant giver sjældent det næste led. Tjek at to sider faktisk er ens, før du kæder dem.
+  ],
+  worked: [
+    Først finder vi hvor uligheden begynder at holde. $2^n + 3^n < 4^n$ fejler ved $n = 0, 1$ og holder først ved $n = 2$ ($13 < 16$), så $n_0 = 2$.
+
+    - *(a) ugyldig.* $4(2^n + 3^n) != 2^(n+1) + 3^(n+1)$, for venstresiden er $2^(n+2) + dots$. Sidste implikation hænger i luften.
     - *(b) ugyldig.* Basis $n = 3$ springer $n = 2$ over.
-    - *(c) ugyldig.* Samme gangefejl som (a), skrevet med $n-1 arrow.r n$.
+    - *(c) ugyldig.* Samme gangefejl som (a), bare skrevet med $n-1 arrow.r n$.
     - *(d) ugyldig.* Går baglæns fra målet til hypotesen.
     - *(e) ugyldig.* Antager konklusionen ved $n+1$ og udleder det mindre tilfælde.
-    - *(f) gyldig.* Hver ulighed holder: $2 dot 2^n < 3 dot 2^n$, så IA ved indeks $n$, så $3 dot 4^n < 4 dot 4^n$. Forlæns.
-    - *(g) ugyldig.* Kræver $1/2 < 1/3$ på $2^(n+1)$-leddet (falsk), og bruger IA ved $n+1$.],
+    - *(f) gyldig.* Hvert trin holder: $2 dot 2^n < 3 dot 2^n$, så IA ved indeks $n$, så $3 dot 4^n < 4 dot 4^n$. Rent forlæns.
+    - *(g) ugyldig.* Kræver $1/2 < 1/3$ på $2^(n+1)$-leddet, som er falsk, og bruger desuden IA ved $n+1$.
+
+    Svar: kun (f) er gyldig.
+  ],
 )
 
 #qcard(
@@ -99,9 +125,23 @@ Tjek at to sider er lig hinanden, før du kæder dem sammen.]
     [Basis $n = 1$; ind.ant.: summen til $k$ er $1 - (1/2)^k$ for $k >= 1$; skridtet udleder udsagnet ved $k-1$ (nedad, $k arrow.r.double k-1$).],
   ),
   answer: [Gyldige: (a) og (b).],
-  worked: [Identiteten teleskoperer. Indsættelsen i skridtet er:
+  blueprint: [
+    En sum-identitet beviser du ved at trække det sidste led ud af summen og sætte IA ind for resten.
+
+    + *Basis.* Tjek identiteten ved mindste $n$, #swap[$n = 1$].
+    + *IA.* Antag at summen op til $k-1$ rammer #swap[$1 - (1/2)^(k-1)$].
+    + *Skridt.* Split summen op til $k$ som "sum til $k-1$" plus det sidste led, indsæt IA, og reducer til den lukkede form ved $k$.
+    + *Retning.* Skridtet skal gå opad, $k-1 arrow.r.double k$. Går det nedad fra $k$ til $k-1$, er det ikke induktion.
+  ],
+  worked: [
+    Identiteten teleskoperer, så leddene ophæver hinanden parvis. Indsættelsen i skridtet ser sådan ud:
+
     #eq[$ (1 - (1/2)^(k-1)) + ((1/2)^(k-1) - (1/2)^k) = 1 - (1/2)^k. $]
-    - *(a) gyldig.* Basis $n = 1, 2$ ($n = 2$ overflødigt). Forlæns skridt $k-1 arrow.r.double k$, korrekt algebra.
-    - *(b) gyldig.* Basis $n = 1$, samme forlæns skridt.
-    - *(c) ugyldig.* Algebraen er fin, men antager resultatet ved $k$ og går tilbage til $k-1$. Induktion skal gå opad fra basis.],
+
+    - *(a) gyldig.* Basis $n = 1, 2$, hvor $n = 2$ er overflødigt. Forlæns skridt $k-1 arrow.r.double k$ med korrekt algebra.
+    - *(b) gyldig.* Basis $n = 1$ og samme forlæns skridt.
+    - *(c) ugyldig.* Algebraen er fin, men den antager resultatet ved $k$ og går tilbage til $k-1$. Induktion skal gå opad fra basis.
+
+    Svar: gyldige er (a) og (b).
+  ],
 )

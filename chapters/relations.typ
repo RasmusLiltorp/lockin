@@ -77,7 +77,27 @@ Et *Hasse-diagram* tegner en partiel ordning uden støj. Fjern alle løkker og h
     [$R$ er en partiel ordning],
   ),
   answer: [Kun (b), $R$ er symmetrisk.],
-  worked: [Refleksiv: $(b,b)$ mangler, nej. Symmetrisk: $(a,b)$ har $(b,a)$, og løkkerne er deres egne makkere, ja. Antisymmetrisk: $(a,b)$ og $(b,a)$ med $a != b$, nej. Transitiv: $(b,a)$ og $(a,b)$ kræver $(b,b)$, som mangler, nej. Ækvivalens og partiel ordning fejler dermed begge.],
+  blueprint: [
+    Du har en relation som liste og skal afgøre hvilke egenskaber den har. Gå de fire grundegenskaber igennem hver for sig, og lad de to klassificeringer falde ud af dem.
+
+    + *Refleksiv?* Tjek at $(x,x)$ er med for hvert element i #swap[grundmængden]. Mangler bare én løkke, er svaret nej.
+    + *Symmetrisk?* For hvert par $(x,y)$ i #swap[relationen], er $(y,x)$ så også med? Ét par uden makker vælter den.
+    + *Antisymmetrisk?* Find to forskellige elementer hvor både $(x,y)$ og $(y,x)$ er med. Findes et sådant par, er den ikke antisymmetrisk.
+    + *Transitiv?* For hver kæde $(x,y)$ og $(y,z)$ skal genvejen $(x,z)$ være der. Ét manglende par vælter den.
+    + Saml op: refleksiv + symmetrisk + transitiv giver ækvivalensrelation, refleksiv + antisymmetrisk + transitiv giver partiel ordning.
+  ],
+  worked: [
+    Relationen er #swap[${(a,a),(a,b),(b,a),(c,c)}$] på ${a,b,c}$.
+
+    - *Refleksiv?* $(b,b)$ mangler #sym.arrow.r nej.
+    - *Symmetrisk?* $(a,b)$ har sin makker $(b,a)$, og løkkerne $(a,a),(c,c)$ er deres egne makkere #sym.arrow.r ja.
+    - *Antisymmetrisk?* $(a,b)$ og $(b,a)$ er begge med med $a != b$ #sym.arrow.r nej.
+    - *Transitiv?* $(b,a)$ og $(a,b)$ kræver $(b,b)$, som mangler #sym.arrow.r nej.
+
+    Ækvivalensrelation kræver refleksiv, og partiel ordning kræver antisymmetrisk. Begge fejler, så ingen af dem holder.
+
+    Svar: kun (b).
+  ],
 )
 
 #qcard(
@@ -93,7 +113,26 @@ Et *Hasse-diagram* tegner en partiel ordning uden støj. Fjern alle løkker og h
     [Den transitive lukning af ${(a,b),(c,d)}$ på $A$ er ${(a,b),(c,d)}$],
   ),
   answer: [(a), (e) og (f).],
-  worked: [(a): refleksiv lukning af den tomme relation er præcis diagonalen, passer. (b): refleksiv lukning tilføjer løkker, ikke $(a,c)$, falsk. (c): symmetrisk lukning tilføjer ikke løkkerne $(b,b),(c,c),(d,d)$, falsk. (d): mangler $(b,c)$ og $(c,b)$, falsk. (e): genvejene $(a,c),(b,d),(a,d)$ langs kæden $a -> b -> c -> d$, passer. (f): ingen par kan kædes sammen, uændret, passer.],
+  blueprint: [
+    Hvert udsagn påstår en bestemt lukning af #swap[en relation]. Regn lukningen selv og sammenlign med påstanden. Hold styr på hvilken slags lukning der spørges om, for de tilføjer hver sin slags par.
+
+    + *Refleksiv lukning:* tilføj en løkke $(x,x)$ på hvert element i #swap[grundmængden], også dem uden par. Tilføj intet andet.
+    + *Symmetrisk lukning:* tilføj den modsatte $(y,x)$ for hvert par $(x,y)$. Tilføj ikke løkker, og kæd ikke par sammen.
+    + *Transitiv lukning:* tilføj genveje $(x,z)$ så længe der findes en kæde $(x,y),(y,z)$. Gentag på den voksende mængde til intet nyt dukker op.
+    + Sammenlign din mængde med påstanden par for par. Stemmer de præcist, er udsagnet sandt.
+  ],
+  worked: [
+    Grundmængden er $A = {a,b,c,d}$. Tjek hvert udsagn for sig.
+
+    - *(a)* Refleksiv lukning af $emptyset$ er præcis diagonalen ${(a,a),(b,b),(c,c),(d,d)}$ #sym.arrow.r passer.
+    - *(b)* Refleksiv lukning tilføjer løkker, ikke genvejen $(a,c)$ #sym.arrow.r falsk.
+    - *(c)* Symmetrisk lukning tilføjer kun modsatte par, ikke løkkerne $(b,b),(c,c),(d,d)$ #sym.arrow.r falsk.
+    - *(d)* $(b,c)$ skal blive til $(b,c),(c,b)$, men begge mangler i påstanden #sym.arrow.r falsk.
+    - *(e)* Langs kæden $a -> b -> c -> d$ får du genvejene $(a,c),(b,d),(a,d)$, og det er netop mængden #sym.arrow.r passer.
+    - *(f)* $(a,b)$ og $(c,d)$ kan ikke kædes sammen, så relationen er uændret #sym.arrow.r passer.
+
+    Svar: (a), (e) og (f).
+  ],
 )
 
 #qcard(
@@ -101,7 +140,27 @@ Et *Hasse-diagram* tegner en partiel ordning uden støj. Fjern alle løkker og h
   source: "MCQ juni 2023, Spm. 36 (3 point)",
   prompt: [Betragt relationen på ${a,b,c}$: $R = #swap[${(a,b),(b,a),(b,b),(b,c)}$]$. Angiv den transitive lukning af $R$.],
   answer: [$t(R) = {(a,a),(a,b),(a,c),(b,a),(b,b),(b,c)}$.],
-  worked: [$b$ når $a, b$ og $c$. Da $(a,b)$ gælder, når $a$ alt det $b$ når: $(a,b)+(b,a)$ giver $(a,a)$, $(a,b)+(b,c)$ giver $(a,c)$, $(a,b)+(b,b)$ giver $(a,b)$. $c$ har ingen udgående kanter, så ingen nye par.],
+  blueprint: [
+    Den transitive lukning tilføjer en genvej hver gang du kan gå to skridt. Læs #swap[relationen] som en graf og tilføj par til det stopper.
+
+    + Skriv #swap[relationen] op som kanter i en graf.
+    + Find hver kæde $(x,y),(y,z)$ og tilføj genvejen $(x,z)$, hvis den ikke allerede er der.
+    + Kør runden igen på den større mængde, for de nye par kan selv åbne nye genveje.
+    + Stop når en hel runde ikke tilføjer noget. Resultatet: $(x,z)$ er med præcis når der findes en sti fra $x$ til $z$.
+  ],
+  worked: [
+    Relationen er #swap[${(a,b),(b,a),(b,b),(b,c)}$] på ${a,b,c}$.
+
+    Se på hvor $b$ kan nå hen: $b$ peger på $a$, $b$ og $c$.
+
+    - $(a,b)$ + $(b,a)$ #sym.arrow.r tilføj $(a,a)$.
+    - $(a,b)$ + $(b,c)$ #sym.arrow.r tilføj $(a,c)$.
+    - $(a,b)$ + $(b,b)$ #sym.arrow.r giver $(a,b)$, som allerede er der.
+
+    $c$ har ingen udgående kanter, så den åbner ingen nye genveje. En runde mere tilføjer intet.
+
+    Svar: $t(R) = {(a,a),(a,b),(a,c),(b,a),(b,b),(b,c)}$.
+  ],
 )
 
 #qcard(
@@ -109,7 +168,28 @@ Et *Hasse-diagram* tegner en partiel ordning uden støj. Fjern alle løkker og h
   source: "DM547 januar 2021, Spørgsmål 7 (3%)",
   prompt: [Angiv den symmetriske lukning af $T = #swap[${(a,b),(b,b),(c,d),(d,e)}$]$.],
   answer: [$s(T) = {(a,b),(b,a),(b,b),(c,d),(d,c),(d,e),(e,d)}$.],
-  worked: [$s(T) = T union T^(-1)$: tilføj den modsatte af hvert par, altså $(b,a), (d,c)$ og $(e,d)$. $(b,b)$ er sin egen modsatte. Tilføj ikke diagonalløkker, kæd ikke par sammen.],
+  blueprint: [
+    Den symmetriske lukning gør hver pil tovejs. Formlen er $s(T) = T union T^(-1)$.
+
+    + Behold alle par fra #swap[relationen].
+    + For hvert par $(x,y)$ tilføj det modsatte $(y,x)$.
+    + Et par $(x,x)$ er sin egen modsatte, så det giver ikke noget nyt.
+    + Tilføj ingen ekstra diagonalløkker, og kæd ikke par sammen. Det hører til den refleksive og den transitive lukning.
+  ],
+  worked: [
+    Relationen er #swap[${(a,b),(b,b),(c,d),(d,e)}$].
+
+    Vend hvert par om og tilføj det modsatte:
+
+    - $(a,b)$ #sym.arrow.r tilføj $(b,a)$.
+    - $(b,b)$ er sin egen modsatte, intet nyt.
+    - $(c,d)$ #sym.arrow.r tilføj $(d,c)$.
+    - $(d,e)$ #sym.arrow.r tilføj $(e,d)$.
+
+    Ingen løkker udover dem der allerede var der, og ingen kædning.
+
+    Svar: $s(T) = {(a,b),(b,a),(b,b),(c,d),(d,c),(d,e),(e,d)}$.
+  ],
 )
 
 #qcard(
@@ -117,7 +197,27 @@ Et *Hasse-diagram* tegner en partiel ordning uden støj. Fjern alle løkker og h
   source: "DM547 januar 2021, Spørgsmål 6 (8%)",
   prompt: [En digraf for relationen $S$ på ${a,b,c,d,e,f}$ har løkker på $a,b,e,f$, kanterne $a->b$, $a->c$, $a->d$, $a->e$, $b->e$, $c->d$, $f->d$, og tovejsparret $e<->f$. Hvilke af følgende gælder: refleksiv, symmetrisk, antisymmetrisk, transitiv, ækvivalensrelation, partiel ordning, total ordning?],
   answer: [Ingen af dem.],
-  worked: [Refleksiv: $c$ og $d$ har ingen løkke, nej. Symmetrisk: $a->b$ uden $b->a$, nej. Antisymmetrisk: $e<->f$ med $e != f$, nej. Transitiv: $e->f$ og $f->d$, men intet $e->d$, nej. Når alle fire grundegenskaber fejler, fejler de tre ordningstyper også.],
+  blueprint: [
+    Her får du relationen som en digraf i stedet for en liste. De fire egenskaber bliver til ting du aflæser direkte på tegningen.
+
+    + *Refleksiv?* Har hvert element i #swap[grundmængden] en løkke? Mangler bare én, er svaret nej.
+    + *Symmetrisk?* Har hver pil sin modsatte pil tilbage? Find en enkeltrettet pil, og den fejler.
+    + *Antisymmetrisk?* Er der to forskellige knuder med pile begge veje? Et tovejspar mellem ulige knuder vælter den.
+    + *Transitiv?* For hver to-trins-sti $x -> y -> z$, findes genvejen $x -> z$? Ét hul vælter den.
+    + Klassificér: ækvivalensrelation og de to ordninger kræver hver tre af egenskaberne. Fejler en af de nødvendige, falder klassificeringen med.
+  ],
+  worked: [
+    Aflæs digrafen for $S$ knude for knude.
+
+    - *Refleksiv?* $c$ og $d$ har ingen løkke #sym.arrow.r nej.
+    - *Symmetrisk?* $a -> b$ findes, men ikke $b -> a$ #sym.arrow.r nej.
+    - *Antisymmetrisk?* $e <-> f$ med $e != f$ #sym.arrow.r nej.
+    - *Transitiv?* $e -> f$ og $f -> d$, men $e -> d$ mangler #sym.arrow.r nej.
+
+    Alle fire grundegenskaber fejler. Ækvivalensrelation kræver de første tre, og begge ordninger kræver refleksiv og transitiv, så de falder også.
+
+    Svar: ingen af dem.
+  ],
 )
 
 #qcard(
@@ -132,7 +232,25 @@ Et *Hasse-diagram* tegner en partiel ordning uden støj. Fjern alle løkker og h
     [${(a,a),(a,b),(b,a),(b,b),(c,c)}$],
   ),
   answer: [(a) og (e).],
-  worked: [Skal være refleksiv, symmetrisk og transitiv på ${a,b,c}$. (a): bare diagonalen, alle tre holder. (b): $(c,c)$ mangler, ikke refleksiv. (c): $(a,b)$ uden $(b,a)$, ikke symmetrisk. (d): $(a,b)$ uden $(b,a)$, ikke symmetrisk. (e): refleksiv, symmetrisk via $(a,b),(b,a)$, og transitiv (${a,b}$ som blok plus $c$ alene).
-  #v(4pt)
-  Klasserne i (e): $[a] = [b] = {a,b}$ og $[c] = {c}$, disjunkte og dækkende.],
+  blueprint: [
+    En ækvivalensrelation skal være refleksiv, symmetrisk og transitiv på hele #swap[grundmængden]. Test hver kandidat mod alle tre, og smid den ud så snart én fejler.
+
+    + *Refleksiv?* Er $(x,x)$ med for hvert element i #swap[grundmængden]? Mangler en løkke, ryger kandidaten.
+    + *Symmetrisk?* Har hvert par $(x,y)$ sin makker $(y,x)$? Et par uden makker fælder den.
+    + *Transitiv?* Lukker hver kæde $(x,y),(y,z)$ med genvejen $(x,z)$? Et hul fælder den.
+    + Overlever en kandidat alle tre, er den en ækvivalensrelation. Klasserne er så elementerne grupperet efter hvad de er relateret til.
+  ],
+  worked: [
+    Grundmængden er ${a,b,c}$. Hver kandidat skal klare refleksiv, symmetrisk og transitiv.
+
+    - *(a)* Bare diagonalen ${(a,a),(b,b),(c,c)}$. Refleksiv, symmetrisk og transitiv #sym.arrow.r ja.
+    - *(b)* $(c,c)$ mangler #sym.arrow.r ikke refleksiv.
+    - *(c)* $(a,b)$ uden $(b,a)$ #sym.arrow.r ikke symmetrisk.
+    - *(d)* $(a,b)$ uden $(b,a)$ #sym.arrow.r ikke symmetrisk.
+    - *(e)* Refleksiv, symmetrisk via $(a,b),(b,a)$, og transitiv med ${a,b}$ som blok og $c$ for sig #sym.arrow.r ja.
+
+    Klasserne i (e): $[a] = [b] = {a,b}$ og $[c] = {c}$. De er disjunkte og dækker hele mængden.
+
+    Svar: (a) og (e).
+  ],
 )

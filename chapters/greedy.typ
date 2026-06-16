@@ -60,7 +60,28 @@ Skal du *bevise* greedy optimal, brug et ombytningsargument: tag en vilkårlig o
   prompt: [En fil indeholder tegn med hyppigheder: o=#swap[$150$], p=#swap[$100$], q=#swap[$25$], r=#swap[$125$], s=#swap[$200$], t=#swap[$50$], u=#swap[$75$]. Byg et Huffman-træ. Hvor mange bit er der i kodeordet for #swap[$q$]?],
   options: ([$1$], [$2$], [$3$], [$4$], [$5$], [$6$]),
   answer: [(d) $4$.],
-  worked: [Sortér: q:25, t:50, u:75, p:100, r:125, o:150, s:200. Merges: $q+t=75$; $u+75=150$; $p+r=225$; $o+150=300$; $s+225=425$; $300+425=725$ (rod). $q$ ligger under $(q+t)$, $(u+75)$, $(o+150)$ og roden: dybde 4, altså 4 bit.],
+  blueprint: [
+    Byg træet og tæl skridtene ned til bladet.
+
+    + *Sortér.* Skriv symbolerne op med frekvens og stil dem efter #swap[voksende frekvens].
+    + *Merge.* Tag de to mindste vægte, lav en knude med summen, og læg den tilbage i køen.
+    + *Gentag.* Bliv ved til der er ét træ. Hold øje med hvilke merges #swap[dit symbol] ender under.
+    + *Aflæs.* Kodeordslængden er bladets dybde, altså antallet af merges symbolet sidder under.
+  ],
+  worked: [
+    Sortér efter frekvens: q:25, t:50, u:75, p:100, r:125, o:150, s:200.
+
+    + $q+t=75$
+    + $u+75=150$
+    + $p+r=225$
+    + $o+150=300$
+    + $s+225=425$
+    + $300+425=725$ #sym.arrow.r rod
+
+    $q$ sidder under $(q+t)$, derefter $(u+75)$, så $(o+150)$ og til sidst roden. Det er 4 merges, så dybde 4.
+
+    Svar: 4 bit.
+  ],
 )
 
 #qcard(
@@ -69,7 +90,26 @@ Skal du *bevise* greedy optimal, brug et ombytningsargument: tag en vilkårlig o
   prompt: [Et Huffman-træ for en fil med hyppigheder o=#swap[$150$], p=#swap[$100$], q=#swap[$25$], r=#swap[$125$], s=#swap[$200$], t=#swap[$50$], u=#swap[$75$] (i alt #swap[$725$] symboler). Hvor mange bit fylder de 725 symboler tilsammen Huffman-kodet?],
   options: ([$1800$], [$1825$], [$1900$], [$1925$], [$2000$], [$2075$], [$2100$]),
   answer: [(c) $1900$.],
-  worked: [Genvej via interne vægte: merges gav $75, 150, 225, 300, 425, 725$, og $75+150+225+300+425+725 = 1900$. Tjek med $sum "freq" dot "depth"$: $150 dot 2 + 200 dot 2 + 100 dot 3 + 125 dot 3 + 75 dot 3 + 25 dot 4 + 50 dot 4 = 1900$.],
+  blueprint: [
+    Byg træet og læg de interne vægte sammen.
+
+    + *Sortér* symbolerne efter #swap[frekvens].
+    + *Merge* de to mindste igen og igen, og skriv hver merge-sum op.
+    + *Læg sammen.* Summen af alle merge-summerne er det samlede antal bit.
+    + *Tjek* eventuelt med $sum "freq" dot "depth"$ hvis du vil være sikker.
+  ],
+  worked: [
+    Genvejen er at lægge de interne vægte sammen. Merges gav:
+
+    + $75, 150, 225, 300, 425, 725$
+    + $75+150+225+300+425+725 = 1900$
+
+    Tjek med $sum "freq" dot "depth"$:
+
+    $ 150 dot 2 + 200 dot 2 + 100 dot 3 + 125 dot 3 + 75 dot 3 + 25 dot 4 + 50 dot 4 = 1900 $
+
+    Svar: 1900 bit.
+  ],
 )
 
 #qcard(
@@ -78,7 +118,26 @@ Skal du *bevise* greedy optimal, brug et ombytningsargument: tag en vilkårlig o
   prompt: [En fil indeholder tegnene med hyppigheder: a=#swap[$200$], b=#swap[$250$], c=#swap[$100$], d=#swap[$350$], e=#swap[$400$]. Byg et Huffman-træ. Hvor mange bit er der i kodeordet for #swap[$d$]?],
   options: ([$1$], [$2$], [$3$], [$4$]),
   answer: [(b) $2$.],
-  worked: [Merges: $c+a=300$; $b+d=600$; $300+e=700$; $600+700=1300$ (rod). $d$ er barn af $(b+d)$, som er barn af roden: dybde 2, altså 2 bit.],
+  blueprint: [
+    Samme metode: byg træet og tæl merges ned til bladet.
+
+    + *Sortér* symbolerne efter #swap[voksende frekvens].
+    + *Merge* de to mindste, læg knuden tilbage, gentag til ét træ.
+    + *Følg* #swap[dit symbol] ned gennem træet og tæl, hvor mange knuder det ligger under.
+    + *Aflæs* dybden som kodeordslængden.
+  ],
+  worked: [
+    Sortér: c:100, a:200, b:250, d:350, e:400.
+
+    + $c+a=300$
+    + $b+d=600$
+    + $300+e=700$
+    + $600+700=1300$ #sym.arrow.r rod
+
+    $d$ er barn af $(b+d)$, og $(b+d)$ er barn af roden. Det er 2 merges over $d$, så dybde 2.
+
+    Svar: 2 bit.
+  ],
 )
 
 #qcard(
@@ -92,5 +151,27 @@ Skal du *bevise* greedy optimal, brug et ombytningsargument: tag en vilkårlig o
     [H5 $= ((b,(a,c)),(d,e))$],
   ),
   answer: [(a) og (d): kun H2 og H5.],
-  worked: [Huffmans tvungne merges: $100+150=250$; $150+250=400$; $250+350=600$; $400+600=1000$. Et producerbart træ må have interne vægte $250, 400, 600, 1000$. H2 og H5 giver begge netop dem og matcher. H3 og H4 giver $250, 500, 500, 1000$; de to 500-taller er parringer Huffman aldrig laver — optimale, men ikke producerbare.],
+  blueprint: [
+    Kør Huffman selv, find de interne vægte den tvinger frem, og se hvilke træer rammer dem.
+
+    + *Kør Huffman* på #swap[frekvenserne] og notér de interne vægte i merge-rækkefølge.
+    + *Aflæs* hvert kandidat-træs egne interne vægte.
+    + *Match.* Et træ kan produceres netop hvis dets interne vægte er det samme sæt som Huffmans.
+    + *Forkast* træer med en intern vægt Huffman aldrig ville lave, også selvom de er optimale.
+  ],
+  worked: [
+    Huffmans tvungne merges:
+
+    + $100+150=250$
+    + $150+250=400$
+    + $250+350=600$
+    + $400+600=1000$ #sym.arrow.r rod
+
+    Et producerbart træ må altså have de interne vægte $250, 400, 600, 1000$.
+
+    - H2 og H5 rammer netop de fire vægte og matcher.
+    - H3 og H4 giver $250, 500, 500, 1000$. De to 500-taller er parringer Huffman aldrig laver, så de er optimale men ikke producerbare.
+
+    Svar: kun H2 og H5.
+  ],
 )

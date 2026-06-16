@@ -85,8 +85,22 @@ PARTITION(A, p, r)
     [$Theta(n^3)$],
   ),
   answer: [(d) $Theta(n^3)$.],
-  worked: [CountingSort koster $Theta(n + k)$. Her er $k = #swap[$n^3$]$, og $n^3$ dominerer:
-  #eq[$ Theta(n + n^3) = Theta(n^3) $]],
+  blueprint: [
+    CountingSort koster altid $Theta(n + k)$, uanset hvad tallene er. Du skal bare finde de to størrelser og se hvilken der vinder.
+
+    + *Find $n$.* Tæl elementerne der skal sorteres: #swap[$n$].
+    + *Find $k$.* Læs værdiområdet og sæt $k$ til den øvre grænse: #swap[$k = n^3$].
+    + *Læg dem sammen.* Skriv $Theta(n + k)$ op med dine egne tal.
+    + *Behold det hurtigste led.* Det led der vokser hurtigst, slår det andet ihjel. Det er svaret.
+  ],
+  worked: [
+    Inputtet er $n$ elementer i $[0, #swap[$n^3$])$, så $k = n^3$.
+
+    + Sæt ind i formlen: $Theta(n + k) = Theta(n + n^3)$.
+    + $n^3$ vokser hurtigere end $n$, så $n$ falder væk.
+
+    Svar: $Theta(n^3)$.
+  ],
 )
 
 #qcard(
@@ -100,8 +114,23 @@ PARTITION(A, p, r)
     [$Theta(n^3)$],
   ),
   answer: [(a) $Theta(n)$.],
-  worked: [$d = 3$ gennemløb, hver en counting sort med cifferområde $k = n$, koster $Theta(n + n) = Theta(n)$. Konstanten $d = 3$ forsvinder:
-  #eq[$ 3 dot Theta(n) = Theta(n) $]],
+  blueprint: [
+    RadixSort er counting sort kørt én gang per ciffer. Du tæller cifrene og ganger med prisen for ét gennemløb.
+
+    + *Tæl cifrene.* Hvor mange cifre deler du tallene op i: #swap[$d$].
+    + *Find cifferområdet $k$.* Hvor store kan de enkelte cifre være: #swap[$k = n$].
+    + *Pris per gennemløb.* Hvert ciffer er en counting sort, altså $Theta(n + k)$.
+    + *Gang med $d$.* Samlet $Theta(d(n + k))$. Er $d$ en konstant, falder den væk i $Theta$.
+  ],
+  worked: [
+    Her er $d = 3$ cifre, hvert i $[0, #swap[$n$])$, så $k = n$.
+
+    + Ét gennemløb koster $Theta(n + n) = Theta(n)$.
+    + Tre gennemløb giver $3 dot Theta(n)$.
+    + $3$ er en konstant og forsvinder i $Theta$.
+
+    Svar: $Theta(n)$.
+  ],
 )
 
 #qcard(
@@ -115,8 +144,23 @@ PARTITION(A, p, r)
     [$Theta(n^3)$],
   ),
   answer: [(c) $Theta(n^2)$.],
-  worked: [QuickSort er sammenligningsbaseret, så værdiområdet er irrelevant. Værste fald er maksimalt ubalancerede partitioner ($n - 1$ og $0$):
-  #eq[$ T(n) = T(n-1) + Theta(n) = Theta(n^2) $]],
+  blueprint: [
+    Spørg først om algoritmen er sammenligningsbaseret. Er den det, er værdiområdet i opgaven ren støj, og du ser kun på $n$.
+
+    + *Sammenligningsbaseret?* QuickSort, merge, heap og insertion sammenligner alle. Er svaret ja, så ignorer værdiområdet #swap[$[0, n^3)$].
+    + *Find værste fald.* For QuickSort er det maksimalt skæve partitioner: den ene del har $n-1$ elementer, den anden er tom.
+    + *Skriv rekursionen.* $T(n) = T(n-1) + Theta(n)$.
+    + *Løs den.* Summen $1 + 2 + ... + n$ giver svaret.
+  ],
+  worked: [
+    QuickSort sammenligner, så $[0, #swap[$n^3$])$ er ligegyldigt.
+
+    + Værste fald: pivoten ender yderst hver gang, så partitionerne bliver $n-1$ og $0$.
+    + Det giver rekursionen $T(n) = T(n-1) + Theta(n)$.
+    + Den summer til $sum_(i=1)^n i = Theta(n^2)$.
+
+    Svar: $Theta(n^2)$.
+  ],
 )
 
 #qcard(
@@ -133,14 +177,28 @@ PARTITION(A, p, r)
     [InsertionSort],
   ),
   answer: [(a) CountingSort, (e) ubalanceret TreeSort, (f) QuickSort og (g) InsertionSort.],
+  blueprint: [
+    Listen blander sammenligningssorteringer og distributionssorteringer. Gå hver linje igennem og slå dens værste fald op.
+
+    + *Del op.* Marker hver algoritme som sammenligningsbaseret eller distributionsbaseret.
+    + *Distributionssorteringerne.* Counting sort bliver $Theta(n^2)$, hvis #swap[$k = n^2$] eller større. Radix med få cifre i base $n$ er lineær.
+    + *De garanterede.* Merge sort og balancerede træer (rød-sort) er altid $Theta(n log n)$, aldrig $n^2$.
+    + *De ustabile.* QuickSort, insertion og et ubalanceret søgetræ rammer $Theta(n^2)$ på det rigtige input, typisk det sorterede.
+    + *Saml svaret.* Alle med $Theta(n^2)$ i værste fald.
+  ],
   worked: [
-  CountingSort: $k = #swap[$n^2$]$ dominerer, $Theta(n^2)$ → ja.
-  RadixSort, to cifre i base $n$: to gennemløb à $Theta(n)$ → nej.
-  MergeSort: altid $Theta(n log n)$ → nej.
-  Rød-sort TreeSort: $n$ indsættelser à $O(log n)$ → $Theta(n log n)$ → nej.
-  Ubalanceret TreeSort: sorteret input degenererer til en sti, og indsættelse $i$ koster $i$:
-  #eq[$ sum_(i=1)^n i = Theta(n^2) $]
-  → ja. QuickSort og InsertionSort: begge $Theta(n^2)$ → ja.],
+    Her er $k = #swap[$n^2$]$. Jeg går listen igennem.
+
+    - CountingSort: $k = n^2$ dominerer, så $Theta(n^2)$. Ja.
+    - RadixSort, to cifre i base $n$: to gennemløb à $Theta(n)$. Nej.
+    - MergeSort: altid $Theta(n log n)$. Nej.
+    - Rød-sort TreeSort: $n$ indsættelser à $O(log n)$, altså $Theta(n log n)$. Nej.
+    - Ubalanceret TreeSort: sorteret input degenererer til en sti, og indsættelse $i$ koster $i$. Summen $sum_(i=1)^n i = Theta(n^2)$. Ja.
+    - QuickSort: $Theta(n^2)$. Ja.
+    - InsertionSort: $Theta(n^2)$. Ja.
+
+    Svar: CountingSort, ubalanceret TreeSort, QuickSort og InsertionSort.
+  ],
 )
 
 #qcard(
@@ -156,13 +214,28 @@ PARTITION(A, p, r)
     [$A = [2, 1, 4, 5, 6, 7, 3]$],
   ),
   answer: [(a) $A = [2, 1, 3, 5, 6, 7, 4]$.],
-  worked: [Pivot $x = A[7] = 3$, start $i = 0$.
-  $j = 1$: $6 > 3$, spring over.
-  $j = 2$: $2 <= 3$, $i = 1$, swap → $[2, 6, 4, 5, 1, 7, 3]$.
-  $j = 3, 4$: $4, 5 > 3$, spring over.
-  $j = 5$: $1 <= 3$, $i = 2$, swap $A[2], A[5]$ → $[2, 1, 4, 5, 6, 7, 3]$.
-  $j = 6$: $7 > 3$, spring over.
-  Til sidst swap $A[i+1] = A[3]$ med $A[7]$ → $[2, 1, 3, 5, 6, 7, 4]$.],
+  blueprint: [
+    Lomuto-partition skubber alt der er mindre end eller lig pivoten om til venstre. Du holder styr på to indeks, $i$ og $j$, og swapper undervejs.
+
+    + *Sæt pivot.* Pivoten er sidste element: #swap[$x = A[r]$]. Sæt $i = p - 1$.
+    + *Løb $j$ fra venstre.* Er $A[j] > x$, så gør ingenting.
+    + *Ved et lille element.* Er $A[j] <= x$, tæl $i$ op med $1$ og swap $A[i]$ med $A[j]$. Skriv arrayet ned hver gang.
+    + *Til sidst.* Swap $A[i+1]$ med pivoten $A[r]$. Nu står pivoten på sin endelige plads.
+  ],
+  worked: [
+    Pivot $x = A[7] = 3$, start $i = 0$. Array: #swap[$[6, 2, 4, 5, 1, 7, 3]$].
+
+    - $j = 1$: $6 > 3$, spring over.
+    - $j = 2$: $2 <= 3$, $i = 1$, swap $A[1]$ og $A[2]$ #sym.arrow.r $[2, 6, 4, 5, 1, 7, 3]$.
+    - $j = 3$: $4 > 3$, spring over.
+    - $j = 4$: $5 > 3$, spring over.
+    - $j = 5$: $1 <= 3$, $i = 2$, swap $A[2]$ og $A[5]$ #sym.arrow.r $[2, 1, 4, 5, 6, 7, 3]$.
+    - $j = 6$: $7 > 3$, spring over.
+
+    Til sidst swap $A[i+1] = A[3]$ med $A[7]$ #sym.arrow.r $[2, 1, 3, 5, 6, 7, 4]$.
+
+    Svar: $A = [2, 1, 3, 5, 6, 7, 4]$.
+  ],
 )
 
 #qcard(
@@ -178,7 +251,20 @@ PARTITION(A, p, r)
     [$37$],
   ),
   answer: [(f) $37$.],
-  worked: [Rå tællinger: $C = [1, 1, 3, 1, 0, 2, 1]$ (sum $9$). CLRS efterlader $C$ som prefix-summer, $C[i] "+="C[i-1]$, så $C = [1, 2, 5, 6, 6, 8, 9]$:
-  #eq[$ 1 + 2 + 5 + 6 + 6 + 8 + 9 = 37 $]
-  Fælden: $C$ ender kumulativt, ikke som rå tællinger.],
+  blueprint: [
+    Fælden er at $C$ ikke ender med de rå tællinger. CLRS overskriver $C$ med prefix-summer, og det er dem du skal regne på.
+
+    + *Tæl forekomster.* Løb arrayet igennem og tæl hver værdi. Det giver det rå $C$.
+    + *Lav prefix-summer.* Sæt $C[i] "+=" C[i-1]$ fra venstre. Nu er $C[i]$ antallet af værdier $<= i$.
+    + *Læs svaret af det rigtige $C$.* Det opgaven spørger om (her summen) regnes på det kumulative $C$, ikke det rå.
+  ],
+  worked: [
+    Array: #swap[$[2, 0, 6, 2, 3, 5, 5, 1, 2]$], værdier $0..6$.
+
+    + Rå tællinger: $C = [1, 1, 3, 1, 0, 2, 1]$, sum $9$.
+    + Prefix-summer, $C[i] "+=" C[i-1]$: $C = [1, 2, 5, 6, 6, 8, 9]$.
+    + Summen er $1 + 2 + 5 + 6 + 6 + 8 + 9 = 37$.
+
+    Svar: $37$.
+  ],
 )

@@ -98,7 +98,24 @@ Hver operation har sin egen opskrift herunder. De er skrevet for en *max-heap* (
     A3 $= [1,2,3,4,1,2,3,4,5,6]$ \
     A4 $= [1,1,1,1,1,1,1,1,1,1]$],
   answer: [A2 og A4.],
-  worked: [Tjek $A[i] <= A[2i]$ og $A[i] <= A[2i+1]$ for $i = 1..5$. A1: $A[1]=7 > A[2]=4$, falder. A2: sorteret stigende, forælder $<=$ børn — min-heap. A3: $A[2]=2 > A[5]=1$, falder. A4: alle ens — min-heap.],
+  blueprint: [
+    Her tjekker du hver forælder mod sine børn. Knækker bare én ulighed, er det ikke en min-heap.
+
+    + *Find de interne knuder.* Kun $i = 1 .. floor(n\/2)$ har børn, så kun dem skal tjekkes. For #swap[$n=10$] er det $i = 1..5$.
+    + *Slå børnene op.* Barn af $i$ ligger på $2i$ og $2i+1$.
+    + *Tjek uligheden.* Min-heap kræver $#swap[$A[i] <= A[2i]$]$ og $A[i] <= A[2i+1]$. Ens nøgler er tilladt.
+    + *Stop ved første brud.* Holder alle uligheder, er det en min-heap. Ellers ikke.
+  ],
+  worked: [
+    Tjek $A[i] <= A[2i]$ og $A[i] <= A[2i+1]$ for $i = 1..5$.
+
+    - A1 $= [7,4,9,2,6,8,10,1,3,5]$: $A[1]=7 > A[2]=4$. Brud med det samme, ikke en heap.
+    - A2 $= [1,2,3,4,5,6,7,8,9,10]$: sorteret stigende, så hver forælder er $<=$ begge børn. Min-heap.
+    - A3 $= [1,2,3,4,1,2,3,4,5,6]$: $A[2]=2 > A[5]=1$. Brud, ikke en heap.
+    - A4 $= [1,1,1,1,1,1,1,1,1,1]$: alle nøgler ens, så alle uligheder holder. Min-heap.
+
+    Svar: A2 og A4.
+  ],
 )
 
 #qcard(
@@ -107,7 +124,24 @@ Hver operation har sin egen opskrift herunder. De er skrevet for en *max-heap* (
   prompt: [Udfør Extract-Min på min-heapen $A = #swap[$[3,5,6,10,11,8,7,18,16,15]$]$ (1-indekseret, positioner $1..10$). Hvilken position i $A$ ender $#swap[$15$]$ på bagefter?],
   options: ([$1$], [$2$], [$3$], [$4$], [$5$], [$8$], [$9$]),
   answer: [(d) position 4.],
-  worked: [Fjern roden $3$, flyt sidste element $15$ op, størrelse $9$: $[15,5,6,10,11,8,7,18,16]$. Sift ned fra idx 1: børn $5,6$, byt med $5$ — $15$ til idx 2. Idx 2: børn $10,11$, byt med $10$ — $15$ til idx 4. Børn ved idx 8 ($18$) og 9 ($16$) er begge $> 15$, stop. Slut $[5,10,6,15,11,8,7,18,16]$: $15$ står på position 4.],
+  blueprint: [
+    Extract-Min trækker roden ud og reparerer heapen ved at synke det sidste element ned på plads.
+
+    + *Tag roden ud.* $A[1]$ er svaret (det mindste).
+    + *Flyt sidste element op i roden.* Heapen bliver én plads kortere.
+    + *Synk ned.* Sammenlign #swap[knuden] med begge børn på $2i$ og $2i+1$. Er et barn mindre, byt med det *mindste* barn.
+    + *Gentag,* til ingen børn er mindre, eller knuden ingen børn har. Aflæs arrayet.
+  ],
+  worked: [
+    Her er heapen: #swap[$[3,5,6,10,11,8,7,18,16,15]$].
+
+    + Tag roden $3$ ud, flyt sidste element $15$ op. Størrelse $9$: $[15,5,6,10,11,8,7,18,16]$.
+    + Idx 1: børn er $5$ og $6$. Mindst er $5$, og $5 < 15$, så byt. $15$ rykker til idx 2: $[5,15,6,10,11,8,7,18,16]$.
+    + Idx 2: børn er $10$ og $11$. Mindst er $10$, og $10 < 15$, så byt. $15$ rykker til idx 4: $[5,10,6,15,11,8,7,18,16]$.
+    + Idx 4: børn er $18$ (idx 8) og $16$ (idx 9). Begge $> 15$, så stop.
+
+    Slutarray: $[5,10,6,15,11,8,7,18,16]$. $15$ står på position 4.
+  ],
 )
 
 #qcard(
@@ -121,7 +155,28 @@ Hver operation har sin egen opskrift herunder. De er skrevet for en *max-heap* (
     [$A = [16,15,13,4,8,12,1,2]$],
   ),
   answer: [(b) $[16,15,13,9,8,12,4,1]$.],
-  worked: [Increase-Key pos 9 til $15$: forælder pos 4 $=4<15$ byt, pos 2 $=9<15$ byt, pos 1 $=18>15$ stop — $[18,15,16,9,8,12,13,1,4]$. Extract-Max: max $=18$, flyt sidste $4$ op, størrelse $8$, sift ned: mod $15,16$ byt med $16$, mod $12,13$ byt med $13$, mod barn $1$ stop. Slut $[16,15,13,9,8,12,4,1]$.],
+  blueprint: [
+    Den nye nøgle bobler op mod roden, og bagefter trækker Extract-Max roden ud og synker en ny værdi på plads.
+
+    + *Increase-Key.* Skriv #swap[den nye værdi $k$] ind på plads $i$. Boble op: byt med forælderen på $floor(i\/2)$ så længe din nøgle er *større*, stop ellers.
+    + *Extract-Max.* Roden $A[1]$ er max og fjernes. Flyt sidste element op i roden.
+    + *Synk ned.* Byt med det *største* barn så længe et barn er større. Aflæs arrayet.
+  ],
+  worked: [
+    Start: #swap[$[18,9,16,4,8,12,13,1,2]$].
+
+    *Increase-Key$(A, 9, 15)$* — sæt pos 9 til $15$ og boble op:
+    + Forælder på pos 4 er $4 < 15$, byt. $15$ til pos 4.
+    + Forælder på pos 2 er $9 < 15$, byt. $15$ til pos 2.
+    + Forælder på pos 1 er $18 > 15$, stop. Nu: $[18,15,16,9,8,12,13,1,4]$.
+
+    *Extract-Max$(A)$* — tag $18$ ud, flyt sidste $4$ op, størrelse $8$, synk ned:
+    + Idx 1: børn $15$ og $16$. Størst er $16 > 4$, byt. $4$ til idx 3.
+    + Idx 3: børn $12$ og $13$. Størst er $13 > 4$, byt. $4$ til idx 7.
+    + Idx 7: barn $1 < 4$, stop.
+
+    Slutarray: $[16,15,13,9,8,12,4,1]$.
+  ],
 )
 
 #qcard(
@@ -130,5 +185,19 @@ Hver operation har sin egen opskrift herunder. De er skrevet for en *max-heap* (
   prompt: [Hvad er worst-case køretiden for Heapsort, når den køres på $#swap[$n$]$ identiske elementer?],
   options: ([$O(1)$], [$O(log n)$], [$O(n)$], [$O(n log n)$], [$O(n^2)$]),
   answer: [(c) $O(n)$.],
-  worked: [Heapsort er Build-Max-Heap ($O(n)$) og derefter $n-1$ Extract-Max med sift-ned. Når alle nøgler er ens, er en forælder aldrig strengt mindre end et barn, så hvert sift-ned stopper efter et par sammenligninger — $O(1)$ per kald. Build: $~n\/2$ kald, Extract: $n-1$ kald, hver $O(1)$. I alt $O(n)$.],
+  blueprint: [
+    Tæl arbejdet i de to faser, og se hvad inputtet gør ved sift-ned.
+
+    + *Skriv faserne op.* Heapsort er Build-Max-Heap efterfulgt af $#swap[$n-1$]$ gange Extract-Max, hver med et sift-ned.
+    + *Find prisen på ét sift-ned for dette input.* Når #swap[alle nøgler er ens], er ingen forælder strengt mindre end et barn, så hvert sift-ned stopper efter et par sammenligninger: $O(1)$.
+    + *Gang sammen.* Antal kald gange pris per kald.
+  ],
+  worked: [
+    Input: #swap[$n$ identiske elementer].
+
+    + Build-Max-Heap kører $~n\/2$ sift-ned. Med ens nøgler stopper hvert kald straks, så fasen er $O(n)$.
+    + Extract-Max kører $n-1$ gange. Hver gang stopper sift-ned efter en sammenligning eller to, altså $O(1)$ per kald. Fasen er $O(n)$.
+
+    Begge faser er $O(n)$, så i alt $O(n)$.
+  ],
 )

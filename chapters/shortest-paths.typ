@@ -31,16 +31,77 @@ Algoritmerne adskiller sig kun ved rækkefølgen kanterne slappes af i, og den a
 
 #recipe(
   title: "Vælg algoritmen",
-  [Vægtene: alle ens (enhedsvægte)? Alle ikke-negative? Eller nogle negative?],
-  [Strukturen: er grafen en DAG (orienteret uden kredse), eller har den kredse?],
-  [Match mod forudsætningerne:
-    - *BFS* virker kun hvis alle vægte er ens.
-    - *Dijkstra* kræver at alle vægte er $>= 0$.
-    - *DAG-Shortest-Paths* kræver at grafen er en DAG. Vægtene må gerne være negative.
-    - *Bellman-Ford* virker på enhver én-kilde-graf uden negativ kreds; negative vægte er fine.
-    - *Floyd-Warshall* er til alle-par, tåler negative vægte, men ingen negativ kreds.],
-  [Vælg hver algoritme hvis forudsætning er opfyldt. Til "et eller flere svar" kan flere være rigtige.],
+  [*Læs vægtene.* Er de alle ens (enhedsvægte)? Alle $>= 0$? Eller er nogle negative? Skriv det ned ét sted.],
+  [*Læs strukturen.* Følg pilene: kan du komme tilbage til en knude du har forladt, er der en kreds. Ellers er grafen en DAG (orienteret uden kredse).],
+  [*Slå hver algoritme op i kortene nedenfor* og kryds den af, hvis dens krav er opfyldt for netop din graf.],
+  [Til "et eller flere svar" kan flere godt være rigtige på samme graf.],
 )
+
+Her er hvad hver algoritme gør, hvad den kræver, og hvorfor kravet er der. Den lille graf til venstre viser den slags graf, kravet handler om.
+
+#let algcard(dia, name, body) = block(breakable: false, above: 12pt, below: 12pt)[
+  #grid(
+    columns: (2.6cm, 1fr), column-gutter: 12pt,
+    align: (center + horizon, left + horizon),
+    dia, [*#name* \ #body],
+  )
+]
+
+#algcard(
+  gdiag({
+    gnode((0,0), "a", $a$); gnode((1.5,0.5), "b", $b$); gnode((1.5,-0.5), "c", $c$)
+    gedge("a","b", w: $1$); gedge("a","c", w: $1$); gedge("b","c", w: $1$)
+  }),
+  [BFS (Breadth-First-Search)],
+  [Går grafen igennem lag for lag ud fra kilden, så knuderne nås efter hvor få kanter der er hen til dem. *Krav:* alle vægte ens — reelt en uvægtet graf. *Hvorfor:* når hver kant koster det samme, er den korteste vej bare den med færrest kanter. Så snart vægtene varierer, holder det ikke.],
+)
+
+#algcard(
+  gdiag({
+    gnode((0,0), "a", $a$); gnode((1.5,0.5), "b", $b$); gnode((1.5,-0.5), "c", $c$)
+    gedge("a","b", w: $4$); gedge("a","c", w: $2$); gedge("b","c", w: $3$)
+  }),
+  [Dijkstra],
+  [Tager hele tiden den nærmeste uafklarede knude og slapper dens kanter af. *Krav:* alle vægte $>= 0$. *Hvorfor:* den regner en knude for færdig i samme øjeblik den trækkes ud af køen. En negativ kant kunne gøre en vej billigere bagefter, og så ville svaret være forkert. Derfor er negative vægte udelukket.],
+)
+
+#algcard(
+  gdiag({
+    gnode((0,0), "a", $a$); gnode((1.1,0.55), "b", $b$); gnode((2.2,0), "c", $c$)
+    gedge("a","b", w: $3$); gedge("b","c", w: $-2$); gedge("a","c", w: $4$)
+  }),
+  [DAG-Shortest-Paths],
+  [Sorterer knuderne topologisk og slapper kanterne af i den orden, én gang hver. *Krav:* grafen skal være en DAG; negative vægte er fine. *Hvorfor:* i en DAG kan du stille knuderne på en række, hvor alle pile peger fremad. Tager du dem i den orden, er en knude færdig, før du bruger den. Har grafen en kreds, findes den orden ikke.],
+)
+
+#algcard(
+  gdiag({
+    gnode((0,0), "a", $a$); gnode((1.5,0.5), "b", $b$); gnode((1.5,-0.5), "c", $c$)
+    gedge("a","b", w: $-2$); gedge("b","c", w: $3$); gedge("c","a", w: $4$)
+  }),
+  [Bellman-Ford],
+  [Slapper alle kanter af $|V| - 1$ gange og kører så en runde mere for at se efter forbedringer. *Krav:* ingen negativ kreds; negative kanter og almindelige kredse er fine. *Hvorfor:* det robuste valg, der stiller færrest krav. Den ekstra runde fanger en negativ kreds — kan en kant stadig forbedres, findes der en. Til gengæld er den langsommere end de andre.],
+)
+
+#algcard(
+  gdiag({
+    gnode((0,0), "a", $a$); gnode((1.4,0.5), "b", $b$); gnode((1.4,-0.5), "c", $c$)
+    gedge("a","b", w: $3$); gedge("a","c", w: $2$); gedge("b","c", w: $1$)
+  }),
+  [Floyd-Warshall],
+  [Finder korteste vej mellem hvert par knuder på én gang — alle-par, ikke én kilde. *Krav:* ingen negativ kreds; negative kanter er fine. *Hvornår:* når du skal bruge afstandene mellem alle par, ikke kun fra én startknude.],
+)
+
+#trap(title: [Negativ kreds — så findes der ingen korteste vej])[
+  #grid(
+    columns: (2.6cm, 1fr), column-gutter: 12pt, align: (center + horizon, left + horizon),
+    gdiag({
+      gnode((0,0), "a", $a$); gnode((1.5,0.5), "b", $b$); gnode((1.5,-0.5), "c", $c$)
+      gedge("a","b", w: $1$); gedge("b","c", w: $-2$); gedge("c","a", w: $-1$)
+    }),
+    [Rundt i kredsen $a arrow.r b arrow.r c arrow.r a$ summer vægtene til $1 - 2 - 1 = -2$. Du kan løbe rundt igen og igen og trække prisen ned hver gang, så afstanden går mod $-infinity$. Derfor forbyder selv de algoritmer, der ellers tillader negative kanter (DAG-SP, Bellman-Ford, Floyd-Warshall), en negativ kreds. Bellman-Ford er den, der opdager den for dig.],
+  )
+]
 
 #trap(title: [MST er ikke korteste vej])[Kruskal og Prim bygger et minimalt udspændende træ, ikke korteste veje. DFS alene gør det heller ikke. Klassiske distraktorer.]
 
@@ -71,7 +132,27 @@ BELLMAN-FORD(G, w, s)          // negative vægte ok, opdager neg. kreds
 
 Bellman-Ford slapper alle kanter af $|V| - 1$ gange og tjekker så en sidste gang om en kant stadig kan forbedres. Kan den det, findes en negativ kreds.
 
-#note(title: [Køretider])[Dijkstra med binært heap: $O((n + m) log n)$. Bellman-Ford: $O(n m)$.]
+#note(title: [Køretider — alle korteste-vej-algoritmer])[
+  $n$ er antal knuder, $m$ antal kanter.
+
+  #table(
+    columns: 4,
+    align: (left, left, left, left),
+    stroke: none,
+    inset: (x: 11pt, y: 6pt),
+    table.header(
+      [*Algoritme*], [*Køretid*], [*Vægte*], [*Krav*],
+    ),
+    table.hline(stroke: 0.4pt + hair),
+    [BFS], [$O(n + m)$], [ens], [—],
+    [DAG-Shortest-Paths], [$O(n + m)$], [alle, også negative], [DAG (ingen kreds)],
+    [Dijkstra (binært heap)], [$O((n + m) log n)$], [$>= 0$], [ingen negative kanter],
+    [Bellman-Ford], [$O(n m)$], [alle, også negative], [ingen negativ kreds],
+    [Floyd-Warshall (alle-par)], [$O(n^3)$], [alle, også negative], [ingen negativ kreds],
+  )
+
+  BFS og DAG-SP er hurtigst ($O(n + m)$), men har de strammeste krav. Bellman-Ford er langsomst men mest fleksibel.
+]
 
 Til alle-par kører du enten en én-kilde-algoritme fra hver knude eller Floyd-Warshall direkte. Vinderen afhænger af grafens tæthed.
 
@@ -93,7 +174,30 @@ Tæt graf ($m = Theta(n^2)$): $n$ kørsler af Dijkstra giver $O(n^3 log n)$, så
     [Depth-First-Search (DFS)],
   ),
   answer: [(a), (b) og (d): Dijkstra, Bellman-Ford og BFS.],
-  worked: [Vægtene er alle 1, altså ikke-negative og ens. Dijkstra kræver kun ikke-negative vægte: ok. Bellman-Ford kræver kun ingen negativ kreds: ok. BFS virker fordi vægtene er ens. Grafen har kredse, så DAG-Shortest-Paths fejler. DFS er ikke en korteste-vej-algoritme.],
+  blueprint: [
+    Det er en ren tjekliste-opgave. Du regner ikke noget — du læser grafen og krydser af.
+
+    + *Læs vægtene.* Er de alle ens? Alle $>= 0$? Eller er nogle negative? Skriv det ned ét sted.
+    + *Læs strukturen.* Følg pilene: kan du vende tilbage til en knude du har forladt, er der en kreds. Ellers er det en DAG.
+    + *Kryds hver algoritme af mod sin forudsætning:*
+      - BFS: kun hvis alle vægte er ens.
+      - Dijkstra: kun hvis alle vægte $>= 0$.
+      - DAG-Shortest-Paths: kun hvis grafen er en DAG.
+      - Bellman-Ford: virker altid, så længe der ikke er en negativ kreds.
+    + *DFS er aldrig svaret* her, og det samme gælder MST (Prim, Kruskal). De finder ikke korteste veje.
+    + Marker hver algoritme hvor forudsætningen holder. Flere kan være rigtige.
+  ],
+  worked: [
+    Denne graf: alle vægte er #swap[$1$], så de er ens og ikke-negative. Og der er mindst én kreds.
+
+    - *Dijkstra* — vægte $>= 0$? Ja. #sym.arrow.r virker.
+    - *Bellman-Ford* — negativ kreds? Nej. #sym.arrow.r virker.
+    - *BFS* — alle vægte ens? Ja. #sym.arrow.r virker.
+    - *DAG-Shortest-Paths* — er grafen en DAG? Nej, den har en kreds. #sym.arrow.r fejler.
+    - *DFS* — en korteste-vej-algoritme? Nej. #sym.arrow.r fejler.
+
+    Tilbage står Dijkstra, Bellman-Ford og BFS.
+  ],
 )
 
 #qcard(
@@ -108,7 +212,29 @@ Tæt graf ($m = Theta(n^2)$): $n$ kørsler af Dijkstra giver $O(n^3 log n)$, så
     [Depth-First-Search (DFS)],
   ),
   answer: [(b) og (c): Bellman-Ford og DAG-Shortest-Paths.],
-  worked: [Negative vægte, så Dijkstra er ude. Den topologiske orden $c,b,a,e,d$ har ingen bagudkant: grafen er en DAG, og DAG-Shortest-Paths virker. Bellman-Ford tåler negative vægte uden negativ kreds: ok. BFS kræver ens vægte; DFS finder ikke korteste veje.],
+  blueprint: [
+    Samme tjekliste som før, men her er det de negative vægte og DAG-strukturen der afgør det.
+
+    + *Vægte:* er nogle negative? Så ryger Dijkstra og BFS med det samme.
+    + *Struktur:* prøv at stille knuderne på en række så alle pile går fremad (en topologisk orden). Lykkes det, er grafen en DAG og har ingen kreds.
+    + *Kryds af:*
+      - Dijkstra: nej, hvis bare én vægt er negativ.
+      - BFS: nej, hvis vægtene ikke er ens.
+      - DAG-Shortest-Paths: ja, hvis grafen er en DAG (negative vægte er fine her).
+      - Bellman-Ford: ja, så længe ingen negativ kreds — og en DAG har slet ingen kreds.
+    + DFS er aldrig svaret.
+  ],
+  worked: [
+    Vægtene: nogle er #swap[$-1$], altså negative. Strukturen: den topologiske orden $c, b, a, e, d$ findes (alle pile går fremad), så grafen er en DAG.
+
+    - *Dijkstra* — kræver alle vægte $>= 0$. Her er nogle negative. #sym.arrow.r ude.
+    - *BFS* — kræver ens vægte. Her er både $1$ og $-1$. #sym.arrow.r ude.
+    - *DAG-Shortest-Paths* — kræver en DAG. Ja. #sym.arrow.r virker.
+    - *Bellman-Ford* — kun ingen negativ kreds; en DAG har ingen. #sym.arrow.r virker.
+    - *DFS* — finder ikke korteste veje. #sym.arrow.r ude.
+
+    Svar: Bellman-Ford og DAG-Shortest-Paths.
+  ],
 )
 
 #qcard(
@@ -123,7 +249,26 @@ Tæt graf ($m = Theta(n^2)$): $n$ kørsler af Dijkstra giver $O(n^3 log n)$, så
     [Node $h$],
   ),
   answer: [(b): node $e$.],
-  worked: [Udtrækningsrækkefølgen med færdige afstande: $a(0), b(1), d(2), c(3), g(3), e(4), h(5), f(6), i(6)$. $a$: relax $b=1, d=3$. $b$: relax $d arrow.r 2$, $c arrow.r 3$, $e arrow.r 4$. $d$ ($2 < 3$): relax $g arrow.r 3$. Nu er $c=3$ og $g=3$ uafgjort, så alfabetisk $c$ fjerde, $g$ femte. Sjette er $e = 4$.],
+  blueprint: [
+    Du fører en lille tabel med $d$-værdier og krydser knuder af, efterhånden som de trækkes ud. Køen er bare "hvem har lige nu det mindste $d$".
+
+    + Sæt $d = 0$ for startknuden #swap[$a$] og $infinity$ for resten.
+    + Træk knuden med mindst $d$ ud af køen. Står to lige, tag den alfabetisk mindste.
+    + Skriv den udtrukne knude på din liste. Det er den næste i udtrækningsrækkefølgen, og dens $d$ er nu endelig.
+    + Slap dens udkanter af: for hver kant $(u,v)$, hvis $u.d + w(u,v) < v.d$, så sæt $v.d$ ned.
+    + Gentag til køen er tom. Tæl dig frem på listen til det nummer der spørges om (her den #swap[sjette]).
+  ],
+  worked: [
+    Start: $a.d = 0$, resten $infinity$. Så trækker vi ud én ad gangen og slapper udkanter af.
+
+    + *1. $a$ (0)* #sym.arrow.r relax $b = 1$, $d = 3$.
+    + *2. $b$ (1)* #sym.arrow.r relax $d: 3 #sym.arrow.r 2$, $c = 3$, $e = 4$.
+    + *3. $d$ (2)* #sym.arrow.r relax $g = 3$. ($2 < 3$, så $d$ kommer før $c$ og $g$.)
+    + *4. $c$ (3)* og *5. $g$ (3)* står uafgjort på $3$. Alfabetisk tager vi $c$ som fjerde, $g$ som femte.
+    + *6. $e$ (4)* trækkes ud som den sjette.
+
+    Hele rækkefølgen med færdige afstande: $a(0), b(1), d(2), c(3), g(3), e(4), h(5), f(6), i(6)$. Den sjette er $e$ med afstand $4$.
+  ],
 )
 
 #qcard(
@@ -137,5 +282,26 @@ Tæt graf ($m = Theta(n^2)$): $n$ kørsler af Dijkstra giver $O(n^3 log n)$, så
       [$v.d$],[0],[17],[9],[1],[7],[10],[12],[0],
     )
   ],
-  worked: [Init $a.d = 0$, resten $infinity$, relax alle kanter $|V| - 1 = 7$ gange. Vejene der realiserer afstandene: $a arrow.r f arrow.r h$ giver $h = 0$; $a arrow.r b arrow.r g$ giver $g = 12$; $g arrow.r c$ giver $c = 9$; $h arrow.r d$ giver $d = 1$; $d arrow.r e$ giver $e = 7$. Ingen negativ kreds er nåelig fra $a$, så værdierne er endelige.],
+  blueprint: [
+    Du behøver ikke spore relax-rækkefølgen kant for kant. Bellman-Ford garanterer at $v.d$ til sidst er vægten af den letteste vej, så du kan bare finde den letteste vej til hver knude i hånden.
+
+    + Sæt $d = 0$ for startknuden #swap[$a$] og $infinity$ for resten.
+    + Hvis du følger pseudokoden: slap alle kanter af $|V| - 1$ gange. Hver runde tager dig ét kant-hop længere ud.
+    + Genvejen i hånden: for hver knude, find den billigste sti fra startknuden og læg vægtene sammen. Husk at negative kanter kan gøre en omvej billigere end den direkte kant.
+    + Skriv afstandene ind i tabellen.
+    + Tjek til sidst for negativ kreds: kan en kant $(u,v)$ stadig forbedres, altså $u.d + w(u,v) < v.d$, så findes der en negativ kreds, og svaret er FALSE.
+  ],
+  worked: [
+    Init $a.d = 0$, resten $infinity$. Efter $|V| - 1 = 7$ runder med relax af alle kanter sporer vi den letteste vej til hver knude.
+
+    - $h = 0$ via $a #sym.arrow.r f #sym.arrow.r h$, altså $10 + (-10)$. Det slår $a #sym.arrow.r e #sym.arrow.r h = 8 + (-4) = 4$.
+    - $g = 12$ via $a #sym.arrow.r b #sym.arrow.r g$, altså $17 + (-5)$.
+    - $c = 9$ via $g #sym.arrow.r c$, altså $12 + (-3)$.
+    - $d = 1$ via $h #sym.arrow.r d$, altså $0 + 1$.
+    - $e = 7$ via $d #sym.arrow.r e$, altså $1 + 6$.
+    - $b = 17$ via den direkte $a #sym.arrow.r b$. Omvejen $c #sym.arrow.r b$ giver $9 + 19 = 28$ og taber.
+    - $f = 10$ via den direkte $a #sym.arrow.r f$.
+
+    Ingen negativ kreds er nåelig fra $a$, så ingen kant kan forbedres i en ekstra runde. Værdierne står fast som i tabellen.
+  ],
 )

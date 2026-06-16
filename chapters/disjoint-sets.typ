@@ -87,15 +87,26 @@ Tallene gælder for $n$ $"Make-Set"$, $n-1$ $"Union"$ og $m$ $"Find-Set"$.
     [Rod $c$ øverst; $a arrow.r c$; $b, d, e arrow.r a$; $f arrow.r e$.],
   ),
   answer: [Mulighed (a).],
-  worked: [
-    - $"Union"(f,e)$: uafgjort $arrow.r$ $f.p = e$, $"rank"(e) = 1$.
-    - $"Union"(b,f)$: $"find"(f) = e$; $"rank"(e) > "rank"(b)$ $arrow.r$ $b.p = e$.
-    - $"Union"(d,a)$: uafgjort $arrow.r$ $d.p = a$, $"rank"(a) = 1$.
-    - $"Union"(f,d)$: $"find"(f) = e$, $"find"(d) = a$, begge rank 1, uafgjort $arrow.r$ $e.p = a$, $"rank"(a) = 2$.
-    - $"Union"(b,c)$: $"find"(b)$ går $b arrow.r e arrow.r a$ og komprimerer $b$ til $a$; $"find"(c) = c$; $"rank"(a) > "rank"(c)$ $arrow.r$ $c.p = a$.
-    - $"Find-Set"(a)$: $a$ er rod, intet sker.
+  blueprint: [
+    Kør sekvensen én operation ad gangen og hold styr på to ting: hver knudes forælder og hver rods rank.
 
-    Endelige forældre: $b, c, d, e arrow.r a$ og $f arrow.r e$.
+    + *Start.* Hvert $"Make-Set"$ giver en rod med $x.p = x$ og #swap[$"rank" = 0$].
+    + *Hver $"Union"(x,y)$.* Find først begge rødder. $"Find-Set"$ følger forældrepegerne op til roden og komprimerer stien undervejs. Link så efter rank: den høje rod vinder og beholder sin rank; ved uafgjort bliver #swap[første] rod barn af #swap[anden], hvis rank vokser med 1.
+    + *Aflæs skoven.* Roden er den knude med $x.p = x$. Resten af pegerne giver figuren.
+  ],
+  worked: [
+    Sekvensen kørt op:
+
+    + $"Union"(f,e)$: uafgjort, så $f.p = e$ og $"rank"(e) = 1$.
+    + $"Union"(b,f)$: $"find"(f) = e$. Her er $"rank"(e) > "rank"(b)$, så $b.p = e$.
+    + $"Union"(d,a)$: uafgjort, så $d.p = a$ og $"rank"(a) = 1$.
+    + $"Union"(f,d)$: $"find"(f) = e$ og $"find"(d) = a$, begge rank 1. Uafgjort, så $e.p = a$ og $"rank"(a) = 2$.
+    + $"Union"(b,c)$: $"find"(b)$ går $b #sym.arrow.r e #sym.arrow.r a$ og komprimerer $b$ direkte under $a$. $"find"(c) = c$, og $"rank"(a) > "rank"(c)$, så $c.p = a$.
+    + $"Find-Set"(a)$: $a$ er allerede rod, så intet ændrer sig.
+
+    Endelige forældre: $b, c, d, e #sym.arrow.r a$ og $f #sym.arrow.r e$.
+
+    Det er mulighed (a).
   ],
 )
 
@@ -106,18 +117,30 @@ Tallene gælder for $n$ $"Make-Set"$, $n-1$ $"Union"$ og $m$ $"Find-Set"$.
     #swap[$"Union"(b,a)$, $"Union"(b,c)$, $"Union"(e,d)$, $"Union"(e,c)$, $"Union"(g,f)$, $"Union"(e,g)$]
     med union by rank. Ved uafgjort hænges $"root"(x)$ under $"root"(y)$, og $"root"(y)$'s rank forhøjes. Tegn skoven (b) uden path compression og (c) med.],
   answer: [Rod $a$ (rank 2) med børnene $b, c, d, f$; $e$ under $d$; $g$ under $f$. Med komprimering flytter $e$ direkte ind under $a$.],
+  blueprint: [
+    Når opgaven beder om skoven både med og uden komprimering, kør den fulde sekvens for rank, og hold så øje med, hvilke $"Find-Set"$-kald der faktisk går gennem mere end ét led.
+
+    + *Uden komprimering.* Kør hver #swap[$"Union"$]. Find begge rødder og link den lave rank under den høje. Ved uafgjort hænges $"root"(x)$ under $"root"(y)$, og $"root"(y)$'s rank vokser med 1. Pegerne ændrer sig kun ved selve linket.
+    + *Med komprimering.* Samme sekvens, men hver gang et $"Find-Set"$ går over en sti på to led eller mere, peger knuderne på stien bagefter direkte på roden. Rank rører du ikke.
+    + *Sammenlign.* Find de $"Find-Set"$-kald med lange stier. Kun de knuder flytter; resten af træet står som i den ukomprimerede version.
+  ],
   worked: [
-    *(b) uden komprimering:*
-    - $"Union"(b,a)$: uafgjort $arrow.r$ $b.p = a$, $"rank"(a) = 1$.
-    - $"Union"(b,c)$: $"root"(b) = a$ (rank 1) $>$ $c$ (rank 0) $arrow.r$ $c.p = a$.
-    - $"Union"(e,d)$: uafgjort $arrow.r$ $e.p = d$, $"rank"(d) = 1$.
-    - $"Union"(e,c)$: $"root"(e) = d$ (rank 1), $"root"(c) = a$ (rank 1), uafgjort $arrow.r$ $d.p = a$, $"rank"(a) = 2$.
-    - $"Union"(g,f)$: uafgjort $arrow.r$ $g.p = f$, $"rank"(f) = 1$.
-    - $"Union"(e,g)$: $"root"(e) = a$ (rank 2) $>$ $"root"(g) = f$ (rank 1) $arrow.r$ $f.p = a$.
+    *(b) uden komprimering.*
+
+    + $"Union"(b,a)$: uafgjort, så $b.p = a$ og $"rank"(a) = 1$.
+    + $"Union"(b,c)$: $"root"(b) = a$ (rank 1) mod $c$ (rank 0), så $c.p = a$.
+    + $"Union"(e,d)$: uafgjort, så $e.p = d$ og $"rank"(d) = 1$.
+    + $"Union"(e,c)$: $"root"(e) = d$ (rank 1) og $"root"(c) = a$ (rank 1), uafgjort, så $d.p = a$ og $"rank"(a) = 2$.
+    + $"Union"(g,f)$: uafgjort, så $g.p = f$ og $"rank"(f) = 1$.
+    + $"Union"(e,g)$: $"root"(e) = a$ (rank 2) mod $"root"(g) = f$ (rank 1), så $f.p = a$.
 
     Resultat: $a$ (rank 2) med børnene $b, c, d, f$; $e$ under $d$; $g$ under $f$.
 
-    *(c) med komprimering:* eneste $"find"$ på en sti af længde 2 er trin 6, hvor $"find"(e)$ går $e arrow.r d arrow.r a$ og komprimerer $e$ til at pege på $a$. Samme træ som (b), men $e$ er nu direkte barn af $a$. Rank uændret.
+    *(c) med komprimering.*
+
+    + Det eneste $"find"$ med en sti på to led er trin 6. Der går $"find"(e)$ vejen $e #sym.arrow.r d #sym.arrow.r a$ og sætter $e.p = a$.
+
+    Samme træ som i (b), men nu hænger $e$ direkte under $a$. Rank er uændret.
   ],
 )
 
@@ -126,16 +149,23 @@ Tallene gælder for $n$ $"Make-Set"$, $n-1$ $"Union"$ og $m$ $"Find-Set"$.
   source: "DM02 jan 2006, Opg 3a",
   prompt: [De første #swap[5] Kruskal-kanter er valgt, så grupperne er ${E,F,H,I}$, ${D,G}$, ${A,B}$, ${C}$. Hvilken kant tilføjer Kruskal som den #swap[6.], og hvordan ser disjunkt-mængde-skoven ud bagefter, med union by rank + path compression?],
   answer: [Næste kant er #swap[$D"-"H$] (vægt #swap[4]). $D$ hænges under $E$.],
+  blueprint: [
+    Her smelter to spørgsmål sammen: hvilken kant tager Kruskal, og hvordan ser union-find-skoven ud bagefter.
+
+    + *Find kanten.* Gå de resterende kanter igennem i stigende vægt. Den første, hvor #swap[endepunkterne] ligger i hver sin gruppe, er den næste Kruskal vælger.
+    + *Kald $"Find-Set"$ på begge endepunkter.* Følg forældrepegerne op til hver rod. Går et kald over flere led, komprimerer du stien, så knuderne peger direkte på roden.
+    + *Link efter rank.* Den lave rod hænges under den høje, som beholder sin rank. Tegn så den nye skov.
+  ],
   worked: [
-    Scan resterende kanter i stigende vægt. Den letteste med endepunkter i forskellige grupper er $D"-"H$: $D in {D,G}$ og $H in {E,F,H,I}$.
+    + Gå de resterende kanter igennem efter vægt. Den letteste med endepunkter i hver sin gruppe er $D"-"H$, hvor $D in {D,G}$ og $H in {E,F,H,I}$.
+    + $"Union"(D, H)$ kalder $"Find-Set"$ på begge:
+      - $"find"(D) = D$ (rank 1).
+      - $"find"(H)$ går $H #sym.arrow.r I #sym.arrow.r E$, så $"find"(H) = E$ (rank 2). Komprimering peger nu $H$ og $I$ direkte på $E$.
+    + Rank 1 er mindre end rank 2, så $D$ (med barnet $G$) hænges under $E$, der bliver ved med at have rank 2.
 
-    $"Union"(D, H)$ kalder $"Find-Set"$ på begge:
-    - $"find"(D) = D$ (rank 1).
-    - $"find"(H)$ går $H arrow.r I arrow.r E$, så $"find"(H) = E$ (rank 2). Komprimering peger nu $H$ og $I$ direkte på $E$.
+    Pas på her: $"find"(H)$ komprimerer, så $H #sym.arrow.r I$ forsvinder og både $H$ og $I$ peger direkte på $E$.
 
-    Rank 1 $<$ rank 2, så $D$ (med barnet $G$) hænges under $E$, der forbliver rank 2.
-
-    Fælden: $"find"(H)$ komprimerer, så kanten $H arrow.r I$ forsvinder og $H, I$ peger direkte på $E$.
+    Næste kant er altså $D"-"H$ (vægt 4), og $D$ hænges under $E$.
   ],
 )
 

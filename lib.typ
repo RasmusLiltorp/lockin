@@ -2,9 +2,30 @@
 // Design: monochrome, spacious, easy to read cold. No coloured fills.
 // Group with whitespace and thin gray hairlines. Math gets its own display blocks.
 
+#import "@preview/cetz:0.3.4"
+
 #let ink = rgb("#111111")
 #let soft = rgb("#5b5b5b")
 #let hair = rgb("#d8d8d8")
+
+// --- tiny inline graph diagrams (monochrome, for the cheat-sheet cards) ---
+// A node: a small labelled circle at point `p`, registered under `name`.
+#let gnode(p, name, label) = {
+  import cetz.draw: *
+  circle(p, radius: 0.18, name: name, fill: white, stroke: 0.6pt + ink)
+  content(p, text(size: 6.5pt)[#label])
+}
+// A directed edge a -> b with an optional weight label on the midpoint.
+// The label sits on a white box so the line does not run through it.
+#let gedge(a, b, w: none) = {
+  import cetz.draw: *
+  line(a, b, mark: (end: "stealth", fill: ink, scale: 0.35), stroke: 0.55pt + ink)
+  if w != none {
+    content((a, 50%, b), box(fill: white, inset: 0.6pt, text(size: 6pt)[#w]))
+  }
+}
+// Wrap a set of gnode/gedge calls into a centred mini-canvas.
+#let gdiag(body) = align(center, cetz.canvas(length: 0.8cm, body))
 
 // A value you change from one exam to the next. Subtle underline, no colour.
 #let swap(body) = box(
@@ -52,7 +73,7 @@
 // `prompt` = the question text (verbatim). `options` = array of answer choices
 // shown exactly as on the exam (optional). `answer` = the correct choice.
 // `worked` = a short solution.
-#let qcard(source: "", prompt: [], options: (), answer: [], worked: [], tag: "") = block(
+#let qcard(source: "", prompt: [], options: (), answer: [], worked: [], blueprint: [], tag: "") = block(
   width: 100%, breakable: true, above: 18pt, below: 18pt,
 )[
   // Register this question so the problem index can list and link to it.
@@ -68,11 +89,25 @@
     v(6pt)
     enum(numbering: "(a)", tight: true, spacing: 5pt, ..options)
   }
-  #v(9pt)
+  #v(10pt)
   #text(weight: "bold")[Svar. ] #answer
+  // Blueprint: the reusable method for this question type, with blanks to fill in.
+  #if blueprint != [] {
+    v(11pt)
+    block(breakable: true)[
+      #text(weight: "bold", size: 11pt)[Skabelon — sæt dine egne tal ind]
+      #v(5pt)
+      #blueprint
+    ]
+  }
+  // Worked: the concrete run-through, spaced out so it reads cold.
   #if worked != [] {
-    v(7pt)
-    block[#text(weight: "bold")[Fremgangsmåde. ] #worked]
+    v(11pt)
+    block(breakable: true)[
+      #text(weight: "bold", size: 11pt)[Gennemregning]
+      #v(5pt)
+      #worked
+    ]
   }
 ]
 

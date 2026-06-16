@@ -72,8 +72,22 @@ Tabellen rummer kun den optimale værdi. Vil du have løsningen, så gem det vin
     [$Theta(m^2 n)$], [$Theta(m n^2)$], [$Theta(m^2 n^2)$],
   ),
   answer: [(f) $Theta(m n^2)$.],
-  worked: [Celler: $i$ i $0..m$, $j$ i $0..n$ giver $Theta(m n)$. Per celle løber min'en over $k in {0,...,j-1}$, op til $j = Theta(n)$ led. Samlet
-  #eq[$ Theta(m n) dot Theta(n) = Theta(m n^2) $]],
+  blueprint: [
+    Køretiden er antal celler gange arbejdet per celle. Begge tal står i rekursionen, så du behøver ikke køre den.
+
+    + *Tæl cellerne.* Find intervallet for hvert indeks. To frie indeks #swap[$i in 0..m$] og #swap[$j in 0..n$] giver $Theta(m n)$ celler.
+    + *Mål arbejdet per celle.* Tæl hvor mange tidligere celler én celle slår op i. Et #swap[$min$ over $k < j$] løber over op til $Theta(n)$ led.
+    + *Gang de to tal sammen.* Køretid $= ("celler") times ("arbejde per celle")$.
+  ],
+  worked: [
+    Her er tallene for $b(m, n)$.
+
+    + Celler: $i$ i $0..m$ og $j$ i $0..n$, altså $Theta(m n)$.
+    + Arbejde per celle: min'en løber over $k in {0, ..., j-1}$, op til $j = Theta(n)$ led.
+    + Gang sammen: $Theta(m n) dot Theta(n)$.
+
+    #eq[$ Theta(m n) dot Theta(n) = Theta(m n^2) $]
+  ],
 )
 
 #qcard(
@@ -85,7 +99,22 @@ Tabellen rummer kun den optimale værdi. Vil du have løsningen, så gem det vin
     [$Theta(m^2 n)$], [$Theta(m n^2)$], [$Theta(m^2 n^2)$],
   ),
   answer: [(c) $Theta(#swap[$n$])$.],
-  worked: [Hver celle i række $i$ læser kun række $i-1$. Et rullende array på én række er nok: smid række $i-1$ væk, når række $i$ er færdig. Lavere går ikke, for en celle kræver et præfiks af alle $n$ søjler i forrige række. Mindste plads $= Theta(n)$, ikke den fulde $Theta(m n)$-tabel.],
+  blueprint: [
+    Mindste plads er den mindste front af tidligere celler, du skal holde på samtidig.
+
+    + *Se hvad en celle læser.* Find hvilke tidligere celler der står i rekursionens højreside.
+    + *Find fronten.* Læser en celle kun #swap[forrige række], er én række nok, og resten kan smides væk.
+    + *Tjek den nedre grænse.* Kræver cellen et helt præfiks af rækken, kan du ikke gå under #swap[rækkens bredde].
+  ],
+  worked: [
+    Her er fronten for $b(m, n)$.
+
+    + Hver celle i række $i$ læser kun række $i-1$.
+    + Et rullende array på én række er nok. Når række $i$ står færdig, kan række $i-1$ smides væk.
+    + Lavere går ikke, for cellen kræver et præfiks af alle $n$ søjler i forrige række.
+
+    Mindste plads bliver $Theta(n)$, mens den fulde tabel ville koste $Theta(m n)$.
+  ],
 )
 
 #qcard(
@@ -99,9 +128,24 @@ Tabellen rummer kun den optimale værdi. Vil du have løsningen, så gem det vin
     [$Theta(n^2)$], [$Theta(n^3)$],
   ),
   answer: [(e) $Theta(n^2)$.],
-  worked: [1-D-tabel $B[0..n]$, altså $Theta(n)$ celler. $B[k]$ summerer $k$ produkter, så $Theta(k)$ arbejde. Samlet
-  #eq[$ sum_(k=1)^n k = (n(n+1))/2 = Theta(n^2) $]
-  Pladsen er $Theta(n)$: $B(n)$ læser hver tidligere indgang, så ingen kan frigives. Et konstant vindue som i Fibonacci dur ikke her.],
+  blueprint: [
+    En 1-D-rekursion med en sum i hver celle. Tæl cellerne, mål summens længde, og gang.
+
+    + *Tæl cellerne.* En tabel $B[0..n]$ har $Theta(n)$ celler.
+    + *Mål summen.* Celle $B[k]$ summerer #swap[$k$ produkter], altså $Theta(k)$ arbejde.
+    + *Læg arbejdet sammen.* En stigende sum giver $sum_(k=1)^n k = n(n+1)\/2 = Theta(n^2)$.
+  ],
+  worked: [
+    Her er tallene for $B(n)$.
+
+    + Tabel $B[0..n]$ har $Theta(n)$ celler.
+    + $B[k]$ summerer $k$ produkter $B[i] dot B[k-i-1]$, så $Theta(k)$ arbejde.
+    + Læg sammen over alle celler.
+
+    #eq[$ sum_(k=1)^n k = (n(n+1))/2 = Theta(n^2) $]
+
+    Pladsen er $Theta(n)$, fordi $B(n)$ læser hver tidligere indgang, så ingen kan frigives. Et konstant vindue som i Fibonacci dur ikke her.
+  ],
 )
 
 #qcard(
@@ -118,7 +162,22 @@ Tabellen rummer kun den optimale værdi. Vil du have løsningen, så gem det vin
     [$Theta(n^2)$], [$Theta(n^3)$],
   ),
   answer: [(e) $Theta(n^2)$.],
-  worked: [Gyldige tilstande er par $1 <= i <= j <= n$, en øvre trekant på $n(n+1)\/2 = Theta(n^2)$ celler. Hver celle med $i < j$ læser to værdier plus $O(1)$ aritmetik, så $Theta(1)$ arbejde. Samlet
-  #eq[$ Theta(n^2) dot Theta(1) = Theta(n^2) $]
-  Mindste plads er $Theta(n)$: ordn efter diagonalen $d = j - i$, hvor diagonal $d$ kun kræver diagonal $d-1$.],
+  blueprint: [
+    Et bånd $i <= j$ på indeksene fylder en trekant, ikke et helt kvadrat. Tæl trekantens celler.
+
+    + *Tæl trekanten.* Par med #swap[$i <= j$] fylder en øvre trekant på $n(n+1)\/2 = Theta(n^2)$ celler.
+    + *Mål arbejdet.* Læser cellen et fast antal naboer plus $O(1)$ aritmetik, er det $Theta(1)$ per celle.
+    + *Gang de to tal sammen.* Køretid $= ("trekantens celler") times ("arbejde per celle")$.
+  ],
+  worked: [
+    Her er tallene for $L(1, n)$.
+
+    + Gyldige tilstande er par $1 <= i <= j <= n$, en øvre trekant på $n(n+1)\/2 = Theta(n^2)$ celler.
+    + Hver celle med $i < j$ læser to værdier plus $O(1)$ aritmetik, så $Theta(1)$ arbejde.
+    + Gang sammen: $Theta(n^2) dot Theta(1)$.
+
+    #eq[$ Theta(n^2) dot Theta(1) = Theta(n^2) $]
+
+    Mindste plads er $Theta(n)$. Ordn efter diagonalen $d = j - i$, hvor diagonal $d$ kun kræver diagonal $d-1$.
+  ],
 )

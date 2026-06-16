@@ -112,9 +112,25 @@ Tre situationer giver svaret *"kan ikke løses med Master Theorem"*:
     [Rekursionsligningen kan ikke løses med Master Theorem fra Cormen et al., 4. udgave.],
   ),
   answer: [Mulighed (g): $T(n) = Theta(n^2)$ — tilfælde 3.],
-  worked: [$a = #swap[$2$]$, $b = #swap[$4$]$, $f(n) = #swap[$n^2$]$. Skelseksponenten er
-  #eq[$ alpha = log_4 2 = 0.5, quad n^alpha = n^(0.5). $]
-  $f(n) = n^2$ er polynomielt større end $n^(0.5)$ (med $epsilon = 1.5$): tilfælde 3. Regularitet: $a thin f(n/b) = 2(n/4)^2 = 1/8 n^2 <= c thin n^2$ med $c = 1/8 < 1$. Den holder, så $T(n) = Theta(n^2)$.],
+  blueprint: [
+    Tre tal styrer hele opgaven, $a$, $b$ og $f(n)$. Resten kører ens hver gang.
+
+    + *Aflæs.* Find #swap[$a$], #swap[$b$] og #swap[$f(n)$] i ligningen.
+    + *Skelseksponent.* Regn $alpha = log_b a$ og skriv $n^alpha$.
+    + *Sammenlign.* Sæt $n^alpha$ og $f(n)$ på vækststigen og se hvem der står længst til højre.
+    + *Vælg tilfælde.* Vinder $n^alpha$, er det tilfælde 1. Står de lige, tilfælde 2. Vinder $f(n)$ med en hel potens, tilfælde 3.
+    + *Skriv svaret.* Læs $Theta$-grænsen af tabellen og find den i svarmenuen.
+  ],
+  worked: [
+    Tallene her er $a = #swap[$2$]$, $b = #swap[$4$]$ og $f(n) = #swap[$n^2$]$.
+
+    + Skelseksponenten: $alpha = log_4 2 = 0.5$, så $n^alpha = n^(0.5)$.
+    + Sammenlign $n^(0.5)$ mod $n^2$. $f(n)$ er klart størst.
+    + Forskellen er halvanden potens, altså mindst en hel. Det er tilfælde 3.
+    + Tjek regularitet: $a thin f(n/b) = 2(n/4)^2 = 1/8 n^2 <= c thin n^2$ med $c = 1/8 < 1$. Den holder.
+
+    Svar: $T(n) = Theta(n^2)$.
+  ],
 )
 
 #qcard(
@@ -134,9 +150,23 @@ Tre situationer giver svaret *"kan ikke løses med Master Theorem"*:
     [Rekursionsligningen kan ikke løses med Master Theorem fra Cormen et al., 4. udgave.],
   ),
   answer: [Mulighed (h): $T(n) = Theta(n^2 log n)$ — tilfælde 2.],
-  worked: [$a = #swap[$4$]$, $b = #swap[$2$]$, $f(n) = #swap[$n^2$]$. Skelseksponenten er
-  #eq[$ alpha = log_2 4 = 2, quad n^alpha = n^2. $]
-  $f(n) = n^2$ er lige så stor som $n^alpha$, altså uafgjort med $k = 0$: tilfælde 2, $T(n) = Theta(n^2 log n)$.],
+  blueprint: [
+    Samme tre tal som altid, $a$, $b$ og $f(n)$. Stå særligt klar på tilfælde 2, hvor $f(n)$ og $n^alpha$ ender lige store.
+
+    + *Aflæs.* Find #swap[$a$], #swap[$b$] og #swap[$f(n)$].
+    + *Skelseksponent.* Regn $alpha = log_b a$ og skriv $n^alpha$.
+    + *Sammenlign.* Står $f(n)$ og $n^alpha$ samme sted på stigen, er det uafgjort.
+    + *Læg log på.* Uafgjort er tilfælde 2, og du ganger et $log n$ på $n^alpha$.
+  ],
+  worked: [
+    Tallene her er $a = #swap[$4$]$, $b = #swap[$2$]$ og $f(n) = #swap[$n^2$]$.
+
+    + Skelseksponenten: $alpha = log_2 4 = 2$, så $n^alpha = n^2$.
+    + Sammenlign $n^2$ mod $n^2$. De står samme sted på stigen.
+    + Lige store er tilfælde 2, og så koster det et ekstra $log n$.
+
+    Svar: $T(n) = Theta(n^2 log n)$.
+  ],
 )
 
 #qcard(
@@ -156,9 +186,23 @@ Tre situationer giver svaret *"kan ikke løses med Master Theorem"*:
     [Rekursionsligningen kan ikke løses med Master Theorem fra Cormen et al., 4. udgave.],
   ),
   answer: [Mulighed (f): $T(n) = Theta(n^(log_3 4))$ — tilfælde 1.],
-  worked: [$a = #swap[$4$]$, $b = #swap[$3$]$, $f(n) = #swap[$n$]$. Skelseksponenten er
-  #eq[$ alpha = log_3 4 approx 1.26. $]
-  Her vokser $n^alpha$ hurtigere end $f(n) = n$. $f$ er polynomielt mindre: tilfælde 1, $T(n) = Theta(n^(log_3 4))$.],
+  blueprint: [
+    De samme tre tal, men her er pointen, at $n^alpha$ kan have en skæv potens og stadig vinde.
+
+    + *Aflæs.* Find #swap[$a$], #swap[$b$] og #swap[$f(n)$].
+    + *Skelseksponent.* Regn $alpha = log_b a$. Den behøver ikke være et helt tal.
+    + *Sammenlign.* Ligger $n^alpha$ længere til højre på stigen end $f(n)$, vinder rekursionen.
+    + *Skriv svaret.* Vinder $n^alpha$ med en hel potens, er det tilfælde 1, og svaret er $Theta(n^alpha)$.
+  ],
+  worked: [
+    Tallene her er $a = #swap[$4$]$, $b = #swap[$3$]$ og $f(n) = #swap[$n$]$.
+
+    + Skelseksponenten: $alpha = log_3 4 approx 1.26$.
+    + Sammenlign $n^(1.26)$ mod $n$. $n^alpha$ ligger længere til højre.
+    + $n^alpha$ vinder, og $f$ er en hel potens mindre. Tilfælde 1.
+
+    Svar: $T(n) = Theta(n^(log_3 4))$.
+  ],
 )
 
 #qcard(
@@ -178,9 +222,23 @@ Tre situationer giver svaret *"kan ikke løses med Master Theorem"*:
     [Rekursionsligningen kan ikke løses med Master Theorem fra Cormen et al., 4. udgave.],
   ),
   answer: [Mulighed (b): $T(n) = Theta(log n)$ — tilfælde 2.],
-  worked: [Her er $a = 1$, $b = #swap[$4$]$, $f(n) = #swap[$1$]$. Skelseksponenten er
-  #eq[$ alpha = log_4 1 = 0, quad n^alpha = n^0 = 1. $]
-  $f(n) = 1$ er lige så stor som $n^0$: tilfælde 2, $T(n) = Theta(log n)$.],
+  blueprint: [
+    Pas på de små tal. Når $a = 1$ bliver $alpha = 0$, og $n^alpha$ falder helt ned til en konstant.
+
+    + *Aflæs.* Find #swap[$a$], #swap[$b$] og #swap[$f(n)$]. Med ét kald er $a = 1$.
+    + *Skelseksponent.* Regn $alpha = log_b a$. Er $a = 1$, er $alpha = 0$ og $n^alpha = 1$.
+    + *Sammenlign.* Er $f(n)$ også konstant, står de lige.
+    + *Læg log på.* Lige store er tilfælde 2. Med $n^alpha = 1$ bliver $Theta(n^alpha log n)$ til et rent $Theta(log n)$.
+  ],
+  worked: [
+    Tallene her er $a = 1$, $b = #swap[$4$]$ og $f(n) = #swap[$1$]$.
+
+    + Skelseksponenten: $alpha = log_4 1 = 0$, så $n^alpha = n^0 = 1$.
+    + Sammenlign $f(n) = 1$ mod $n^0 = 1$. De er ens.
+    + Lige store er tilfælde 2. Med $n^alpha = 1$ bliver det et rent $log n$.
+
+    Svar: $T(n) = Theta(log n)$.
+  ],
 )
 
 #qcard(
@@ -193,9 +251,25 @@ Tre situationer giver svaret *"kan ikke løses med Master Theorem"*:
     [Rekursionsligningen kan ikke løses med Master Theorem.],
   ),
   answer: [Mulighed (c): rekursionsligningen *kan ikke løses* med Master Theorem.],
-  worked: [$a = #swap[$5$]$, $b = #swap[$5$]$, $f(n) = #swap[$n log n$]$. Skelseksponenten er
-  #eq[$ alpha = log_5 5 = 1, quad n^alpha = n. $]
-  Sammenlign $f(n) = n log n$ mod $n$: den er *større* end $n$ (ikke tilfælde 1 eller 2), men kun en $log$-faktor større — ikke en hel potens, så $f(n)$ er ikke $Omega(n^(1 + epsilon))$ (ikke tilfælde 3). Den falder i hullet mellem tilfælde 2 og 3, og kan derfor ikke løses.],
+  blueprint: [
+    Den korte menu spørger reelt om én ting. Lander $f(n)$ i hullet eller ej?
+
+    + *Aflæs.* Find #swap[$a$], #swap[$b$] og #swap[$f(n)$].
+    + *Skelseksponent.* Regn $alpha = log_b a$ og skriv $n^alpha$.
+    + *Sammenlign.* Hold $f(n)$ op mod $n^alpha$. Lige store giver tilfælde 2. En hel potens fra hinanden giver tilfælde 1 eller 3.
+    + *Tjek hullet.* Er $f(n)$ kun en $log$-faktor fra $n^alpha$, falder den i hullet og kan ikke løses.
+    + *Vælg svaret.* Match med en af de tre muligheder.
+  ],
+  worked: [
+    Tallene her er $a = #swap[$5$]$, $b = #swap[$5$]$ og $f(n) = #swap[$n log n$]$.
+
+    + Skelseksponenten: $alpha = log_5 5 = 1$, så $n^alpha = n$.
+    + Sammenlign $n log n$ mod $n$. $f$ er størst, så det er hverken tilfælde 1 eller 2.
+    + Men $f$ er kun en $log$-faktor større, ikke en hel potens. Så $f$ er ikke $Omega(n^(1 + epsilon))$, og det er ikke tilfælde 3.
+    + Den falder i hullet mellem tilfælde 2 og 3.
+
+    Svar: kan ikke løses med Master Theorem.
+  ],
 )
 
 #note(title: [Master-sætningen])[Samme skabelon, fire udfald. Regn $alpha = log_b a$, og lad $f(n)$ dyste mod $n^alpha$: vinder $n^alpha$, tilfælde 1; uafgjort, et ekstra $log n$ (tilfælde 2); vinder $f$, tilfælde 3.]

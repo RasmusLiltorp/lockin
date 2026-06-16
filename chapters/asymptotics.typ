@@ -120,7 +120,28 @@ For løkker tæller du to ting hver for sig: hvor mange gange den ydre løkke k�
     [$#swap[$n^(1 slash 7)$]$ er $O(#swap[$log(n^(17))$])$],
   ),
   answer: [(b), (c), (d) og (f) er sande.],
-  worked: [Tag hvert forhold mod uendelig. (a) $n slash sqrt(n) = sqrt(n) -> infinity$, falsk. (b) $2n slash (n log n) = 2 slash log n -> 0$, sand. (c) $n log n slash n^(1.5) = log n slash sqrt(n) -> 0$, sand. (d) $(log n)^2 slash sqrt(n) -> 0$ (rod slår polylog), sand. (e) $3^n$ mod en polylog $-> infinity$, falsk. (f) $log n slash n -> 0$, sand. (g) $n^(1 slash 7)$ mod $17 log n -> infinity$, falsk. Et forhold mod $0$ tæller stadig som $O$.],
+  blueprint: [
+    Hver linje spørger om det samme: vokser venstresiden højst lige så hurtigt som højresiden? Du tjekker én linje ad gangen, og du kan som regel nøjes med vækststigen.
+
+    + Forenkl begge sider. En sum beholder kun sit hurtigste led, så $#swap[$n + n$]$ bliver til $#swap[$n$]$.
+    + Find $f$ og $g$ på stigen $1 < log n < sqrt(n) < n < n log n < n^2 < 2^n < n^n$.
+    + Står $f$ til venstre for eller på samme plads som $g$, holder $O$. Står $f$ til højre, holder den ikke.
+    + Er du i tvivl, så regn forholdet: $#swap[$f(n) slash g(n)$]$. Går det mod $0$ eller en konstant, er det $O$. Går det mod $infinity$, er det ikke.
+    + To genveje: en eksponentiel slår enhver potens, og en rod slår enhver $log$-potens.
+  ],
+  worked: [
+    Jeg tager forholdet $f slash g$ for hver linje og ser hvor det ender.
+
+    - *(a)* $n slash sqrt(n) = sqrt(n) -> infinity$. Falsk.
+    - *(b)* $2n slash (n log n) = 2 slash log n -> 0$. Sand.
+    - *(c)* $n log n slash n^(1.5) = log n slash sqrt(n) -> 0$, fordi roden slår $log$. Sand.
+    - *(d)* $(log n)^2 slash sqrt(n) -> 0$, samme grund. Sand.
+    - *(e)* $3^n$ delt med en $log$-potens $-> infinity$. Falsk.
+    - *(f)* $log n slash n -> 0$. Sand.
+    - *(g)* $n^(1 slash 7)$ delt med $17 log n -> infinity$, for en rod slår $log$. Falsk.
+
+    Et forhold der går mod $0$ tæller stadig som $O$. Tilbage står (b), (c), (d) og (f).
+  ],
 )
 
 #qcard(
@@ -137,7 +158,27 @@ For løkker tæller du to ting hver for sig: hvor mange gange den ydre løkke k�
     [$#swap[$2^n$]$ er $o(#swap[$n^n$])$],
   ),
   answer: [(a), (b), (c), (e) og (g) er sande.],
-  worked: [(a) $n slash (log n)^2 -> infinity$, så $Omega$ holder. (b) $4^n slash 2^n = 2^n -> infinity$, strengt hurtigere, $omega$ holder. (c) $3n slash (n slash 3) = 9$, positiv konstant, $Theta$ holder. (d) $(log n)^3 slash (3 log n) = (log n)^2 slash 3 -> infinity$, ikke konstant, $Theta$ fejler. (e) $1 slash (log n)^2 -> 0$, $o$ holder. (f) summen opfører sig som $n^2$, og $n^2 slash n^(1.75) -> infinity$, $Theta$ fejler. (g) $(2 slash n)^n -> 0$, $o$ holder.],
+  blueprint: [
+    Her blandes alle fem symboler, så du kan ikke bare bruge stigen. Regn forholdet og oversæt grænseværdien til det symbol linjen påstår.
+
+    + Forenkl begge sider, så kun det hurtigste led står tilbage.
+    + Regn $L = lim_(n -> infinity) #swap[$f(n) slash g(n)$]$.
+    + Oversæt $L$: en konstant $> 0$ giver $Theta$. $L = 0$ giver $o$ og $O$. $L = infinity$ giver $omega$ og $Omega$.
+    + Tjek om symbolet i linjen passer til det $L$ du fik. $Theta$ er strengest og kræver en konstant — hverken $0$ eller $infinity$.
+  ],
+  worked: [
+    Jeg regner $L$ for hver linje og holder det op mod symbolet der står.
+
+    - *(a)* $n slash (log n)^2 -> infinity$, og linjen siger $Omega$. Passer. Sand.
+    - *(b)* $4^n slash 2^n = 2^n -> infinity$, strengt hurtigere, så $omega$. Sand.
+    - *(c)* $3n slash (n slash 3) = 9$, en konstant, så $Theta$. Sand.
+    - *(d)* $(log n)^3 slash (3 log n) = (log n)^2 slash 3 -> infinity$. Linjen siger $Theta$, men $L$ er ikke konstant. Falsk.
+    - *(e)* $(n^2 slash log n) slash (n^2 log n) = 1 slash (log n)^2 -> 0$, så $o$. Sand.
+    - *(f)* summen styres af $n^2$, og $n^2 slash n^(1.75) -> infinity$. $Theta$ fejler. Falsk.
+    - *(g)* $2^n slash n^n = (2 slash n)^n -> 0$, så $o$. Sand.
+
+    Sande: (a), (b), (c), (e) og (g).
+  ],
 )
 
 #qcard(
@@ -154,7 +195,20 @@ For løkker tæller du to ting hver for sig: hvor mange gange den ydre løkke k�
     [$Theta(n^3)$],
   ),
   answer: [(d) $Theta(n log n)$.],
-  worked: [Ydre løkke: $i = 1, 2, 4, dots$ indtil $i > n$, altså $Theta(log n)$ gennemløb. Indre løkke: $j$ tæller fra $n$ ned til $2$, det er $n - 1$ skridt hvert gennemløb uafhængigt af $i$, altså $Theta(n)$. I alt $Theta(log n) dot Theta(n) = Theta(n log n)$.],
+  blueprint: [
+    To indlejrede løkker. Du tæller den ydre og den indre hver for sig og ganger til sidst.
+
+    + Se på hvordan tælleren i den ydre løkke ændrer sig. Plusses der med en konstant ($i = i + #swap[$c$]$), kører den $Theta(n)$ gange. Ganges der ($i = #swap[$2$] dot i$), kører den $Theta(log n)$ gange.
+    + Tæl den indre løkkes arbejde for ét ydre gennemløb. Tjek om grænsen afhænger af $n$ eller af den ydre tæller.
+    + Gang de to tal sammen og smid konstanter væk.
+  ],
+  worked: [
+    + *Ydre løkke.* $i$ ganges med $2$ hver gang: $i = 1, 2, 4, dots$ indtil $i > n$. Det er $Theta(log n)$ gennemløb.
+    + *Indre løkke.* $j$ sættes til $n$ og tælles ned til $2$. Det er $n - 1$ skridt, og det sker forfra hvert ydre gennemløb uanset hvad $i$ er. Altså $Theta(n)$ per gang.
+    + *Gang sammen.* $Theta(log n) dot Theta(n) = Theta(n log n)$.
+
+    Svaret er (d).
+  ],
 )
 
 #qcard(
@@ -171,5 +225,19 @@ For løkker tæller du to ting hver for sig: hvor mange gange den ydre løkke k�
     [$Theta(n^3)$],
   ),
   answer: [(c) $Theta(n)$. Det er fælde-tilfældet.],
-  worked: [$j$ sættes til $1$ én gang uden for begge løkker og nulstilles aldrig. Den ydre løkke kører cirka $n slash #swap[$5$]$ gange. Den indre løkke skubber kun $j$ opad, så hen over hele kørslen klatrer $j$ fra $1$ op til cirka $n$ — det er $Theta(n)$ indre skridt i alt, ikke per gennemløb. I alt $Theta(n slash 5) + Theta(n) = Theta(n)$. At læse det som $Theta(n^2)$ er fejlen spørgsmålet jagter.],
+  blueprint: [
+    Det ligner to indlejrede løkker, men tjek hvor den indre tæller sættes, før du ganger.
+
+    + Find ud af hvor den indre tæller initialiseres. Sker det inde i den ydre løkke, nulstilles den hvert gennemløb, og så ganger du som normalt.
+    + Sættes den derimod én gang *uden for* begge løkker og kun stiger, så summér i stedet for at gange. Tælleren klatrer fra start til slut over hele kørslen, så det indre arbejde er $#swap[$Theta(n)$]$ i alt, ikke per gennemløb.
+    + Læg ydre og indre arbejde sammen.
+  ],
+  worked: [
+    + *Hvor sættes $j$?* $j = 1$ står uden for begge løkker og nulstilles aldrig. Det er fælden.
+    + *Ydre løkke.* $i$ plusses med $5$ hver gang, så den kører cirka $n slash 5$ gange, altså $Theta(n)$.
+    + *Indre arbejde i alt.* Den indre løkke skubber kun $j$ opad. Hen over hele kørslen klatrer $j$ fra $1$ til cirka $n$, så det er $Theta(n)$ skridt samlet, ikke per gennemløb.
+    + *Læg sammen.* $Theta(n) + Theta(n) = Theta(n)$.
+
+    Svaret er (c). Læser du det som $Theta(n^2)$, er du gået i fælden.
+  ],
 )

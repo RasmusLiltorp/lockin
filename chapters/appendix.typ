@@ -84,7 +84,27 @@ Hvert ciffer koster $O(1)$, og du deler $N$ ned til 0, så omregningen tager $Th
     [$log(n!)$ er $O(n^2)$],
   ),
   answer: [(b), (c), (e) og (g) er sande.],
-  worked: [Hold $f\/g$ op mod vækstrækken. (a) falsk, $n$ slår $log n$. (b) sand, polylog taber til ethvert polynomium. (c) sand, samme som $log n = O(sqrt(n))$. (d) falsk, eksponentiel slår enhver potens. (e) sand, konstanten 3 forsvinder i $O$. (f) falsk, eksponentiel slår polylog. (g) sand, $log(n!) = Theta(n log n)$, som ligger under $n^2$.],
+  blueprint: [
+    Et $O$-udsagn "$f$ er $O(g)$" spørger om $f$ vokser højst lige så hurtigt som $g$.
+
+    + *Find $f$ og $g$.* Skriv #swap[de to funktioner] op, en på hver side.
+    + *Slå dem op i vækstrækken.* $1 < log n < (log n)^k < n^epsilon < n < n log n < n^2 < c^n < n^n$. Konstante faktorer tæller ikke med.
+    + *Sammenlign placeringen.* Ligger #swap[$f$] til venstre for eller samme sted som #swap[$g$], er udsagnet sandt.
+    + *Tvivlstilfælde.* Regn $L = lim_(n -> oo) f\/g$. Er $L < oo$, holder $O$.
+  ],
+  worked: [
+    Jeg tager dem en ad gangen og holder $f\/g$ op mod rækken.
+
+    - (a) $n$ mod $log n$: $n$ står til højre, så $n$ er ikke $O(log n)$. Falsk.
+    - (b) $(log n)^3$ mod $n^2$: enhver polylog taber til et polynomium. Sand.
+    - (c) $n log n$ mod $n^(1.5)$: del med $n$, så er det $log n$ mod $sqrt(n)$, og $log$ taber. Sand.
+    - (d) $2^n$ mod $sqrt(n)$: eksponentiel slår enhver potens. Falsk.
+    - (e) $3n^2$ mod $n^2$: konstanten 3 forsvinder i $O$. Sand.
+    - (f) $7^n$ mod $(log n)^7$: eksponentiel mod polylog, helt galt. Falsk.
+    - (g) $log(n!)$ mod $n^2$: Stirling giver $log(n!) = Theta(n log n)$, som ligger under $n^2$. Sand.
+
+    Svar: (b), (c), (e) og (g).
+  ],
 )
 
 #qcard(
@@ -101,7 +121,28 @@ Hvert ciffer koster $O(1)$, og du deler $N$ ned til 0, så omregningen tager $Th
     [$n^(1.1)$ er $omega(n log n)$],
   ),
   answer: [(b), (d), (f) og (g) er sande.],
-  worked: [Regn $L = lim f\/g$. (a) falsk, $L = 0$, så $o(n^2)$, ikke $omega$. (b) sand, $n^3$ dominerer, $L = 1$. (c) falsk, $6\/7$ er konstant og $!= 0$, så $Theta(7)$, ikke $o$. (d) sand, $(3\/2)^n -> oo$. (e) falsk, $n\/(log n)^5 -> oo$. (f) sand, $n^n\/2^n -> oo$. (g) sand, $n^(0.1)\/log n -> oo$.],
+  blueprint: [
+    Her er fem forskellige symboler i spil. Grænseværdien $L = lim_(n->oo) f\/g$ afgør dem alle.
+
+    + *Opstil brøken.* Skriv $f\/g$ med #swap[de to funktioner].
+    + *Tag grænsen* $L = lim_(n->oo) f\/g$. Forkort først, så meget du kan.
+    + *Aflæs symbolet ud fra $L$:*
+      #eq[$ O: L < oo quad Theta: 0 < L < oo quad o: L = 0 quad omega: L = oo quad Omega: L > 0 $]
+    + *Match mod udsagnet.* Passer dit $L$ med #swap[det påståede symbol], er udsagnet sandt.
+  ],
+  worked: [
+    Jeg regner $L = lim f\/g$ for hver linje.
+
+    - (a) $log n \/ n^2 -> 0$, så $log n$ er $o(n^2)$, ikke $omega(n^2)$. Falsk.
+    - (b) $n^3$ dominerer $n^2 + n^3$, så $L = 1$ og det er $Theta(n^3)$. Sand.
+    - (c) $6\/7$ er en konstant forskellig fra 0, så $6$ er $Theta(7)$, ikke $o(7)$. Falsk.
+    - (d) $3^n\/2^n = (3\/2)^n -> oo$, så $3^n$ er $Omega(2^n)$. Sand.
+    - (e) $n\/(log n)^2$ delt med $(log n)^3$ giver $n\/(log n)^5 -> oo$, ikke $o$. Falsk.
+    - (f) $n^n\/2^n -> oo$, så $n^n$ er $Omega(2^n)$. Sand.
+    - (g) $n^(1.1)\/(n log n) = n^(0.1)\/log n -> oo$, så $omega(n log n)$. Sand.
+
+    Svar: (b), (d), (f) og (g).
+  ],
 )
 
 #qcard(
@@ -109,7 +150,17 @@ Hvert ciffer koster $O(1)$, og du deler $N$ ned til 0, så omregningen tager $Th
   source: "DM573, talReprSlides (omregningsøvelse)",
   prompt: [Omregn $N = #swap[$25$]$ til binær.],
   answer: [$25 = 11001_2$.],
-  worked: [Gentagen division med 2, rester læst nedefra og op:
+  blueprint: [
+    Gentagen division med basen. Resterne er cifrene, mindst betydende først.
+
+    + *Start.* Sæt $X = #swap[$N$]$, det tal du vil omregne.
+    + *Dividér med basen.* Del $X$ med #swap[2] og skriv resten ned. Den er det næste ciffer.
+    + *Gentag.* Sæt $X$ til kvotienten og kør igen, til $X = 0$.
+    + *Læs op.* Cifrene nedefra og op er svaret. Tjek med den vægtede sum $sum_i d_i dot b^i$.
+  ],
+  worked: [
+    Jeg dividerer 25 med 2 igen og igen og noterer resten hver gang.
+
     #table(
       columns: 3, inset: 5pt, align: center,
       stroke: 0.4pt + hair,
@@ -120,7 +171,11 @@ Hvert ciffer koster $O(1)$, og du deler $N$ ned til 0, så omregningen tager $Th
       [$3 : 2$], [1], [1],
       [$1 : 2$], [0], [1],
     )
-    Læst opad: $11001_2$. Tjek: $16 + 8 + 1 = 25$.],
+
+    Resterne nedefra og op: $11001_2$. Tjek baglæns: $16 + 8 + 0 + 0 + 1 = 25$.
+
+    Svar: $25 = 11001_2$.
+  ],
 )
 
 #qcard(
@@ -138,7 +193,24 @@ Hvert ciffer koster $O(1)$, og du deler $N$ ned til 0, så omregningen tager $Th
       k = i - 1
     ```],
   answer: [$Theta(log n)$.],
-  worked: [$d$ starter ved $n$ og halveres (heltalsdivision) hver iteration, til den når 0. Antal iterationer er
-    #eq[$ floor(log_2 n) + 1 = Theta(log n) $]
-    Hver iteration laver $O(1)$ arbejde: én mod, én div, én addition. I alt $Theta(log n)$.],
+  blueprint: [
+    Køretid for en løkke er antal gennemløb gange arbejdet per gennemløb.
+
+    + *Find tælleren.* Hvilken variabel styrer #swap[løkken], og hvad starter den ved?
+    + *Se hvordan den ændrer sig.* Trækkes der fra (lineært), eller deles der med en faktor (logaritmisk)? Halvering hver gang giver $log_2$.
+    + *Tæl gennemløbene.* Deles der med #swap[2] ned til 0, er det $floor(log_2 n) + 1$ gange.
+    + *Gang med arbejdet per gennemløb.* Er kroppen $O(1)$, er svaret antal gennemløb.
+  ],
+  worked: [
+    Jeg følger $d$ gennem løkken.
+
+    + $d$ starter ved $n$ og deles med 2 (heltalsdivision) hver gang, til den rammer 0.
+    + Antal halveringer ned til 0 er
+      #eq[$ floor(log_2 n) + 1 = Theta(log n) $]
+    + Kroppen laver $O(1)$ per gennemløb: én mod, én div og en optælling.
+
+    For $n = 55$ kører løkken $floor(log_2 55) + 1 = 6$ gange. I alt $Theta(log n)$.
+
+    Svar: $Theta(log n)$.
+  ],
 )

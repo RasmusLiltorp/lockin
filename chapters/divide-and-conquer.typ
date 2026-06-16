@@ -91,9 +91,26 @@ MaxSum3(n)                              // Kadane, Theta(n)
   #eq[$ T(n) = #swap[$8$] thin T(n\/#swap[$2$]) + n^2 $]
   Hvilken $Theta$-grænse gælder, og slår den den naive $Theta(n^3)$?],
   answer: [$T(n) = Theta(n^3)$. Ingen forbedring.],
-  worked: [$a = #swap[$8$]$, $b = #swap[$2$]$, $f(n) = n^2$. Skellet er $alpha = log_2 8 = 3$, så
-  #eq[$ n^alpha = n^3. $]
-  Her er $f(n) = n^2 = O(n^(3 - epsilon))$ med $epsilon = 1$, polynomielt mindre. Master case 1 giver $T(n) = Theta(n^3)$, samme som den kubiske metode.],
+  blueprint: [
+    Aflæs $a$ og $b$ fra rekursionen og kør Master Theorem.
+
+    + Aflæs #swap[$a$] (antal kald) og #swap[$b$] (faktor i $n\/b$) samt $f(n)$.
+    + Regn skellet $alpha = log_b a$ ud og skriv $n^alpha$ op.
+    + Sammenlign $f(n)$ med $n^alpha$: er $f$ polynomielt mindre, lige stor eller større?
+    + Vælg den case, sammenligningen peger på, og læs $Theta$-grænsen af.
+  ],
+  worked: [
+    + Her er $a = #swap[$8$]$, $b = #swap[$2$]$ og $f(n) = n^2$.
+
+    + Skellet bliver $alpha = log_2 8 = 3$, så
+      #eq[$ n^alpha = n^3. $]
+
+    + Sammenlign: $f(n) = n^2$ ligger under $n^3$. Mere præcist $f(n) = O(n^(3 - epsilon))$ med $epsilon = 1$, altså polynomielt mindre.
+
+    + Det er case 1, og den giver $Theta(n^alpha)$.
+
+    Svar: $T(n) = Theta(n^3)$, det samme som den kubiske metode laver i forvejen.
+  ],
 )
 
 #qcard(
@@ -103,9 +120,26 @@ MaxSum3(n)                              // Kadane, Theta(n)
   #eq[$ T(n) = #swap[$7$] thin T(n\/#swap[$2$]) + n^2 $]
   Hvad er køretiden?],
   answer: [$T(n) = Theta(n^(log_2 7)) = O(n^2.81)$.],
-  worked: [$a = #swap[$7$]$, $b = #swap[$2$]$, $f(n) = n^2$. Skellet er $alpha = log_2 7 = 2.807...$, så
-  #eq[$ n^alpha approx n^2.81. $]
-  Her er $f(n) = n^2 = O(n^(alpha - epsilon))$, polynomielt mindre, så Master case 1 giver $T(n) = Theta(n^alpha) = O(n^2.81)$. Det slår $Theta(n^3)$ fordi $log_2 7 < 3$.],
+  blueprint: [
+    Samme fremgang som før: aflæs tallene, find skellet, vælg case.
+
+    + Aflæs #swap[$a$], #swap[$b$] og $f(n)$ fra rekursionen.
+    + Regn $alpha = log_b a$ ud. Når $a$ ikke er en pæn potens af $b$, bliver $alpha$ et krummet tal.
+    + Sammenlign $f(n)$ med $n^alpha$ og vælg den case, der passer.
+    + Læs $Theta$-grænsen af, og hold den op mod den naive $Theta(n^3)$.
+  ],
+  worked: [
+    + Her er $a = #swap[$7$]$, $b = #swap[$2$]$ og $f(n) = n^2$.
+
+    + Skellet bliver $alpha = log_2 7 = 2.807...$, så
+      #eq[$ n^alpha approx n^2.81. $]
+
+    + Sammenlign: $f(n) = n^2$ ligger under $n^2.81$, altså $f(n) = O(n^(alpha - epsilon))$ og polynomielt mindre.
+
+    + Det er case 1, som giver $Theta(n^alpha)$.
+
+    Svar: $T(n) = Theta(n^(log_2 7)) = O(n^2.81)$. Det slår $Theta(n^3)$, fordi $log_2 7 < 3$.
+  ],
 )
 
 #qcard(
@@ -113,7 +147,24 @@ MaxSum3(n)                              // Kadane, Theta(n)
   source: "Max-sum slides (SE4-DMAD F26)",
   prompt: [Hvad er køretid og ekstra pladsforbrug for #swap[Kadanes algoritme (MaxSum3)] til maximum subarray-problemet?],
   answer: [$Theta(n)$ tid, $O(1)$ plads.],
-  worked: [Ét gennemløb med $n$ iterationer á $Theta(1)$ arbejde (to `max`-opdateringer) giver $Theta(n)$. Algoritmen holder kun to tal (`maxSoFar`, `maxEndingHere`) uden ekstra array, så pladsen er $O(1)$. MaxSum1 er $Theta(n^3)$ (tre løkker), MaxSum2 er $Theta(n^2)$ (to løkker); hvert spring fjerner én løkke ved at genbruge den forrige sum.],
+  blueprint: [
+    Tæl løkker for tiden og tæl gemte tal for pladsen.
+
+    + Find ydre struktur: hvor mange #swap[indlejrede løkker] kører over inputtet? Det giver tiden.
+    + Tjek arbejdet pr. iteration. Er det konstant, ganger du bare op.
+    + Tæl hvor meget ekstra hukommelse algoritmen holder ud over selve inputtet. Det giver pladsen.
+  ],
+  worked: [
+    + Kadane kører ét gennemløb, altså $n$ iterationer.
+
+    + Hver iteration laver to `max`-opdateringer, det er $Theta(1)$ arbejde. Så tiden er $n dot Theta(1) = Theta(n)$.
+
+    + Algoritmen gemmer kun to tal undervejs, `maxSoFar` og `maxEndingHere`, og bruger ikke noget ekstra array. Pladsen er $O(1)$.
+
+    Til sammenligning: MaxSum1 har tre løkker og er $Theta(n^3)$, MaxSum2 har to og er $Theta(n^2)$. Hvert trin sparer en løkke ved at genbruge den forrige sum.
+
+    Svar: $Theta(n)$ tid og $O(1)$ plads.
+  ],
 )
 
 #qcard(
@@ -131,9 +182,26 @@ MaxSum3(n)                              // Kadane, Theta(n)
     [Rekursionsligningen kan ikke løses med Master Theorem.],
   ),
   answer: [(b) $T(n) = Theta(n^(1/2))$.],
-  worked: [$a = #swap[$1$]$, $b = #swap[$2$]$, $f(n) = #swap[$n^(1/2)$]$. Skellet er $alpha = log_2 1 = 0$, så
-  #eq[$ n^alpha = n^0 = 1. $]
-  Her er $f(n) = n^(0.5)$ polynomielt større end $1$, altså $f(n) = Omega(n^(0 + epsilon))$, så Master case 3. Tjek regularitet:
-  #eq[$ a thin f(n/b) = sqrt(n/2) = sqrt(n)/sqrt(2) <= c thin sqrt(n), quad c = 1/sqrt(2) < 1. $]
-  Den holder, så $T(n) = Theta(f(n)) = Theta(n^(1/2))$.],
+  blueprint: [
+    Find skellet, sammenlign med $f(n)$, og husk regularitetstjekket i case 3.
+
+    + Aflæs #swap[$a$], #swap[$b$] og #swap[$f(n)$], og regn $alpha = log_b a$ ud.
+    + Sammenlign $f(n)$ med $n^alpha$. Når $f$ er polynomielt større, peger det på case 3.
+    + Inden du lander på case 3, tjek regularitet: findes der $c < 1$ med $a thin f(n\/b) <= c thin f(n)$?
+    + Holder den, er svaret $Theta(f(n))$.
+  ],
+  worked: [
+    + Her er $a = #swap[$1$]$, $b = #swap[$2$]$ og $f(n) = #swap[$n^(1/2)$]$.
+
+    + Skellet bliver $alpha = log_2 1 = 0$, så
+      #eq[$ n^alpha = n^0 = 1. $]
+
+    + Sammenlign: $f(n) = n^(0.5)$ er polynomielt større end $1$, altså $f(n) = Omega(n^(0 + epsilon))$. Det peger på case 3.
+
+    + Regularitetstjek:
+      #eq[$ a thin f(n/b) = sqrt(n/2) = sqrt(n)/sqrt(2) <= c thin sqrt(n), quad c = 1/sqrt(2) < 1. $]
+      Den holder.
+
+    Svar: $T(n) = Theta(f(n)) = Theta(n^(1/2))$, altså (b).
+  ],
 )
