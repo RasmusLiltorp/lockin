@@ -41,6 +41,12 @@
   block(it.body)
   v(2pt)
 }
+#show heading.where(level: 4): it => {
+  set text(size: 11pt, fill: ink, weight: "bold")
+  v(10pt)
+  block(it.body)
+  v(1pt)
+}
 #show link: it => underline(text(fill: ink)[#it])
 
 // --- title page ---
