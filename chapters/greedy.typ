@@ -27,11 +27,11 @@ Den sum er lig summen af alle interne knuders vægte, du skrev op undervejs:
 
 #eq[$ sum_s "freq"(s) dot "depth"(s) = sum_("interne knuder") "vægt" $]
 
-#note[Genvejen via interne vægte er hurtigst: læg blot de noterede merge-summer sammen. For o:150, p:100, q:25, r:125, s:200, t:50, u:75 bliver de interne vægte $75, 150, 225, 300, 425, 725$, og $75+150+225+300+425+725 = 1900$ bit. Slip for at holde styr på dybder.]
+#note(title: [Interne vægte])[Genvejen via interne vægte er hurtigst: læg blot de noterede merge-summer sammen. For o:150, p:100, q:25, r:125, s:200, t:50, u:75 bliver de interne vægte $75, 150, 225, 300, 425, 725$, og $75+150+225+300+425+725 = 1900$ bit. Slip for at holde styr på dybder.]
 
-#trap[Ved samme vægt kan begge træer vælges først, og venstre/højre er frit, så der findes flere gyldige Huffman-træer. Men dybder og pris er ens uanset valget — svar trygt på dem. Kun "tegn træet" har flere rigtige svar.]
+#trap(title: [Flere gyldige træer])[Ved samme vægt kan begge træer vælges først, og venstre/højre er frit, så der findes flere gyldige Huffman-træer. Men dybder og pris er ens uanset valget — svar trygt på dem. Kun "tegn træet" har flere rigtige svar.]
 
-#trap[Optimal betyder ikke, at Huffman kan bygge det. Huffman merger altid de to aktuelt mindste vægte, så et producerbart træ må have interne vægte, der passer med den tvungne merge-rækkefølge. To optimale træer kan have hvert sit sæt interne vægte; kun dem der matcher Huffmans merges er gyldige.]
+#trap(title: [Optimal vs. producerbar])[Optimal betyder ikke, at Huffman kan bygge det. Huffman merger altid de to aktuelt mindste vægte, så et producerbart træ må have interne vægte, der passer med den tvungne merge-rækkefølge. To optimale træer kan have hvert sit sæt interne vægte; kun dem der matcher Huffmans merges er gyldige.]
 
 Aktivitetsudvælgelse er det andet klassiske greedy-problem: du har aktiviteter med start- og sluttider og vil have flest mulige uden overlap.
 
@@ -46,9 +46,9 @@ Køretiden er domineret af sorteringen:
 
 #eq[$ O(n log n) $]
 
-#note[De andre greedy-valg fejler: korteste aktivitet, færrest overlap og tidligste start har alle modeksempler. Kun tidligste sluttidspunkt er optimalt. Beviset er en invariant — "en optimal løsning indeholder de hidtidige valg" — lukket med et ombytningsargument.]
+#note(title: [Korrekt greedy-valg])[De andre greedy-valg fejler: korteste aktivitet, færrest overlap og tidligste start har alle modeksempler. Kun tidligste sluttidspunkt er optimalt. Beviset er en invariant — "en optimal løsning indeholder de hidtidige valg" — lukket med et ombytningsargument.]
 
-#trap[Greedy efter værditæthed løser fractional rygsæk optimalt, men fejler for 0-1. Kapacitet 50, genstande (vægt 10, \$60), (vægt 20, \$100), (vægt 30, \$120): tæthed tager de to første og får \$160, men optimum er de to sidste med \$220. 0-1-rygsæk kræver dynamisk programmering.]
+#trap(title: [0-1-rygsæk])[Greedy efter værditæthed løser fractional rygsæk optimalt, men fejler for 0-1. Kapacitet 50, genstande (vægt 10, \$60), (vægt 20, \$100), (vægt 30, \$120): tæthed tager de to første og får \$160, men optimum er de to sidste med \$220. 0-1-rygsæk kræver dynamisk programmering.]
 
 Skal du *bevise* greedy optimal, brug et ombytningsargument: tag en vilkårlig optimal løsning OPT og vis, at du kan bytte ét element i OPT ud med greedy-valget uden at gøre OPT værre eller ugyldig. Gentaget bliver OPT til greedy-løsningen, så greedy er også optimal.
 

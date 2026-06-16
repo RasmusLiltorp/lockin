@@ -48,11 +48,11 @@ Union(x, y)              Link(x, y)   // x, y er rødder
                                      y.rank = y.rank + 1
 ```
 
-#note[Rank er en øvre grænse for højden, ikke den faktiske højde. Komprimering flader træet ud uden at sænke rank, så rank kan ende større end den højde, du tegner. Hold kun styr på rank i rødderne.]
+#note(title: [Rank vs. højde])[Rank er en øvre grænse for højden, ikke den faktiske højde. Komprimering flader træet ud uden at sænke rank, så rank kan ende større end den højde, du tegner. Hold kun styr på rank i rødderne.]
 
-#trap[Rækkefølgen tæller ved uafgjort. $"Union"(x,y)$ med ens rank gør $"root"(x)$ til barn af $"root"(y)$, som vokser. Bytter du $x$ og $y$, vender træet om.]
+#trap(title: [Rækkefølge ved uafgjort])[Rækkefølgen tæller ved uafgjort. $"Union"(x,y)$ med ens rank gør $"root"(x)$ til barn af $"root"(y)$, som vokser. Bytter du $x$ og $y$, vender træet om.]
 
-#trap[Komprimering kører kun på de $"Find-Set"$-kald, unionerne faktisk udfører. Komprimér ikke alle knuder til sidst. Et afsluttende $"Find-Set"$ på en rod ændrer intet.]
+#trap(title: [Sti-komprimering])[Komprimering kører kun på de $"Find-Set"$-kald, unionerne faktisk udfører. Komprimér ikke alle knuder til sidst. Et afsluttende $"Find-Set"$ på en rod ændrer intet.]
 
 ==== Priser
 
@@ -70,7 +70,7 @@ Tallene gælder for $n$ $"Make-Set"$, $n-1$ $"Union"$ og $m$ $"Find-Set"$.
   [Skov, rank + komprimering], [$alpha(n)$], [$alpha(n)$], [$O(m dot alpha(n) + n)$],
 )
 
-#note[Vægtet union på lænkede lister giver $O(n log n)$: en knudes header omskrives kun, når dens liste er den korteste, så gruppen fordobles hver gang, altså højst $log n$ omskrivninger pr. knude. For skoven er $alpha(n)$ den inverse Ackermann-funktion, under 5 for ethvert tænkeligt $n$. Beviset (CLRS 19.4) er ikke pensum.]
+#note(title: [Vægtet union og inverse Ackermann])[Vægtet union på lænkede lister giver $O(n log n)$: en knudes header omskrives kun, når dens liste er den korteste, så gruppen fordobles hver gang, altså højst $log n$ omskrivninger pr. knude. For skoven er $alpha(n)$ den inverse Ackermann-funktion, under 5 for ethvert tænkeligt $n$. Beviset (CLRS 19.4) er ikke pensum.]
 
 === Tilbagevendende eksamensspørgsmål
 
@@ -139,4 +139,4 @@ Tallene gælder for $n$ $"Make-Set"$, $n-1$ $"Union"$ og $m$ $"Find-Set"$.
   ],
 )
 
-#note[Kruskal er stedet, union-find oftest dukker op. Opskrift: sortér kanterne efter stigende vægt; for hver kant, foren endepunkterne hvis deres $"Find-Set"$ er forskellige, ellers spring over. Stop ved $|V| - 1$ kanter. Antal komponenter undervejs er $|V|$ minus accepterede kanter.]
+#note(title: [Kruskal])[Kruskal er stedet, union-find oftest dukker op. Opskrift: sortér kanterne efter stigende vægt; for hver kant, foren endepunkterne hvis deres $"Find-Set"$ er forskellige, ellers spring over. Stop ved $|V| - 1$ kanter. Antal komponenter undervejs er $|V|$ minus accepterede kanter.]

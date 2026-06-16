@@ -44,11 +44,11 @@ For "irrationel" findes ingen formel. Du antager det modsatte — at tallet *er*
 
 Et fjerde greb dækker "bevis eller modbevis" om en for-alle-påstand: ét modeksempel slår den ihjel.
 
-#note[Ved "bevis eller modbevis" prøv et modeksempel først. Vælg "pæne" værdier, der falder sammen. F.eks. modbeviser $sqrt(2) dot sqrt(2) = 2$ påstanden om, at produktet af to irrationale tal altid er irrationelt.]
+#note(title: [Modeksempel først])[Ved "bevis eller modbevis" prøv et modeksempel først. Vælg "pæne" værdier, der falder sammen. F.eks. modbeviser $sqrt(2) dot sqrt(2) = 2$ påstanden om, at produktet af to irrationale tal altid er irrationelt.]
 
-#trap[Kontraposition er $not Q arrow.r not P$, ikke den omvendte $Q arrow.r P$. Den omvendte er den hyppigste forkerte MCQ-mulighed. Negér en disjunktion med De Morgan: $not(a > c/2 or b > c/2)$ bliver $a <= c/2 and b <= c/2$, altså et *OG*.]
+#trap(title: [Ikke den omvendte])[Kontraposition er $not Q arrow.r not P$, ikke den omvendte $Q arrow.r P$. Den omvendte er den hyppigste forkerte MCQ-mulighed. Negér en disjunktion med De Morgan: $not(a > c/2 or b > c/2)$ bliver $a <= c/2 and b <= c/2$, altså et *OG*.]
 
-#trap[En "forskellig fra nul"-hypotese bærer ofte hele beviset. I "(rationalt $!= 0$) $times$ (irrationelt) er irrationelt" er det $r != 0$, der lader dig dividere med $r$. Drop den, og beviset bryder sammen, for $0 dot x = 0$ er rationel.]
+#trap(title: [Forskellig fra nul])[En "forskellig fra nul"-hypotese bærer ofte hele beviset. I "(rationalt $!= 0$) $times$ (irrationelt) er irrationelt" er det $r != 0$, der lader dig dividere med $r$. Drop den, og beviset bryder sammen, for $0 dot x = 0$ er rationel.]
 
 === Tilbagevendende eksamensspørgsmål
 

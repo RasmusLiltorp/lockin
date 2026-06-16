@@ -21,22 +21,32 @@
 #let recipe(title: "Sådan løser du den", ..steps) = block(
   width: 100%, breakable: true, above: 16pt, below: 16pt,
 )[
+  // Invisible anchor so the recipe shows up in the PDF outline (sidebar).
+  #heading(level: 5, outlined: false, bookmarked: true)[#title]
   #text(weight: "bold", size: 11pt)[#title]
   #v(7pt)
   #enum(tight: false, spacing: 11pt, ..steps.pos())
 ]
 
-// Aside. Thin gray left rule, generous spacing, no fill.
-#let note(body) = block(
-  width: 100%, breakable: true, above: 13pt, below: 13pt,
-  inset: (left: 12pt), stroke: (left: 1pt + hair),
-)[#text(weight: "bold")[Bemærk. ] #body]
+// Aside: a small heading followed by normal prose. No box, no rule.
+// `title` is a short heading for the point; defaults to "Bemærk".
+#let note(title: [Bemærk], body) = block(
+  width: 100%, breakable: true, above: 14pt, below: 14pt,
+)[
+  #text(weight: "bold", size: 11pt)[#title]
+  #v(3pt)
+  #body
+]
 
-// Common trap. Heavier black left rule so it reads differently from a note, no fill.
-#let trap(body) = block(
-  width: 100%, breakable: true, above: 13pt, below: 13pt,
-  inset: (left: 12pt), stroke: (left: 2pt + ink),
-)[#text(weight: "bold")[Fælde. ] #body]
+// Common pitfall. Same plain styling; the heading carries the warning.
+// `title` is a short heading; defaults to "Fælde".
+#let trap(title: [Fælde], body) = block(
+  width: 100%, breakable: true, above: 14pt, below: 14pt,
+)[
+  #text(weight: "bold", size: 11pt)[#title]
+  #v(3pt)
+  #body
+]
 
 // A worked exam question, quoted as the exam phrases it.
 // `prompt` = the question text (verbatim). `options` = array of answer choices
@@ -47,6 +57,8 @@
 )[
   // Register this question so the problem index can list and link to it.
   #metadata((source: source, prompt: prompt, tag: tag)) <qcard>
+  // Invisible anchor so the question shows up in the PDF outline (sidebar).
+  #if tag != "" { heading(level: 5, outlined: false, bookmarked: true)[#tag] }
   #line(length: 100%, stroke: 0.4pt + hair)
   #v(7pt)
   #text(size: 9pt, fill: soft)[#source]

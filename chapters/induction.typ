@@ -35,13 +35,13 @@ Til eksamen skriver du sjældent et bevis selv. Du får flere kandidat-"beviser"
   [*Er hvert skridt sandt?* Én forkert lighed eller ulighed dræber beviset. Hold øje med brøktricks som $1/2 > 1/3$.],
 )
 
-#trap[Et "bevis" der starter ved målet $P(k+1)$ og arbejder sig ned til hypotesen $P(k)$ antager det, det skulle bevise. Baglæns er ugyldigt, også når hver linje er algebraisk sand.]
+#trap(title: [Baglæns bevis])[Et "bevis" der starter ved målet $P(k+1)$ og arbejder sig ned til hypotesen $P(k)$ antager det, det skulle bevise. Baglæns er ugyldigt, også når hver linje er algebraisk sand.]
 
-#trap[At gange IA med en konstant og stiltiende bytte den ud med det næste led er en klassisk fælde. Siderne er ikke ens:
+#trap(title: [Gangetrick på IA])[At gange IA med en konstant og stiltiende bytte den ud med det næste led er en klassisk fælde. Siderne er ikke ens:
 #eq[$ 4(2^n + 3^n) != 2^(n+1) + 3^(n+1). $]
 Tjek at to sider er lig hinanden, før du kæder dem sammen.]
 
-#note[SDU regner $NN = {0, 1, 2, dots}$, så $0$ er med. For "for alle $n in NN$" er basis $n = 0$, ikke $n = 1$. En ekstra basis (fx også $n = 1$) skader ikke.]
+#note(title: [Basis ved nul])[SDU regner $NN = {0, 1, 2, dots}$, så $0$ er med. For "for alle $n in NN$" er basis $n = 0$, ikke $n = 1$. En ekstra basis (fx også $n = 1$) skader ikke.]
 
 === Tilbagevendende eksamensspørgsmål
 

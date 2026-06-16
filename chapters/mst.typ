@@ -25,15 +25,21 @@ Begge algoritmer er grådige og bygger på samme cut-idé: den letteste kant der
 #recipe(
   title: "Prim — voks ét træ ud fra en startknude",
   [Vælg en startknude #swap[$r$]. Den besøgte mængde $C$ er ${r}$.],
-  [Find den letteste kant der går fra $C$ ud til en knude udenfor. Tag kanten, og læg den nye knude ind i $C$.],
-  [Gentag til alle knuder er i $C$.],
+  [Find den letteste kant der går fra $C$ ud til en knude udenfor. Tag kanten — den er en MST-kant — og gem den som den nye knudes forælder $v.pi$, før du lægger knuden ind i $C$.],
+  [Gentag til alle knuder er i $C$. MST'et er nu de #swap[$n - 1$] kanter du tog: kantmængden ${(v, v.pi)}$ for hver knude pånær startknuden.],
 )
 
-#note[Er alle kantvægte forskellige, er MST'et entydigt: Kruskal og Prim giver samme træ, selv om de tager kanterne i hver sin rækkefølge.]
+#note(title: [Aflæs kanterne])[Det er *kanterne*, ikke knuderne, der er træet — alle knuder ender jo med at være med uanset hvad. I bogens notation gemmer hver knude $v$ sin indkomne kant som forælderen $v.pi$, og hele MST'et er $A = {(v, v.pi) | v in.not {r}}$. For Kruskal er det endnu mere ligetil: træet er de kanter du accepterede undervejs (dem der ikke lavede en kreds). Begge ender med $n - 1$ kanter.]
 
-#trap[Kruskal ser på alle kanter i vægtrækkefølge. Prim ser kun på kanter der rører den knudemængde han har bygget. De tager derfor sjældent kanterne i samme rækkefølge.]
+#note(title: [Extract-Min])[Prim køres ofte med en min-prioritetskø, og så spørger eksamen til Extract-Min frem for til selve træet, men det er samme algoritme. Hver knude uden for træet bærer en nøgle, nemlig vægten af den letteste kant der forbinder den til det du har bygget indtil nu (uendelig, hvis ingen kant rører den endnu). Extract-Min er den køoperation der fjerner og returnerer knuden med den mindste nøgle; den knude lægges ind i træet, og bagefter opdateres naboernes nøgler. Startknuden har nøgle 0 og kommer derfor ud først. Rækkefølgen knuderne forlader køen i, er den samme som rækkefølgen de føjes til MST'et. Så "hvilken knude udtages sidst med Extract-Min" er bare "hvilken knude føjes sidst til træet", løst nøjagtig som Prim-opskriften ovenfor.]
 
-#trap[En kant forkastes netop når begge endepunkter allerede sidder i samme komponent — det ville give en kreds.]
+#note(title: [Prim som UCS])[Kender du UCS (uniform cost search), så er Prim stort set UCS uden et goal: du trækker den billigste knude ud af køen, lægger den ind, og bliver ved til hele grafen er med i stedet for at stoppe ved et mål. Den ene forskel ligger i nøglen — i Prim vægter du den enkelte kant ind til træet, ikke den samlede vej fra start. Netop dét gør resultatet til et MST og ikke et korteste-vej-træ.]
+
+#note(title: [Entydigt MST])[Er alle kantvægte forskellige, er MST'et entydigt: Kruskal og Prim giver samme træ, selv om de tager kanterne i hver sin rækkefølge.]
+
+#trap(title: [Forskellig rækkefølge])[Kruskal ser på alle kanter i vægtrækkefølge. Prim ser kun på kanter der rører den knudemængde han har bygget. De tager derfor sjældent kanterne i samme rækkefølge.]
+
+#trap(title: [Hvornår forkastes en kant])[En kant forkastes netop når begge endepunkter allerede sidder i samme komponent — det ville give en kreds.]
 
 Begge algoritmer kører på en sammenhængende graf i:
 
@@ -71,7 +77,23 @@ Hver tagen kant smelter to komponenter til én, så efter $k$ kanter gælder:
   prompt: [Brug Prims algoritme til at finde et MST med start i knude #swap[$a$]. Urettede vægtede kanter: $b c=5$, $c a=11$, $a f=10$, $f e=7$, $b d=13$, $c h=9$, $a h=2$, $a i=3$, $f i=4$, $e g=8$, $d h=1$, $h i=6$, $i g=12$. Hvilken knude tilføjes sidst til MST'et?],
   options: ([$b$], [$d$], [$e$], [$g$]),
   answer: [(a) #swap[$b$].],
-  worked: [Voks $C$ fra $a$, hvert skridt letteste kant ud af $C$: $a h (2) arrow.r h$, $h d (1) arrow.r d$, $a i (3) arrow.r i$, $f i (4) arrow.r f$, $f e (7) arrow.r e$, $e g (8) arrow.r g$, $c h (9) arrow.r c$, $b c (5) arrow.r b$. Sidst er $b$.],
+  worked: [Voks $C$ fra $a$; hvert skridt tager den letteste kant ud af $C$ og trækker en ny knude ind. Den kant er en MST-kant:
+    #table(
+      columns: 3,
+      align: (center, center, left),
+      stroke: 0.4pt + hair,
+      inset: (x: 9pt, y: 5pt),
+      table.header([*Skridt*], [*Knude ind*], [*Kant taget*]),
+      [1], [$h$], [$a h = 2$],
+      [2], [$d$], [$h d = 1$],
+      [3], [$i$], [$a i = 3$],
+      [4], [$f$], [$f i = 4$],
+      [5], [$e$], [$f e = 7$],
+      [6], [$g$], [$e g = 8$],
+      [7], [$c$], [$c h = 9$],
+      [8], [$b$], [$b c = 5$],
+    )
+    De otte kanter i højre kolonne er MST'et (9 knuder giver 8 kanter). Sidste knude ind er $b$, så svaret er (a).],
 )
 
 #qcard(

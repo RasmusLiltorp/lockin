@@ -48,9 +48,9 @@ Så $log_a n = Theta(log_b n)$ uanset basen. Derfor skriver man aldrig basen i e
 
 Hvert ciffer koster $O(1)$, og du deler $N$ ned til 0, så omregningen tager $Theta(log_b N)$.
 
-#note[*Hex er grupperet binær.* Del bittene i firkløvere fra højre og erstat hver gruppe med ét hex-ciffer: $0$–$9$, så $A = 10$ op til $F = 15$. F.eks. $0110 thin 1010_2 = 6 A_16$.]
+#note(title: [Hex som firkløvere])[*Hex er grupperet binær.* Del bittene i firkløvere fra højre og erstat hver gruppe med ét hex-ciffer: $0$–$9$, så $A = 10$ op til $F = 15$. F.eks. $0110 thin 1010_2 = 6 A_16$.]
 
-#note[*Toer-komplement.* Øverste bit tæller negativt, $-(2^(k-1))$ i stedet for $+2^(k-1)$. Med 4 bit: $1101_2 = -8 + 4 + 0 + 1 = -3$. Et 1-tal forrest betyder altid et negativt tal.]
+#note(title: [Toer-komplement])[*Toer-komplement.* Øverste bit tæller negativt, $-(2^(k-1))$ i stedet for $+2^(k-1)$. Med 4 bit: $1101_2 = -8 + 4 + 0 + 1 = -3$. Et 1-tal forrest betyder altid et negativt tal.]
 
 #table(
   columns: (auto, auto, auto, auto, auto, auto),
@@ -64,9 +64,9 @@ Hvert ciffer koster $O(1)$, og du deler $N$ ned til 0, så omregningen tager $Th
   [0111], [7], [7], [1111], [15], [-1],
 )
 
-#trap[Fortegnsskift i toer-komplement er ikke "vend alle bit". Kopiér bittene fra højre til og med første 1-tal, og vend resten. $0110$ ($=6$) bliver $1010$ ($=-6$). (Samme som at vende alle bit og lægge 1 til.)]
+#trap(title: [Fortegnsskift])[Fortegnsskift i toer-komplement er ikke "vend alle bit". Kopiér bittene fra højre til og med første 1-tal, og vend resten. $0110$ ($=6$) bliver $1010$ ($=-6$). (Samme som at vende alle bit og lægge 1 til.)]
 
-#trap[Vendte retninger er den klassiske fælde. $n$ er *ikke* $O(log n)$, og $log n$ er *ikke* $omega(n^2)$. $log$ vokser langsommere end enhver positiv potens af $n$.]
+#trap(title: [Vendte retninger])[Vendte retninger er den klassiske fælde. $n$ er *ikke* $O(log n)$, og $log n$ er *ikke* $omega(n^2)$. $log$ vokser langsommere end enhver positiv potens af $n$.]
 
 === Tilbagevendende eksamensspørgsmål
 

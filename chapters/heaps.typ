@@ -83,9 +83,9 @@ Hver operation har sin egen opskrift herunder. De er skrevet for en *max-heap* (
   [Én overtrådt ulighed er nok til at forkaste arrayet.],
 )
 
-#trap[Den klassiske trace-fejl er at bytte retning om. Increase-Key og Insert *bobler op* (mod forælderen, $floor(i\/2)$). Extract *synker ned* (mod børnene, $2i$ og $2i+1$). Roden er min i en min-heap og max i en max-heap, aldrig begge.]
+#trap(title: [Boble op vs. synk ned])[Den klassiske trace-fejl er at bytte retning om. Increase-Key og Insert *bobler op* (mod forælderen, $floor(i\/2)$). Extract *synker ned* (mod børnene, $2i$ og $2i+1$). Roden er min i en min-heap og max i en max-heap, aldrig begge.]
 
-#note[Build-Heap er $O(n)$, ikke $O(n log n)$. Den kalder synk-ned nedefra og op over arrayets nederste halvdel. At indsætte $n$ nøgler én ad gangen ville koste $O(n log n)$.]
+#note(title: [Build-Heap-køretid])[Build-Heap er $O(n)$, ikke $O(n log n)$. Den kalder synk-ned nedefra og op over arrayets nederste halvdel. At indsætte $n$ nøgler én ad gangen ville koste $O(n log n)$.]
 
 === Tilbagevendende eksamensspørgsmål
 

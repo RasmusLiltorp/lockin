@@ -49,6 +49,10 @@
 }
 #show link: it => underline(text(fill: ink)[#it])
 
+// Level-5 headings are invisible anchors: recipes and exam questions emit one so
+// they show up in the PDF outline (sidebar) without printing anything on the page.
+#show heading.where(level: 5): it => []
+
 // --- title page ---
 #align(center + horizon)[
   #text(size: 40pt, weight: "bold", fill: ink)[Lockin]

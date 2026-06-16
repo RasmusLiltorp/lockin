@@ -28,7 +28,7 @@ Rækkefølgen er ikke ligegyldig. $forall x exists y$ lader $y$ afhænge af $x$ 
 
 #eq[$ forall x exists y : P(x,y) quad != quad exists y forall x : P(x,y) $]
 
-#note[Bytter du en $forall$ og en $exists$, vender sandhedsværdien næsten altid. Det er den hyppigst testede fælde. "Hvert tal har et større" er sandt over $NN$; "der findes ét tal større end alle" er falsk.]
+#note(title: [Kvantorrækkefølge])[Bytter du en $forall$ og en $exists$, vender sandhedsværdien næsten altid. Det er den hyppigst testede fælde. "Hvert tal har et større" er sandt over $NN$; "der findes ét tal større end alle" er falsk.]
 
 #recipe(
   title: [Fornægt et kvantificeret udsagn (intet $not$ i svaret)],
@@ -43,9 +43,9 @@ Vending-reglerne er:
 
 #eq[$ not exists x : P(x) quad equiv quad forall x : not P(x) $]
 
-#trap[De Morgan for kvantorer vender alle kvantorer i rækken. Fornægtelsen af $exists x exists y : P$ er $forall x forall y : not P$, ikke $forall x exists y : not P$. En "ækvivalens" med kun den ene kvantor vendt er et klassisk falsk MCQ-svar (juni 2021 Spm. 35, juni 2023 Spm. 34).]
+#trap(title: [Vend alle kvantorer])[De Morgan for kvantorer vender alle kvantorer i rækken. Fornægtelsen af $exists x exists y : P$ er $forall x forall y : not P$, ikke $forall x exists y : not P$. En "ækvivalens" med kun den ene kvantor vendt er et klassisk falsk MCQ-svar (juni 2021 Spm. 35, juni 2023 Spm. 34).]
 
-#trap[En implikation inde i en kvantor er vakuøst sand, når forudsætningen er falsk. $forall x : (x != 0 -> dots)$ er automatisk opfyldt ved $x = 0$, så $x = 0$ kan aldrig være modeksempel her.]
+#trap(title: [Vakuøst sand implikation])[En implikation inde i en kvantor er vakuøst sand, når forudsætningen er falsk. $forall x : (x != 0 -> dots)$ er automatisk opfyldt ved $x = 0$, så $x = 0$ kan aldrig være modeksempel her.]
 
 === Tilbagevendende eksamensspørgsmål
 

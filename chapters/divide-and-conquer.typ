@@ -29,7 +29,7 @@ Den løses med Master Theorem: sammenlign $f(n)$ med $n^(log_b a)$ og find det d
   [Opstil rekursionsligningen og løs den med Master Theorem (se kapitlet om rekursionsligninger).],
 )
 
-#note[Rekursionstræet er kontrolflowet tegnet ud: hver knude er ét kald, roden er det øverste kald, bladene er basistilfælde. Afviklingen er dybde-først: ned i et barn, bliv færdig, videre til næste. Kaldstakken er stien fra rod til det kald, du er i nu.]
+#note(title: [Rekursionstræet])[Rekursionstræet er kontrolflowet tegnet ud: hver knude er ét kald, roden er det øverste kald, bladene er basistilfælde. Afviklingen er dybde-først: ned i et barn, bliv færdig, videre til næste. Kaldstakken er stien fra rod til det kald, du er i nu.]
 
 ==== Strassen: matrixmultiplikation
 
@@ -45,7 +45,7 @@ Strassen [1969] regner de samme fire outputblokke ud med kun *7* produkter. De e
 
 #eq[$ T(n) = 7 thin T(n/2) + n^2 = Theta(n^(log_2 7)) = O(n^2.81) $]
 
-#trap[Gevinsten er 7 mod 8, fordi $log_2 7 = 2.807 < 3$. Matrixprodukter er ikke kommutative, så rækkefølgen af faktorerne i hvert produkt $P_i$ skal holdes.]
+#trap(title: [7 mod 8 produkter])[Gevinsten er 7 mod 8, fordi $log_2 7 = 2.807 < 3$. Matrixprodukter er ikke kommutative, så rækkefølgen af faktorerne i hvert produkt $P_i$ skal holdes.]
 
 ==== Max-sum: maximum subarray
 
@@ -68,9 +68,9 @@ Kadane bygger på én observation: det bedste stykke der slutter i position $i$ 
 
 #eq[$ "maxEndingHere"_i = max("maxEndingHere"_(i-1) + A[i], thin 0) $]
 
-#note[Nullet er det tomme stykke; det nulstiller den løbende sum, før den når at blive negativ. Algoritmen holder kun styr på to tal, så pladsen er $O(1)$.]
+#note(title: [Det tomme stykke])[Nullet er det tomme stykke; det nulstiller den løbende sum, før den når at blive negativ. Algoritmen holder kun styr på to tal, så pladsen er $O(1)$.]
 
-#note[Et max-produkt-problem bliver til max-sum med en logaritme. $log$ er voksende med $log(x y) = log x + log y$, så det bedste produktstykke er det bedste sumstykke af log-værdierne.]
+#note(title: [Max-produkt via log])[Et max-produkt-problem bliver til max-sum med en logaritme. $log$ er voksende med $log(x y) = log x + log y$, så det bedste produktstykke er det bedste sumstykke af log-værdierne.]
 
 ```
 MaxSum3(n)                              // Kadane, Theta(n)

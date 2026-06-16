@@ -26,7 +26,7 @@ For et aggregat over data, som største $y$-værdi i deltræet:
 
 #eq[$ v."ymax" = max(v.y, space v."left"."ymax", space v."right"."ymax") $]
 
-#note[Nøglefelt vs. ikke-nøglefelt afgør formlen. Træet er sorteret efter *én* nøgle, fx $x$. Et ekstremum af *nøglen* ligger fast: største $x$ er den højreste knude, mindste $x$ den venstreste.
+#note(title: [Nøglefelt vs. ikke-nøglefelt])[Nøglefelt vs. ikke-nøglefelt afgør formlen. Træet er sorteret efter *én* nøgle, fx $x$. Et ekstremum af *nøglen* ligger fast: største $x$ er den højreste knude, mindste $x$ den venstreste.
 
 #eq[$ v."xmax" = v."right"."xmax", quad v."xmin" = v."left"."xmin" $]
 
@@ -35,7 +35,7 @@ Et ikke-nøglefelt (fx $y$) er ikke sorteret af træet, så kig på begge børn 
 #eq[$ v."ymax" = max(v.y, space v."left"."ymax", space v."right"."ymax") $]
 ]
 
-#trap[Vedligeholdelse rører ikke kun bladet eller kun roden. En indsæt eller slet ændrer knuderne langs én rod-til-blad-sti plus $O(1)$ rotationer; du genberegner felterne nedefra og op langs den sti, altså $O(log n)$ knuder. Et fuldt inorder-gennemløb er $O(n)$ og dermed forkert svar på et $O(log n)$-spørgsmål.]
+#trap(title: [Vedligeholdelse af augmentering])[Vedligeholdelse rører ikke kun bladet eller kun roden. En indsæt eller slet ændrer knuderne langs én rod-til-blad-sti plus $O(1)$ rotationer; du genberegner felterne nedefra og op langs den sti, altså $O(log n)$ knuder. Et fuldt inorder-gennemløb er $O(n)$ og dermed forkert svar på et $O(log n)$-spørgsmål.]
 
 For ordensstatistik gemmer hver knude `size`. NIL er en sentinel med `size = 0`, så `x.left.size` altid er defineret. Rangen i eget deltræ:
 
@@ -72,9 +72,9 @@ Double hashing bruger en anden funktion til skridtlængden:
 
 #eq[$ h(k, i) = (h_1(k) + i dot h_2(k)) mod m $]
 
-#note[Chaining er den anden kollisionsmetode: hver plads peger på en liste over de nøgler, der hasher dertil. Indsæt er $O(1)$ (forrest i listen), søg og slet er $Theta(|"liste"|)$. Worst case hasher alle $n$ nøgler til samme plads, så listen får længde $n$ og søgning bliver $Theta(n)$. Bruger du balancerede træer i stedet for lister, falder worst case til $O(log n)$. I praksis er hashing $O(1)$ for søg, indsæt og slet.]
+#note(title: [Chaining])[Chaining er den anden kollisionsmetode: hver plads peger på en liste over de nøgler, der hasher dertil. Indsæt er $O(1)$ (forrest i listen), søg og slet er $Theta(|"liste"|)$. Worst case hasher alle $n$ nøgler til samme plads, så listen får længde $n$ og søgning bliver $Theta(n)$. Bruger du balancerede træer i stedet for lister, falder worst case til $O(log n)$. I praksis er hashing $O(1)$ for søg, indsæt og slet.]
 
-#trap[Open addressing kræver $n <= m$; sigt efter en fyldningsgrad omkring $n approx m\/4$. Slet markerer pladsen som slettet uden at tømme den, ellers afbryder en senere søgning for tidligt. Vælg $m$ som primtal, så probe-sekvensen når alle pladser. Quadratic probing er ude af pensum.]
+#trap(title: [Open addressing])[Open addressing kræver $n <= m$; sigt efter en fyldningsgrad omkring $n approx m\/4$. Slet markerer pladsen som slettet uden at tømme den, ellers afbryder en senere søgning for tidligt. Vælg $m$ som primtal, så probe-sekvensen når alle pladser. Quadratic probing er ude af pensum.]
 
 Valget mellem de to strukturer afgøres af spørgsmålstypen:
 
@@ -89,7 +89,7 @@ Valget mellem de to strukturer afgøres af spørgsmålstypen:
   [Sorteret gennemløb], [$O(n)$], [ikke understøttet],
 )
 
-#note[Et rød-sort træ er balanceret, fordi ingen sti har to røde knuder i træk. Med $k$ sorte knuder på hver rod-til-blad-sti gælder $n >= 2^(k-1) - 1$, så $k - 1 <= log(n+1)$. Den længste sti har højst dobbelt så mange kanter som den korteste, så højden er $<= 2 log(n+1) = O(log n)$.]
+#note(title: [Rød-sort balance])[Et rød-sort træ er balanceret, fordi ingen sti har to røde knuder i træk. Med $k$ sorte knuder på hver rod-til-blad-sti gælder $n >= 2^(k-1) - 1$, så $k - 1 <= log(n+1)$. Den længste sti har højst dobbelt så mange kanter som den korteste, så højden er $<= 2 log(n+1) = O(log n)$.]
 
 === Tilbagevendende eksamensspørgsmål
 

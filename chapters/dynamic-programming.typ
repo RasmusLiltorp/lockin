@@ -35,7 +35,7 @@ Mindste plads er den største mængde tidligere celler, du er nødt til at holde
   [Vil du have selve løsningen, så gem det vindende valg per celle og følg valgene baglæns.],
 )
 
-#note[Memoization og bottom-up giver samme $Theta$ for tid og plads; memoization har blot en lidt dårligere konstant.]
+#note(title: [Memoization vs. bottom-up])[Memoization og bottom-up giver samme $Theta$ for tid og plads; memoization har blot en lidt dårligere konstant.]
 
 #table(
   columns: (auto, auto, auto, auto),
@@ -48,9 +48,9 @@ Mindste plads er den største mængde tidligere celler, du er nødt til at holde
   [Matrixkæde $m(i,j)$], [$Theta(n^2)$], [$Theta(n)$], [$Theta(n^3)$],
 )
 
-#trap[Tabellens størrelse er ikke køretiden — gang med arbejdet per celle. Et min over op til $j$ tidligere celler koster $Theta(j)$, ikke $Theta(1)$, og gør en $Theta(m n)$-tabel til $Theta(m n^2)$.]
+#trap(title: [Arbejde per celle])[Tabellens størrelse er ikke køretiden — gang med arbejdet per celle. Et min over op til $j$ tidligere celler koster $Theta(j)$, ikke $Theta(1)$, og gør en $Theta(m n)$-tabel til $Theta(m n^2)$.]
 
-#trap[Mindste plads er ikke altid tabellens størrelse. Afhænger en celle kun af den forrige række, nøjes et rullende array med én række, og pladsen falder fra $Theta(m n)$ til $Theta(n)$. Læser en celle alle tidligere indgange, kan intet frigives.]
+#trap(title: [Rullende array])[Mindste plads er ikke altid tabellens størrelse. Afhænger en celle kun af den forrige række, nøjes et rullende array med én række, og pladsen falder fra $Theta(m n)$ til $Theta(n)$. Læser en celle alle tidligere indgange, kan intet frigives.]
 
 ==== Rekonstruktion
 

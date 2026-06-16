@@ -28,7 +28,7 @@ Lær de fire grundkonnektiver udenad.
   [F], [F], [F], [F], [T], [T],
 )
 
-#note[$p -> q$ er kun falsk i rækken T $->$ F; er $p$ falsk, er implikationen automatisk sand. $p <-> q$ er sand når $p$ og $q$ er ens; $p plus.o q$ når de er forskellige.]
+#note(title: [Konnektivernes sandhed])[$p -> q$ er kun falsk i rækken T $->$ F; er $p$ falsk, er implikationen automatisk sand. $p <-> q$ er sand når $p$ og $q$ er ens; $p plus.o q$ når de er forskellige.]
 
 #recipe(
   title: "Byg en sandhedstabel",
@@ -58,9 +58,9 @@ Biimplikation:
 
 #eq[$ p <-> q equiv (p -> q) and (q -> p) $]
 
-#trap[Tæl *forskellige* variable. $p or not p$ har én, altså 2 rækker, ikke 4. $(p or not q) and q$ har to, altså 4, ikke 8.]
+#trap(title: [Tæl forskellige variable])[Tæl *forskellige* variable. $p or not p$ har én, altså 2 rækker, ikke 4. $(p or not q) and q$ har to, altså 4, ikke 8.]
 
-#trap[Kontrapositionen $not q -> not p$ er ækvivalent med $p -> q$. Den omvendte $q -> p$ og den inverse $not p -> not q$ er det ikke, men er ækvivalente med hinanden.]
+#trap(title: [Omvendt og invers])[Kontrapositionen $not q -> not p$ er ækvivalent med $p -> q$. Den omvendte $q -> p$ og den inverse $not p -> not q$ er det ikke, men er ækvivalente med hinanden.]
 
 === Tilbagevendende eksamensspørgsmål
 

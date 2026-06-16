@@ -16,9 +16,9 @@ Sammenlign arbejdet i rekursionen, målt af $n^alpha$ med
 
 mod arbejdet uden for, $f(n)$. Den, der vokser hurtigst, bestemmer svaret.
 
-#note[Skelseksponenten $alpha = log_b a$ er det samme som $p$ i eksamenens svar: skriver opgaven $Theta(n^p)$, så er $p = alpha = log_b a$. Du regner altså $p$ ved at tage $log$ af $a$ med grundtal $b$ — fx $T(n) = 5 T(n/2) + n^2$ giver $p = log_2 5$. Pas på rækkefølgen: det er $log_b a$, ikke $log_a b$.]
+#note(title: [Skelseksponenten])[Skelseksponenten $alpha = log_b a$ er det samme som $p$ i eksamenens svar: skriver opgaven $Theta(n^p)$, så er $p = alpha = log_b a$. Du regner altså $p$ ved at tage $log$ af $a$ med grundtal $b$ — fx $T(n) = 5 T(n/2) + n^2$ giver $p = log_2 5$. Pas på rækkefølgen: det er $log_b a$, ikke $log_a b$.]
 
-#note[*$p$ optræder kun når svaret er $n^alpha$ (tilfælde 1).* Vinder $f(n)$ (tilfælde 3), er svaret $f(n)$ selv — fx $Theta(n^(1/2))$ — uden noget $p$. Tommelfinger: ser du "$p = log_b a$", er det tilfælde 1; ser du en ren funktion som $n^(1/2)$ eller $n^2$, er det tilfælde 3.]
+#note(title: [Hvornår $p$ optræder])[*$p$ optræder kun når svaret er $n^alpha$ (tilfælde 1).* Vinder $f(n)$ (tilfælde 3), er svaret $f(n)$ selv — fx $Theta(n^(1/2))$ — uden noget $p$. Tommelfinger: ser du "$p = log_b a$", er det tilfælde 1; ser du en ren funktion som $n^(1/2)$ eller $n^2$, er det tilfælde 3.]
 
 #recipe(
   title: "Master Theorem (Cormen et al., 4. udg.)",
@@ -53,9 +53,9 @@ For at se *hvem der er størst*, placér både $n^alpha$ og $f(n)$ på vækststi
 
 #eq[$ 1 quad < quad log n quad < quad sqrt(n) quad < quad n quad < quad n log n quad < quad n^2 quad < quad n^2 log n quad < quad n^3 quad < quad 2^n $]
 
-#note[Et $n^c$ med større potens slår altid et med mindre ($n^2 > n^(1.5) > n$), uanset $log$-faktorer: ethvert $n^c$ slår $log n$, og enhver eksponentiel ($2^n$) slår alle $n^c$. Til Master Theorem: er $n^alpha$ længere til højre end $f(n)$, er det tilfælde 1; står de på samme plads, tilfælde 2; er $f(n)$ en *hel potens* længere til højre, tilfælde 3. Bemærk $n^alpha$ kan have skæv potens, fx $n^(log_2 5) approx n^(2.32)$, som ligger mellem $n^2$ og $n^3$.]
+#note(title: [Potenser på stigen])[Et $n^c$ med større potens slår altid et med mindre ($n^2 > n^(1.5) > n$), uanset $log$-faktorer: ethvert $n^c$ slår $log n$, og enhver eksponentiel ($2^n$) slår alle $n^c$. Til Master Theorem: er $n^alpha$ længere til højre end $f(n)$, er det tilfælde 1; står de på samme plads, tilfælde 2; er $f(n)$ en *hel potens* længere til højre, tilfælde 3. Bemærk $n^alpha$ kan have skæv potens, fx $n^(log_2 5) approx n^(2.32)$, som ligger mellem $n^2$ og $n^3$.]
 
-#trap[Tilfælde 3 kræver, at $f(n)$ er en *hel potens* større end $n^alpha$ (et helt trin på stigen, fx $n^2$ mod $n$). Er $f(n)$ kun en $log$-faktor større — som $f(n) = n log n$ når $n^alpha = n$ — så er den for stor til tilfælde 2 og for lille til tilfælde 3. Den falder i hullet, og Master Theorem kan *ikke* løse den.]
+#trap(title: [Hullet i tilfælde 3])[Tilfælde 3 kræver, at $f(n)$ er en *hel potens* større end $n^alpha$ (et helt trin på stigen, fx $n^2$ mod $n$). Er $f(n)$ kun en $log$-faktor større — som $f(n) = n log n$ når $n^alpha = n$ — så er den for stor til tilfælde 2 og for lille til tilfælde 3. Den falder i hullet, og Master Theorem kan *ikke* løse den.]
 
 *Tilfælde 1 — $n^alpha$ er størst.* Rekursionen vinder, og svaret er $n^alpha$.
 
@@ -71,7 +71,7 @@ For at se *hvem der er størst*, placér både $n^alpha$ og $f(n)$ på vækststi
 
 I tilfælde 3 skal du tjekke regularitetsbetingelsen: at et $c < 1$ opfylder $a thin f(n/b) <= c thin f(n)$ for store $n$. For polynomielle $f$ holder den altid.
 
-#note[MCQ'en har samme faste svarmenu hvert år: $Theta(1)$, $Theta(log n)$, $Theta(n^(log_4 3))$, $Theta(n)$, $Theta(n log n)$, $Theta(n^(log_3 4))$, $Theta(n^2)$, $Theta(n^2 log n)$, $Theta(n^3)$ og "kan ikke løses med Master Theorem". Løs ligningen, og find svaret i menuen.]
+#note(title: [Fast svarmenu])[MCQ'en har samme faste svarmenu hvert år: $Theta(1)$, $Theta(log n)$, $Theta(n^(log_4 3))$, $Theta(n)$, $Theta(n log n)$, $Theta(n^(log_3 4))$, $Theta(n^2)$, $Theta(n^2 log n)$, $Theta(n^3)$ og "kan ikke løses med Master Theorem". Løs ligningen, og find svaret i menuen.]
 
 Tre situationer giver svaret *"kan ikke løses med Master Theorem"*:
 
@@ -198,4 +198,4 @@ Tre situationer giver svaret *"kan ikke løses med Master Theorem"*:
   Sammenlign $f(n) = n log n$ mod $n$: den er *større* end $n$ (ikke tilfælde 1 eller 2), men kun en $log$-faktor større — ikke en hel potens, så $f(n)$ er ikke $Omega(n^(1 + epsilon))$ (ikke tilfælde 3). Den falder i hullet mellem tilfælde 2 og 3, og kan derfor ikke løses.],
 )
 
-#note[Samme skabelon, fire udfald. Regn $alpha = log_b a$, og lad $f(n)$ dyste mod $n^alpha$: vinder $n^alpha$, tilfælde 1; uafgjort, et ekstra $log n$ (tilfælde 2); vinder $f$, tilfælde 3.]
+#note(title: [Master-sætningen])[Samme skabelon, fire udfald. Regn $alpha = log_b a$, og lad $f(n)$ dyste mod $n^alpha$: vinder $n^alpha$, tilfælde 1; uafgjort, et ekstra $log n$ (tilfælde 2); vinder $f$, tilfælde 3.]

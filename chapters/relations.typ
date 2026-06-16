@@ -54,11 +54,11 @@ En lukning er den mindste relation, der indeholder $R$ og har en ønsket egenska
   Gentag på den voksende mængde, til intet nyt dukker op. $(a,c)$ er med, hvis der findes en sti fra $a$ til $c$ i grafen.],
 )
 
-#note[$=$ er refleksiv, symmetrisk og antisymmetrisk på én gang — altså både ækvivalensrelation og partiel ordning. "Samme paritet" og "kongruens mod $m$" er ækvivalensrelationer; $<=$ og "går op i" er partielle ordninger.]
+#note(title: [Relationstyper])[$=$ er refleksiv, symmetrisk og antisymmetrisk på én gang — altså både ækvivalensrelation og partiel ordning. "Samme paritet" og "kongruens mod $m$" er ækvivalensrelationer; $<=$ og "går op i" er partielle ordninger.]
 
-#trap[Der findes ingen antisymmetrisk lukning. En lukning tilføjer kun par, men antisymmetri kræver, at du fjerner enten $(a,b)$ eller $(b,a)$ når $a != b$.]
+#trap(title: [Antisymmetrisk lukning])[Der findes ingen antisymmetrisk lukning. En lukning tilføjer kun par, men antisymmetri kræver, at du fjerner enten $(a,b)$ eller $(b,a)$ når $a != b$.]
 
-#trap[Refleksiv lukning rammer hvert element i $A$, også dem uden par. På $A = {1,2,3,4}$ med $R = {(1,3),(2,2)}$ tilføjer du $(1,1), (3,3)$ og $(4,4)$, selvom $4$ ikke står i noget par.]
+#trap(title: [Refleksiv lukning])[Refleksiv lukning rammer hvert element i $A$, også dem uden par. På $A = {1,2,3,4}$ med $R = {(1,3),(2,2)}$ tilføjer du $(1,1), (3,3)$ og $(4,4)$, selvom $4$ ikke står i noget par.]
 
 Et *Hasse-diagram* tegner en partiel ordning uden støj. Fjern alle løkker og hver kant, der følger af transitivitet; behold kun kanter, hvor intet element ligger strengt imellem. Tegn det mindste element nederst og udelad pilespidser. Et element er maksimalt, hvis ingen linje går opad fra det, og minimalt, hvis ingen går nedad.
 

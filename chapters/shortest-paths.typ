@@ -25,7 +25,7 @@ så sætter du
 
 #eq[$ v.d <- u.d + w(u,v), quad v.pi <- u $]
 
-#note[Uanset hvilken relax-algoritme du kører: gættet er aldrig for lavt ($delta(s,v) <= v.d$), det kan kun falde, og når $v.d$ rammer $delta(s,v)$ ændres det aldrig igen.]
+#note(title: [Relax-egenskaber])[Uanset hvilken relax-algoritme du kører: gættet er aldrig for lavt ($delta(s,v) <= v.d$), det kan kun falde, og når $v.d$ rammer $delta(s,v)$ ændres det aldrig igen.]
 
 Algoritmerne adskiller sig kun ved rækkefølgen kanterne slappes af i, og den afhænger af grafen. Læs derfor grafen først.
 
@@ -42,9 +42,9 @@ Algoritmerne adskiller sig kun ved rækkefølgen kanterne slappes af i, og den a
   [Vælg hver algoritme hvis forudsætning er opfyldt. Til "et eller flere svar" kan flere være rigtige.],
 )
 
-#trap[Kruskal og Prim bygger et minimalt udspændende træ, ikke korteste veje. DFS alene gør det heller ikke. Klassiske distraktorer.]
+#trap(title: [MST er ikke korteste vej])[Kruskal og Prim bygger et minimalt udspændende træ, ikke korteste veje. DFS alene gør det heller ikke. Klassiske distraktorer.]
 
-#trap[En DAG med negative vægte: Dijkstra ude, Bellman-Ford og DAG-Shortest-Paths ok. Ikke-negative vægte med kredse: Dijkstra, Bellman-Ford og (ved enhedsvægte) BFS ok, men ikke DAG-Shortest-Paths.]
+#trap(title: [Forudsætninger pr. graf])[En DAG med negative vægte: Dijkstra ude, Bellman-Ford og DAG-Shortest-Paths ok. Ikke-negative vægte med kredse: Dijkstra, Bellman-Ford og (ved enhedsvægte) BFS ok, men ikke DAG-Shortest-Paths.]
 
 Dijkstra og Bellman-Ford skal du oftest køre i hånden. Dijkstra tager altid den nærmeste uafklarede knude først.
 
@@ -71,7 +71,7 @@ BELLMAN-FORD(G, w, s)          // negative vægte ok, opdager neg. kreds
 
 Bellman-Ford slapper alle kanter af $|V| - 1$ gange og tjekker så en sidste gang om en kant stadig kan forbedres. Kan den det, findes en negativ kreds.
 
-#note[Dijkstra med binært heap: $O((n + m) log n)$. Bellman-Ford: $O(n m)$.]
+#note(title: [Køretider])[Dijkstra med binært heap: $O((n + m) log n)$. Bellman-Ford: $O(n m)$.]
 
 Til alle-par kører du enten en én-kilde-algoritme fra hver knude eller Floyd-Warshall direkte. Vinderen afhænger af grafens tæthed.
 

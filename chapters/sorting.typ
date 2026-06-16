@@ -68,9 +68,9 @@ PARTITION(A, p, r)
   return i + 1
 ```
 
-#note[Værdiområdet i opgaveteksten er ofte med for at narre dig. For en sammenligningssortering er det støj: quicksort er $Theta(n^2)$ i værste fald, uanset om tallene ligger i $[0, n)$ eller $[0, n^9)$. Det betyder kun noget for counting og radix.]
+#note(title: [Værdiområde])[Værdiområdet i opgaveteksten er ofte med for at narre dig. For en sammenligningssortering er det støj: quicksort er $Theta(n^2)$ i værste fald, uanset om tallene ligger i $[0, n)$ eller $[0, n^9)$. Det betyder kun noget for counting og radix.]
 
-#trap[Counting sort er ikke altid lineær. Med $k = #swap[$n^2$]$ koster den $Theta(n + n^2) = Theta(n^2)$. Den er kun $O(n)$, når $k = O(n)$. Deler du heltallet op i cifre med radix sort, holdes cifferområdet lille, og du slipper med $Theta(n)$.]
+#trap(title: [Counting sort])[Counting sort er ikke altid lineær. Med $k = #swap[$n^2$]$ koster den $Theta(n + n^2) = Theta(n^2)$. Den er kun $O(n)$, når $k = O(n)$. Deler du heltallet op i cifre med radix sort, holdes cifferområdet lille, og du slipper med $Theta(n)$.]
 
 === Tilbagevendende eksamensspørgsmål
 

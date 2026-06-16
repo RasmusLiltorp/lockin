@@ -26,11 +26,11 @@ Initialisering er basistilfældet, vedligeholdelse er induktionsskridtet, og ter
   [Behold udsagn, der er sande ved *hver* test, også exit-testen. Der kan være flere.],
 )
 
-#note[Vedligeholdelse alene beviser ikke korrekthed. Du skal bruge alle tre dele: rigtig start, hvert skridt bevarer det, og løkken stopper et sted, hvor invarianten giver svaret.]
+#note(title: [Alle tre dele])[Vedligeholdelse alene beviser ikke korrekthed. Du skal bruge alle tre dele: rigtig start, hvert skridt bevarer det, og løkken stopper et sted, hvor invarianten giver svaret.]
 
-#trap[Exit-testen kan skyde forbi grænsen. En `while x < n` kan stoppe med $x > n$, så $x <= n$ er typisk *ikke* en invariant, selvom $x < n$ holder inde i kroppen. Tjek altid kandidaten ved den fejlende exit-test.]
+#trap(title: [Exit-testen skyder forbi])[Exit-testen kan skyde forbi grænsen. En `while x < n` kan stoppe med $x > n$, så $x <= n$ er typisk *ikke* en invariant, selvom $x < n$ holder inde i kroppen. Tjek altid kandidaten ved den fejlende exit-test.]
 
-#trap[En invariant skal være sand *ved testen*, både første og sidste gang. $r = n!$ i en fakultetsløkke er kun sandt ved sidste test, ikke første, så det er ikke en invariant, selvom det beskriver resultatet.]
+#trap(title: [Sand ved første test])[En invariant skal være sand *ved testen*, både første og sidste gang. $r = n!$ i en fakultetsløkke er kun sandt ved sidste test, ikke første, så det er ikke en invariant, selvom det beskriver resultatet.]
 
 === Tilbagevendende eksamensspørgsmål
 

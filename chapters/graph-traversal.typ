@@ -29,7 +29,7 @@ Hver knude får et interval $[d, f]$. To tik per knude giver sidste afslutningst
 
 #eq[$ 2n $]
 
-#note[Intervallerne nestes som parenteser: $[u.d, u.f]$ og $[v.d, v.f]$ er enten adskilte eller det ene ligger helt inde i det andet. En knude er grå præcis i sit eget interval.]
+#note(title: [Parentes-strukturen])[Intervallerne nestes som parenteser: $[u.d, u.f]$ og $[v.d, v.f]$ er enten adskilte eller det ene ligger helt inde i det andet. En knude er grå præcis i sit eget interval.]
 
 #recipe(
   title: "Kantklassifikation (u, v), set fra u",
@@ -39,9 +39,9 @@ Hver knude får et interval $[d, f]$. To tik per knude giver sidste afslutningst
   [$v$ sort og $u.d > v.d$ #sym.arrow.r cross-kant: $v$ ligger i et undertræ, der blev afsluttet før.],
 )
 
-#trap[En uorienteret graf har kun tree- og back-kanter. Forward- og cross-kanter kræver en orienteret graf. Nævner en MCQ "én kant af hver type", er grafen orienteret.]
+#trap(title: [Uorienteret kanttype])[En uorienteret graf har kun tree- og back-kanter. Forward- og cross-kanter kræver en orienteret graf. Nævner en MCQ "én kant af hver type", er grafen orienteret.]
 
-#trap[En orienteret graf har en kreds netop hvis DFS finder en back-kant; ingen back-kanter betyder en DAG. Forveksl ikke back-kant med cross-kant.]
+#trap(title: [Back-kant og kredse])[En orienteret graf har en kreds netop hvis DFS finder en back-kant; ingen back-kanter betyder en DAG. Forveksl ikke back-kant med cross-kant.]
 
 #recipe(
   title: "BFS i hånden",
@@ -53,7 +53,7 @@ Hver knude får et interval $[d, f]$. To tik per knude giver sidste afslutningst
 
 #eq[$ v.d = delta(s, v) $]
 
-#note[Alle knuder i afstand $i$ kommer ud før nogen i afstand $i + 1$. Vil du finde den første med $d = k$, fyld et niveau ad gangen: niveau 1 er de sorterede naboer til $s$, og udvid dem i rækkefølge.]
+#note(title: [BFS niveaurækkefølge])[Alle knuder i afstand $i$ kommer ud før nogen i afstand $i + 1$. Vil du finde den første med $d = k$, fyld et niveau ad gangen: niveau 1 er de sorterede naboer til $s$, og udvid dem i rækkefølge.]
 
 #recipe(
   title: "Topologisk sortering og komponenter",
