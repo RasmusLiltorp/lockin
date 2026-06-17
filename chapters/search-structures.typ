@@ -89,7 +89,147 @@ Valget mellem de to strukturer afgøres af spørgsmålstypen:
   [Sorteret gennemløb], [$O(n)$], [ikke understøttet],
 )
 
-#note(title: [Rød-sort balance])[Et rød-sort træ er balanceret, fordi ingen sti har to røde knuder i træk. Med $k$ sorte knuder på hver rod-til-blad-sti gælder $n >= 2^(k-1) - 1$, så $k - 1 <= log(n+1)$. Den længste sti har højst dobbelt så mange kanter som den korteste, så højden er $<= 2 log(n+1) = O(log n)$.]
+=== Rød-sort træ
+
+Et rød-sort træ er et binært søgetræ, hvor hver knude har en farve, rød eller sort. Farverne er der kun for at holde træet i balance, så højden bliver $O(log n)$ uanset i hvilken rækkefølge du indsætter.
+
+#recipe(
+  title: "De fem rød-sorte regler",
+  [Hver knude er enten rød eller sort.],
+  [Roden er sort.],
+  [Alle blade (de tomme NIL-knuder) er sorte.],
+  [En rød knude har to sorte børn. To røde knuder i træk er forbudt.],
+  [Fra en vilkårlig knude har alle stier ned til bladene samme antal sorte knuder. Det tal er knudens *sort-højde*.],
+)
+
+Regel 4 og 5 er dem, der gør arbejdet. Ingen røde i træk betyder, at den længste sti højst er dobbelt så lang som den korteste, og samme sort-højde overalt holder de to ender tæt på hinanden.
+
+#block(breakable: true, above: 14pt, below: 14pt)[
+  #text(weight: "bold", size: 11pt)[Hurtig opslag — hvad gør jeg?]
+  #v(4pt)
+  Først: hvilken regel er brudt? Find symptomet, og klik dig videre til løsningen.
+
+  #table(
+    columns: (auto, auto),
+    align: (left, left),
+    stroke: none,
+    inset: (x: 9pt, y: 5pt),
+    table.header([*Hvad du ser på træet*], [*Hvad du gør*]),
+    table.hline(stroke: 0.4pt + hair),
+    [Roden er rød (regel 2)], [farv roden sort — færdig],
+    [To røde knuder i træk (regel 4, sker efter indsæt)], link(<rb-indsaet>)[#underline[ret op med indsæt-tabellen nedenfor]],
+    [En sti har færre sorte knuder end en anden, fx 3 mod 2 (regel 5, sker efter slet)], link(<rb-slet>)[#underline[ret op med slet-tabellen nedenfor]],
+  )
+
+  #v(9pt)
+  _Indsæt: to røde i træk — vælg efter onklens farve og hvor knuden ligger._
+  #table(
+    columns: (auto, auto, auto),
+    align: (left, left, left),
+    stroke: none,
+    inset: (x: 9pt, y: 5pt),
+    table.header([*Onkel*], [*Knuden ligger*], [*Løsning*]),
+    table.hline(stroke: 0.4pt + hair),
+    [rød], [ligegyldigt], link(<rb-indsaet>)[#underline[farv forælder + onkel sorte, bedsteforælder rød, ryk op]],
+    [sort], [yderside (lige linje)], link(<rb-indsaet>)[#underline[farv om og rotér bedsteforælderen]],
+    [sort], [inderside (knæk)], link(<rb-indsaet>)[#underline[rotér forælderen først, så bliver det yderside]],
+  )
+  Til sidst: farv altid roden sort.
+
+  #v(9pt)
+  _Slet: en sort knude blev fjernet, så én knude bærer en dobbelt-sort. $w$ er dens søskende._
+  #table(
+    columns: (auto, auto),
+    align: (left, left),
+    stroke: none,
+    inset: (x: 9pt, y: 5pt),
+    table.header([*$w$ og $w$'s børn*], [*Løsning*]),
+    table.hline(stroke: 0.4pt + hair),
+    [$w$ rød], link(<rb-slet>)[#underline[rotér forælderen + farv om, så er du i et af tilfældene nedenfor]],
+    [$w$ sort, begge børn sorte], link(<rb-slet>)[#underline[farv $w$ rød, og ryk dobbelt-sorten op]],
+    [$w$ sort, nær barn rødt], link(<rb-slet>)[#underline[rotér $w$ + farv om, videre til sidste tilfælde]],
+    [$w$ sort, fjern barn rødt], link(<rb-slet>)[#underline[rotér forælderen, farv om, gør fjerne barn sort — færdig]],
+  )
+]
+
+#note(title: [Hvorfor det er balanceret])[Med $k$ sorte knuder på hver rod-til-blad-sti gælder $n >= 2^(k-1) - 1$, så $k - 1 <= log(n+1)$. Den længste sti har højst dobbelt så mange kanter som den korteste, så højden er $<= 2 log(n+1) = O(log n)$.]
+
+Når du indsætter eller sletter, kan du komme til at bryde reglerne. Så retter du op med to værktøjer: *omfarvning* (skift en knudes farve) og *rotation*.
+
+En rotation bytter om på en knude og et af dens børn, men holder søgeordenen intakt. Den er $O(1)$ og flytter kun tre pointere. Venstrerotation om $x$ løfter dens højre barn $y$ op; deltræet $beta$ skifter forælder fra $y$ til $x$:
+
+#gdiag({
+  gnode((0,1.2), "x1", $x$)
+  gnode((-0.7,0.4), "A1", $alpha$)
+  gnode((0.7,0.4), "y1", $y$)
+  gnode((0.3,-0.4), "B1", $beta$)
+  gnode((1.1,-0.4), "C1", $gamma$)
+  gedge("x1","A1"); gedge("x1","y1"); gedge("y1","B1"); gedge("y1","C1")
+
+  gnode((3.6,1.2), "y2", $y$)
+  gnode((2.9,0.4), "x2", $x$)
+  gnode((4.3,0.4), "C2", $gamma$)
+  gnode((2.5,-0.4), "A2", $alpha$)
+  gnode((3.3,-0.4), "B2", $beta$)
+  gedge("y2","x2"); gedge("y2","C2"); gedge("x2","A2"); gedge("x2","B2")
+})
+
+#align(center)[#text(size: 9pt, fill: soft)[Venstre: før. Højre: efter venstrerotation om $x$. Ordenen $alpha < x < beta < y < gamma$ holder begge steder.]]
+
+Højrerotation er det spejlvendte og løfter venstre barn op. De to er hinandens modsatte, så en højrerotation kan altid fortrydes med en venstrerotation.
+
+#metadata(none) <rb-indsaet>
+#recipe(
+  title: "Indsæt og ret op",
+  [Indsæt den nye knude som i et almindeligt BST, og farv den *rød*. En rød knude kan kun bryde regel 4 (to røde i træk), aldrig sort-højden, så du har kun ét problem at rette.],
+  [Er forælderen sort, er du færdig med det samme.],
+  [Er forælderen rød, kig på *onklen* (forælderens søskende), og brug et af tre tilfælde:
+    - *Onkel rød:* farv forælder og onkel sorte og bedsteforælderen rød. Problemet flytter to niveauer op; fortsæt derfra. Ingen rotation her.
+    - *Onkel sort, knuden på indersiden* (zig-zag): rotér om forælderen, så de tre knuder kommer på en lige linje. Nu er du i yderside-tilfældet.
+    - *Onkel sort, knuden på ydersiden* (lige linje): farv forælder sort og bedsteforælder rød, og rotér om bedsteforælderen. Færdig.],
+  [Farv til sidst altid roden sort.],
+)
+
+#note(title: [Inderside eller yderside?])[Kig på de tre knuder bedsteforælder–forælder–barn. Går de samme vej (venstre-venstre eller højre-højre), er barnet på *ydersiden*, og du retter med én rotation. Knækker linjen (venstre-højre eller højre-venstre), er det på *indersiden*, og du bruger en ekstra rotation først for at rette knækket ud.]
+
+Et fuldt eksempel binder reglerne sammen. Indsæt $10, 20, 30, 15, 25, 5$ i et tomt træ:
+
+#recipe(
+  title: "Gennemregnet: indsæt 10, 20, 30, 15, 25, 5",
+  [*10:* bliver rod, farves sort.],
+  [*20:* ind til højre, rød. Forælder $10$ er sort, så færdig.],
+  [*30:* ind til højre for $20$, rød. Forælder $20$ er rød, onkel er NIL (sort), og $30$ er på ydersiden (højre-højre). Farv $20$ sort, $10$ rød, og venstrerotér om $10$. Nu er $20$ rod med røde børn $10$ og $30$; rod farves sort.],
+  [*15:* ind til højre for $10$, rød. Forælder $10$ rød, onkel $30$ rød. Farv $10$ og $30$ sorte, $20$ rød. Op til roden $20$, der farves sort igen.],
+  [*25:* ind til venstre for $30$, rød. Forælder $30$ er sort, så færdig.],
+  [*5:* ind til venstre for $10$, rød. Forælder $10$ er sort, så færdig.],
+)
+
+#gdiag({
+  gnode((1.5,1.2), "n20", $20$)
+  gnode((0.7,0.4), "n10", $10$)
+  gnode((2.3,0.4), "n30", $30$)
+  gnode((0.2,-0.4), "n5", $5$)
+  gnode((1.2,-0.4), "n15", $15$)
+  gnode((1.9,-0.4), "n25", $25$)
+  gedge("n20","n10"); gedge("n20","n30"); gedge("n10","n5"); gedge("n10","n15"); gedge("n30","n25")
+})
+
+#align(center)[#text(size: 9pt, fill: soft)[Slutresultat. Sorte: $20, 10, 30$. Røde: $5, 15, 25$. Hver sti fra roden møder to sorte knuder, så sort-højden passer.]]
+
+Sletning bruger samme to værktøjer, men er tungere. Du fjerner knuden som i et almindeligt BST. Var den fjernede knude rød, sker der ikke noget med balancen. Var den sort, mangler der nu en sort på den sti, og knuden, der tog dens plads, bærer en ekstra "dobbelt-sort", som du skubber væk:
+
+#metadata(none) <rb-slet>
+#recipe(
+  title: "Slet og ret op (dobbelt-sort knude x, søskende w)",
+  [*w rød:* rotér om forælderen og farv om, så $w$ bliver sort. Det fører dig ned i et af de tre tilfælde nedenfor.],
+  [*w sort, begge w's børn sorte:* farv $w$ rød. Den dobbelt-sorte flytter op til forælderen; fortsæt derfra. Er forælderen rød, farv den bare sort, og du er færdig.],
+  [*w sort, w's nære barn rødt, fjerne barn sort:* rotér om $w$ og farv om, så det fjerne barn bliver rødt. Nu er du i sidste tilfælde.],
+  [*w sort, w's fjerne barn rødt:* rotér om forælderen, flyt forælderens farve over på $w$, og farv både forælderen og $w$'s fjerne barn sorte. Færdig.],
+)
+
+#note(title: [Hvad du skal kunne til eksamen])[De fleste spørgsmål tester de fem regler, et indsæt i hånden, eller at både indsæt og slet er $O(log n)$ med højst $O(1)$ rotationer ($2$ for indsæt, $3$ for slet). Den fulde sletnings-fixup bliver sjældent krævet skridt for skridt.]
+
+#trap(title: [Rød knude øverst eller nederst])[To klassiske fælder: roden skal være sort (regel 2), og en ny knude indsættes altid rød. Indsætter du sort, bryder du straks sort-højden (regel 5), som er langt sværere at rette end et par røde i træk.]
 
 === Tilbagevendende eksamensspørgsmål
 

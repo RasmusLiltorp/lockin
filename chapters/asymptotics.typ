@@ -93,7 +93,75 @@ Kort sagt: er $f$ *under* $g$ på vækststigen, så er $f = O(g)$ (og $o(g)$). *
 
 #trap(title: [Konstante faktorer])[Konstante faktorer og summer af samme grad ændrer ikke klassen: $n + n + n = Theta(n slash 3) = Theta(n)$. Men en $log$-faktor tæller. $(log n)^3$ er ikke $Theta(3 log n)$, fordi $(log n)^3 slash (3 log n) = (log n)^2 slash 3 -> infinity$.]
 
-For løkker tæller du to ting hver for sig: hvor mange gange den ydre løkke kører, og arbejdet indeni per gennemløb.
+=== O(n) eller O(n²)?
+
+Forskellen mellem $Theta(n)$ og $Theta(n^2)$ handler kun om én ting: hvor mange gange den inderste linje kører i alt. Køretiden _er_ det tal. Så lad være med at gætte eksponenten; tæl skridtene.
+
+En enkelt løkke fra $1$ til $n$ rammer den inderste linje $n$ gange. Det er $Theta(n)$:
+
+```
+for i = 1 til n:
+  tæl = tæl + 1
+```
+
+Lægger du en løkke inden i en løkke, og begge løber til $n$, kører den inderste linje $n$ gange for hvert af de $n$ ydre gennemløb. $n$ gange $n$ er $n^2$, så det er $Theta(n^2)$:
+
+```
+for i = 1 til n:
+  for j = 1 til n:
+    tæl = tæl + 1
+```
+
+Sæt tal på. Med $n = 4$ kører den enkelte løkke 4 gange, mens den indlejrede kører $4 dot 4 = 16$. Fordobler du til $n = 8$, går den enkelte op på 8, altså dobbelt så meget, men den indlejrede springer til 64, fire gange så meget. Det er sådan $n^2$ opfører sig. Fordobler du dit input, firdobler du arbejdet, fordi hvert ekstra ydre skridt slæber en hel indre løkke med sig.
+
+Vanen, der gør det nemt, er at starte ved den inderste linje og tælle udad. Ét lag løkke om den giver én faktor $n$. To lag giver to faktorer, altså $n^2$. Når du tæller den vej, falder eksponenten på plads helt af sig selv.
+
+Men en enkelt løkke kører ikke nødvendigvis $n$ gange. Hvor mange gange den kører afhænger helt af, hvordan tælleren ændrer sig undervejs. Det er her de andre klasser som $log n$ og $sqrt(n)$ kommer fra:
+
+#block(above: 14pt, below: 14pt)[
+  #align(center)[
+    #table(
+      columns: 3,
+      align: (left, left, center),
+      stroke: none,
+      inset: (x: 14pt, y: 7pt),
+      table.header(
+        [*Tælleren ændres*], [*Eksempel*], [*Gennemløb*],
+      ),
+      table.hline(stroke: 0.4pt + hair),
+      [Plus en konstant], [`i = i + 3`], [$Theta(n)$],
+      [Gange med en konstant], [`i = 2 * i`], [$Theta(log n)$],
+      [Stopper ved $sqrt(n)$], [`while i*i <= n`], [$Theta(sqrt(n))$],
+    )
+  ]
+]
+
+En multiplikativ tæller når $n$ langt hurtigere end en additiv, fordi den fordobler sig hver gang. Derfor klarer den sig på $log n$ skridt: hvor mange gange skal du gange $1$ med $2$ for at nå $n$? Cirka $log_2 n$ gange.
+
+Stabler du løkker oven på hinanden, ganger du tallene sammen. Det er sådan resten af klasserne opstår, $n log n$ for eksempel:
+
+#block(above: 14pt, below: 14pt)[
+  #align(center)[
+    #table(
+      columns: 3,
+      align: (left, left, center),
+      stroke: none,
+      inset: (x: 14pt, y: 7pt),
+      table.header(
+        [*Ydre løkke*], [*Indre løkke*], [*Samlet*],
+      ),
+      table.hline(stroke: 0.4pt + hair),
+      [$Theta(n)$ gennemløb], [$Theta(n)$ arbejde], [$Theta(n^2)$],
+      [$Theta(log n)$ gennemløb], [$Theta(n)$ arbejde], [$Theta(n log n)$],
+      [$Theta(n)$ gennemløb], [$Theta(log n)$ arbejde], [$Theta(n log n)$],
+      [$Theta(n)$ gennemløb], [indre løber op til $i$], [$Theta(n^2)$],
+    )
+  ]
+]
+
+Den sidste række er værd at lægge mærke til. En indre løkke, der kun løber op til den ydre tæller $i$, laver $1 + 2 + dots + n$ skridt i alt. Den sum er $n(n+1) slash 2$, som stadig er $Theta(n^2)$, ikke $Theta(n)$. En trekant af arbejde fylder altså lige så meget som hele firkanten, asymptotisk set.
+
+For løkker tæller du altså to ting hver for sig: hvor mange gange den ydre løkke kører, og arbejdet indeni per gennemløb.
 
 #recipe(
   title: "Find Θ-køretiden for en løkke",
