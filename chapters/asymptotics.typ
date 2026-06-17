@@ -91,6 +91,22 @@ Kort sagt: er $f$ *under* $g$ på vækststigen, så er $f = O(g)$ (og $o(g)$). *
 
 #note(title: [Polynomium vs. eksponentiel])[To kendsgerninger afgør næsten alt. Ethvert polynomium slår enhver eksponentialfunktion: $n^a slash b^n -> 0$ for $a > 0$ og $b > 1$. Og enhver rod slår enhver polylog: $(log n)^a slash n^d -> 0$ for $a, d > 0$.]
 
+*Et gennemregnet eksempel.* Vil vi afgøre om $(log n)^4 = O(n slash (log n)^4)$, kan vækststigen ikke bruges direkte, fordi $g$ selv er en brøk. Så regn forholdet $f slash g$ og se om det går mod $0$.
+
+*Trin 1 — opstil forholdet (venstre delt med højre):*
+#eq[$ ((log n)^4) / (n slash (log n)^4) $]
+
+*Trin 2 — at dele med en brøk er det samme som at gange med den omvendte:*
+#eq[$ (log n)^4 dot (log n)^4 / n $]
+
+*Trin 3 — gang de to log-led sammen:*
+#eq[$ ((log n)^4 dot (log n)^4) / n = (log n)^(4 + 4) / n = (log n)^8 / n $]
+
+*Trin 4 — tag grænsen for $n -> infinity$:*
+#eq[$ lim_(n -> infinity) (log n)^8 / n = 0 $]
+
+Grænsen er $0$, fordi enhver positiv rod af $n$ slår enhver potens af $log n$, altså $(log n)^a = o(n^b)$. Forholdet går mod $0$, så $(log n)^4 = o(n slash (log n)^4)$ og dermed også $O(n slash (log n)^4)$. Påstanden er sand.
+
 #trap(title: [Konstante faktorer])[Konstante faktorer og summer af samme grad ændrer ikke klassen: $n + n + n = Theta(n slash 3) = Theta(n)$. Men en $log$-faktor tæller. $(log n)^3$ er ikke $Theta(3 log n)$, fordi $(log n)^3 slash (3 log n) = (log n)^2 slash 3 -> infinity$.]
 
 === O(n) eller O(n²)?

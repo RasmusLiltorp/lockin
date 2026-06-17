@@ -72,6 +72,83 @@ PARTITION(A, p, r)
 
 #trap(title: [Counting sort])[Counting sort er ikke altid lineær. Med $k = #swap[$n^2$]$ koster den $Theta(n + n^2) = Theta(n^2)$. Den er kun $O(n)$, når $k = O(n)$. Deler du heltallet op i cifre med radix sort, holdes cifferområdet lille, og du slipper med $Theta(n)$.]
 
+=== Sådan udfører du hver sortering i hånden
+
+Det følgende er den rene mekaniske opskrift på hver algoritme — hvad du fysisk gør, trin for trin, uden pseudokode. Køretiderne står i tabellen ovenfor.
+
+#recipe(
+  title: "Insertion sort",
+  [Se det venstre stykke af arrayet som "allerede sorteret". I starten er det bare det første tal.],
+  [Tag det næste tal og hold det i hånden.],
+  [Sammenlign det med tallene til venstre, og skub dem ét felt til højre så længe de er større.],
+  [Sæt tallet i hullet der opstår. Så er det sorterede stykke ét længere.],
+  [Bliv ved til der ikke er flere tal tilbage.],
+)
+
+I $[3, 1, 2]$ tager du $1$, skubber $3$ til højre og får $[1, 3, 2]$. Koster $Theta(n^2)$.
+
+#recipe(
+  title: "Selection sort",
+  [Kig på hele det usorterede stykke og find det mindste tal.],
+  [Byt det med det første tal i det usorterede stykke.],
+  [Nu ligger det tal fast. Ryk grænsen ét felt til højre.],
+  [Gør det samme med resten, til kun ét tal er tilbage.],
+)
+
+I $[3, 1, 2]$ finder du $1$, bytter med $3$ og får $[1, 3, 2]$. Koster $Theta(n^2)$.
+
+#recipe(
+  title: "Merge sort",
+  [Del arrayet midt over igen og igen, til hver bid kun har ét tal.],
+  [Et enkelt tal er sorteret af sig selv.],
+  [Flet to sorterede bidder sammen ved at kigge på det forreste tal i hver, tage det mindste og gentage.],
+  [Arbejd dig opad, så bidderne bliver dobbelt så store hver gang, til hele arrayet er én sorteret bid.],
+)
+
+$[3, 1]$ og $[2, 4]$ flettes ved at sammenligne forrest hver gang til $[1, 2, 3, 4]$. Koster $Theta(n log n)$.
+
+#recipe(
+  title: "Quicksort (Lomuto, sidste element som pivot)",
+  [Vælg det sidste tal i stykket som pivot.],
+  [Løb stykket igennem fra venstre og saml alle tal, der er mindre end eller lig pivoten, i venstre side.],
+  [Byt pivoten ind lige efter den sidste lille værdi. Så står pivoten på sin endelige plads.],
+  [Gentag rekursivt på stykket til venstre for pivoten og på stykket til højre.],
+  [Når alle stykker har længde ét, er arrayet sorteret.],
+)
+
+Typisk $Theta(n log n)$, men $Theta(n^2)$ når pivoten lander yderst hver gang (fx på sorteret input).
+
+#recipe(
+  title: "Heapsort",
+  [Byg en max-heap (max-heap) ud af arrayet, så hver forælder er større end eller lig sine børn. Det gør du nedefra og op med sift-down.],
+  [Det største tal sidder nu i toppen (rod). Byt det med det sidste tal i heapen.],
+  [Skrump heapen med ét, så det store tal ligger fast bagest.],
+  [Lad det nye top-tal synke ned (sift-down), til heap-egenskaben holder igen.],
+  [Gentag byt, skrump og synk, til heapen er tom. Så er arrayet sorteret.],
+)
+
+Build-heap koster $Theta(n)$, derefter $n$ sift-downs. Samlet $Theta(n log n)$.
+
+#recipe(
+  title: "Counting sort",
+  [Lav et tælle-array med en plads per mulig værdi, og tæl hvor mange gange hver værdi optræder.],
+  [Læg tællingerne sammen fra venstre, så hver plads viser hvor mange tal der er mindre end eller lig den værdi (prefix-sum).],
+  [Løb input-arrayet igennem bagfra og slå hvert tal op i tælle-arrayet for at finde dets plads i output. Træk én fra tællingen bagefter.],
+  [At gå bagfra holder ens værdier i deres oprindelige rækkefølge (stabilt/stable).],
+)
+
+Koster $Theta(n + k)$, hvor $k$ er værdiområdet.
+
+#recipe(
+  title: "Radix sort (LSD, base 10)",
+  [Start med det mindst betydende ciffer (enerne).],
+  [Sortér hele arrayet på det ciffer alene med en stabil counting sort.],
+  [Gå videre til næste ciffer (tierne, så hundrederne og så videre), og sortér stabilt på det.],
+  [Fordi hver ciffer-sortering er stabil, bevares ordenen fra de tidligere cifre. Når du har været alle cifre igennem, er arrayet sorteret.],
+)
+
+$[21, 12, 11]$ sorteres først på enere til $[21, 11, 12]$, så på tiere til $[11, 12, 21]$. Koster $Theta(d(n + k))$.
+
 === Tilbagevendende eksamensspørgsmål
 
 #qcard(
