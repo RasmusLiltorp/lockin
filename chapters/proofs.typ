@@ -2,7 +2,7 @@
 
 == Bevismetoder
 
-Et bevis viser, at en påstand gælder i hvert tilfælde, den dækker. Til eksamen skal du bevise eller modbevise korte påstande om hele og rationale tal, eller vælge det gyldige bevis fra en menu. Tre metoder dækker næsten alt: direkte, kontraposition og modstrid.
+Et bevis (proof) viser, at en påstand gælder i hvert tilfælde, den dækker. Til eksamen skal du bevise eller modbevise korte påstande om hele og rationale tal, eller vælge det gyldige bevis fra en menu. Tre metoder dækker næsten alt: direkte (direct), kontraposition (contraposition) og modstrid (contradiction).
 
 Først oversætter du ordene til algebra. Et lige tal er
 
@@ -12,11 +12,11 @@ et ulige tal er
 
 #eq[$ 2k + 1 $]
 
-for et heltal $k$. Et rationalt tal er en brøk
+for et heltal $k$. Et rationalt tal (rational number) er en brøk
 
 #eq[$ a/b, quad a, b in ZZ, quad b != 0. $]
 
-For "irrationel" findes ingen formel. Du antager det modsatte — at tallet *er* rationelt — og rammer en modstrid.
+For "irrationel" (irrational) findes ingen formel. Du antager det modsatte — at tallet *er* rationelt — og rammer en modstrid.
 
 === Sådan løser du den
 
@@ -30,7 +30,7 @@ For "irrationel" findes ingen formel. Du antager det modsatte — at tallet *er*
 
 #recipe(
   title: "Kontraposition — for P ⟹ Q",
-  [Skriv den kontraponerede $not Q arrow.r not P$. Negér begge sider: f.eks. $not Q$ = "#swap[$n$ er ulige]" og $not P$ = "#swap[$n^3 + 5$ er lige]".],
+  [Skriv den kontraponerede (contrapositive) $not Q arrow.r not P$. Negér begge sider: f.eks. $not Q$ = "#swap[$n$ er ulige]" og $not P$ = "#swap[$n^3 + 5$ er lige]".],
   [Antag $not Q$, og bevis $not P$ ved direkte udregning.],
   [Det er nok: $not Q arrow.r not P$ er logisk det samme som $P arrow.r Q$.],
 )
@@ -42,11 +42,11 @@ For "irrationel" findes ingen formel. Du antager det modsatte — at tallet *er*
   [Vis, at faktoren kommer ud som rationel. Det modsiger antagelsen, som dermed falder.],
 )
 
-Et fjerde greb dækker "bevis eller modbevis" om en for-alle-påstand: ét modeksempel slår den ihjel.
+Et fjerde greb dækker "bevis eller modbevis" om en for-alle-påstand: ét modeksempel (counterexample) slår den ihjel.
 
 #note(title: [Modeksempel først])[Ved "bevis eller modbevis" prøv et modeksempel først. Vælg "pæne" værdier, der falder sammen. F.eks. modbeviser $sqrt(2) dot sqrt(2) = 2$ påstanden om, at produktet af to irrationale tal altid er irrationelt.]
 
-#trap(title: [Ikke den omvendte])[Kontraposition er $not Q arrow.r not P$, ikke den omvendte $Q arrow.r P$. Den omvendte er den hyppigste forkerte MCQ-mulighed. Negér en disjunktion med De Morgan: $not(a > c/2 or b > c/2)$ bliver $a <= c/2 and b <= c/2$, altså et *OG*.]
+#trap(title: [Ikke den omvendte])[Kontraposition er $not Q arrow.r not P$, ikke den omvendte (converse) $Q arrow.r P$. Den omvendte er den hyppigste forkerte MCQ-mulighed. Negér en disjunktion (disjunction) med De Morgan: $not(a > c/2 or b > c/2)$ bliver $a <= c/2 and b <= c/2$, altså et *OG*.]
 
 #trap(title: [Forskellig fra nul])[En "forskellig fra nul"-hypotese bærer ofte hele beviset. I "(rationalt $!= 0$) $times$ (irrationelt) er irrationelt" er det $r != 0$, der lader dig dividere med $r$. Drop den, og beviset bryder sammen, for $0 dot x = 0$ er rationel.]
 

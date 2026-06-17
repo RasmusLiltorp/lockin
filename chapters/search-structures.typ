@@ -2,11 +2,11 @@
 
 == Søgestrukturer: BST, augmenteret BST, hashing
 
-En ordbog skal kunne slå op, indsætte og slette. Skal den også svare på "hvad kommer før/efter denne nøgle" eller gå igennem alt i sorteret orden, kræver det en *ordnet* ordbog.
+En ordbog (dictionary) skal kunne slå op, indsætte og slette. Skal den også svare på "hvad kommer før/efter denne nøgle" eller gå igennem alt i sorteret orden, kræver det en *ordnet* ordbog.
 
-Et balanceret søgetræ (rød-sort træ) klarer alt i $O(log n)$. En hashtabel klarer opslag, indsæt og slet i $O(1)$ i gennemsnit, men kan ikke svare på de ordnede spørgsmål.
+Et balanceret søgetræ (balanced search tree) (rød-sort træ (red-black tree)) klarer alt i $O(log n)$. En hashtabel (hash table) klarer opslag, indsæt og slet i $O(1)$ i gennemsnit, men kan ikke svare på de ordnede spørgsmål.
 
-At *augmentere* et BST betyder, at hver knude gemmer ekstra info om hele sit deltræ (antal knuder, største $y$-værdi, en sum), så du kan svare på nye spørgsmål i $O(log n)$.
+At *augmentere* (augment) et BST betyder, at hver knude gemmer ekstra info om hele sit deltræ (subtree) (antal knuder, største $y$-værdi, en sum), så du kan svare på nye spørgsmål i $O(log n)$.
 
 Til eksamen skal du opstille ligningerne for et augmenteret felt, simulere en hashtabel skridt for skridt og udvælge worst-case-køretider.
 
@@ -26,7 +26,7 @@ For et aggregat over data, som største $y$-værdi i deltræet:
 
 #eq[$ v."ymax" = max(v.y, space v."left"."ymax", space v."right"."ymax") $]
 
-#note(title: [Nøglefelt vs. ikke-nøglefelt])[Nøglefelt vs. ikke-nøglefelt afgør formlen. Træet er sorteret efter *én* nøgle, fx $x$. Et ekstremum af *nøglen* ligger fast: største $x$ er den højreste knude, mindste $x$ den venstreste.
+#note(title: [Nøglefelt vs. ikke-nøglefelt])[Nøglefelt vs. ikke-nøglefelt afgør formlen. Træet er sorteret efter *én* nøgle, fx $x$. Et ekstremum af *nøglen* ligger fast: største $x$ er den højreste knude, mindste $x$ den venstreste. Selve ekstremerne af nøglen henter du med Tree-Minimum og Tree-Maximum fra lærebogen: Tree-Minimum følger venstre barn fra roden hele vejen ned og ender i den mindste nøgle (venstreste knude), Tree-Maximum følger højre barn ned til den største nøgle (højreste knude). Begge er $O(log n)$ i et balanceret træ.
 
 #eq[$ v."xmax" = v."right"."xmax", quad v."xmin" = v."left"."xmin" $]
 
@@ -35,9 +35,9 @@ Et ikke-nøglefelt (fx $y$) er ikke sorteret af træet, så kig på begge børn 
 #eq[$ v."ymax" = max(v.y, space v."left"."ymax", space v."right"."ymax") $]
 ]
 
-#trap(title: [Vedligeholdelse af augmentering])[Vedligeholdelse rører ikke kun bladet eller kun roden. En indsæt eller slet ændrer knuderne langs én rod-til-blad-sti plus $O(1)$ rotationer; du genberegner felterne nedefra og op langs den sti, altså $O(log n)$ knuder. Et fuldt inorder-gennemløb er $O(n)$ og dermed forkert svar på et $O(log n)$-spørgsmål.]
+#trap(title: [Vedligeholdelse af augmentering])[Vedligeholdelse rører ikke kun bladet eller kun roden. En indsæt eller slet ændrer knuderne langs én rod-til-blad-sti plus $O(1)$ rotationer; du genberegner felterne nedefra og op langs den sti, altså $O(log n)$ knuder. Et fuldt inorder-gennemløb (inorder traversal) er $O(n)$ og dermed forkert svar på et $O(log n)$-spørgsmål.]
 
-For ordensstatistik gemmer hver knude `size`. NIL er en sentinel med `size = 0`, så `x.left.size` altid er defineret. Rangen i eget deltræ:
+For ordensstatistik (order statistics) gemmer hver knude `size`. NIL er en sentinel med `size = 0`, så `x.left.size` altid er defineret. Rangen (rank) i eget deltræ:
 
 #eq[$ r = x."left"."size" + 1 $]
 
@@ -61,7 +61,7 @@ OS-RANK(T, x)                // rang af x i hele træet
 #recipe(
   title: "Simulér en hashtabel med open addressing",
   [Noter tabelstørrelsen #swap[$m$] og hvilke pladser der er optaget før indsættelsen.],
-  [Find probe-sekvensen. Linear probing:],
+  [Find probe-sekvensen (probe sequence). Linear probing:],
   [Indsæt ved at prøve $i = 0, 1, 2, dots$ til *første tomme plads*. Søgning gør det samme og stopper ved nøglen eller en tom plads.],
   [Til "hvilke $h'$-værdier er mulige": prøv hver kandidat, simulér probingen, og behold den hvis landingen rammer den observerede plads.],
 )
@@ -72,9 +72,9 @@ Double hashing bruger en anden funktion til skridtlængden:
 
 #eq[$ h(k, i) = (h_1(k) + i dot h_2(k)) mod m $]
 
-#note(title: [Chaining])[Chaining er den anden kollisionsmetode: hver plads peger på en liste over de nøgler, der hasher dertil. Indsæt er $O(1)$ (forrest i listen), søg og slet er $Theta(|"liste"|)$. Worst case hasher alle $n$ nøgler til samme plads, så listen får længde $n$ og søgning bliver $Theta(n)$. Bruger du balancerede træer i stedet for lister, falder worst case til $O(log n)$. I praksis er hashing $O(1)$ for søg, indsæt og slet.]
+#note(title: [Chaining])[Chaining er den anden kollisionsmetode (collision resolution method): hver plads peger på en liste over de nøgler, der hasher dertil. Indsæt er $O(1)$ (forrest i listen), søg og slet er $Theta(|"liste"|)$. Worst case hasher alle $n$ nøgler til samme plads, så listen får længde $n$ og søgning bliver $Theta(n)$. Bruger du balancerede træer i stedet for lister, falder worst case til $O(log n)$. I praksis er hashing $O(1)$ for søg, indsæt og slet.]
 
-#trap(title: [Open addressing])[Open addressing kræver $n <= m$; sigt efter en fyldningsgrad omkring $n approx m\/4$. Slet markerer pladsen som slettet uden at tømme den, ellers afbryder en senere søgning for tidligt. Vælg $m$ som primtal, så probe-sekvensen når alle pladser. Quadratic probing er ude af pensum.]
+#trap(title: [Open addressing])[Open addressing kræver $n <= m$; sigt efter en fyldningsgrad (load factor) omkring $n approx m\/4$. Slet markerer pladsen som slettet uden at tømme den, ellers afbryder en senere søgning for tidligt. Vælg $m$ som primtal, så probe-sekvensen når alle pladser. Quadratic probing er ude af pensum.]
 
 Valget mellem de to strukturer afgøres af spørgsmålstypen:
 
@@ -91,7 +91,7 @@ Valget mellem de to strukturer afgøres af spørgsmålstypen:
 
 === Rød-sort træ
 
-Et rød-sort træ er et binært søgetræ, hvor hver knude har en farve, rød eller sort. Farverne er der kun for at holde træet i balance, så højden bliver $O(log n)$ uanset i hvilken rækkefølge du indsætter.
+Et rød-sort træ er et binært søgetræ (binary search tree), hvor hver knude har en farve, rød eller sort. Farverne er der kun for at holde træet i balance, så højden bliver $O(log n)$ uanset i hvilken rækkefølge du indsætter.
 
 #recipe(
   title: "De fem rød-sorte regler",
@@ -99,7 +99,7 @@ Et rød-sort træ er et binært søgetræ, hvor hver knude har en farve, rød el
   [Roden er sort.],
   [Alle blade (de tomme NIL-knuder) er sorte.],
   [En rød knude har to sorte børn. To røde knuder i træk er forbudt.],
-  [Fra en vilkårlig knude har alle stier ned til bladene samme antal sorte knuder. Det tal er knudens *sort-højde*.],
+  [Fra en vilkårlig knude har alle stier ned til bladene samme antal sorte knuder. Det tal er knudens *sort-højde* (black-height).],
 )
 
 Regel 4 og 5 er dem, der gør arbejdet. Ingen røde i træk betyder, at den længste sti højst er dobbelt så lang som den korteste, og samme sort-højde overalt holder de to ender tæt på hinanden.
@@ -154,9 +154,9 @@ Regel 4 og 5 er dem, der gør arbejdet. Ingen røde i træk betyder, at den læn
 
 #note(title: [Hvorfor det er balanceret])[Med $k$ sorte knuder på hver rod-til-blad-sti gælder $n >= 2^(k-1) - 1$, så $k - 1 <= log(n+1)$. Den længste sti har højst dobbelt så mange kanter som den korteste, så højden er $<= 2 log(n+1) = O(log n)$.]
 
-Når du indsætter eller sletter, kan du komme til at bryde reglerne. Så retter du op med to værktøjer: *omfarvning* (skift en knudes farve) og *rotation*.
+Når du indsætter eller sletter, kan du komme til at bryde reglerne. Så retter du op med to værktøjer: *omfarvning* (recoloring) (skift en knudes farve) og *rotation*.
 
-En rotation bytter om på en knude og et af dens børn, men holder søgeordenen intakt. Den er $O(1)$ og flytter kun tre pointere. Venstrerotation om $x$ løfter dens højre barn $y$ op; deltræet $beta$ skifter forælder fra $y$ til $x$:
+En rotation bytter om på en knude og et af dens børn, men holder søgeordenen intakt. Den er $O(1)$ og flytter kun tre pointere. Venstrerotation (left rotation) om $x$ løfter dens højre barn $y$ op; deltræet $beta$ skifter forælder fra $y$ til $x$:
 
 #gdiag({
   gnode((0,1.2), "x1", $x$)
@@ -176,7 +176,7 @@ En rotation bytter om på en knude og et af dens børn, men holder søgeordenen 
 
 #align(center)[#text(size: 9pt, fill: soft)[Venstre: før. Højre: efter venstrerotation om $x$. Ordenen $alpha < x < beta < y < gamma$ holder begge steder.]]
 
-Højrerotation er det spejlvendte og løfter venstre barn op. De to er hinandens modsatte, så en højrerotation kan altid fortrydes med en venstrerotation.
+Højrerotation (right rotation) er det spejlvendte og løfter venstre barn op. De to er hinandens modsatte, så en højrerotation kan altid fortrydes med en venstrerotation.
 
 #metadata(none) <rb-indsaet>
 #recipe(
@@ -270,6 +270,97 @@ Sletning bruger samme to værktøjer, men er tungere. Du fjerner knuden som i et
 )
 
 #qcard(
+  tag: [Augmenteret BST: vælg opdateringsligninger],
+  source: "MCQ juni 2021, Spm. 31",
+  prompt: [For en sorteret liste $x_1 <= dots.h <= x_n$ defineres summen af kvadrerede mellemrum $"ssg" = sum_(i=2)^n (x_i - x_(i-1))^2$. Hver knude $v$ gemmer $v.x$ samt $v."min"$, $v."max"$ og $v."ssg"$ for hele sit deltræ. Børnene er $v.l$ og $v.r$. Hvilken formel giver #swap[$v."ssg"$] ud fra børnenes værdier (begge børn findes)?],
+  options: (
+    [$v."ssg" = v.l."ssg" + v.r."ssg"$],
+    [$v."ssg" = v.l."ssg" + (v.r."min" - v.l."max")^2 + v.r."ssg"$],
+    [$v."ssg" = v.l."ssg" + (v.x - v.l."max")^2 + (v.x - v.r."min")^2 + v.r."ssg"$],
+    [$v."ssg" = v.l."ssg" + (v.r.x - v.l.x)^2 + v.r."ssg"$],
+    [$v."ssg" = v.l."ssg" + (v.x - v.l.x)^2 + (v.x - v.r.x)^2 + v.r."ssg"$],
+  ),
+  answer: [Mulighed (c): $v."ssg" = v.l."ssg" + (v.x - v.l."max")^2 + (v.x - v.r."min")^2 + v.r."ssg"$.],
+  blueprint: [
+    Et aggregat over nabopar i sorteret orden samles fra venstre del, højre del og de to overgange til knuden selv.
+
+    + *Skriv inorder-rækken ud.* Deltræets nøgler er #swap[venstre deltræ], så $v.x$, så #swap[højre deltræ].
+    + *Find de gamle par.* Mellemrummene inde i venstre og højre del er allerede talt med i $v.l."ssg"$ og $v.r."ssg"$.
+    + *Find de nye par.* De eneste nye nabopar er $(v.l."max", v.x)$ og $(v.x, v.r."min")$. Brug deltræs-feltet, ikke barnets egen nøgle.
+    + *Læg sammen.* Summen er de to indre dele plus de to nye kvadrerede mellemrum.
+  ],
+  worked: [
+    Inorder-nøglerne er $L + [v.x] + R$, hvor $L$'s største er $v.l."max"$ og $R$'s mindste er $v.r."min"$.
+
+    + Mellemrummene inde i $L$ er $v.l."ssg"$, og inde i $R$ er $v.r."ssg"$.
+    + De eneste nye nabopar er $(v.l."max", v.x)$ og $(v.x, v.r."min")$. Kvadrering gør fortegnet ligegyldigt.
+    + Altså $v."ssg" = v.l."ssg" + (v.x - v.l."max")^2 + (v.x - v.r."min")^2 + v.r."ssg"$.
+
+    Mulighederne: (a) glemmer overgangene til $v$; (b) springer $v$ over og bruger ét forkert par; (d) og (e) bruger børnenes egne nøgler i stedet for deltræets ekstrem. Kun (c) rammer.
+
+    Svar: mulighed (c).
+  ],
+)
+
+#qcard(
+  tag: [Augmenteret BST: vælg opdateringsligninger],
+  source: "MCQ juni 2023, Spm. 30",
+  prompt: [Nøgler $x_1 < dots.h < x_n$ ligger i et rød-sort træ, hver farvet sort eller hvid. En *stime* er et maksimalt løb af på hinanden følgende sort-farvede knuder i inorder. Hver knude $v$ gemmer $v."maxS"$ (længste stime i $T(v)$), $v."maxLS"$ (længste stime der starter ved venstreste nøgle), $v."maxRS"$ (længste stime der ender ved højreste nøgle) og $v."hasWhite"$. Hvilken rekursion beregner #swap[$v."maxS"$] korrekt ud fra børnene $v.l$ og $v.r$?],
+  options: (
+    [sort: $max{v.l."maxS", space v.r."maxS", space v.l."maxRS" + v.r."maxLS"}$; hvid: $max{v.l."maxS", space v.r."maxS"}$],
+    [sort: $max{v.l."maxS", space v.r."maxS", space v.l."maxRS" + 1 + v.r."maxLS"}$; hvid: $max{v.l."maxS", space v.r."maxS"}$],
+    [hvid: $max{v.l."maxS", space v.r."maxS", space v.l."maxRS" + 1 + v.r."maxLS"}$; sort: $max{v.l."maxS", space v.r."maxS"}$],
+    [sort: $v.l."maxS" + v.r."maxS" + v.l."maxRS" + v.r."maxLS"$; hvid: $v.l."maxS" + v.r."maxS"$],
+  ),
+  answer: [Mulighed (b): sort knude tager $max{v.l."maxS", space v.r."maxS", space v.l."maxRS" + 1 + v.r."maxLS"}$, hvid knude $max{v.l."maxS", space v.r."maxS"}$.],
+  blueprint: [
+    Den længste stime i $T(v)$ er den bedste af kun venstre, kun højre, eller en der går gennem $v$. Den gennemgående tæller kun, hvis $v$ selv er sort.
+
+    + *De to rene tilfælde.* Tag den bedste stime fra hvert barn: $v.l."maxS"$ og $v.r."maxS"$.
+    + *Den gennemgående.* Kun mulig hvis #swap[$v$ er sort]. Den binder løbet der ender til venstre ($v.l."maxRS"$), $v$ selv ($+1$) og løbet der starter til højre ($v.r."maxLS"$).
+    + *Hvid blokerer.* Er $v$ hvid, brydes stimen ved $v$, så kun de to rene tilfælde tæller.
+    + *Sortér fra.* Smid svar uden $+1$ (glemmer $v$), svar der bytter sort/hvid, og svar der lægger sammen i stedet for $max$.
+  ],
+  worked: [
+    Sort $v$: $max{v.l."maxS", space v.r."maxS", space v.l."maxRS" + 1 + v.r."maxLS"}$. Hvid $v$: $max{v.l."maxS", space v.r."maxS"}$.
+
+    - (a) glemmer $+1$ for $v$ selv. Forkert.
+    - (c) bytter sort og hvid. Forkert.
+    - (d) bruger sum i stedet for $max$. Forkert.
+    - (b) rammer både $+1$'et og den rigtige farvebetingelse. Rigtig.
+
+    Svar: mulighed (b).
+  ],
+)
+
+#qcard(
+  tag: [Augmenteret BST: vælg opdateringsligninger],
+  source: "MCQ juni 2023, Spm. 31",
+  prompt: [Samme augmenterede træ med stimer. Hvordan beregnes #swap[$v."maxLS"$] (længste stime der starter ved venstreste nøgle) ud fra børnene (begge børn findes)?],
+  options: (
+    [$v."maxLS" = v.l."maxLS"$ hvis $v$'s nøgle er hvid; $v.l."maxS" + 1 + v.r."maxLS"$ hvis $v$'s nøgle er sort],
+    [$v."maxLS" = v.l."maxLS"$ hvis hvid; $v.l."maxS" + v.r."maxLS"$ hvis sort],
+    [$v."maxLS" = v.l."maxLS"$ hvis $v.l."hasWhite"$ eller $v$ hvid; $v.l."maxS" + 1 + v.r."maxLS"$ ellers],
+    [$v."maxLS" = v.l."maxLS"$ hvis $v.l."hasWhite"$ eller $v$ hvid; $v.l."maxS" + v.r."maxLS"$ ellers],
+  ),
+  answer: [Mulighed (a): $v.l."maxLS"$ hvis $v$ hvid, ellers $v.l."maxS" + 1 + v.r."maxLS"$.],
+  blueprint: [
+    $"maxLS"$ er det længste sorte løb fra den venstreste nøgle. Grenen afhænger kun af $v$'s *egen* farve.
+
+    + *Hvid $v$.* Løbet brydes ved $v$, så $v."maxLS" = v.l."maxLS"$.
+    + *Sort $v$.* Løbet kan kun nå forbi $v$, hvis #swap[hele venstre deltræ er sort] — da er $v.l."maxS"$ lig hele venstre størrelse. Læg $1$ for $v$ og $v.r."maxLS"$ til.
+    + *Sortér fra.* Smid svar der betinger på $v.l."hasWhite"$ (forkert felt) eller dropper $+1$'et for $v$.
+  ],
+  worked: [
+    Hvid nøgle: $v."maxLS" = v.l."maxLS"$. Sort nøgle: $v.l."maxS" + 1 + v.r."maxLS"$.
+
+    Kun (a) har både den rigtige betingelse (på $v$'s egen farve) og $+1$'et. (b) mangler $+1$; (c) og (d) betinger på $v.l."hasWhite"$.
+
+    Svar: mulighed (a).
+  ],
+)
+
+#qcard(
   tag: [Augmenteret BST: hvorfor bevares O(log n)?],
   source: "MCQ juni 2015, Spm. 26",
   prompt: [Lad nu søgetræet være et rød-sort træ. Hvilke af følgende er korrekte argumenter for, at informationen i træets knuder kan vedligeholdes under indsættelser og sletninger, uden at ændre de rød-sorte træers køretid på $O(log n)$ for indsættelser og sletninger?],
@@ -305,6 +396,135 @@ Sletning bruger samme to værktøjer, men er tungere. Du fjerner knuden som i et
     - (e) bruger inorder, som er $O(n)$. Falsk.
 
     Svar: mulighed (d).
+  ],
+)
+
+#qcard(
+  tag: [Augmenteret BST: O(1)-forespørgsel fra roden],
+  source: "MCQ juni 2015, Spm. 27",
+  prompt: [Punkterne ligger i et balanceret BST nøglet på $x$, og hver knude gemmer deltræs-felterne `xmin`, `xmax`, `ymin`, `ymax`. Hvordan kan arealet af det rektangel, punkterne udspænder, bestemmes i #swap[$O(1)$] ud fra træet?],
+  options: (
+    [Arealet er $v."ymin" times u."ymax"$, hvor $v$ er det venstreste blad og $u$ det højreste blad.],
+    [Arealet er $r."xmax" times r."ymax"$, hvor $r$ er roden.],
+    [Arealet er $(r."xmax" - r."xmin") times (r."ymax" - r."ymin")$, hvor $r$ er roden.],
+    [Arealet findes ved et inorder-gennemløb, der finder mindste og største $x$ og $y$, og derfra sidelængderne.],
+  ),
+  answer: [Mulighed (c): $(r."xmax" - r."xmin") times (r."ymax" - r."ymin")$.],
+  blueprint: [
+    Et $O(1)$-svar kræver, at de fire ekstremer allerede er gemt. Roden i et augmenteret træ opsummerer hele mængden.
+
+    + *Skriv formlen for det omsluttende rektangel.* Areal $=$ bredde $times$ højde $= (x_max - x_min)(y_max - y_min)$.
+    + *Find ekstremerne i $O(1)$.* I et augmenteret træ holder #swap[roden] aggregatet over alle punkter: `r.xmin`, `r.xmax`, `r.ymin`, `r.ymax`.
+    + *Saml.* Sæt rodens fire felter ind i arealformlen.
+    + *Sortér fra.* Smid svar der mangler at trække min'erne fra, kun bruger blade, eller bruger et $O(n)$-gennemløb.
+  ],
+  worked: [
+    Det omsluttende rektangel har areal $("bredde") dot ("højde") = (x_max - x_min)(y_max - y_min)$.
+
+    + $O(1)$ kræver, at ekstremerne er forberegnet og gemt.
+    + Roden $r$ holder aggregatet over alle punkter, så $r."xmin"$, $r."xmax"$, $r."ymin"$, $r."ymax"$ er de fire ekstremer.
+    + Altså areal $= (r."xmax" - r."xmin")(r."ymax" - r."ymin")$.
+
+    (a) bruger kun $y$ fra blade; (b) glemmer at trække min'erne fra; (d) bruger et $O(n)$-inorder. Kun (c).
+
+    Svar: mulighed (c).
+  ],
+)
+
+#qcard(
+  tag: [Augmenteret BST: O(1)-forespørgsel fra roden],
+  source: "MCQ juni 2015, Spm. 29",
+  prompt: [Vi vil nu nå de samme resultater på en anden måde: arealet af det udspændte rektangel i #swap[$O(1)$] og et punkt på hver af de fire sider i #swap[$O(log n)$], stadig med indsæt og slet i $O(log n)$. Antag at ingen to punkter deler $x$-koordinat, og ingen to deler $y$-koordinat. Det skal klares med *to træer uden ekstra information i nogen knude*. Hvilken datastruktur virker?],
+  options: (
+    [Et træ er en max-heap nøglet på punkternes $x$; det andet en max-heap nøglet på $y$.],
+    [Et træ er en max-heap nøglet på $x$; det andet et rød-sort træ nøglet på $y$, der gemmer største og mindste $y$ i to globale variable.],
+    [Begge er rød-sorte træer: ét nøglet på $x$ med største og mindste $x$ gemt i to globale variable, ét nøglet på $y$ med største og mindste $y$ gemt i to globale variable.],
+    [Begge er Huffman-træer (Huffman trees): ét med $x$-koordinaterne som hyppigheder, ét med $y$-koordinaterne som hyppigheder.],
+  ),
+  answer: [Mulighed (c): to rød-sorte træer, ét nøglet på $x$ og ét på $y$, hver med min og max cachet i to globale variable.],
+  blueprint: [
+    Skriv kravene op først, og kør hver kandidat imod dem. Du skal bruge *både* min og max på begge koordinater, plus indsæt og slet i $O(log n)$.
+
+    + *Kravene.* Areal i $O(1)$, de fire ekstreme punkter (min og max på $x$ og $y$) i $O(log n)$, indsæt og slet i $O(log n)$.
+    + *Smid heap'en.* En max-heap giver kun max (eller kun min) i $O(1)$; den anden ekstrem og sletning af et vilkårligt punkt er ikke $O(log n)$.
+    + *Smid Huffman.* Et Huffman-træ bygges statisk ud fra hyppigheder og understøtter hverken ekstrem-forespørgsler eller dynamisk indsæt og slet.
+    + *Vælg de balancerede træer.* Et rød-sort træ giver venstreste og højreste knude (min og max på nøglen) i $O(log n)$ og indsæt/slet i $O(log n)$. Cacher du min og max i to globale variable, bliver arealet $O(1)$ — og en global variabel er ikke ekstra info i en knude.
+  ],
+  worked: [
+    De fire sider er bestemt af min $x$, max $x$, min $y$ og max $y$, og arealet er $(x_max - x_min)(y_max - y_min)$, ønsket i $O(1)$.
+
+    - (a): to max-heaps giver kun maksimum. Minimum kan ikke hentes, og sletning af et vilkårligt punkt er ikke $O(log n)$. Forkert.
+    - (b): heap'en på $x$ kan ikke levere både min og max $x$ i $O(log n)$. Forkert.
+    - (d): Huffman-træer koder hyppigheder og bygges statisk; de svarer ikke på ekstremer og understøtter ikke dynamisk indsæt og slet. Forkert.
+    - (c): et rød-sort træ på $x$ giver venstreste og højreste punkt (min og max $x$) i $O(log n)$ og indsæt/slet i $O(log n)$; tilsvarende for $y$. Min og max i globale variable gør arealet $O(1)$, og de variable hænger ikke på den enkelte knude. Rammer alle krav.
+
+    Svar: mulighed (c).
+  ],
+)
+
+#qcard(
+  tag: [Augmenteret BST: O(log n)-forespørgsel ned ad træet (flere rigtige)],
+  source: "MCQ juni 2015, Spm. 28 (flere rigtige)",
+  prompt: [Træet er et balanceret BST nøglet på $x$ og augmenteret i hver knude med deltræs-`xmin`, `xmax`, `ymin`, `ymax`. For hver af de fire sider af det udspændte rektangel vil vi finde et punkt på siden. Hvordan gøres det i #swap[$O(log n)$] med træet? (et eller flere svar)],
+  options: (
+    [Punkterne på de *vandrette* sider findes med Tree-Maximum og Tree-Minimum. Punktet på højre lodrette side findes med en rekursiv søgning fra roden, der via `xmax`-værdierne går mod største $x$; venstre side via `xmin`.],
+    [Punkterne på de *lodrette* sider findes med Tree-Maximum og Tree-Minimum. Punktet på øverste vandrette side findes med en rekursiv søgning fra roden, der via `ymax`-værdierne går mod største $y$; nederste side via `ymin`.],
+    [Punkterne på både de vandrette og de lodrette sider findes med Tree-Maximum og Tree-Minimum.],
+    [Øverste vandrette punkt findes via en `ymax`-styret søgning fra roden, nederste via `ymin`. Højre lodrette punkt findes via en `xmax`-styret søgning fra roden, venstre via `xmin`.],
+    [Punkterne på alle fire sider findes ved et inorder-gennemløb.],
+  ),
+  answer: [Mulighed (b) (lærebogssvaret). Mulighed (d) er også algoritmisk gyldig, men (b) er det tilsigtede svar med Tree-Maximum/Minimum på nøgledimensionen.],
+  blueprint: [
+    En lodret side har et ekstremt $x$ (træets nøgle), en vandret side et ekstremt $y$ (ikke nøglen). De to slags kræver hver sin metode.
+
+    + *Find nøglesiderne.* Højre side $=$ største $x$, venstre $=$ mindste $x$. Da $x$ er nøglen, giver #swap[Tree-Maximum] og #swap[Tree-Minimum] dem direkte i $O(log n)$.
+    + *Find ikke-nøglesiderne.* Øverste $=$ største $y$, nederste $=$ mindste $y$. $y$ er ikke ordnet af træet, så følg det augmenterede `ymax` (resp. `ymin`): stig fra roden mod barnet, hvis deltræs-`ymax` matcher knudens.
+    + *Begge er $O(log n)$.* Hvert skridt går ét niveau ned i et balanceret træ.
+    + *Sortér fra.* Smid svar der bruger Tree-Max/Min på $y$ (ikke ordnet), og smid inorder ($O(n)$).
+  ],
+  worked: [
+    Træet er $x$-ordnet og augmenteret med `xmin`/`xmax`/`ymin`/`ymax`.
+
+    - Lodrette sider kræver ekstremt $x$. Da $x$ er nøglen, giver Tree-Maximum det højreste punkt og Tree-Minimum det venstreste, begge $O(log n)$.
+    - Vandrette sider kræver ekstremt $y$, som $x$-ordenen ikke arrangerer. Stig fra roden langs barnet, hvis deltræs-`ymax` matcher knudens `ymax`, til øverste punkt (og `ymin` til nederste), hvert $O(log n)$.
+
+    Mulighederne:
+
+    - (a) bruger Tree-Max/Min på $y$-siderne. Forkert.
+    - (b) bruger Tree-Max/Min på nøglen ($x$) og augmentering på $y$. Rigtig, lærebogssvaret.
+    - (c) bruger Tree-Max/Min på alle fire. Forkert.
+    - (d) bruger augmenteret søgning på begge dimensioner. Algoritmisk gyldig, men ikke det tilsigtede svar.
+    - (e) bruger inorder, $O(n)$. Forkert.
+
+    Svar: mulighed (b) (og (d) gyldig).
+  ],
+)
+
+#qcard(
+  tag: [Augmenteret BST: O(log n)-forespørgsel ned ad træet (flere rigtige)],
+  source: "MCQ juni 2023, Spm. 32",
+  prompt: [Med $r."maxS"$ kender vi den længste sorte stimes længde i $O(1)$. Vi vil nu i #swap[$O(log n)$] finde en knude, hvis nøgle er en del af en længste sort stime. Hver algoritme starter med $v = $ rod; kun tilfældet, hvor begge børn findes, beskrives. Hvilken algoritme virker?],
+  options: (
+    [Hvis $v."maxS" > v.l."maxS"$ og $v."maxS" > v.r."maxS"$, returnér $v$. Ellers hvis $v."maxS" = v.l."maxS"$, gå til $v.l$. Ellers gå til $v.r$.],
+    [Hvis $v.l."maxS" > v.r."maxS"$, gå til $v.l$. Ellers hvis $v.l."maxS" < v.r."maxS"$, gå til $v.r$. Ellers returnér $v$.],
+    [Hvis $v.l."hasWhite"$, gå til $v.r$. Ellers hvis $v.r."hasWhite"$, gå til $v.l$. Ellers returnér $v$.],
+    [Hvis ikke $v."hasWhite"$, returnér $v$. Ellers hvis ikke $v.l."hasWhite"$, gå til $v.l$. Ellers gå til $v.r$.],
+  ),
+  answer: [Mulighed (a).],
+  blueprint: [
+    Roden $"maxS"$ er det globale maksimum $M$, og $"maxS"(v) = max("venstre", "højre", "ved-"v)$. Følg kilden til maksimummet ned.
+
+    + *Er maks ved $v$?* Overstiger #swap[$v."maxS"$] begge børns $"maxS"$, ligger den længste stime midt på $v$ — returnér $v$.
+    + *Ellers følg kilden.* Gå til det barn, hvis $"maxS"$ er lig $v."maxS"$.
+    + *Ét niveau pr. skridt* giver $O(log n)$ i et balanceret træ.
+    + *Sortér fra.* Smid svar der ignorerer $v$'s egen værdi (kun sammenligner børn), og svar der bruger `hasWhite` (forkert felt).
+  ],
+  worked: [
+    + (a) returnerer $v$, når den længste stime er centreret på $v$, og følger ellers kilden til maksimummet. Rigtig.
+    + (b) ignorerer $v$'s egen $"maxS"$ og kan misse stimer centreret på $v$. Forkert.
+    + (c) og (d) bruger `hasWhite`, det forkerte felt. Forkert.
+
+    Svar: mulighed (a).
   ],
 )
 
@@ -350,6 +570,322 @@ Sletning bruger samme to værktøjer, men er tungere. Du fjerner knuden som i et
 )
 
 #qcard(
+  tag: [Hashing: hvilke h'-værdier passer? (linear probing)],
+  source: "MCQ juni 2019, Spm. 9 (samme type 2015/2017/2021/2023) (flere rigtige)",
+  prompt: [En hashtabel $H$ bruger linear probing og en hjælpe-hashfunktion $h'(x)$. Tabellen er nu (indeks 0..6): plads 0 $=$ #swap[33], plads 1 tom, plads 2 $=$ #swap[27], plads 3 $=$ #swap[32], plads 4 $=$ #swap[55], plads 5 tom, plads 6 $=$ #swap[47]. Derefter indsættes #swap[99], og tabellen er bagefter: plads 0 $=$ 33, plads 1 $=$ 99, plads 2 $=$ 27, plads 3 $=$ 32, plads 4 $=$ 55, plads 5 tom, plads 6 $=$ 47. Tabelstørrelse #swap[$m = 7$]. Hvilke værdier af $h'(99)$ er mulige? (et eller flere svar)],
+  options: (
+    [$h'(99) = 0$],
+    [$h'(99) = 1$],
+    [$h'(99) = 2$],
+    [$h'(99) = 3$],
+    [$h'(99) = 4$],
+    [$h'(99) = 5$],
+    [$h'(99) = 6$],
+  ),
+  answer: [Mulighederne (a), (b) og (g): $h'(99) in #swap[${0, 1, 6}$]$.],
+  blueprint: [
+    Du kender landingspladsen og skal finde, hvilke startværdier der kunne ende der. Prøv dem alle.
+
+    + *Aflæs tabellen.* Noter hvilke pladser der var optaget før indsættelsen, og hvilken plads den nye nøgle endte på.
+    + *Linear probing.* Probe-sekvensen er $h(k,i) = (h'(k) + i) mod m$, altså start ved #swap[$h'$] og gå ét skridt frem ad gangen til første tomme plads.
+    + *Prøv hver kandidat.* For hvert mulige $h'$ følger du sekvensen fra den startplads, til du rammer en tom plads. Lander den på den observerede plads, er kandidaten gyldig.
+    + *Saml svaret.* Behold de startværdier, hvis sekvens ender på den rigtige plads.
+  ],
+  worked: [
+    Optagne pladser før indsættelsen: $#swap[${0,2,3,4,6}$]$. Tomme: $#swap[${1,5}$]$. Nøglen 99 endte på plads #swap[1], og $m = #swap[7]$.
+
+    Jeg prober hver startværdi frem til første tomme plads:
+
+    - $h'=0$: plads 0 optaget, gå til 1. Tom, lander på 1. Passer.
+    - $h'=1$: plads 1 tom, lander på 1. Passer.
+    - $h'=2$: 2, 3, 4 optaget, gå til 5. Tom, lander på 5. Forkert.
+    - $h'=3$: ender på 5. Forkert.
+    - $h'=4$: ender på 5. Forkert.
+    - $h'=5$: 5 tom, lander på 5. Forkert.
+    - $h'=6$: 6 optaget, gå til 0 (wrap), også optaget, gå til 1. Tom, lander på 1. Passer.
+
+    Kun $0$, $1$ og $6$ rammer plads 1.
+
+    Svar: $h'(99) in {0, 1, 6}$, altså (a), (b) og (g).
+  ],
+)
+
+#qcard(
+  tag: [Hashing: hvilken rækkefølge/nøgle passer? (linear probing)],
+  source: "MCQ juni 2017, Spm. 8 (flere rigtige)",
+  prompt: [For en funktion $h'(x)$ gælder #swap[$h'(7)=2$, $h'(9)=2$, $h'(13)=3$, $h'(17)=4$]. En hashtabel $H$ bruger linear probing med $h'(x)$. Fra en tom tabel er #swap[${7,9,13,17}$] indsat i en eller anden rækkefølge, og resultatet er: plads 2 $=$ 9, plads 3 $=$ 7, plads 4 $=$ 17, plads 5 $=$ 13 (resten tomme, $m = 11$). Hvilke af følgende indsættelsesrækkefølger kan have været brugt? (et eller flere svar)],
+  options: (
+    [$7, 9, 13, 17$],
+    [$13, 7, 17, 9$],
+    [$9, 17, 7, 13$],
+    [$17, 13, 9, 7$],
+    [$9, 7, 17, 13$],
+  ),
+  answer: [Mulighederne (c) og (e): $9,17,7,13$ og $9,7,17,13$ gengiver begge tabellen.],
+  blueprint: [
+    Simulér hver kandidat-rækkefølge fra en tom tabel og sammenlign med målet. Et hurtigt tjek: en nøgle der er skubbet væk fra sin hjemmeplads, må være indsat *efter* den nøgle, der sidder på hjemmepladsen.
+
+    + *Aflæs.* Noter hver nøgles hjemmeplads $h'(x)$, tabelstørrelsen #swap[$m$], og målpladserne.
+    + *Find afhængighederne.* En nøgle på sin hjemmeplads og en anden skubbet ét frem $==>$ den første blev indsat før den anden.
+    + *Simulér.* For hver rækkefølge prober du hver nøgle fra dens hjemmeplads til første tomme plads.
+    + *Behold dem, der matcher* måltabellen præcist.
+  ],
+  worked: [
+    Hjemmepladser: $9 -> 2$, $7 -> 2$, $17 -> 4$, $13 -> 3$. Mål: plads 2 $=$ 9, 3 $=$ 7, 4 $=$ 17, 5 $=$ 13.
+
+    + 9 sidder på hjemmeplads 2 og 7 er skubbet til 3, så 9 må indsættes før 7.
+    + 17 sidder på hjemmeplads 4 og 13 er skubbet til 5, så 17 må indsættes før 13.
+    + (c) $9,17,7,13$: $9->2$; $17->4$; $7->2$ optaget $->3$; $13->3,4$ optaget $->5$. Passer.
+    + (e) $9,7,17,13$: $9->2$; $7->2$ optaget $->3$; $17->4$; $13->3,4$ optaget $->5$. Passer.
+    + (a) giver $7,9$ på 2,3 (forkert); (b) giver 13 på 3 (forkert); (d) giver 7 på 5 (forkert).
+
+    Svar: (c) og (e).
+  ],
+)
+
+#qcard(
+  tag: [Hashing: hvilken rækkefølge/nøgle passer? (linear probing)],
+  source: "MCQ juni 2023, Spm. 9 (flere rigtige)",
+  prompt: [For en funktion $h_1(x)$ gælder #swap[$h_1(22)=6$, $h_1(33)=1$, $h_1(44)=4$, $h_1(55)=1$, $h_1(66)=6$, $h_1(77)=1$]. En hashtabel af længde syv bruger linear probing med $h_1$. Fra en tom tabel er #swap[${22,33,44,55,66,77}$] indsat i en eller anden rækkefølge, og resultatet er: plads 0 $=$ 22, plads 1 $=$ 77, plads 2 $=$ 55, plads 3 $=$ 33, plads 4 $=$ 44, plads 5 tom, plads 6 $=$ 66. Hvilke nøgler kan være indsat #swap[først]? (et eller flere svar)],
+  options: (
+    [$22$],
+    [$33$],
+    [$44$],
+    [$55$],
+    [$66$],
+    [$77$],
+  ),
+  answer: [Mulighederne (c), (e) og (f): $44$, $66$ og $77$.],
+  blueprint: [
+    Den først indsatte nøgle møder en tom tabel, så den lander præcis på sin hjemmeplads uden probing.
+
+    + *Aflæs.* Noter hver nøgles hjemmeplads $h_1(x)$ og dens faktiske plads i den færdige tabel.
+    + *Sammenlign.* En nøgle kan være indsat først, netop hvis dens faktiske plads er lig dens hjemmeplads.
+    + *Saml* alle nøgler, hvor de to falder sammen.
+  ],
+  worked: [
+    Hjemmeplads $->$ faktisk plads:
+
+    - $22$: hjem 6, men på plads 0 (wrappet). Kan ikke være først.
+    - $33$: hjem 1, men på plads 3. Kan ikke.
+    - $44$: hjem 4, på plads 4. Kan være først.
+    - $55$: hjem 1, men på plads 2. Kan ikke.
+    - $66$: hjem 6, på plads 6. Kan være først.
+    - $77$: hjem 1, på plads 1. Kan være først.
+
+    Svar: $44$, $66$, $77$ — altså (c), (e) og (f).
+  ],
+)
+
+#qcard(
+  tag: [Hashing: hvilken rækkefølge/nøgle passer? (linear probing)],
+  source: "MCQ juni 2025, Spm. 9 (flere rigtige)",
+  prompt: [For en funktion $h_1(x)$ gælder #swap[$h_1(44)=2$, $h_1(55)=5$, $h_1(66)=1$, $h_1(77)=2$, $h_1(88)=5$, $h_1(99)=6$]. En hashtabel af længde syv bruger linear probing med $h_1$. Fra en tom tabel er #swap[${44,55,66,77,88,99}$] indsat i en eller anden rækkefølge, og resultatet er: plads 0 $=$ 99, plads 1 $=$ 66, plads 2 $=$ 44, plads 3 $=$ 77, plads 4 tom, plads 5 $=$ 88, plads 6 $=$ 55. Hvilke nøgler kan være indsat #swap[sidst]? (et eller flere svar)],
+  options: (
+    [$44$],
+    [$55$],
+    [$66$],
+    [$77$],
+    [$88$],
+    [$99$],
+  ),
+  answer: [Mulighederne (c), (d) og (f): $66$, $77$ og $99$.],
+  blueprint: [
+    En nøgle kan være sidst, netop hvis den sidder for *enden* af sin probe-klynge, så ingen anden nøgle var afhængig af, at den allerede lå der.
+
+    + *Aflæs.* Noter hver nøgles hjemmeplads $h_1(x)$ og dens faktiske plads.
+    + *Fjern kandidaten.* For hver nøgle: tag den ud, og tjek om de andre fem stadig kan gengive resten af tabellen.
+    + *Indsæt sidst.* Prober kandidaten fra sin hjemmeplads og lander den præcis på sin faktiske plads, kan den være sidst.
+    + *Saml* alle, der består.
+  ],
+  worked: [
+    Hjemmeplads $->$ faktisk plads: $44 (2->2)$, $55 (5->6)$, $66 (1->1)$, $77 (2->3)$, $88 (5->5)$, $99 (6->0)$. Klyngen wrapper pladserne $5,6,0,1,2,3$ (plads 4 tom).
+
+    - $44$: 77 (hjem 2) kræver 44 allerede på plads 2 for at blive skubbet til 3. Fejler.
+    - $55$: uden den kan de andre ikke gengive klyngen omkring. Fejler.
+    - $66$: hjem 1, plads 1, nås uafhængigt. Kan.
+    - $77$: hjem 2 prober $2 (44), 3$ tom $-> 3$. Hale på 44-klyngen. Kan.
+    - $88$: 55 ville tage plads 5, hvis 88 var fjernet. Fejler.
+    - $99$: hjem 6 prober $6 (55), 0$ tom $-> 0$. Hale på wrap-klyngen. Kan.
+
+    Svar: $66$, $77$, $99$ — altså (c), (d) og (f).
+  ],
+)
+
+#qcard(
+  tag: [Hashing: trace med quadratic probing],
+  source: "MCQ juni 2015, Spm. 7",
+  prompt: [Hashtabellen $H$ bruger quadratic probing med hjælpe-hashfunktion #swap[$h'(x) = (3x + 5) mod 11$] og konstanter #swap[$c_1 = 3$, $c_2 = 1$]. Probe-sekvens: $h(x,i) = (h'(x) + c_1 dot i + c_2 dot i^2) mod #swap[$11$]$. Starttabel (indeks: værdi): #swap[$0:13$, $1:39$, $3:36$, $8:23$, $9:5$] (pladserne 2,4,5,6,7,10 tomme). Indsæt værdierne #swap[$22$, $16$, $17$] (i den rækkefølge). Hvilken tabel viser $H$ bagefter?],
+  options: (
+    [$0:13 thin 1:39 thin 2:17 thin 3:36 thin 5:22 thin 8:23 thin 9:5 thin 10:16$],
+    [$0:13 thin 1:39 thin 2:16 thin 3:36 thin 4:17 thin 5:22 thin 8:23 thin 9:5$],
+    [$0:13 thin 1:39 thin 2:16 thin 3:36 thin 5:22 thin 7:17 thin 8:23 thin 9:5$],
+    [$0:13 thin 1:39 thin 2:16 thin 3:36 thin 5:22 thin 8:23 thin 9:5 thin 10:17$],
+  ),
+  answer: [Mulighed (c): $0:13, thick 1:39, thick 2:16, thick 3:36, thick 5:22, thick 7:17, thick 8:23, thick 9:5$.],
+  blueprint: [
+    Quadratic probing følger samme idé som linear probing, men skridtlængden vokser kvadratisk. Kør én nøgle ad gangen på den opdaterede tabel.
+
+    + *Probe-funktion.* $h(x,i) = (h'(x) + c_1 i + c_2 i^2) mod m$.
+    + *For hver værdi* starter du ved $i = 0$ og øger $i$, til du finder en tom plads.
+    + *Indsæt* og fortsæt med næste værdi på den nu opdaterede tabel.
+  ],
+  worked: [
+    + $22$: $h' = (66+5) mod 11 = 5$, tom. Plads 5.
+    + $16$: $h' = (48+5) mod 11 = 9$, optaget. $i=1$: $(9+3+1) mod 11 = 2$, tom. Plads 2.
+    + $17$: $h' = (51+5) mod 11 = 1$, optaget. $i=1$: $(1+3+1)=5$ optaget; $i=2$: $(1+6+4)=11 mod 11=0$ optaget; $i=3$: $(1+9+9)=19 mod 11=8$ optaget; $i=4$: $(1+12+16)=29 mod 11=7$ tom. Plads 7.
+
+    Slut: $0:13, 1:39, 2:16, 3:36, 5:22, 7:17, 8:23, 9:5$.
+
+    Svar: mulighed (c).
+  ],
+)
+
+#qcard(
+  tag: [Hashing: hvilke h₂-værdier passer? (double hashing)],
+  source: "MCQ juni 2019, Spm. 10 (samme type 2021/2023/2025) (flere rigtige)",
+  prompt: [En hashtabel $H$ bruger double hashing med hjælpe-hashfunktioner $h_1(x)$ og $h_2(x)$. Tabellen er nu (indeks 0..6): #swap[$0:33$, 1 tom, $2:27$, $3:32$, $4:55$, 5 tom, $6:47$]. Derefter indsættes #swap[99], som ender på plads #swap[1]. Probe-sekvens: $h(x,i) = (h_1(x) + i dot h_2(x)) mod #swap[$7$]$. Hvis #swap[$h_1(99) = 2$], hvilke værdier af $h_2(99)$ er mulige? (et eller flere svar)],
+  options: (
+    [$h_2(99) = 1$],
+    [$h_2(99) = 2$],
+    [$h_2(99) = 3$],
+    [$h_2(99) = 4$],
+    [$h_2(99) = 5$],
+    [$h_2(99) = 6$],
+  ),
+  answer: [Mulighederne (b), (d) og (f): $h_2(99) in #swap[${2, 4, 6}$]$.],
+  blueprint: [
+    Du kender $h_1$ og landingspladsen og skal finde, hvilke skridtlængder $h_2$ rammer den. Prøv dem alle.
+
+    + *Aflæs.* Noter optagne pladser før indsættelsen, tabelstørrelsen #swap[$m$], $h_1$ og landingspladsen.
+    + *Double hashing.* Probe-sekvensen er $h(x,i) = (h_1(x) + i dot h_2(x)) mod m$ for $i = 0, 1, 2, dots.h$
+    + *Prøv hver kandidat.* For hvert mulige $h_2$ stepper du $i$ frem, til du rammer en tom plads.
+    + *Behold* de $h_2$, hvis første tomme plads er lig den observerede landingsplads.
+  ],
+  worked: [
+    Optagne før indsæt: $#swap[${0,2,3,4,6}$]$. 99 endte på plads #swap[1], $h_1 = #swap[2]$, $m = #swap[7]$.
+
+    - $h_2=1$: $2(o),3(o),4(o),5$ tom $-> 5$. Forkert.
+    - $h_2=2$: $2(o),4(o),6(o),(8 mod 7=)1$ tom $-> 1$. Passer.
+    - $h_2=3$: $2(o),5$ tom $-> 5$. Forkert.
+    - $h_2=4$: $2(o),6(o),(10 mod 7=)3(o),0(o),4(o),1$ tom $-> 1$. Passer.
+    - $h_2=5$: $2(o),(7 mod 7=)0(o),5$ tom $-> 5$. Forkert.
+    - $h_2=6$: $2(o),(8 mod 7=)1$ tom $-> 1$. Passer.
+
+    Svar: $h_2(99) in {2, 4, 6}$ — altså (b), (d) og (f).
+  ],
+)
+
+#qcard(
+  tag: [Hashing: hvilke h₂-værdier passer? (double hashing)],
+  source: "MCQ juni 2021, Spm. 10 (flere rigtige)",
+  prompt: [En hashtabel $H$ bruger double hashing med $h_1(x)$ og $h_2(x)$. Tabellen er nu (indeks 0..6): #swap[$0:12$, 1 tom, $2:10$, 3 tom, $4:22$, 5 tom, $6:31$]. Derefter indsættes #swap[97], som ender på plads #swap[1]. Probe-sekvens: $h(x,i) = (h_1(x) + i dot h_2(x)) mod #swap[$7$]$. Hvis #swap[$h_1(97) = 0$], hvilke værdier af $h_2(97)$ er mulige? (et eller flere svar)],
+  options: (
+    [$h_2(97) = 1$],
+    [$h_2(97) = 2$],
+    [$h_2(97) = 3$],
+    [$h_2(97) = 4$],
+    [$h_2(97) = 5$],
+    [$h_2(97) = 6$],
+  ),
+  answer: [Mulighederne (a), (b) og (d): $h_2(97) in #swap[${1, 2, 4}$]$.],
+  blueprint: [
+    Samme fremgang som altid for double hashing: kend $h_1$ og landingspladsen, og prøv hver $h_2$.
+
+    + *Aflæs.* Noter optagne pladser, $m$, $h_1$ og landingspladsen.
+    + *Double hashing.* $h(x,i) = (h_1(x) + i dot h_2(x)) mod m$.
+    + *Prøv hver kandidat* og find dens første tomme plads.
+    + *Behold* de $h_2$, der lander på den observerede plads.
+  ],
+  worked: [
+    Optagne før indsæt: $#swap[${0,2,4,6}$]$. 97 endte på plads #swap[1], $h_1 = #swap[0]$, $m = #swap[7]$.
+
+    - $h_2=1$: $0(o),1$ tom $-> 1$. Passer.
+    - $h_2=2$: $0,2,4,6$ alle optaget, $(8 mod 7=)1$ tom $-> 1$. Passer.
+    - $h_2=3$: $0(o),3$ tom $-> 3$. Forkert.
+    - $h_2=4$: $0(o),4(o),(8 mod 7=)1$ tom $-> 1$. Passer.
+    - $h_2=5$: $0(o),5$ tom $-> 5$. Forkert.
+    - $h_2=6$: $0(o),6(o),(12 mod 7=)5$ tom $-> 5$. Forkert.
+
+    Svar: $h_2(97) in {1, 2, 4}$ — altså (a), (b) og (d).
+  ],
+)
+
+#qcard(
+  tag: [Hashing: hvilke h₂-værdier passer? (double hashing)],
+  source: "MCQ juni 2023, Spm. 10 (flere rigtige)",
+  prompt: [En hashtabel $H$ af længde #swap[$8$] bruger double hashing med $h_1, h_2$. Før indsættelse af #swap[25] (indeks 0..7): #swap[$0:13$, $1:56$, $3:32$, $4:91$, $6:82$], resten tomme. 25 ender på plads #swap[5]. Probe-sekvens: $h(x,i) = (h_1(x) + i dot h_2(x)) mod #swap[$8$]$. Hvis #swap[$h_1(25) = 3$], hvilke værdier af $h_2(25)$ er mulige? (et eller flere svar)],
+  options: (
+    [$h_2(25) = 1$],
+    [$h_2(25) = 2$],
+    [$h_2(25) = 3$],
+    [$h_2(25) = 4$],
+    [$h_2(25) = 5$],
+    [$h_2(25) = 6$],
+    [$h_2(25) = 7$],
+  ),
+  answer: [Mulighederne (a), (b) og (e): $h_2(25) in #swap[${1, 2, 5}$]$.],
+  blueprint: [
+    Bemærk at tabelstørrelsen her er #swap[$8$], ikke 7. Ellers samme fremgang.
+
+    + *Aflæs.* Noter optagne pladser, $m$, $h_1$ og landingspladsen.
+    + *Double hashing.* $h(x,i) = (h_1(x) + i dot h_2(x)) mod m$.
+    + *Prøv hver kandidat* og find dens første tomme plads.
+    + *Behold* de $h_2$, der lander på den observerede plads.
+  ],
+  worked: [
+    Optagne før indsæt: $#swap[${0,1,3,4,6}$]$. 25 endte på plads #swap[5], $h_1 = #swap[3]$, $m = #swap[8]$.
+
+    - $h_2=1$: $3(o),4(o),5$ tom $-> 5$. Passer.
+    - $h_2=2$: $3(o),5$ tom $-> 5$. Passer.
+    - $h_2=3$: $3(o),6(o),(9 mod 8=)1(o),4(o),7$ tom $-> 7$. Forkert.
+    - $h_2=4$: $3(o),7$ tom $-> 7$. Forkert.
+    - $h_2=5$: $3(o),(8 mod 8=)0(o),5$ tom $-> 5$. Passer.
+    - $h_2=6$: $3(o),(9 mod 8=)1(o),7$ tom $-> 7$. Forkert.
+    - $h_2=7$: $3(o),(10 mod 8=)2$ tom $-> 2$. Forkert.
+
+    Svar: $h_2(25) in {1, 2, 5}$ — altså (a), (b) og (e).
+  ],
+)
+
+#qcard(
+  tag: [Hashing: hvilke h₂-værdier passer? (double hashing)],
+  source: "MCQ juni 2025, Spm. 10 (flere rigtige)",
+  prompt: [En hashtabel $H$ af længde #swap[$7$] bruger double hashing med $h_1(x)$ og $h_2(x)$. Før indsættelse: #swap[$H = [47, 50, \_, \_, 35, 21, \_]$] (pladserne 0,1,4,5 optaget; 2,3,6 tomme). #swap[99] indsættes på plads #swap[2]. Probe-sekvens: $h(x,i) = (h_1(x) + i dot h_2(x)) mod #swap[$7$]$. Hvis #swap[$h_2(99) = 2$], hvilke værdier af $h_1(99)$ er mulige? (et eller flere svar)],
+  options: (
+    [$h_1(99) = 0$],
+    [$h_1(99) = 1$],
+    [$h_1(99) = 2$],
+    [$h_1(99) = 3$],
+    [$h_1(99) = 4$],
+    [$h_1(99) = 5$],
+    [$h_1(99) = 6$],
+  ),
+  answer: [Mulighederne (a), (c) og (f): $h_1(99) in #swap[${0, 2, 5}$]$.],
+  blueprint: [
+    Her er det $h_2$ der er fast og $h_1$ der varierer, men sekvensen er den samme. Prøv hver startværdi.
+
+    + *Aflæs.* Noter optagne pladser, $m$, det faste $h_2$ og landingspladsen.
+    + *Double hashing.* $h(x,i) = (h_1(x) + i dot h_2(x)) mod m$.
+    + *Prøv hver kandidat $h_1$* og find dens første tomme plads.
+    + *Behold* de $h_1$, der lander på den observerede plads.
+  ],
+  worked: [
+    Optagne før indsæt: $#swap[${0,1,4,5}$]$. 99 endte på plads #swap[2], $h_2 = #swap[2]$, $m = #swap[7]$. Sekvens $(h_1 + 2i) mod 7$:
+
+    - $h_1=0$: $0(o),2$ tom $-> 2$. Passer.
+    - $h_1=1$: $1(o),3$ tom $-> 3$. Forkert.
+    - $h_1=2$: $2$ tom $-> 2$. Passer.
+    - $h_1=3$: $3$ tom $-> 3$. Forkert.
+    - $h_1=4$: $4(o),6$ tom $-> 6$. Forkert.
+    - $h_1=5$: $5(o),0(o),2$ tom $-> 2$. Passer.
+    - $h_1=6$: $6$ tom $-> 6$. Forkert.
+
+    Svar: $h_1(99) in {0, 2, 5}$ — altså (a), (c) og (f).
+  ],
+)
+
+#qcard(
   tag: [Sortering: hvilke er Θ(n²) i værste fald?],
   source: "MCQ juni 2019, Spm. 27 (worst-case sortering, går igen bredt)",
   prompt: [Vi betragter sortering af #swap[$n$] heltal med værdier i intervallet $[0, #swap[$n^2$])$. Med TreeSort menes algoritmen, der indsætter tallene ét ad gangen i et søgetræ og derefter laver et inorder-gennemløb. Hvilke af følgende algoritmer har worst-case-køretid $Theta(n^2)$? (et eller flere svar)],
@@ -384,5 +920,284 @@ Sletning bruger samme to værktøjer, men er tungere. Du fjerner knuden som i et
     - *InsertionSort:* worst case $Theta(n^2)$. Rammer.
 
     Svar: (a), (e), (f) og (g).
+  ],
+)
+
+#qcard(
+  tag: [Rød-sort træ: gyldig farvelægning? (flere rigtige)],
+  source: "MCQ juni 2015, Spm. 19 (flere rigtige)",
+  prompt: [Hvilke farvelægninger af knuderne i træet gør det til et lovligt rød-sort træ? (et eller flere svar) Træet: rod #swap[$b$] med børn #swap[$a$] og #swap[$d$]; $a$ har to NIL-børn; $d$ har børn $c$ og $e$; både $c$ og $e$ har to NIL-børn.],
+  options: (
+    [Sorte: $b, d$; Røde: $a, c, e$],
+    [Sorte: $a, b, c, e$; Rød: $d$],
+    [Sorte: $a, b, d$; Røde: $c, e$],
+    [Sorte: $a, c, e$; Røde: $b, d$],
+    [Sorte: $a, b, c, d, e$; Røde: ingen],
+  ),
+  answer: [Mulighederne (b) og (c): begge opfylder alle tre rød-sorte regler.],
+  blueprint: [
+    Tegn træet med eksplicitte sorte NIL-blade, og tjek de tre regler på hver kandidat. En farvelægning er kun lovlig, hvis alle tre holder.
+
+    + *List stierne.* Skriv hver rod-til-NIL-sti op.
+    + *Regel 2: roden sort.* Smid enhver farvelægning med rød rod.
+    + *Regel 4: ingen rød-rød.* Smid enhver med en rød knude, der har et rødt barn.
+    + *Regel 5: ens sort-højde.* Tæl sorte knuder (NIL tæller som sort) på hver sti. Alle skal være ens.
+  ],
+  worked: [
+    Stier: $b "-" a "-" "NIL"$, $b "-" d "-" c "-" "NIL"$, $b "-" d "-" e "-" "NIL"$.
+
+    - (a): rod $b$ sort, men $a$-stien har sort-højde 2 mod $d$-stiernes 3. Ulige. Ugyldig.
+    - (b): sorte $a,b,c,e$, rød $d$. Rod sort, $d$'s børn $c,e$ sorte (ingen rød-rød), alle stier sort-højde 3. Gyldig.
+    - (c): sorte $a,b,d$, røde $c,e$. Rod sort, $c,e$ har kun NIL-børn (ingen rød-rød), alle stier sort-højde 3. Gyldig.
+    - (d): $b,d$ røde, så rod ikke sort *og* $b "-" d$ rød-rød. Ugyldig.
+    - (e): alle sorte. $a$-sti sort-højde 3 mod $d$-stiernes 4. Ugyldig.
+
+    Svar: (b) og (c).
+  ],
+)
+
+#qcard(
+  tag: [Rød-sort træ: gyldig farvelægning? (flere rigtige)],
+  source: "MCQ juni 2017, Spm. 19 (flere rigtige)",
+  prompt: [For hvilke af træerne nedenfor kan knuderne farvelægges, så træet bliver et lovligt rød-sort træ? (et eller flere svar) Cirkler er indre knuder, der skal farves rød eller sort; sorte firkanter er NIL-blade.],
+  options: (
+    [Rod med venstre $=$ NIL-blad og højre $=$ indre knude med to NIL-børn.],
+    [Zigzag-kæde: rod (venstre $=$ NIL) $->$ højre indre knude (højre $=$ NIL) $->$ venstre indre knude med to NIL-børn.],
+    [Rod med to indre børn; venstre barn har to indre børn, hvert med to NIL-børn; højre barn har venstre $=$ indre (to NIL), højre $=$ NIL-blad.],
+    [Rod med to indre børn; venstre $=$ (NIL, indre(to NIL)); højre $=$ (indre, NIL), hvor den indre $=$ (NIL, indre(to NIL)).],
+    [Rod med to indre børn; venstre deltræ $=$ ((indre(to NIL), NIL), indre(to NIL)); højre deltræ $=$ (indre(to NIL), indre(to NIL)).],
+  ),
+  answer: [Mulighederne (a), (c) og (e): de kan farvelægges lovligt; (b) og (d) kan ikke (sort-højden kan ikke balanceres).],
+  blueprint: [
+    Et træ kan farvelægges, netop hvis *mindst én* tildeling opfylder alle tre regler. Den afgørende test er som regel sort-højde-balancen.
+
+    + *Læs træet.* Cirkler $=$ indre knuder at farve; firkanter $=$ NIL-blade (altid sorte, tæller 1 sort hver).
+    + *Krav.* Rod sort, ingen rød-rød, og ens sort-højde på hver rod-til-NIL-sti.
+    + *Test balancen.* NIL-blade på vidt forskellige dybder, eller knuder med kun ét barn i kæde, bryder typisk sort-højden.
+    + *Rapportér* hvert træ, der tillader mindst én lovlig farvelægning.
+  ],
+  worked: [
+    Gennemgang (brute-force over alle farvelægninger med de tre regler, NIL $=$ sort $=$ 1):
+
+    - (a): gyldig.
+    - (b): zigzag-kæde med NIL-blade i dybde 1 mod 3+. Ingen sorttælling kan udligne stierne. Ugyldig.
+    - (c): gyldig.
+    - (d): 2-dyb venstre-sti mod 3-dyb højre-sti gennem enkelt-barn-knuder. Sort-højderne kan ikke matche. Ugyldig.
+    - (e): gyldig.
+
+    Svar: (a), (c) og (e).
+  ],
+)
+
+#qcard(
+  tag: [Rød-sort træ: gyldig farvelægning? (flere rigtige)],
+  source: "MCQ juni 2023, Spm. 21 (flere rigtige)",
+  prompt: [Hvilke delmængder af knuder gør træet til et lovligt rød-sort træ, hvis præcis den delmængde farves rød (resten sort)? (et eller flere svar) BST: rod #swap[$5$]; $5$'s børn $3$ og $7$; $3$'s børn $2$ og $4$; $7$'s børn $6$ og $9$; $2$'s venstre barn $1$; $9$'s venstre barn $8$; knuderne $4, 6, 1, 8$ har kun NIL-børn.],
+  options: (
+    [${1, 3, 6, 8, 9}$],
+    [${1, 5, 8}$],
+    [${1, 3, 7, 8}$],
+    [${1, 8}$],
+    [${1, 2, 4, 7, 8}$],
+  ),
+  answer: [Mulighederne (c) og (d): begge er lovlige.],
+  blueprint: [
+    Rekonstruér træet med eksplicitte sorte NIL-blade. En delmængde er lovlig, netop hvis alle tre regler holder.
+
+    + *Rod sort.* Smid enhver delmængde, der farver roden rød.
+    + *Ingen rød-rød.* Smid enhver, hvor en rød knude har et rødt barn.
+    + *Ens sort-højde.* Tæl sorte (NIL $=$ sort) på hver rod-til-NIL-sti. Alle skal være ens.
+    + *Behold* de delmængder, der består alle tre.
+  ],
+  worked: [
+    - (a) ${1,3,6,8,9}$: 9 rød med rødt barn 8. Rød-rød. Ugyldig.
+    - (b) ${1,5,8}$: rod 5 rød. Ugyldig.
+    - (c) ${1,3,7,8}$: rod sort, ingen rød-rød, alle sort-højder 3. Gyldig.
+    - (d) ${1,8}$: rod sort, ingen rød-rød, alle sort-højder 4. Gyldig.
+    - (e) ${1,2,4,7,8}$: 2 rød med rødt barn 1. Rød-rød. Ugyldig.
+
+    Svar: (c) og (d).
+  ],
+)
+
+#qcard(
+  tag: [Rød-sort træ: gyldig farvelægning? (flere rigtige)],
+  source: "MCQ juni 2025, Spm. 23 (flere rigtige)",
+  prompt: [Hvilke delmængder af knuder gør træet til et lovligt rød-sort træ, når de farves rød (resten sort)? (et eller flere svar) BST: rod #swap[$5$]; $5 ->$ venstre $3$, højre $8$; $3 ->$ venstre $1$, højre $4$; $8 ->$ venstre $6$, højre $9$; $1 ->$ højre barn $2$; $6 ->$ venstre barn $7$. NIL-blade er sorte.],
+  options: (
+    [${2, 7}$],
+    [${1, 2, 4, 7, 8}$],
+    [${2, 5, 7}$],
+    [${2, 3, 6, 7, 9}$],
+    [${2, 3, 7, 8}$],
+  ),
+  answer: [Mulighederne (a) og (e): begge er lovlige.],
+  blueprint: [
+    Samme tre regler. Bemærk dybderne: rod, niveau 2, niveau 3, niveau 4 — sort-højden skal stemme over alle stier.
+
+    + *Rod sort.* Smid delmængder med rød rod.
+    + *Ingen rød-rød.* Smid delmængder med en rød knude, der har et rødt barn.
+    + *Ens sort-højde.* Tæl sorte (NIL $=$ sort) på hver sti.
+    + *Behold* dem, der består alle tre.
+  ],
+  worked: [
+    Dybder: rod $5$; niveau 2 ${3,8}$; niveau 3 ${1,4,6,9}$; niveau 4 ${2,7}$.
+
+    - (a) ${2,7}$: rod sort. Røde 2 og 7 er dybest med sorte NIL-børn, ingen rød-rød. Alle stier sort-højde 4. Gyldig.
+    - (b) ${1,2,4,7,8}$: 1 rød med rødt barn 2. Rød-rød. Ugyldig.
+    - (c) ${2,5,7}$: rod 5 rød. Ugyldig.
+    - (d) ${2,3,6,7,9}$: 6 rød med rødt barn 7. Rød-rød. Ugyldig.
+    - (e) ${2,3,7,8}$: rod sort. Røde 3 (sorte børn 1,4), 8 (sorte børn 6,9), plus blade 2,7. Ingen rød-rød, alle stier sort-højde 3. Gyldig.
+
+    Svar: (a) og (e).
+  ],
+)
+
+#qcard(
+  tag: [Rød-sort træ: gyldig farvelægning? (flere rigtige)],
+  source: "MCQ juni 2019, Spm. 23",
+  prompt: [På hvor mange måder kan knuderne i træet farves, så det bliver et lovligt rød-sort træ? Cirkler er indre knuder (farves rød eller sort), sorte firkanter er NIL-blade. Struktur: rod med børn #swap[$A$] og #swap[$B$]; $A ->$ børn $A_1, A_2$, hver med to NIL-børn; $B ->$ børn $B_1$ og $B_2$; $B_1$ har venstre NIL og højre indre knude $C$ (to NIL-børn); $B_2$ har venstre NIL og højre indre knude $D$; $D$ har venstre NIL og højre indre knude $E$ (to NIL-børn). Rod-til-NIL-stierne passerer 3, 4 eller 5 indre knuder.],
+  options: (
+    [På ingen måder.],
+    [På én måde.],
+    [På to måder.],
+    [På tre måder.],
+    [På fire måder.],
+  ),
+  answer: [Mulighed (a): på ingen måder.],
+  blueprint: [
+    En farvelægning er lovlig, netop hvis alle tre regler holder samtidig. Står stiernes længder i forvejen for skævt, kan sort-højden ikke reddes, uanset farverne.
+
+    + *Læs træet.* Cirkler $=$ indre knuder at farve; firkanter $=$ NIL-blade (altid sorte, tæller 1 sort hver).
+    + *Krav.* Rod sort, ingen rød-rød, og ens sort-højde på hver rod-til-NIL-sti.
+    + *Tjek balancen.* Tæl indre knuder på den korteste og den længste sti. Spænder de over flere niveauer, må de korte stier hente ekstra sorte et sted fra — og det kan røde knuder ikke give.
+    + *Konkludér.* Findes der ingen tildeling med ens sort-højde og ingen rød-rød, er svaret "på ingen måder".
+  ],
+  worked: [
+    Indre knuder: rod, $A$, $B$, $A_1$, $A_2$, $B_1$, $B_2$, $C$, $D$, $E$ (10 i alt). NIL-bladene er sorte.
+
+    + Korteste rod-til-NIL-sti går gennem 3 indre knuder (fx rod-$A$-$A_1$), længste gennem 5 (rod-$B$-$B_2$-$D$-$E$).
+    + En lovlig farvelægning kræver samme sort-højde overalt, rod sort og ingen to røde i træk.
+    + Den korte gren har kun 3 knuder at fordele sorte på, den lange 5. For at matche sort-højden måtte den lange gren gøre to af sine knuder røde i træk — det bryder regel 4.
+    + Gennemsøger man alle $2^(10)$ farvelægninger med rod sort, ingen rød-rød og fælles sort-højde, overlever ingen.
+
+    Svar: mulighed (a), på ingen måder.
+  ],
+)
+
+#qcard(
+  tag: [Rød-sort træ: indsæt og ret op],
+  source: "MCQ juni 2015, Spm. 20",
+  prompt: [I det rød-sorte træ indsættes #swap[$11$] med lærebogens algoritme. Hvordan ser træet ud bagefter? Starttræ: rod #swap[$5$] (sort); $5 ->$ venstre $3$ (sort), højre $7$ (rød); $3 ->$ børn $2$ (rød), $4$ (rød); $7 ->$ børn $6$ (sort), $9$ (sort); $9 ->$ børn $8$ (rød), $10$ (rød).],
+  options: (
+    [$11$ indsat som rødt højrebarn af $10$; ingen omfarvning/rotation (rød-rød ikke rettet).],
+    [Forkert omfarvnings-/rotationskonfiguration: $3,4,6,7,8,10$ sorte, $9$ rød, $11$ rød under $10$.],
+    [Rod $7$ (sort); $7 ->$ venstre $5$ (rød), højre $9$ (rød); $5 ->$ venstre $3$ (sort) [med $2,4$ røde], højre $6$ (sort); $9 ->$ venstre $8$ (sort), højre $10$ (sort) med rødt højrebarn $11$.],
+    [Forkert rotation: rod $5$; $5 ->$ højre $9$; $9 ->$ venstre $7$ med børn $6,8$, højre $10$ med $11$; venstre side $3,2,4$.],
+  ),
+  answer: [Mulighed (c).],
+  blueprint: [
+    Indsæt som rødt blad, og ret op opefter. Vælg rette tilfælde efter onklens farve, og tving roden sort til sidst.
+
+    + *BST-indsæt* nøglen som et rødt blad.
+    + *Mens forælderen er rød*, kig på onklen.
+    + *Onkel rød:* farv forælder og onkel sorte, bedsteforælder rød, ryk $z$ op til bedsteforælderen, gentag.
+    + *Onkel sort/NIL:* rotation. Ret først knækket ud (inderside $->$ rotér forælder), farv så forælder sort og bedsteforælder rød, og rotér bedsteforælderen.
+    + *Til sidst:* tving roden sort, og match resultatet.
+  ],
+  worked: [
+    + BST-indsæt: $11 > 5,7,9,10$, så $11$ bliver rødt højrebarn af $10$.
+    + Rød-rød: forælder $10$(R), $z = 11$. Bedsteforælder $9$(B), onkel $= 8$(R), rød $->$ omfarv: $10 -> $B, $8 -> $B, $9 -> $R; $z$ rykker op til $9$.
+    + Ny rød-rød: $z = 9$(R), forælder $7$(R). Bedsteforælder $5$(B), onkel $= 3$(B), sort $->$ rotation. $9$ er højrebarn af $7$, og $7$ er højrebarn af $5$ (lige højre-højre-linje): farv $7 -> $B, $5 -> $R og venstrerotér om $5$.
+    + $7$ stiger op som rod; $5$ bliver $7$'s venstrebarn (gamle venstre $3$ følger med, gamle højre $6$ flyttes til $5$'s højre), $9$ forbliver $7$'s højrebarn. Tving rod $7$ sort.
+
+    Slut: $7$(B); $5$(R), $9$(R) som børn; $3$(B)[$2$R,$4$R], $6$(B) under $5$; $8$(B), $10$(B) under $9$; $11$(R) under $10$. Det er mulighed (c).
+  ],
+)
+
+#qcard(
+  tag: [Rød-sort træ: indsæt og ret op],
+  source: "MCQ juni 2021, Spm. 23",
+  prompt: [Indsæt nøglen #swap[$21$] i det rød-sorte træ (dobbeltcirkler $=$ røde). Starttræ: rod #swap[$24$] (sort); venstre $18$ (rød) med venstre $5$ (sort, med røde børn $2$ og $7$) og højre $20$ (sort, med rødt højrebarn $23$); rodens højre $26$ (sort, med rødt højrebarn $27$). Hvilket træ er resultatet?],
+  options: (
+    [Naiv BST-indsæt: $20$(sort) beholder rødt højrebarn $23$, og $23$ får nyt rødt venstrebarn $21$. Rød-rød ikke rettet.],
+    [Hele træet omstruktureret med $21$ som ny rod, $5$(rød) og $26$(rød) som børn.],
+    [Under $18$: $21$ er sort og sidder, hvor $20$ var, med røde børn $20$ og $23$. Resten uændret.],
+    [Under $18$: $20$ forbliver sort, dens røde højrebarn $23$ får et nyt rødt venstrebarn $21$ (kun-omfarvning, ingen rotation).],
+  ),
+  answer: [Mulighed (c).],
+  blueprint: [
+    BST-indsæt som rød, ret så op. Er forælderen rød og onklen sort/NIL, er det et rotationstilfælde — ikke kun omfarvning.
+
+    + *BST-indsæt* nøglen som rød.
+    + *Tjek forælder.* Sort $->$ færdig. Rød $->$ kig på onklen.
+    + *Onkel sort/NIL: trinode-omstrukturering.* Tag bedsteforælder, forælder, barn; medianen rykker op og bliver sort, de to andre bliver dens røde børn.
+    + *Match* slutkonfigurationen.
+  ],
+  worked: [
+    + BST-sti for $21$: $21 < 24$ venstre til $18$; $21 > 18$ højre til $20$; $21 > 20$ højre til $23$; $21 < 23$ indsæt $21$ som rødt venstrebarn af $23$.
+    + Rød-rød: $23$(R) og barn $21$(R). Forælder $23$ er højrebarn af bedsteforælder $20$(B); onkel ($20$'s venstre) er NIL/sort; $21$ er venstrebarn af $23$ — en venstre-højre zigzag.
+    + Trinode: median af ${20,21,23}$ er $21$, som rykker ind på $20$'s plads med $20$ som venstrebarn og $23$ som højrebarn; farv $21$ sort, $20$ og $23$ røde.
+    + Deltræet under $18$'s højre-link: $21$(B) med børn $20$(R) og $23$(R). Resten urørt.
+
+    Svar: mulighed (c).
+  ],
+)
+
+#qcard(
+  tag: [Rød-sort træ: indsæt og ret op],
+  source: "MCQ juni 2023, Spm. 22",
+  prompt: [Indsæt nøglen #swap[$25$] i det rød-sorte træ (dobbeltcirkler $=$ røde). Starttræ: rod #swap[$18$] (sort); venstre $9$ (rød), $9 ->$ venstre $7$ (sort) med venstre rødt $4$, $9 ->$ højre $15$ (sort) med røde børn $11$ og $16$; rodens højre $21$ (sort), $21 ->$ venstre NIL, højre $24$ (rød). Hvilket træ er resultatet?],
+  options: (
+    [Højre $21$(sort), $21 ->$ højre $24$(rød), $24 ->$ højre $25$(rød); rød-rød $24 "-" 25$ ikke rettet.],
+    [Fuldt omstruktureret træ med rod $16$.],
+    [Højre barn $24$(sort) med røde børn $21$ og $25$; venstre deltræ uændret.],
+    [Højre $21$(sort), $21 ->$ højre $24$(rød), $24 ->$ højre $25$(rød); rød-rød ikke rettet.],
+  ),
+  answer: [Mulighed (c).],
+  blueprint: [
+    Indsæt som rødt blad. Sort forælder $->$ færdig; rød forælder $->$ kig på onklen. Sort/NIL onkel betyder rotation: lige linje (LL/RR) er én rotation, knæk (LR/RL) to.
+
+    + *BST-indsæt* den nye nøgle som rødt blad.
+    + *Forælder sort?* Færdig.
+    + *Forælder rød, onkel rød?* Omfarv og ryk op.
+    + *Forælder rød, onkel sort/NIL?* Rotér. Den nye deltræs-rod bliver sort, dens børn røde. Hold roden sort.
+  ],
+  worked: [
+    + Indsæt: $25 > 18$ højre til $21$, $25 > 21$ højre til $24$, $25 > 24$ som rødt højrebarn af $24$.
+    + Rød-rød: $24$(R) forælder til $25$(R); bedsteforælder $21$(sort), onkel $= 21$'s venstre $=$ NIL (sort).
+    + $25$ er højrebarn af $24$, og $24$ er højrebarn af $21$: lige RR-linje. Venstrerotér om $21$: $24$ stiger op under $18$, $24 ->$ venstre $21$, højre $25$; farv $24$ sort, $21$ rød, $25$ forbliver rød.
+
+    Svar: mulighed (c).
+  ],
+)
+
+#qcard(
+  tag: [Rød-sort træ: indsæt og ret op],
+  source: "MCQ juni 2025, Spm. 24",
+  prompt: [Indsæt nøglen #swap[$10$] i det rød-sorte træ (dobbeltcirkler $=$ røde). Starttræ: rod #swap[$22$] (sort); venstre $17$ (rød); $17 ->$ venstre $8$ (sort) med rødt højrebarn $12$; $17 ->$ højre $20$ (sort) med røde børn $19$ (venstre), $21$ (højre); rodens højre $25$ (sort) med rødt højrebarn $26$. Hvilket træ er resultatet?],
+  options: (
+    [Ny rod $20$: $20$(B) med røde børn $17$ og $25$; $17$ har børn $10$(B) [med røde $8, 12$] og $19$; $25$ har børn $22$ og $26$.],
+    [Samme form som start, men $10$ indsat som rødt venstrebarn af $12$, ingen rebalancering.],
+    [Samme som start, men $10$ indsat som sort venstrebarn af rødt $12$ under $8$, ingen rotation.],
+    [Under $17$'s venstre erstatter knude $10$ (sort) $8$'s plads, med røde børn $8$ (venstre) og $12$ (højre), begge blade; højre side ($20,19,21$) og $25,26,22$ uændret.],
+  ),
+  answer: [Mulighed (d).],
+  blueprint: [
+    Indsæt som rødt blad, og ret op. Sort/NIL onkel $->$ rotation: LL/RR er enkelt, LR/RL er dobbelt. Den nye deltræs-rod bliver sort med røde børn.
+
+    + *BST-indsæt* nøglen som rødt blad.
+    + *Forælder sort?* Færdig.
+    + *Forælder rød, onkel rød?* Omfarv og ryk op.
+    + *Forælder rød, onkel sort/NIL?* Rotér efter linjens form (lige eller knæk).
+    + *Hold roden sort.*
+  ],
+  worked: [
+    + BST-indsæt $10$: $10 < 22$ venstre til $17$; $10 < 17$ venstre til $8$; $10 > 8$ højre til rødt $12$; $10 < 12$ venstre. Indsæt $10$ som rødt venstrebarn af $12$.
+    + Rød-rød: $10$(R) og forælder $12$(R). Bedsteforælder $8$(B); onkel $= 8$'s venstre $=$ NIL (sort) $->$ rotation.
+    + $12$ er højrebarn af $8$, og $10$ er venstrebarn af $12$ $->$ højre-venstre (RL): højrerotér om $12$, så venstrerotér om $8$, så $10$ bliver deltræs-rod med $8$ (venstre) og $12$ (højre).
+    + Omfarv: $10$ sort, børnene $8$ og $12$ røde, begge blade. Resten urørt, sort-højden bevaret.
+
+    Svar: mulighed (d).
   ],
 )

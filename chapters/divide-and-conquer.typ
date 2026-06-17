@@ -2,7 +2,7 @@
 
 == Divide & Conquer
 
-Divide-and-conquer er rekursion som designmetode: del problemet i mindre stykker af samme slags, løs hvert rekursivt og saml svarene. Basistilfældet løses direkte.
+Divide-and-conquer er rekursion (recursion) som designmetode: del problemet i mindre stykker af samme slags, løs hvert rekursivt og saml svarene. Basistilfældet (base case) løses direkte.
 
 De tre trin:
 
@@ -13,7 +13,7 @@ De tre trin:
   [*Kombinér.* Lim delsvarene sammen til det fulde svar.],
 )
 
-Hvert kald deler i #swap[$a$] delproblemer af størrelse #swap[$n/b$] og bruger #swap[$f(n)$] arbejde på at dele op og kombinere. Det giver rekursionsligningen:
+Hvert kald deler i #swap[$a$] delproblemer af størrelse #swap[$n/b$] og bruger #swap[$f(n)$] arbejde på at dele op og kombinere. Det giver rekursionsligningen (recurrence):
 
 #eq[$ T(n) = a thin T(n/b) + f(n) $]
 
@@ -29,9 +29,9 @@ Den løses med Master Theorem: sammenlign $f(n)$ med $n^(log_b a)$ og find det d
   [Opstil rekursionsligningen og løs den med Master Theorem (se kapitlet om rekursionsligninger).],
 )
 
-#note(title: [Rekursionstræet])[Rekursionstræet er kontrolflowet tegnet ud: hver knude er ét kald, roden er det øverste kald, bladene er basistilfælde. Afviklingen er dybde-først: ned i et barn, bliv færdig, videre til næste. Kaldstakken er stien fra rod til det kald, du er i nu.]
+#note(title: [Rekursionstræet])[Rekursionstræet (recursion tree) er kontrolflowet tegnet ud: hver knude er ét kald, roden er det øverste kald, bladene er basistilfælde. Afviklingen er dybde-først (depth-first): ned i et barn, bliv færdig, videre til næste. Kaldstakken (call stack) er stien fra rod til det kald, du er i nu.]
 
-==== Strassen: matrixmultiplikation
+==== Strassen: matrixmultiplikation (matrix multiplication)
 
 Naiv multiplikation af to $n times n$-matricer koster $Theta(n^3)$: hver af de $n^2$ outputtal er et prikprodukt med $n$ multiplikationer.
 

@@ -2,11 +2,11 @@
 
 == Relationer, ækvivalens og ordning
 
-En relation på $A$ er en samling ordnede par fra $A$. Du skriver $(a,b) in R$ når $a$ er relateret til $b$:
+En relation (relation) på $A$ er en samling ordnede par (ordered pairs) fra $A$. Du skriver $(a,b) in R$ når $a$ er relateret til $b$:
 
 #eq[$ R subset.eq A times A $]
 
-Til eksamen får du en relation som liste, matrix eller graf. Du skal afgøre hvilke egenskaber den har, om den er ækvivalensrelation eller ordning, eller udregne en lukning eller ækvivalensklasserne. Alt bygger på fire egenskaber og tre definitioner.
+Til eksamen får du en relation som liste, matrix eller graf. Du skal afgøre hvilke egenskaber den har, om den er ækvivalensrelation (equivalence relation) eller ordning (order), eller udregne en lukning (closure) eller ækvivalensklasserne (equivalence classes). Alt bygger på fire egenskaber og tre definitioner.
 
 === Sådan løser du den
 
@@ -14,16 +14,16 @@ Læs relationen som en graf: hvert element er en knude, og $(a,b) in R$ er en pi
 
 #recipe(
   title: "Tjek de fire egenskaber",
-  [*Refleksiv.* Hvert element peger på sig selv.
+  [*Refleksiv (reflexive).* Hvert element peger på sig selv.
   #eq[$ (a,a) in R "for alle" a in A $]
   Graf: løkke på hver knude. Matrix: hele diagonalen er $1$. Mangler bare én løkke, er den ikke refleksiv.],
-  [*Symmetrisk.* Går en pil den ene vej, går den også den anden.
+  [*Symmetrisk (symmetric).* Går en pil den ene vej, går den også den anden.
   #eq[$ (a,b) in R ==> (b,a) in R $]
   Hver pil skal have sin modsatte. Én pil uden makker vælter det.],
-  [*Antisymmetrisk.* To forskellige elementer peger aldrig begge veje.
+  [*Antisymmetrisk (antisymmetric).* To forskellige elementer peger aldrig begge veje.
   #eq[$ (a,b) in R and (b,a) in R ==> a = b $]
   Find ét par $(a,b)$ og $(b,a)$ med $a != b$, så fejler den. Løkker er tilladt.],
-  [*Transitiv.* Kan du gå $a -> b -> c$, skal genvejen $a -> c$ også være der.
+  [*Transitiv (transitive).* Kan du gå $a -> b -> c$, skal genvejen $a -> c$ også være der.
   #eq[$ (a,b) in R and (b,c) in R ==> (a,c) in R $]
   Tjek hver to-trins-kæde for sin genvej. Ét hul vælter det.],
 )
@@ -34,22 +34,22 @@ Antisymmetrisk er ikke det modsatte af symmetrisk. En relation kan være begge d
   title: "Klassificér relationen",
   [*Ækvivalensrelation:* refleksiv, symmetrisk og transitiv. Den deler $A$ op i klasser. Klassen for $a$ er alt, $a$ er relateret til:
   #eq[$ [a] = { x in A mid(|) (a,x) in R } $]
-  Klasserne overlapper ikke og dækker hele $A$ — en partition.],
-  [*Partiel ordning:* refleksiv, antisymmetrisk og transitiv. Som ækvivalens, men antisymmetrisk i stedet for symmetrisk. Eksempler: $<=$ på tal og "går op i" på heltal.],
-  [*Total ordning:* en partiel ordning hvor alle par kan sammenlignes, altså $(a,b) in R$ eller $(b,a) in R$ for ethvert par. $<=$ er total; "går op i" er ikke ($2$ og $3$ går ikke op i hinanden).],
+  Klasserne overlapper ikke og dækker hele $A$ — en partition (partition).],
+  [*Partiel ordning (partial order):* refleksiv, antisymmetrisk og transitiv. Som ækvivalens, men antisymmetrisk i stedet for symmetrisk. Eksempler: $<=$ på tal og "går op i" på heltal.],
+  [*Total ordning (total order):* en partiel ordning hvor alle par kan sammenlignes, altså $(a,b) in R$ eller $(b,a) in R$ for ethvert par. $<=$ er total; "går op i" er ikke ($2$ og $3$ går ikke op i hinanden).],
 )
 
 En lukning er den mindste relation, der indeholder $R$ og har en ønsket egenskab. Du tilføjer kun par, fjerner aldrig.
 
 #recipe(
   title: "Udregn en lukning",
-  [*Refleksiv lukning:* tilføj en løkke på hvert element i $A$.
+  [*Refleksiv lukning (reflexive closure):* tilføj en løkke på hvert element i $A$.
   #eq[$ r(R) = R union { (a,a) mid(|) a in A } $]
   Husk også løkker på elementer, der ikke optræder i noget par.],
-  [*Symmetrisk lukning:* tilføj den modsatte af hvert par.
+  [*Symmetrisk lukning (symmetric closure):* tilføj den modsatte af hvert par.
   #eq[$ s(R) = R union R^(-1) $]
   Tilføj ikke diagonalløkker — det hører til den refleksive lukning.],
-  [*Transitiv lukning:* tilføj genveje, til der ikke er flere.
+  [*Transitiv lukning (transitive closure):* tilføj genveje, til der ikke er flere.
   #eq[$ t(R): quad (a,b), (b,c) in R ==> "tilføj" (a,c) $]
   Gentag på den voksende mængde, til intet nyt dukker op. $(a,c)$ er med, hvis der findes en sti fra $a$ til $c$ i grafen.],
 )
@@ -60,7 +60,7 @@ En lukning er den mindste relation, der indeholder $R$ og har en ønsket egenska
 
 #trap(title: [Refleksiv lukning])[Refleksiv lukning rammer hvert element i $A$, også dem uden par. På $A = {1,2,3,4}$ med $R = {(1,3),(2,2)}$ tilføjer du $(1,1), (3,3)$ og $(4,4)$, selvom $4$ ikke står i noget par.]
 
-Et *Hasse-diagram* tegner en partiel ordning uden støj. Fjern alle løkker og hver kant, der følger af transitivitet; behold kun kanter, hvor intet element ligger strengt imellem. Tegn det mindste element nederst og udelad pilespidser. Et element er maksimalt, hvis ingen linje går opad fra det, og minimalt, hvis ingen går nedad.
+Et *Hasse-diagram (Hasse diagram)* tegner en partiel ordning uden støj. Fjern alle løkker og hver kant, der følger af transitivitet; behold kun kanter, hvor intet element ligger strengt imellem. Tegn det mindste element nederst og udelad pilespidser. Et element er maksimalt (maximal), hvis ingen linje går opad fra det, og minimalt (minimal), hvis ingen går nedad.
 
 === Tilbagevendende eksamensspørgsmål
 
@@ -97,6 +97,42 @@ Et *Hasse-diagram* tegner en partiel ordning uden støj. Fjern alle løkker og h
     Ækvivalensrelation kræver refleksiv, og partiel ordning kræver antisymmetrisk. Begge fejler, så ingen af dem holder.
 
     Svar: kun (b).
+  ],
+)
+
+#qcard(
+  tag: [Relation: hvilke egenskaber har den?],
+  source: "MCQ juni 2021, Spm. 37 (flere rigtige)",
+  prompt: [Betragt relationen $R$ på ${a,b,c}$: $R = #swap[${(a,a),(a,b),(a,c),(b,b),(b,c),(c,c)}$]$. Hvilke udsagn om $R$ er sande?],
+  options: (
+    [$R$ er refleksiv],
+    [$R$ er symmetrisk],
+    [$R$ er antisymmetrisk],
+    [$R$ er transitiv],
+    [$R$ er en ækvivalensrelation],
+    [$R$ er en partiel ordning],
+  ),
+  answer: [Mulighed (a), (c), (d), (f): $R$ er refleksiv, antisymmetrisk, transitiv og en partiel ordning.],
+  blueprint: [
+    Du har en relation som liste og skal afgøre hvilke egenskaber den har. Gå de fire grundegenskaber igennem hver for sig, og lad de to klassificeringer falde ud af dem.
+
+    + *Refleksiv?* Tjek at $(x,x)$ er med for hvert element i #swap[grundmængden]. Mangler bare én løkke, er svaret nej.
+    + *Symmetrisk?* Har hvert par $(x,y)$ sin makker $(y,x)$? Ét par uden makker vælter den.
+    + *Antisymmetrisk?* Find to forskellige elementer hvor både $(x,y)$ og $(y,x)$ er med. Findes et sådant par, er den ikke antisymmetrisk.
+    + *Transitiv?* For hver kæde $(x,y),(y,z)$ skal genvejen $(x,z)$ være der. Ét manglende par vælter den.
+    + Saml op: refleksiv + symmetrisk + transitiv giver ækvivalensrelation, refleksiv + antisymmetrisk + transitiv giver partiel ordning.
+  ],
+  worked: [
+    Relationen er #swap[${(a,a),(a,b),(a,c),(b,b),(b,c),(c,c)}$] på ${a,b,c}$.
+
+    - *Refleksiv?* $(a,a),(b,b),(c,c)$ er alle med #sym.arrow.r ja.
+    - *Symmetrisk?* $(a,b)$ er med, men $(b,a)$ mangler #sym.arrow.r nej.
+    - *Antisymmetrisk?* De eneste tovejspar er på diagonalen, så $x = y$ holder #sym.arrow.r ja.
+    - *Transitiv?* $(a,b),(b,c)$ lukker med $(a,c)$, som er der; alle kæder lukker #sym.arrow.r ja.
+
+    Ækvivalensrelation kræver symmetri, som fejler. Partiel ordning kræver refleksiv, antisymmetrisk og transitiv, som alle holder.
+
+    Svar: (a), (c), (d), (f).
   ],
 )
 
@@ -164,6 +200,47 @@ Et *Hasse-diagram* tegner en partiel ordning uden støj. Fjern alle løkker og h
 )
 
 #qcard(
+  tag: [Lukning: udregn den transitive lukning],
+  source: "MCQ juni 2021, Spm. 38",
+  prompt: [Angiv den transitive lukning af $#swap[${(a,b),(a,c),(b,b),(c,d),(d,e)}$]$.],
+  options: (
+    [${}$ (tom mængde)],
+    [${(b,b)}$],
+    [${(a,d),(c,e)}$],
+    [${(a,d),(a,e),(c,e)}$],
+    [${(b,a),(c,a),(d,c),(e,d)}$],
+    [${(a,b),(a,c),(b,b),(c,d),(d,e)}$],
+    [${(a,b),(a,c),(a,d),(b,b),(c,d),(c,e),(d,e)}$],
+    [${(a,b),(a,c),(a,d),(a,e),(b,b),(c,d),(c,e),(d,e)}$],
+    [${(a,b),(a,c),(b,a),(b,b),(c,a),(c,d),(d,c),(d,e),(e,d)}$],
+    [${(a,a),(a,b),(a,c),(b,b),(c,c),(c,d),(d,d),(d,e),(e,e)}$],
+    [Relationen har ingen transitiv lukning.],
+  ),
+  answer: [Mulighed (h): ${(a,b),(a,c),(a,d),(a,e),(b,b),(c,d),(c,e),(d,e)}$.],
+  blueprint: [
+    Den transitive lukning tilføjer en genvej hver gang du kan gå to skridt. Læs #swap[relationen] som en graf og tilføj par til det stopper.
+
+    + Skriv #swap[relationen] op som kanter i en graf, og behold alle par.
+    + Find hver kæde $(x,y),(y,z)$ og tilføj genvejen $(x,z)$, hvis den ikke allerede er der.
+    + Kør runden igen på den større mængde, for de nye par kan selv åbne nye genveje.
+    + Stop når en hel runde ikke tilføjer noget. Sammenlign så med mulighederne og vælg den, der matcher præcist.
+  ],
+  worked: [
+    Relationen er #swap[${(a,b),(a,c),(b,b),(c,d),(d,e)}$].
+
+    Følg stierne og tilføj genveje:
+
+    - $a -> c -> d$ #sym.arrow.r tilføj $(a,d)$.
+    - $a -> d -> e$ #sym.arrow.r tilføj $(a,e)$.
+    - $c -> d -> e$ #sym.arrow.r tilføj $(c,e)$.
+
+    $(b,b)$ er en løkke og åbner ingen nye genveje. En runde mere tilføjer intet.
+
+    Svar: $t(R) = {(a,b),(a,c),(a,d),(a,e),(b,b),(c,d),(c,e),(d,e)}$.
+  ],
+)
+
+#qcard(
   tag: [Lukning: udregn den symmetriske lukning],
   source: "DM547 januar 2021, Spørgsmål 7 (3%)",
   prompt: [Angiv den symmetriske lukning af $T = #swap[${(a,b),(b,b),(c,d),(d,e)}$]$.],
@@ -195,7 +272,7 @@ Et *Hasse-diagram* tegner en partiel ordning uden støj. Fjern alle løkker og h
 #qcard(
   tag: [Relation: hvilke egenskaber har den? (digraf)],
   source: "DM547 januar 2021, Spørgsmål 6 (8%)",
-  prompt: [En digraf for relationen $S$ på ${a,b,c,d,e,f}$ har løkker på $a,b,e,f$, kanterne $a->b$, $a->c$, $a->d$, $a->e$, $b->e$, $c->d$, $f->d$, og tovejsparret $e<->f$. Hvilke af følgende gælder: refleksiv, symmetrisk, antisymmetrisk, transitiv, ækvivalensrelation, partiel ordning, total ordning?],
+  prompt: [En digraf (digraph) for relationen $S$ på ${a,b,c,d,e,f}$ har løkker på $a,b,e,f$, kanterne $a->b$, $a->c$, $a->d$, $a->e$, $b->e$, $c->d$, $f->d$, og tovejsparret $e<->f$. Hvilke af følgende gælder: refleksiv, symmetrisk, antisymmetrisk, transitiv, ækvivalensrelation, partiel ordning, total ordning?],
   answer: [Ingen af dem.],
   blueprint: [
     Her får du relationen som en digraf i stedet for en liste. De fire egenskaber bliver til ting du aflæser direkte på tegningen.

@@ -2,15 +2,15 @@
 
 == Udsagnslogik og sandhedstabeller
 
-Et udsagn er enten sandt eller falsk. Konnektiverne $not$ (ikke), $and$ (og), $or$ (eller), $->$ (medfører), $<->$ (hvis og kun hvis) og $plus.o$ (XOR) binder udsagn sammen til større udsagn.
+Et udsagn (proposition) er enten sandt eller falsk. Konnektiverne (connectives) $not$ (ikke), $and$ (og), $or$ (eller), $->$ (medfører), $<->$ (hvis og kun hvis) og $plus.o$ (XOR) binder udsagn sammen til større udsagn.
 
-En sandhedstabel skriver alle muligheder op. Hver variabel er sand (T) eller falsk (F), så $n$ variable giver
+En sandhedstabel (truth table) skriver alle muligheder op. Hver variabel er sand (T) eller falsk (F), så $n$ variable giver
 
 #eq[$ 2^n $]
 
 rækker. For hver række afgør du, om hele udsagnet er sandt.
 
-Eksamen giver en liste påstande og spørger, hvilke der er sande. Du skal kunne fire ting: afgøre om to udsagn er ækvivalente, om et udsagn er en tautologi, om det er opfyldeligt, og antal rækker i tabellen.
+Eksamen giver en liste påstande og spørger, hvilke der er sande. Du skal kunne fire ting: afgøre om to udsagn er ækvivalente (equivalent), om et udsagn er en tautologi (tautology), om det er opfyldeligt (satisfiable), og antal rækker i tabellen.
 
 === Sådan løser du den
 
@@ -35,13 +35,13 @@ Lær de fire grundkonnektiver udenad.
   [Tæl de forskellige variable. Med $n$ får tabellen #swap[$2^n$] rækker, én per kombination af T og F.],
   [Lav en kolonne per deludtryk, inderste først: negationer, så $and$ og $or$, så $->$, $<->$ og $plus.o$.],
   [Udfyld kolonnerne efter tabellen ovenfor, op til hele formlen.],
-  [Læs sidste kolonne: alle T er tautologi, alle F kontradiktion, blandet kontingens.],
+  [Læs sidste kolonne: alle T er tautologi, alle F kontradiktion (contradiction), blandet kontingens (contingency).],
 )
 
 #recipe(
   title: "Svar på de fire spørgsmålstyper",
   [*Ækvivalens* ($A equiv B$): stil de to kolonner op side om side. Ens i alle rækker betyder ækvivalente; én afvigende række afgør det.],
-  [*Tautologi*: sidste kolonne er T overalt. Genvej for $X -> Y$: antag det falsk ($X$ sand, $Y$ falsk) og søg en modstrid. Findes ingen, er det en tautologi.],
+  [*Tautologi*: sidste kolonne er T overalt. Genvej for $X -> Y$: antag det falsk ($X$ sand, $Y$ falsk) og søg en modstrid (contradiction). Findes ingen, er det en tautologi.],
   [*Opfyldelig* ("kan $p$ tildeles, så $Z$ bliver sand"): ja, hvis blot én række gør $Z$ sand.],
   [*Antal rækker*: $2^n$, hvor $n$ er antal #swap[forskellige] variable.],
 )
@@ -50,17 +50,17 @@ Lær de tilbagevendende ækvivalenser udenad. De Morgan:
 
 #eq[$ not(p and q) equiv not p or not q quad quad not(p or q) equiv not p and not q $]
 
-Materiel implikation og kontraposition:
+Materiel implikation (material implication) og kontraposition (contraposition):
 
 #eq[$ p -> q equiv not p or q quad quad p -> q equiv not q -> not p $]
 
-Biimplikation:
+Biimplikation (biconditional):
 
 #eq[$ p <-> q equiv (p -> q) and (q -> p) $]
 
 #trap(title: [Tæl forskellige variable])[Tæl *forskellige* variable. $p or not p$ har én, altså 2 rækker, ikke 4. $(p or not q) and q$ har to, altså 4, ikke 8.]
 
-#trap(title: [Omvendt og invers])[Kontrapositionen $not q -> not p$ er ækvivalent med $p -> q$. Den omvendte $q -> p$ og den inverse $not p -> not q$ er det ikke, men er ækvivalente med hinanden.]
+#trap(title: [Omvendt og invers])[Kontrapositionen (contrapositive) $not q -> not p$ er ækvivalent med $p -> q$. Den omvendte (converse) $q -> p$ og den inverse (inverse) $not p -> not q$ er det ikke, men er ækvivalente med hinanden.]
 
 === Tilbagevendende eksamensspørgsmål
 
@@ -125,7 +125,7 @@ Biimplikation:
   worked: [
     Ti påstande, en linje per styk.
 
-    + (0) $p$ sand gør disjunktionen sand. Sand.
+    + (0) $p$ sand gør disjunktionen (disjunction) sand. Sand.
     + (1) $p and q$ er falsk i 3 rækker, $p or q$ kun i 1, så de falder ikke sammen. Falsk.
     + (2) $p and not q$ tvinger $p$ sand, så $p or not q$ er sand. Sand.
     + (3) De Morgan, præcis ens. Sand.
@@ -133,7 +133,7 @@ Biimplikation:
     + (5) $p$ falsk gør $p -> q$ sand for begge værdier af $q$. Falsk.
     + (6) Fire forskellige variable giver $2^4 = 16$ rækker, ikke 8. Falsk.
     + (7) Én variabel giver $2^1 = 2$ rækker, ikke 4. Falsk.
-    + (8) $<->$ og $plus.o$ er hinandens negation, så konjunktionen er aldrig sand. Falsk.
+    + (8) $<->$ og $plus.o$ er hinandens negation, så konjunktionen (conjunction) er aldrig sand. Falsk.
     + (9) $p=T, q=F$ giver $T and (F or T) = T$. Sand.
 
     Svar: 0, 2, 3, 4, 9 er sande, resten falske.

@@ -100,5 +100,8 @@
 #include "chapters/shortest-paths.typ"
 #include "chapters/invariants.typ"
 
+#part[Del III — Skriftlige eksamener efter emne]
+#include "chapters/written-exams.typ"
+
 #part[Appendiks]
 #include "chapters/appendix.typ"

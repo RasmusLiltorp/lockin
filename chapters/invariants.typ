@@ -2,7 +2,7 @@
 
 == Korrekthed og løkkeinvarianter
 
-En løkkeinvariant er et udsagn, der er sandt hver gang løkkebetingelsen testes. Holder det ved hver test, holder det også ved den sidste, hvor løkken stopper. Dér ved du noget præcist om variablerne, og det giver svaret.
+En løkkeinvariant (loop invariant) er et udsagn, der er sandt hver gang løkkebetingelsen (loop condition) testes. Holder det ved hver test, holder det også ved den sidste, hvor løkken stopper. Dér ved du noget præcist om variablerne, og det giver svaret.
 
 Beviset er induktion: invarianten holder før første test, ét gennemløb bevarer den, og løkken stopper til sidst. Til eksamen skal du enten *bevise* en given invariant eller *afgøre*, hvilke udsagn der er invarianter.
 
@@ -11,12 +11,12 @@ Beviset er induktion: invarianten holder før første test, ét gennemløb bevar
 #recipe(
   title: "Bevis en løkkeinvariant",
   [Skriv invarianten op med kodens variabler, fx $s = i^2$.],
-  [*Initialisering.* Indsæt værdierne lige før første test, og tjek at udsagnet holder.],
-  [*Vedligeholdelse.* Antag det holder ved en test. Anvend kroppens tildelinger, og vis at det holder igen ved næste test.],
-  [*Terminering.* Vis at løkken stopper: en heltalsstørrelse aftager eller vokser strengt mod grænsen. Kombinér exit-betingelsen med invarianten (som stadig holder ved den fejlende test) og læs outputtet af.],
+  [*Initialisering* (initialization)*.* Indsæt værdierne lige før første test, og tjek at udsagnet holder.],
+  [*Vedligeholdelse* (maintenance)*.* Antag det holder ved en test. Anvend kroppens tildelinger, og vis at det holder igen ved næste test.],
+  [*Terminering* (termination)*.* Vis at løkken stopper: en heltalsstørrelse aftager eller vokser strengt mod grænsen. Kombinér exit-betingelsen med invarianten (som stadig holder ved den fejlende test) og læs outputtet af.],
 )
 
-Initialisering er basistilfældet, vedligeholdelse er induktionsskridtet, og terminering er hvor du høster korrektheden.
+Initialisering er basistilfældet (base case), vedligeholdelse er induktionsskridtet (induction step), og terminering er hvor du høster korrektheden (correctness).
 
 #recipe(
   title: "Afgør hvilke kandidater der er invarianter",

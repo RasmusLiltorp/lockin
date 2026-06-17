@@ -2,15 +2,15 @@
 
 == Prædikatlogik og kvantorer
 
-Et prædikat er et udsagn med en fri variabel, fx "$x$ er lige". Det har ingen sandhedsværdi, før du binder $x$. En kvantor binder variablen og gør prædikatet til et færdigt udsagn.
+Et prædikat (predicate) er et udsagn med en fri variabel (free variable), fx "$x$ er lige". Det har ingen sandhedsværdi (truth value), før du binder $x$. En kvantor (quantifier) binder variablen og gør prædikatet til et færdigt udsagn.
 
-De to kvantorer er $forall$ ("for alle") og $exists$ ("der findes mindst ét"). De læses altid over et domæne — mængden $x$ kommer fra, typisk $ZZ$, $NN$ eller $RR$.
+De to kvantorer er $forall$ ("for alle") og $exists$ ("der findes mindst ét"). De læses altid over et domæne (domain) — mængden $x$ kommer fra, typisk $ZZ$, $NN$ eller $RR$.
 
 #eq[$ forall x : P(x) quad quad exists x : P(x) $]
 
 Domænet afgør alt: samme prædikat kan skifte sandhedsværdi, når domænet ændres.
 
-Eksamen spørger om tre ting: sandhedsværdien af et (ofte indlejret) udsagn over et givet domæne; fornægtelsen af et udsagn uden $not$ tilbage; og rækkefølgen i en kvantorrække. I MCQ-versionerne vurderes hvert valg sand/falsk for sig, og flere kan være rigtige.
+Eksamen spørger om tre ting: sandhedsværdien af et (ofte indlejret) udsagn over et givet domæne; fornægtelsen (negation) af et udsagn uden $not$ tilbage; og rækkefølgen i en kvantorrække (quantifier sequence). I MCQ-versionerne vurderes hvert valg sand/falsk for sig, og flere kan være rigtige.
 
 === Sådan løser du den
 
@@ -18,7 +18,7 @@ Eksamen spørger om tre ting: sandhedsværdien af et (ofte indlejret) udsagn ove
   title: "Sandhedsværdi af et kvantificeret udsagn",
   [Skriv domænet op først (#swap[$ZZ$], $NN$, $RR$, $ZZ^+$). Et udsagn kan være sandt over $RR$ og falsk over $ZZ$.],
   [Læs kvantorrækken udefra og ind, venstre mod højre. Den yderste vælges først; de indre må afhænge af den.],
-  [Yderste $forall x$: ét modeksempel gør hele udsagnet falsk.],
+  [Yderste $forall x$: ét modeksempel (counterexample) gør hele udsagnet falsk.],
   [Yderste $exists x$: angiv ét $x$, der virker.],
   [Indlejret $forall x exists y$: hold $x$ fast og byg $y$ som formel i $x$, fx $y = x+1$ eller $y = -x$. Virker formlen altid, er udsagnet sandt.],
   [Indlejret $exists x forall y$: find ét fast $x$, der får det indre $forall y$ til at holde for alle $y$. Test grænsetilfælde som $y = 0$. Ubegrænsede domæner slår som regel disse ihjel.],
@@ -45,7 +45,7 @@ Vending-reglerne er:
 
 #trap(title: [Vend alle kvantorer])[De Morgan for kvantorer vender alle kvantorer i rækken. Fornægtelsen af $exists x exists y : P$ er $forall x forall y : not P$, ikke $forall x exists y : not P$. En "ækvivalens" med kun den ene kvantor vendt er et klassisk falsk MCQ-svar (juni 2021 Spm. 35, juni 2023 Spm. 34).]
 
-#trap(title: [Vakuøst sand implikation])[En implikation inde i en kvantor er vakuøst sand, når forudsætningen er falsk. $forall x : (x != 0 -> dots)$ er automatisk opfyldt ved $x = 0$, så $x = 0$ kan aldrig være modeksempel her.]
+#trap(title: [Vakuøst sand implikation])[En implikation inde i en kvantor er vakuøst sand (vacuously true), når forudsætningen er falsk. $forall x : (x != 0 -> dots)$ er automatisk opfyldt ved $x = 0$, så $x = 0$ kan aldrig være modeksempel her.]
 
 === Tilbagevendende eksamensspørgsmål
 
@@ -66,7 +66,7 @@ Vending-reglerne er:
     Du får flere kvantificerede udsagn over ét fast domæne, og hvert udsagn skal vurderes for sig.
 
     + *Skriv domænet op.* Notér mængden #swap[$ZZ$] og hold fast i den. Det samme udsagn kan være sandt over $RR$ og falsk over $ZZ$.
-    + *Tag den yderste kvantor først.* Ved $forall$ leder du efter ét modeksempel. Ved $exists$ rækker det at finde ét vidne.
+    + *Tag den yderste kvantor først.* Ved $forall$ leder du efter ét modeksempel. Ved $exists$ rækker det at finde ét vidne (witness).
     + *Ved $forall x exists y$:* hold $x$ fast og byg $y$ som en formel i $x$, fx $y = x+1$. Virker formlen for hvert $x$, er udsagnet sandt.
     + *Ved $exists x forall y$:* find ét fast $x$, der holder for alle $y$, og test grænsetilfælde som $y = 0$. Over et ubegrænset domæne falder de fleste af disse.
     + *Står der $not$ foran:* afgør først det indre udsagn, og vend så svaret.
@@ -120,7 +120,7 @@ Vending-reglerne er:
       - Den korrekte De Morgan af $not exists x exists y$ er $forall x forall y$, ikke $forall x exists y$. Højresiden bruger den forkerte kvantor.
       - Højresiden er sand: vælg $y = x+1$, så er $x + y != 2x$.
 
-      Venstre er falsk, højre er sand, så bikonditionalen er falsk.
+      Venstre er falsk, højre er sand, så bikonditionalen (biconditional) er falsk.
 
     Svar: sande er (c), (d), (e).
   ],

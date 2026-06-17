@@ -2,13 +2,13 @@
 
 == Appendix: Logaritmer og talrepræsentation
 
-Et tal i base $b$ er en vægtet sum af potenser af $b$. Cifret på plads $i$ (talt fra 0 yderst til højre) vejer $b^i$. Decimal er base 10, binær base 2, hexadecimal base 16.
+Et tal i base $b$ (base) er en vægtet sum af potenser af $b$. Cifret (digit) på plads $i$ (talt fra 0 yderst til højre) vejer $b^i$. Decimal er base 10, binær (binary) base 2, hexadecimal base 16.
 
 To slags spørgsmål går igen: logaritmeregler inde i $O$- og $Theta$-påstande (hvad vokser hurtigst), og omregning af heltal mellem baser i hånden. Begge er rutine, når du kan trinnene.
 
 === Sådan løser du det
 
-En logaritme er det omvendte af en potens. $log_2 x$ er det tal, du opløfter 2 i for at få $x$:
+En logaritme (logarithm) er det omvendte af en potens. $log_2 x$ er det tal, du opløfter 2 i for at få $x$:
 
 #eq[$ y = log_2 x quad <==> quad 2^y = x $]
 
@@ -26,10 +26,10 @@ Så $log_a n = Theta(log_b n)$ uanset basen. Derfor skriver man aldrig basen i e
 
 #recipe(
   title: [Afgør om $f$ er $O(g)$],
-  [Lær vækstrækken udenad; hver står stærkere end den foregående:
+  [Lær vækstrækken (growth hierarchy) udenad; hver står stærkere end den foregående:
    #eq[$ 1 < log n < (log n)^k < n^epsilon < n < n log n < n^2 < n^3 < c^n < n^n $]
    En polylog $(log n)^k$ taber til enhver positiv potens $n^epsilon$. Konstante faktorer tæller ikke.],
-  [I tvivl? Regn grænseværdien
+  [I tvivl? Regn grænseværdien (limit)
    #eq[$ L = lim_(n -> oo) f(n) / g(n) $]],
   [Aflæs svaret af $L$:
    #eq[$ O: L < oo quad quad Theta: 0 < L < oo quad quad o: L = 0 quad quad omega: L = oo $]],
@@ -39,8 +39,8 @@ Så $log_a n = Theta(log_b n)$ uanset basen. Derfor skriver man aldrig basen i e
 
 #recipe(
   title: [Omregn et positivt heltal til base $b$],
-  [Sæt $X = N$. Dividér $X$ med #swap[$b$] og notér *resten*; det er det næste ciffer, mindst betydende først.],
-  [Sæt $X$ til *kvotienten* og gentag, så længe $X > 0$.],
+  [Sæt $X = N$. Dividér $X$ med #swap[$b$] og notér *resten* (remainder); det er det næste ciffer, mindst betydende først.],
+  [Sæt $X$ til *kvotienten* (quotient) og gentag, så længe $X > 0$.],
   [Resterne læst *nedefra og op* er cifrene i base #swap[$b$].],
   [Den anden vej, base $b$ til decimal, er den vægtede sum
    #eq[$ N = sum_i d_i dot b^i $]],
@@ -50,7 +50,7 @@ Hvert ciffer koster $O(1)$, og du deler $N$ ned til 0, så omregningen tager $Th
 
 #note(title: [Hex som firkløvere])[*Hex er grupperet binær.* Del bittene i firkløvere fra højre og erstat hver gruppe med ét hex-ciffer: $0$–$9$, så $A = 10$ op til $F = 15$. F.eks. $0110 thin 1010_2 = 6 A_16$.]
 
-#note(title: [Toer-komplement])[*Toer-komplement.* Øverste bit tæller negativt, $-(2^(k-1))$ i stedet for $+2^(k-1)$. Med 4 bit: $1101_2 = -8 + 4 + 0 + 1 = -3$. Et 1-tal forrest betyder altid et negativt tal.]
+#note(title: [Toer-komplement])[*Toer-komplement* (two's complement)*.* Øverste bit tæller negativt, $-(2^(k-1))$ i stedet for $+2^(k-1)$. Med 4 bit: $1101_2 = -8 + 4 + 0 + 1 = -3$. Et 1-tal forrest betyder altid et negativt tal.]
 
 #table(
   columns: (auto, auto, auto, auto, auto, auto),
@@ -194,7 +194,7 @@ Hvert ciffer koster $O(1)$, og du deler $N$ ned til 0, så omregningen tager $Th
     ```],
   answer: [$Theta(log n)$.],
   blueprint: [
-    Køretid for en løkke er antal gennemløb gange arbejdet per gennemløb.
+    Køretid (running time) for en løkke er antal gennemløb gange arbejdet per gennemløb.
 
     + *Find tælleren.* Hvilken variabel styrer #swap[løkken], og hvad starter den ved?
     + *Se hvordan den ændrer sig.* Trækkes der fra (lineært), eller deles der med en faktor (logaritmisk)? Halvering hver gang giver $log_2$.

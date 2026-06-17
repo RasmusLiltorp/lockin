@@ -2,11 +2,11 @@
 
 == Disjunkte mængder (Union-Find)
 
-$n$ elementer starter hver for sig. Du slår nogle sammen i grupper og vil løbende kunne spørge: "ligger de to i samme gruppe?" Det løser en disjunkt-mængde-struktur.
+$n$ elementer starter hver for sig. Du slår nogle sammen i grupper og vil løbende kunne spørge: "ligger de to i samme gruppe?" Det løser en disjunkt-mængde-struktur (disjoint-set structure).
 
-Tre operationer: $"Make-Set"(x)$ laver en ny gruppe med kun $x$. $"Find-Set"(x)$ returnerer repræsentanten for $x$'s gruppe. $"Union"(x,y)$ smelter to grupper sammen.
+Tre operationer: $"Make-Set"(x)$ laver en ny gruppe med kun $x$. $"Find-Set"(x)$ returnerer repræsentanten (representative) for $x$'s gruppe. $"Union"(x,y)$ smelter to grupper sammen.
 
-Hver gruppe er et træ med repræsentanten som rod, så hele strukturen er en skov. Til eksamen skal du kunne tegne skoven efter en række operationer og kende priserne.
+Hver gruppe er et træ med repræsentanten som rod, så hele strukturen er en skov (forest). Til eksamen skal du kunne tegne skoven efter en række operationer og kende priserne.
 
 Den dukker oftest op i Kruskals MST-algoritme: for hver kant spørger $"Find-Set"$, om endepunkterne allerede ligger i samme komponent.
 
@@ -70,7 +70,7 @@ Tallene gælder for $n$ $"Make-Set"$, $n-1$ $"Union"$ og $m$ $"Find-Set"$.
   [Skov, rank + komprimering], [$alpha(n)$], [$alpha(n)$], [$O(m dot alpha(n) + n)$],
 )
 
-#note(title: [Vægtet union og inverse Ackermann])[Vægtet union på lænkede lister giver $O(n log n)$: en knudes header omskrives kun, når dens liste er den korteste, så gruppen fordobles hver gang, altså højst $log n$ omskrivninger pr. knude. For skoven er $alpha(n)$ den inverse Ackermann-funktion, under 5 for ethvert tænkeligt $n$. Beviset (CLRS 19.4) er ikke pensum.]
+#note(title: [Vægtet union og inverse Ackermann])[Vægtet union (weighted union) på lænkede lister (linked lists) giver $O(n log n)$: en knudes header omskrives kun, når dens liste er den korteste, så gruppen fordobles hver gang, altså højst $log n$ omskrivninger pr. knude. For skoven er $alpha(n)$ den inverse Ackermann-funktion (inverse Ackermann function), under 5 for ethvert tænkeligt $n$. Beviset (CLRS 19.4) er ikke pensum.]
 
 === Tilbagevendende eksamensspørgsmål
 

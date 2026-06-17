@@ -2,7 +2,7 @@
 
 == Matematisk induktion
 
-Induktion beviser, at $P(n)$ gælder for alle heltal fra et startpunkt og opefter. Du viser det for det mindste $n$, og at det gælder for det næste tal når det gælder for ét. Så vælter de som dominobrikker.
+Induktion (induction) beviser, at $P(n)$ gælder for alle heltal fra et startpunkt og opefter. Du viser det for det mindste $n$, og at det gælder for det næste tal når det gælder for ét. Så vælter de som dominobrikker.
 
 To dele skal på plads.
 
@@ -17,9 +17,9 @@ Til eksamen skriver du sjældent et bevis selv. Du får flere kandidat-"beviser"
 #recipe(
   title: "Skriv et induktionsbevis",
   [Skriv $P(n)$ op og find startværdien #swap[$n_0$], det mindste $n$ påstanden skal gælde for.],
-  [*Basis.* Sæt $n = n_0$ ind på begge sider og tjek at det stemmer.],
-  [*Induktionsantagelse (IA).* Antag $P(k)$ sand for et fast $k >= n_0$.],
-  [*Induktionsskridt.* Vis $P(k+1)$ med IA. For en sum trækker du det sidste led ud og erstatter resten med IA:],
+  [*Basis* (base case)*.* Sæt $n = n_0$ ind på begge sider og tjek at det stemmer.],
+  [*Induktionsantagelse (IA)* (induction hypothesis)*.* Antag $P(k)$ sand for et fast $k >= n_0$.],
+  [*Induktionsskridt* (induction step)*.* Vis $P(k+1)$ med IA. For en sum trækker du det sidste led ud og erstatter resten med IA:],
   [
     #eq[$ sum_(i=1)^(k+1) f(i) = (sum_(i=1)^k f(i)) + f(k+1). $]
     For en ulighed begrænser du $(k+1)$-siden med IA og kendte fakta, fx $3^(k+1) = 3 dot 3^k$.
@@ -48,7 +48,7 @@ Tjek at to sider er lig hinanden, før du kæder dem sammen.]
 #qcard(
   tag: [Induktion: hvilke kandidatbeviser er gyldige?],
   source: "MCQ juni 2025, Spm. 34 (samme som DM547 jan 2019, Spm. 3)",
-  prompt: [Bevis at #swap[$3^n - 1$ er lige] for alle $n in NN$. Hvilke argumenter er gyldige induktionsbeviser? (en eller flere korrekte)],
+  prompt: [Bevis at #swap[$3^n - 1$ er lige] for alle $n in NN$. Hvilke argumenter er gyldige induktionsbeviser (induction proofs)? (en eller flere korrekte)],
   options: (
     [Basis $3^0 - 1 = 0$ lige. Skridt ($n >= 0$): $3^(n+1) - 1 = 3 dot 3^n - 1 = 3(3^n - 1) + 2 = 3 dot 2k + 2 = 2(3k+1)$, ved IA.],
     [Basis $3^0 - 1 = 0$ og $3^1 - 1 = 2$ lige. Skridt ($n >= 2$): $3^n - 1 = 3(3^(n-1) - 1) + 2 = 3 dot 2k + 2 = 2(3k+1)$.],
