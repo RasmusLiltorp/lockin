@@ -1,6 +1,6 @@
 #import "../lib.typ": *
 
-== Rekursionsligninger og Master Theorem
+== Rekursionsligninger og Master Theorem <th-recurrences>
 
 En Divide-and-Conquer-algoritme deler problemet op, løser delene rekursivt (recursively) og samler resultatet. Køretiden $T(n)$ står derfor udtrykt ved sig selv på mindre input. Gør algoritmen $a$ kald, hvert på et stykke af størrelse $n/b$, og bruger $f(n)$ på at dele op og samle, så er
 
@@ -8,7 +8,7 @@ En Divide-and-Conquer-algoritme deler problemet op, løser delene rekursivt (rec
 
 Master Theorem giver en lukket $Theta$-grænse for $T(n)$.
 
-=== Sådan løser du den
+=== Sådan løser du den <th-rec-method>
 
 Sammenlign arbejdet i rekursionen, målt af $n^alpha$ med
 
@@ -55,6 +55,7 @@ For at se *hvem der er størst*, placér både $n^alpha$ og $f(n)$ på vækststi
 
 #note(title: [Potenser på stigen])[Et $n^c$ med større potens slår altid et med mindre ($n^2 > n^(1.5) > n$), uanset $log$-faktorer: ethvert $n^c$ slår $log n$, og enhver eksponentiel ($2^n$) slår alle $n^c$. Til Master Theorem: er $n^alpha$ længere til højre end $f(n)$, er det tilfælde 1; står de på samme plads, tilfælde 2; er $f(n)$ en *hel potens* længere til højre, tilfælde 3. Bemærk $n^alpha$ kan have skæv potens, fx $n^(log_2 5) approx n^(2.32)$, som ligger mellem $n^2$ og $n^3$.]
 
+#metadata(none) <th-rec-hole>
 #trap(title: [Hullet i tilfælde 3])[Tilfælde 3 kræver, at $f(n)$ er en *hel potens* større end $n^alpha$ (et helt trin på stigen, fx $n^2$ mod $n$). Er $f(n)$ kun en $log$-faktor større — som $f(n) = n log n$ når $n^alpha = n$ — så er den for stor til tilfælde 2 og for lille til tilfælde 3. Den falder i hullet, og Master Theorem kan *ikke* løse den.]
 
 *Tilfælde 1 — $n^alpha$ er størst.* Rekursionen vinder, og svaret er $n^alpha$.
@@ -96,8 +97,9 @@ Tre situationer giver svaret *"kan ikke løses med Master Theorem"*:
 === Tilbagevendende eksamensspørgsmål
 
 #qcard(
-  tag: [Master Theorem: løs rekursionsligning],
+  tag: [Master Theorem: løs rekursionsligning (skelseksponenten)],
   source: "MCQ juni 2025, Spm. 1 (samme type 2015–2023)",
+  theory: <th-rec-method>,
   prompt: [Hvilket af nedenstående svar gælder for følgende rekursionsligning? $T(n) = #swap[$2$] dot T(n\/#swap[$4$]) + #swap[$n^2$]$],
   options: (
     [$T(n) = Theta(1)$],
@@ -134,8 +136,9 @@ Tre situationer giver svaret *"kan ikke løses med Master Theorem"*:
 )
 
 #qcard(
-  tag: [Master Theorem: løs rekursionsligning],
+  tag: [Master Theorem: løs rekursionsligning (skelseksponenten)],
   source: "MCQ juni 2025, Spm. 2",
+  theory: <th-rec-method>,
   prompt: [Hvilket af nedenstående svar gælder for følgende rekursionsligning? $T(n) = #swap[$4$] dot T(n\/#swap[$2$]) + #swap[$n^2$]$],
   options: (
     [$T(n) = Theta(1)$],
@@ -170,8 +173,9 @@ Tre situationer giver svaret *"kan ikke løses med Master Theorem"*:
 )
 
 #qcard(
-  tag: [Master Theorem: løs rekursionsligning],
+  tag: [Master Theorem: løs rekursionsligning (skelseksponenten)],
   source: "MCQ juni 2025, Spm. 3",
+  theory: <th-rec-method>,
   prompt: [Hvilket af nedenstående svar gælder for følgende rekursionsligning? $T(n) = #swap[$4$] dot T(n\/#swap[$3$]) + #swap[$n$]$],
   options: (
     [$T(n) = Theta(1)$],
@@ -206,8 +210,9 @@ Tre situationer giver svaret *"kan ikke løses med Master Theorem"*:
 )
 
 #qcard(
-  tag: [Master Theorem: løs rekursionsligning],
+  tag: [Master Theorem: løs rekursionsligning (skelseksponenten)],
   source: "MCQ juni 2025, Spm. 4",
+  theory: <th-rec-method>,
   prompt: [Hvilket af nedenstående svar gælder for følgende rekursionsligning? $T(n) = T(n\/#swap[$4$]) + #swap[$1$]$],
   options: (
     [$T(n) = Theta(1)$],
@@ -242,8 +247,9 @@ Tre situationer giver svaret *"kan ikke løses med Master Theorem"*:
 )
 
 #qcard(
-  tag: [Master Theorem: løs rekursionsligning],
+  tag: [Master Theorem: løs rekursionsligning (skelseksponenten)],
   source: "MCQ juni 2015, Spm. 1",
+  theory: <th-rec-method>,
   prompt: [Hvilket af nedenstående svar gælder for følgende rekursionsligning? $T(n) = #swap[$5$] dot T(n\/#swap[$2$]) + #swap[$n^2$]$],
   options: (
     [$T(n) = Theta(n^p)$ med $p = log_2 5$],
@@ -274,8 +280,9 @@ Tre situationer giver svaret *"kan ikke løses med Master Theorem"*:
 )
 
 #qcard(
-  tag: [Master Theorem: løs rekursionsligning],
+  tag: [Master Theorem: løs rekursionsligning (skelseksponenten)],
   source: "MCQ juni 2015, Spm. 3",
+  theory: <th-rec-method>,
   prompt: [Hvilket af nedenstående svar gælder for følgende rekursionsligning? $T(n) = #swap[$2$] dot T(n\/#swap[$5$]) + #swap[$n^(1\/2)$]$],
   options: (
     [$T(n) = Theta(n^p)$ med $p = log_2 5$],
@@ -306,8 +313,9 @@ Tre situationer giver svaret *"kan ikke løses med Master Theorem"*:
 )
 
 #qcard(
-  tag: [Master Theorem: løs rekursionsligning],
+  tag: [Master Theorem: løs rekursionsligning (skelseksponenten)],
   source: "MCQ juni 2017, Spm. 1",
+  theory: <th-rec-method>,
   prompt: [Hvilket af nedenstående svar gælder for følgende rekursionsligning? $T(n) = T(n\/#swap[$4$]) + #swap[$n$]$],
   options: (
     [$T(n) = Theta(log n)$],
@@ -338,8 +346,9 @@ Tre situationer giver svaret *"kan ikke løses med Master Theorem"*:
 )
 
 #qcard(
-  tag: [Master Theorem: løs rekursionsligning],
+  tag: [Master Theorem: løs rekursionsligning (skelseksponenten)],
   source: "MCQ juni 2017, Spm. 2",
+  theory: <th-rec-method>,
   prompt: [Hvilket af nedenstående svar gælder for følgende rekursionsligning? $T(n) = #swap[$3$] dot T(n\/#swap[$4$]) + #swap[$n$]$],
   options: (
     [$T(n) = Theta(log n)$],
@@ -371,8 +380,9 @@ Tre situationer giver svaret *"kan ikke løses med Master Theorem"*:
 )
 
 #qcard(
-  tag: [Master Theorem: løs rekursionsligning],
+  tag: [Master Theorem: løs rekursionsligning (skelseksponenten)],
   source: "MCQ juni 2017, Spm. 3",
+  theory: <th-rec-method>,
   prompt: [Hvilket af nedenstående svar gælder for følgende rekursionsligning? $T(n) = #swap[$3$] dot T(n\/#swap[$4$]) + #swap[$n^(3\/4)$]$],
   options: (
     [$T(n) = Theta(log n)$],
@@ -404,8 +414,9 @@ Tre situationer giver svaret *"kan ikke løses med Master Theorem"*:
 )
 
 #qcard(
-  tag: [Master Theorem: løs rekursionsligning],
+  tag: [Master Theorem: løs rekursionsligning (skelseksponenten)],
   source: "MCQ juni 2019, Spm. 1",
+  theory: <th-rec-method>,
   prompt: [Hvilket af nedenstående svar gælder for følgende rekursionsligning? $T(n) = T(#swap[$3$]n\/#swap[$4$]) + #swap[$n$]$],
   options: (
     [$T(n) = Theta(1)$],
@@ -439,8 +450,9 @@ Tre situationer giver svaret *"kan ikke løses med Master Theorem"*:
 )
 
 #qcard(
-  tag: [Master Theorem: løs rekursionsligning],
+  tag: [Master Theorem: løs rekursionsligning (skelseksponenten)],
   source: "MCQ juni 2019, Spm. 2",
+  theory: <th-rec-method>,
   prompt: [Hvilket af nedenstående svar gælder for følgende rekursionsligning? $T(n) = #swap[$3$] dot T(n\/#swap[$3$]) + #swap[$n$]$],
   options: (
     [$T(n) = Theta(1)$],
@@ -472,8 +484,9 @@ Tre situationer giver svaret *"kan ikke løses med Master Theorem"*:
 )
 
 #qcard(
-  tag: [Master Theorem: løs rekursionsligning],
+  tag: [Master Theorem: løs rekursionsligning (skelseksponenten)],
   source: "MCQ juni 2021, Spm. 1",
+  theory: <th-rec-method>,
   prompt: [Hvilket af nedenstående svar gælder for følgende rekursionsligning? $T(n) = #swap[$3$] dot T(n\/#swap[$2$]) + #swap[$n^2$]$],
   options: (
     [$T(n) = Theta(log n)$],
@@ -506,8 +519,9 @@ Tre situationer giver svaret *"kan ikke løses med Master Theorem"*:
 )
 
 #qcard(
-  tag: [Master Theorem: løs rekursionsligning],
+  tag: [Master Theorem: løs rekursionsligning (skelseksponenten)],
   source: "MCQ juni 2021, Spm. 2",
+  theory: <th-rec-method>,
   prompt: [Hvilket af nedenstående svar gælder for følgende rekursionsligning? $T(n) = #swap[$9$] dot T(n\/#swap[$3$]) + #swap[$n^(1\/2)$]$],
   options: (
     [$T(n) = Theta(log n)$],
@@ -540,8 +554,9 @@ Tre situationer giver svaret *"kan ikke løses med Master Theorem"*:
 )
 
 #qcard(
-  tag: [Master Theorem: løs rekursionsligning],
+  tag: [Master Theorem: løs rekursionsligning (skelseksponenten)],
   source: "MCQ juni 2021, Spm. 3",
+  theory: <th-rec-method>,
   prompt: [Hvilket af nedenstående svar gælder for følgende rekursionsligning? $T(n) = #swap[$4$] dot T(n\/#swap[$2$]) + #swap[$n^2$]$],
   options: (
     [$T(n) = Theta(log n)$],
@@ -574,8 +589,9 @@ Tre situationer giver svaret *"kan ikke løses med Master Theorem"*:
 )
 
 #qcard(
-  tag: [Master Theorem: løs rekursionsligning],
+  tag: [Master Theorem: løs rekursionsligning (skelseksponenten)],
   source: "MCQ juni 2021, Spm. 4",
+  theory: <th-rec-method>,
   prompt: [Hvilket af nedenstående svar gælder for følgende rekursionsligning? $T(n) = #swap[$2$] dot T(n\/#swap[$3$]) + #swap[$n log n$]$],
   options: (
     [$T(n) = Theta(log n)$],
@@ -607,8 +623,9 @@ Tre situationer giver svaret *"kan ikke løses med Master Theorem"*:
 )
 
 #qcard(
-  tag: [Master Theorem: løs rekursionsligning],
+  tag: [Master Theorem: løs rekursionsligning (skelseksponenten)],
   source: "MCQ juni 2023, Spm. 1",
+  theory: <th-rec-method>,
   prompt: [Hvilket af nedenstående svar gælder for følgende rekursionsligning? $T(n) = #swap[$2$] dot T(n\/#swap[$2$]) + #swap[$n^(1\/2)$]$],
   options: (
     [$T(n) = Theta(log n)$],
@@ -640,8 +657,9 @@ Tre situationer giver svaret *"kan ikke løses med Master Theorem"*:
 )
 
 #qcard(
-  tag: [Master Theorem: løs rekursionsligning],
+  tag: [Master Theorem: løs rekursionsligning (skelseksponenten)],
   source: "MCQ juni 2023, Spm. 2",
+  theory: <th-rec-method>,
   prompt: [Hvilket af nedenstående svar gælder for følgende rekursionsligning? $T(n) = T(n\/#swap[$2$]) + #swap[$n^(1\/2)$]$],
   options: (
     [$T(n) = Theta(log n)$],
@@ -673,8 +691,9 @@ Tre situationer giver svaret *"kan ikke løses med Master Theorem"*:
 )
 
 #qcard(
-  tag: [Master Theorem: løs rekursionsligning],
+  tag: [Master Theorem: løs rekursionsligning (skelseksponenten)],
   source: "MCQ juni 2023, Spm. 3",
+  theory: <th-rec-method>,
   prompt: [Hvilket af nedenstående svar gælder for følgende rekursionsligning? $T(n) = #swap[$2$] dot T(n\/#swap[$2$]) + #swap[$1\/2$]$],
   options: (
     [$T(n) = Theta(log n)$],
@@ -706,8 +725,9 @@ Tre situationer giver svaret *"kan ikke løses med Master Theorem"*:
 )
 
 #qcard(
-  tag: [Master Theorem: løs rekursionsligning],
+  tag: [Master Theorem: løs rekursionsligning (skelseksponenten)],
   source: "MCQ juni 2023, Spm. 4",
+  theory: <th-rec-method>,
   prompt: [Hvilket af nedenstående svar gælder for følgende rekursionsligning? $T(n) = T(n\/#swap[$2$]) + #swap[$1\/2$]$],
   options: (
     [$T(n) = Theta(log n)$],
@@ -739,8 +759,9 @@ Tre situationer giver svaret *"kan ikke løses med Master Theorem"*:
 )
 
 #qcard(
-  tag: [Master Theorem: løs rekursionsligning],
+  tag: [Master Theorem: løs rekursionsligning (skelseksponenten)],
   source: "MCQ juni 2019, Spm. 4",
+  theory: <th-rec-method>,
   prompt: [Hvilket af nedenstående svar gælder for følgende rekursionsligning? $T(n) = #swap[$4$] dot T(n\/#swap[$3$]) + #swap[$n log n$]$],
   options: (
     [$T(n) = Theta(1)$],
@@ -775,8 +796,9 @@ Tre situationer giver svaret *"kan ikke løses med Master Theorem"*:
 )
 
 #qcard(
-  tag: [Master Theorem: kan den løses?],
+  tag: [Master Theorem: kan den løses? (hullet)],
   source: "MCQ juni 2025, Spm. 2 (samme menu)",
+  theory: <th-rec-hole>,
   prompt: [Hvilket af nedenstående svar gælder for følgende rekursionsligning? $T(n) = #swap[$5$] dot T(n\/#swap[$5$]) + #swap[$n log n$]$],
   options: (
     [$T(n) = Theta(n^p)$ med $p = log_5 5$],
@@ -806,8 +828,9 @@ Tre situationer giver svaret *"kan ikke løses med Master Theorem"*:
 )
 
 #qcard(
-  tag: [Master Theorem: kan den løses?],
+  tag: [Master Theorem: kan den løses? (hullet)],
   source: "MCQ juni 2015, Spm. 4",
+  theory: <th-rec-hole>,
   prompt: [Hvilket af nedenstående svar gælder for følgende rekursionsligning? $T(n) = #swap[$2$] dot T(n - #swap[$2$]) + #swap[$n$]$],
   options: (
     [$T(n) = Theta(n^p)$ med $p = log_2 2$],
@@ -835,8 +858,9 @@ Tre situationer giver svaret *"kan ikke løses med Master Theorem"*:
 )
 
 #qcard(
-  tag: [Master Theorem: kan den løses?],
+  tag: [Master Theorem: kan den løses? (hullet)],
   source: "MCQ juni 2017, Spm. 4",
+  theory: <th-rec-hole>,
   prompt: [Hvilket af nedenstående svar gælder for følgende rekursionsligning? $T(n) = #swap[$3$] thin T(n^(#swap[$1\/4$])) + #swap[$n^(3\/4)$]$],
   options: (
     [$T(n) = Theta(log n)$],
@@ -867,8 +891,9 @@ Tre situationer giver svaret *"kan ikke løses med Master Theorem"*:
 )
 
 #qcard(
-  tag: [Master Theorem: kan den løses?],
+  tag: [Master Theorem: kan den løses? (hullet)],
   source: "MCQ juni 2019, Spm. 3",
+  theory: <th-rec-hole>,
   prompt: [Hvilket af nedenstående svar gælder for følgende rekursionsligning? $T(n) = T(n\/#swap[$4$]) + #swap[$log n$]$],
   options: (
     [$T(n) = Theta(1)$],
@@ -902,8 +927,9 @@ Tre situationer giver svaret *"kan ikke løses med Master Theorem"*:
 )
 
 #qcard(
-  tag: [Master Theorem: kan den løses?],
+  tag: [Master Theorem: kan den løses? (hullet)],
   source: "MCQ juni 2015, Spm. 2",
+  theory: <th-rec-hole>,
   prompt: [Hvilket af nedenstående svar gælder for følgende rekursionsligning? $T(n) = #swap[$5$] dot T(n\/#swap[$5$]) + #swap[$n log n$]$],
   options: (
     [$T(n) = Theta(n^p)$ med $p = log_5 5$],

@@ -5,8 +5,9 @@
 Søgestrukturer fylder i de skriftlige sæt, og opgaverne gentager sig år efter år. Du skal tjekke eller redigere et binært søgetræ (binary search tree), verificere eller indsætte i et rød-sort træ (red-black tree), farve et træ lovligt eller tælle alle lovlige farvninger, køre en åben hashtabel (open-addressing hash table) med lineær, kvadratisk eller dobbelt probing (linear, quadratic, or double probing), og udvide et BST med felter som `maxGap` eller en hjørnerektangel. Alt sammen er trace-arbejde. Kend reglerne, og kør input igennem ét trin ad gangen.
 
 #qcard(
-  tag: [BST: verificér, indsæt, slet],
+  tag: [BST: verificér, indsæt, slet (binært søgetræ)],
   source: "DM507 jan 2007, Opg. 1 (20%)",
+  theory: <th-bst-bst-ops>,
   prompt: [
     *(a)* Er træet et binært søgetræ? Roden er #swap[$4$]; venstre barn #swap[$2$] (med venstre barn #swap[$1$]); højre barn #swap[$20$] med venstre barn #swap[$8$] og højre barn #swap[$25$]; node #swap[$8$] har børn #swap[$7$] og #swap[$14$]; node #swap[$14$] har venstre barn #swap[$11$]. \
     *(b)* Tegn træet efter sletning af nøgle #swap[$5$] med `TREE-DELETE` (CLRS). Træet: rod #swap[$5$]; venstre #swap[$2$] (børn #swap[$1$] og #swap[$4$], hvor #swap[$4$] har venstre barn #swap[$3$]); højre #swap[$11$] (venstre barn #swap[$6$], højre barn #swap[$12$]); #swap[$6$] har højre barn #swap[$8$]; #swap[$8$] har børn #swap[$7$] og #swap[$10$]. \
@@ -29,8 +30,9 @@ Søgestrukturer fylder i de skriftlige sæt, og opgaverne gentager sig år efter
 )
 
 #qcard(
-  tag: [Rød-sort: verificér + indsæt],
+  tag: [Rød-sort: verificér + indsæt (rød-sort træ)],
   source: "DM02 jan 2005, Opg. 1 (15%)",
+  theory: <th-bst-rb-insert>,
   prompt: [
     *(a)* Hvilke af $T_1$–$T_4$ er rød-sorte træer? Begrund. (B = sort, R = rød; NIL-blade er sorte.) \
     - $T_1$: rod #swap[$5$] (B); #swap[$3$] (B), #swap[$7$] (B); under $3$: #swap[$2$] (B) med venstre barn #swap[$1$] (R), og #swap[$4$] (B); under $7$: #swap[$6$] (B) og #swap[$9$] (R) med børn #swap[$8$] (B), #swap[$10$] (B).
@@ -59,8 +61,9 @@ Søgestrukturer fylder i de skriftlige sæt, og opgaverne gentager sig år efter
 )
 
 #qcard(
-  tag: [Rød-sort: verificér + indsæt],
+  tag: [Rød-sort: verificér + indsæt (rød-sort træ)],
   source: "DM507 juni 2011, Opg. 1 (18%)",
+  theory: <th-bst-rb-insert>,
   prompt: [
     *(a)* Hvilke af otte træer $T_1$–$T_8$ er gyldige rød-sorte træer? (Fede noder sorte, resten røde; små cirkler er sorte NIL-blade.) \
     - $T_1$: rod #swap[$1$] (B); børn #swap[$2$] (B), #swap[$3$] (B).
@@ -92,8 +95,9 @@ Søgestrukturer fylder i de skriftlige sæt, og opgaverne gentager sig år efter
 )
 
 #qcard(
-  tag: [Rød-sort: slet],
+  tag: [Rød-sort: slet (rød-sort træ)],
   source: "DM507 juni 2009, Opg. 1b (6%)",
+  theory: <th-bst-rb-delete>,
   prompt: [
     Slet noden med nøgle #swap[$2$] fra det rød-sorte træ med `RB-Delete` (CLRS); tegn resultatet. Træet (B = sort, R = rød): rod #swap[$9$] (B); #swap[$2$] (R) [børn #swap[$1$] (B), #swap[$7$] (B)]; #swap[$12$] (B) [højre barn #swap[$15$] (R)]; #swap[$7$] har børn #swap[$5$] (R), #swap[$8$] (R).
   ],
@@ -114,8 +118,9 @@ Søgestrukturer fylder i de skriftlige sæt, og opgaverne gentager sig år efter
 )
 
 #qcard(
-  tag: [Rød-sort: lovlig farvning + indsæt],
+  tag: [Rød-sort: lovlig farvning + indsæt (farvelægning)],
   source: "DM507 juni 2015, Opg. 8 (10%)",
+  theory: <th-bst-rb-rules>,
   prompt: [
     *(a)* Farv træet, så det bliver et gyldigt rød-sort træ (NIL-blade sorte): rod #swap[$b$], børn #swap[$a$] (venstre) og #swap[$d$] (højre); #swap[$d$] har børn #swap[$c$] (venstre) og #swap[$e$] (højre); #swap[$a$], #swap[$c$], #swap[$e$] er blade mod NIL. \
     *(b)* Indsæt nøgle #swap[$11$] med `RB-Insert` i: rod #swap[$5$] (B); venstre #swap[$3$] (B) med røde børn #swap[$2$], #swap[$4$]; højre #swap[$7$] (B) med venstre #swap[$6$] (B), højre #swap[$9$] (B); #swap[$9$] har røde børn #swap[$8$], #swap[$10$]. Hvilket af $T_1$–$T_4$ giver det?
@@ -135,8 +140,9 @@ Søgestrukturer fylder i de skriftlige sæt, og opgaverne gentager sig år efter
 )
 
 #qcard(
-  tag: [Rød-sort: tæl alle lovlige farvninger],
+  tag: [Rød-sort: tæl alle lovlige farvninger (farvelægning)],
   source: "DM507 juni 2012, Opg. 1 (10%)",
+  theory: <th-bst-rb-rules>,
   prompt: [
     Cirklerne er rigtige noder, du farver; firkanterne er sorte NIL-blade. \
     *(a)* Angiv én lovlig rød-sort-farvning af $T_1$. $T_1$ (kun cirkler): #swap[$a$] med børn #swap[$b$], #swap[$c$]; #swap[$b$] har to NIL-børn; #swap[$c$] har venstre barn #swap[$f$] og NIL til højre; #swap[$f$] har to NIL-børn. (Altså $4$ rigtige noder: $a, b, c, f$.) \
@@ -166,8 +172,9 @@ Søgestrukturer fylder i de skriftlige sæt, og opgaverne gentager sig år efter
 )
 
 #qcard(
-  tag: [Hashing: lineær probing],
+  tag: [Hashing: lineær probing (linear probing)],
   source: "jun 2016, Problem 4 (6%)",
+  theory: <th-bst-linear-probing>,
   prompt: [
     Åben hashtabel, $m = #swap[$11$]$ pladser, lineær probing, $h'(x) = (#swap[$7$] x + #swap[$4$]) mod #swap[$11$]$, så $h(x, k) = (h'(x) + k) mod #swap[$11$]$ for $k = 0, 1, 2, dots$. Starttabel (plads $0..10$): #swap[`67 20 17 _ 33 _ 16 2 _ _ 15`]. Indsæt #swap[$18$], derefter #swap[$26$]; vis tabellen efter hver. (Tom $=$ x.)
   ],
@@ -188,8 +195,9 @@ Søgestrukturer fylder i de skriftlige sæt, og opgaverne gentager sig år efter
 )
 
 #qcard(
-  tag: [Hashing: kvadratisk probing],
+  tag: [Hashing: kvadratisk probing (quadratic probing)],
   source: "DM507 juni 2015, Opg. 4 (7%)",
+  theory: <th-bst-linear-probing>,
   prompt: [
     Tabel $H$ af størrelse $m = #swap[$11$]$, kvadratisk probing, $h'(x) = (#swap[$3$] x + #swap[$5$]) mod #swap[$11$]$, $c_1 = #swap[$3$]$, $c_2 = #swap[$1$]$, så $h(x, i) = (h'(x) + #swap[$3$] i + i^2) mod #swap[$11$]$. Start: indeks $0=#swap[$13$]$, $1=#swap[$39$]$, $3=#swap[$36$]$, $8=#swap[$23$]$, $9=#swap[$5$]$ (resten tomme). Indsæt #swap[$22$], #swap[$16$], #swap[$17$] i den rækkefølge; vis tabellen efter hver. (Tom $=$ x.)
   ],
@@ -212,8 +220,9 @@ Søgestrukturer fylder i de skriftlige sæt, og opgaverne gentager sig år efter
 )
 
 #qcard(
-  tag: [Hashing: dobbelt hashing],
+  tag: [Hashing: dobbelt hashing (double hashing)],
   source: "DM507 juni 2014, Opg. 4 (6%)",
+  theory: <th-bst-double-hashing>,
   prompt: [
     Tabelstørrelse $m = #swap[$13$]$. $h_1(x) = (#swap[$5$] x + #swap[$1$]) mod #swap[$13$]$, $h_2(x) = #swap[$1$] + (x mod #swap[$12$])$. Probe-sekvens $h(x, i) = (h_1(x) + i dot h_2(x)) mod #swap[$13$]$. Starttabel (indeks : værdi): #swap[$0:18$, $2:8$, $5:6$, $8:30$, $9:25$, $11:2$, $12:23$] (resten tomme). Indsæt #swap[$3$], #swap[$5$], #swap[$15$] i den rækkefølge; angiv den endelige tabel.
   ],
@@ -234,8 +243,9 @@ Søgestrukturer fylder i de skriftlige sæt, og opgaverne gentager sig år efter
 )
 
 #qcard(
-  tag: [Augmenteret BST: maxGap],
+  tag: [Augmenteret BST: maxGap (augmentering)],
   source: "DM507 juni 2010, Opg. 5 (15%)",
+  theory: <th-bst-augment>,
   prompt: [
     Hver node $v$ gemmer $v."key"$ plus #swap[$v."maxGap"$] (største afstand mellem to på hinanden følgende nøgler i $v$'s undertræ), #swap[$v."max"$] (største nøgle) og #swap[$v."min"$] (mindste nøgle). For et et-nøgle-undertræ er $v."maxGap" = 0$. \
     *(a)* Beregn en nodes felter i $O(1)$ ud fra dens to børn. \
@@ -260,8 +270,9 @@ Søgestrukturer fylder i de skriftlige sæt, og opgaverne gentager sig år efter
 )
 
 #qcard(
-  tag: [Augmenteret BST: hjørnerektangel],
+  tag: [Augmenteret BST: hjørnerektangel (augmentering)],
   source: "DM507 juni 2015, Opg. 10 (15%)",
+  theory: <th-bst-augment>,
   prompt: [
     Gem #swap[$n$] punkter (distinkte $x$-koordinater, brugt som BST-nøgler). Hver node $v$ gemmer #swap[$v.x"max"$, $v.x"min"$, $v.y"max"$, $v.y"min"$] $=$ max/min af $x$ og $y$ over $v$'s undertræ (inkl. $v$). Hjørnerektanglen er $["rod".x"min", "rod".x"max"] times ["rod".y"min", "rod".y"max"]$. \
     *(a)* Beregn en nodes fire felter i $O(1)$ fra dens børn. \
@@ -290,8 +301,9 @@ Søgestrukturer fylder i de skriftlige sæt, og opgaverne gentager sig år efter
 )
 
 #qcard(
-  tag: [Hashing: dobbelt hashing],
+  tag: [Hashing: dobbelt hashing (double hashing)],
   source: "DM02 jan 2006, Opg. 1a (7%)",
+  theory: <th-bst-double-hashing>,
   prompt: [
     Åben hashtabel, $m = #swap[$11$]$ pladser. $h_1(k) = k mod #swap[$11$]$, $h_2(k) = #swap[$1$] + (k mod #swap[$10$])$, probe-sekvens $h(k, i) = (h_1(k) + i dot h_2(k)) mod #swap[$11$]$. Starttabel (indeks : værdi): #swap[$3:14$, $7:3$, $9:41$] (resten tomme). Indsæt nøgle #swap[$18$]; hvilken plads ender den i?
   ],
@@ -312,8 +324,9 @@ Søgestrukturer fylder i de skriftlige sæt, og opgaverne gentager sig år efter
 )
 
 #qcard(
-  tag: [Augmenteret RB-træ: MinAbove],
+  tag: [Augmenteret RB-træ: MinAbove (augmentering)],
   source: "DM507 jan 2008, Opg. 3 (30%)",
+  theory: <th-bst-augment>,
   prompt: [
     Punkter i planen med positive heltalskoordinater og distinkte $x$-værdier. De ligger i et rød-sort træ keyet på $x$; hver node $v$ gemmer desuden #swap[$v.y"max"$] $=$ største $y$-koordinat i $v$'s undertræ. Forespørgslen $"MinAbove"(t)$ returnerer blandt alle punkter med $y >= t$ det med mindst $x$ (eller "none"). \
     *(a)* Beregn $"MinAbove"(#swap[$10$])$ for punkterne #swap[$(4,9), (5,17), (19,6), (23,10), (25,15), (40,7)$]. \

@@ -1,6 +1,6 @@
 #import "../lib.typ": *
 
-== Sortering og udvælgelse
+== Sortering og udvælgelse <th-sort-lower-bound>
 
 At sortere er at lægge $n$ tal i rækkefølge. Der findes to slags algoritmer, og forskellen afgør alt til eksamen.
 
@@ -25,6 +25,7 @@ Typisk spørgsmål: "sortér $n$ heltal i et givet interval — hvad er værste-
   [Distributionsbaseret (counting, radix)? Sæt værdiområdet ind i formlen og tag det dominerende led.],
 )
 
+#metadata(none) <th-sort-runtimes>
 #table(
   columns: (auto, auto, auto, 1fr),
   inset: 7pt,
@@ -57,15 +58,24 @@ Radix sort kører counting sort per ciffer, fra mindst til mest betydende. Hvert
 
 #eq[$ T(n) = Theta(d(n + k)) $]
 
-Quicksort vælger en pivot, deler arrayet i mindre og større og sorterer hver del. CLRS bruger Lomuto-partition med sidste element som pivot. Bagefter sidder pivoten på sin endelige plads med mindre-eller-lig til venstre, større til højre:
+Quicksort vælger ét tal som pivot, deler resten op i dem der er mindre og dem der er større, og sorterer hver bunke for sig. Selve delingen foregår i PARTITION, og det er her de fleste falder over notationen. Lad os tage hvert symbol, før vi ser koden.
+
+PARTITION arbejder kun på et udsnit af arrayet, ikke nødvendigvis det hele. Udsnittet skrives $A[p..r]$, hvor $p$ er indekset på det første tal i udsnittet og $r$ indekset på det sidste. Pivoten er det sidste tal, altså $A[r]$ (CLRS vælger altid sidste element).
+
+Undervejs har du to pegepinde. $i$ er en grænse. Alt til og med $i$ er allerede lagt over til venstre som mindre end eller lig pivoten. Den starter på $p - 1$, altså ét felt før udsnittet overhovedet begynder, for du har endnu ikke fundet nogen små tal. Læg mærke til at $i$ hverken er pivotens værdi eller dens plads. Det er bare grænsen mellem "små" og resten. $j$ er den der løber hen over tallene ét ad gangen og kigger.
+
+Hver gang $j$ rammer et tal der er mindre end eller lig pivoten, rykker du grænsen $i$ ét frem og bytter det lille tal ind på grænsen. Større tal lader du bare ligge. Til sidst bytter du pivoten ind lige efter grænsen, og så står den på sin endelige plads med mindre-eller-lig til venstre og større til højre:
 
 ```
 PARTITION(A, p, r)
-  x = A[r]; i = p - 1
+  x = A[r]            // pivot: sidste element i udsnittet
+  i = p - 1           // grænsen, starter lige før udsnittet
   for j = p to r - 1:
-    if A[j] <= x: i += 1; swap A[i], A[j]
-  swap A[i+1], A[r]
-  return i + 1
+    if A[j] <= x:     // lille tal fundet
+      i += 1          // ryk grænsen ét frem
+      swap A[i], A[j] // byt det lille tal ind på grænsen
+  swap A[i+1], A[r]   // byt pivoten ind på sin endelige plads
+  return i + 1        // pivotens indeks
 ```
 
 #note(title: [Værdiområde])[Værdiområdet i opgaveteksten er ofte med for at narre dig. For en sammenligningssortering er det støj: quicksort er $Theta(n^2)$ i værste fald, uanset om tallene ligger i $[0, n)$ eller $[0, n^9)$. Det betyder kun noget for counting og radix.]
@@ -76,6 +86,7 @@ PARTITION(A, p, r)
 
 Det følgende er den rene mekaniske opskrift på hver algoritme — hvad du fysisk gør, trin for trin, uden pseudokode. Køretiderne står i tabellen ovenfor.
 
+#metadata(none) <th-sort-insertion>
 #recipe(
   title: "Insertion sort",
   [Se det venstre stykke af arrayet som "allerede sorteret". I starten er det bare det første tal.],
@@ -87,6 +98,7 @@ Det følgende er den rene mekaniske opskrift på hver algoritme — hvad du fysi
 
 I $[3, 1, 2]$ tager du $1$, skubber $3$ til højre og får $[1, 3, 2]$. Koster $Theta(n^2)$.
 
+#metadata(none) <th-sort-selection>
 #recipe(
   title: "Selection sort",
   [Kig på hele det usorterede stykke og find det mindste tal.],
@@ -97,6 +109,7 @@ I $[3, 1, 2]$ tager du $1$, skubber $3$ til højre og får $[1, 3, 2]$. Koster $
 
 I $[3, 1, 2]$ finder du $1$, bytter med $3$ og får $[1, 3, 2]$. Koster $Theta(n^2)$.
 
+#metadata(none) <th-sort-merge>
 #recipe(
   title: "Merge sort",
   [Del arrayet midt over igen og igen, til hver bid kun har ét tal.],
@@ -107,6 +120,7 @@ I $[3, 1, 2]$ finder du $1$, bytter med $3$ og får $[1, 3, 2]$. Koster $Theta(n
 
 $[3, 1]$ og $[2, 4]$ flettes ved at sammenligne forrest hver gang til $[1, 2, 3, 4]$. Koster $Theta(n log n)$.
 
+#metadata(none) <th-sort-quicksort>
 #recipe(
   title: "Quicksort (Lomuto, sidste element som pivot)",
   [Vælg det sidste tal i stykket som pivot.],
@@ -118,6 +132,7 @@ $[3, 1]$ og $[2, 4]$ flettes ved at sammenligne forrest hver gang til $[1, 2, 3,
 
 Typisk $Theta(n log n)$, men $Theta(n^2)$ når pivoten lander yderst hver gang (fx på sorteret input).
 
+#metadata(none) <th-sort-heapsort>
 #recipe(
   title: "Heapsort",
   [Byg en max-heap (max-heap) ud af arrayet, så hver forælder er større end eller lig sine børn. Det gør du nedefra og op med sift-down.],
@@ -129,6 +144,7 @@ Typisk $Theta(n log n)$, men $Theta(n^2)$ når pivoten lander yderst hver gang (
 
 Build-heap koster $Theta(n)$, derefter $n$ sift-downs. Samlet $Theta(n log n)$.
 
+#metadata(none) <th-sort-counting>
 #recipe(
   title: "Counting sort",
   [Lav et tælle-array med en plads per mulig værdi, og tæl hvor mange gange hver værdi optræder.],
@@ -139,6 +155,7 @@ Build-heap koster $Theta(n)$, derefter $n$ sift-downs. Samlet $Theta(n log n)$.
 
 Koster $Theta(n + k)$, hvor $k$ er værdiområdet.
 
+#metadata(none) <th-sort-radix>
 #recipe(
   title: "Radix sort (LSD, base 10)",
   [Start med det mindst betydende ciffer (enerne).],
@@ -152,8 +169,9 @@ $[21, 12, 11]$ sorteres først på enere til $[21, 11, 12]$, så på tiere til $
 === Tilbagevendende eksamensspørgsmål
 
 #qcard(
-  tag: [Sortering: værste-falds-køretid for CountingSort],
+  tag: [Sortering: værste-falds-køretid for CountingSort (Counting sort)],
   source: "MCQ juni 2023, Spm. 27",
+  theory: <th-sort-counting>,
   prompt: [Vi betragter sortering af #swap[$n$] heltal med værdier i intervallet #swap[$[0, n^3)$]. Hvad er værste-falds-køretiden for CountingSort på dette input?],
   options: (
     [$Theta(n)$],
@@ -181,8 +199,9 @@ $[21, 12, 11]$ sorteres først på enere til $[21, 11, 12]$, så på tiere til $
 )
 
 #qcard(
-  tag: [Sortering: værste-falds-køretid for CountingSort],
+  tag: [Sortering: værste-falds-køretid for CountingSort (Counting sort)],
   source: "MCQ juni 2021, Spm. 29",
+  theory: <th-sort-counting>,
   prompt: [Vi sorterer rækken af #swap[$n$] heltal ($n$ lige): #swap[$2, 1, 2, 1, dots.h, 2, 1$]. Hvad er køretiden for CountingSort på dette input?],
   options: (
     [$Theta(1)$],
@@ -211,8 +230,9 @@ $[21, 12, 11]$ sorteres først på enere til $[21, 11, 12]$, så på tiere til $
 )
 
 #qcard(
-  tag: [Sortering: værste-falds-køretid for RadixSort],
+  tag: [Sortering: værste-falds-køretid for RadixSort (Radix sort)],
   source: "MCQ juni 2023, Spm. 28",
+  theory: <th-sort-radix>,
   prompt: [Vi betragter sortering af #swap[$n$] heltal med værdier i intervallet #swap[$[0, n^3)$]. Hvad er værste-falds-køretiden for RadixSort, når heltallene behandles som tre cifre med værdier i intervallet $[0, n)$?],
   options: (
     [$Theta(n)$],
@@ -241,8 +261,9 @@ $[21, 12, 11]$ sorteres først på enere til $[21, 11, 12]$, så på tiere til $
 )
 
 #qcard(
-  tag: [Sortering: værste-falds-køretid for QuickSort],
+  tag: [Sortering: værste-falds-køretid for QuickSort (Quicksort)],
   source: "MCQ juni 2023, Spm. 29",
+  theory: <th-sort-quicksort>,
   prompt: [Vi betragter sortering af #swap[$n$] heltal med værdier i intervallet #swap[$[0, n^3)$]. Hvad er værste-falds-køretiden for QuickSort på dette input?],
   options: (
     [$Theta(n)$],
@@ -271,8 +292,9 @@ $[21, 12, 11]$ sorteres først på enere til $[21, 11, 12]$, så på tiere til $
 )
 
 #qcard(
-  tag: [Sortering: værste-falds-køretid for QuickSort],
+  tag: [Sortering: værste-falds-køretid for QuickSort (Quicksort)],
   source: "MCQ juni 2021, Spm. 30",
+  theory: <th-sort-quicksort>,
   prompt: [Vi sorterer rækken af #swap[$n$] heltal ($n$ lige): #swap[$2, 1, 2, 1, dots.h, 2, 1$]. Hvad er køretiden for QuickSort på dette input?],
   options: (
     [$Theta(1)$],
@@ -302,8 +324,9 @@ $[21, 12, 11]$ sorteres først på enere til $[21, 11, 12]$, så på tiere til $
 )
 
 #qcard(
-  tag: [Sortering: hvilke er Θ(n²) i værste fald?],
+  tag: [Sortering: hvilke er Θ(n²) i værste fald? (comparison sort)],
   source: "MCQ juni 2019, Spm. 27",
+  theory: <th-sort-runtimes>,
   prompt: [Vi betragter sortering af #swap[$n$] heltal med værdier i intervallet #swap[$[0, n^2)$]. Ved TreeSort menes algoritmen, der indsætter tallene ét ad gangen i et søgetræ og derefter laver et inorder-gennemløb. Hvilke af algoritmerne nedenfor har værste-falds-køretid $Theta(n^2)$? (Et eller flere svar.)],
   options: (
     [CountingSort],
@@ -340,8 +363,9 @@ $[21, 12, 11]$ sorteres først på enere til $[21, 11, 12]$, så på tiere til $
 )
 
 #qcard(
-  tag: [QuickSort: kør PARTITION i hånden],
+  tag: [QuickSort: kør PARTITION i hånden (Lomuto)],
   source: "MCQ juni 2019, Spm. 11",
+  theory: <th-sort-quicksort>,
   prompt: [Kør PARTITION($A$, 1, 7) på arrayet $A = #swap[$[6, 2, 4, 5, 1, 7, 3]$]$ (indeks 1..7). Hvilken mulighed viser $A$ bagefter? (Standard CLRS Lomuto-partition; pivot er sidste element $A[7] = 3$.)],
   options: (
     [$A = [2, 1, 3, 5, 6, 7, 4]$],
@@ -377,8 +401,9 @@ $[21, 12, 11]$ sorteres først på enere til $[21, 11, 12]$, så på tiere til $
 )
 
 #qcard(
-  tag: [QuickSort: kør PARTITION i hånden],
+  tag: [QuickSort: kør PARTITION i hånden (Lomuto)],
   source: "MCQ juni 2021, Spm. 11",
+  theory: <th-sort-quicksort>,
   prompt: [Kør PARTITION($A$, 4, 13) på det relevante stykke af arrayet $A = #swap[$[21, 17, 28, 14, 9, 18, 6, 1, 26, 15, 30, 7, 13, 19, 2]$]$ (indeks 1..15). Hvilken mulighed viser $A$ bagefter? (Standard CLRS Lomuto-partition; pivot er $A[13] = 13$.)],
   options: (
     [$A = [21, 17, 28, 1, 6, 7, 9, 13, 14, 15, 18, 26, 30, 19, 2]$],
@@ -409,8 +434,9 @@ $[21, 12, 11]$ sorteres først på enere til $[21, 11, 12]$, så på tiere til $
 )
 
 #qcard(
-  tag: [QuickSort: kør PARTITION i hånden],
+  tag: [QuickSort: kør PARTITION i hånden (Lomuto)],
   source: "MCQ juni 2025, Spm. 11",
+  theory: <th-sort-quicksort>,
   prompt: [Kør PARTITION($A$, 1, 9) på arrayet $A = #swap[$[8, 5, 6, 1, 9, 7, 3, 2, 4]$]$ (indeks 1..9). Hvilken mulighed viser $A$ bagefter? (Standard CLRS Lomuto-partition; pivot er sidste element $A[9] = 4$.)],
   options: (
     [$A = [1, 3, 2, 4, 5, 6, 9, 7, 8]$],
@@ -445,8 +471,9 @@ $[21, 12, 11]$ sorteres først på enere til $[21, 11, 12]$, så på tiere til $
 )
 
 #qcard(
-  tag: [QuickSort: hvilken værdi var pivot?],
+  tag: [QuickSort: hvilken værdi var pivot? (Lomuto)],
   source: "MCQ juni 2025, Spm. 12 (flere rigtige)",
+  theory: <th-sort-quicksort>,
   prompt: [Et array $A$ af længde ni indeholder ${1, dots.h, 9}$ i en eller anden rækkefølge. Efter PARTITION($A$, 1, 9) er $A = #swap[$[2, 1, 3, 4, 6, 5, 8, 7, 9]$]$ (indeks 1..9). Hvilke tal kunne have været pivoten (det sidste element til at starte med)? (Et eller flere svar.)],
   options: (
     [$1$],
@@ -486,8 +513,9 @@ $[21, 12, 11]$ sorteres først på enere til $[21, 11, 12]$, så på tiere til $
 )
 
 #qcard(
-  tag: [CountingSort: trace tælle-arrayet C],
+  tag: [CountingSort: trace tælle-arrayet C (Counting sort)],
   source: "MCQ juni 2023, Spm. 11",
+  theory: <th-sort-counting>,
   prompt: [Et array af ni heltal med værdier $0..6$: $A = #swap[$[2, 0, 6, 2, 3, 5, 5, 1, 2]$]$ (indeks 1..9). Kør COUNTING-SORT($A$, 9, 6) med et array $C$ med syv pladser (0..6). Hvad er summen af de syv heltal i $C$ ved terminering?],
   options: (
     [$0$],
@@ -517,8 +545,9 @@ $[21, 12, 11]$ sorteres først på enere til $[21, 11, 12]$, så på tiere til $
 )
 
 #qcard(
-  tag: [CountingSort: trace tælle-arrayet C],
+  tag: [CountingSort: trace tælle-arrayet C (Counting sort)],
   source: "MCQ juni 2025, Spm. 19",
+  theory: <th-sort-counting>,
   prompt: [Et array af elleve heltal med værdier $0..5$: $A = #swap[$[2, 2, 5, 1, 3, 5, 2, 3, 2, 5, 2]$]$ (indeks 1..11). Kør COUNTING-SORT($A$, 11, 5) med et array $C$ med seks pladser (0..5). Hvad er summen af de seks heltal i $C$ ved terminering?],
   options: (
     [$0$],
@@ -549,8 +578,9 @@ $[21, 12, 11]$ sorteres først på enere til $[21, 11, 12]$, så på tiere til $
 )
 
 #qcard(
-  tag: [RadixSort: kør trace i hånden],
+  tag: [RadixSort: kør trace i hånden (Radix sort)],
   source: "MCQ juni 2017, Spm. 9",
+  theory: <th-sort-radix>,
   prompt: [Vi vil bruge RADIX-SORT($A$, 4) til at sortere arrayet nedenfor stigende. $A$ (indeks 1..7): $#swap[$[2452, 5363, 4433, 1413, 2433, 3222, 2121]$]$. Hvad er indholdet af $A$ efter tre af de fire iterationer i RADIX-SORT($A$, 4)?],
   options: (
     [$[2452, 5363, 4433, 1413, 2433, 3222, 2121]$],
@@ -581,8 +611,9 @@ $[21, 12, 11]$ sorteres først på enere til $[21, 11, 12]$, så på tiere til $
 )
 
 #qcard(
-  tag: [RadixSort: kør trace i hånden],
+  tag: [RadixSort: kør trace i hånden (Radix sort)],
   source: "MCQ juni 2025, Spm. 20",
+  theory: <th-sort-radix>,
   prompt: [Sortér seks heltal med RADIX-SORT($A$, 6, 4). $A = #swap[$[0113, 4102, 4440, 2240, 2213, 2340]$]$ (indeks 1..6). Hvad er $A$ efter to af de fire iterationer?],
   options: (
     [$[4102, 0113, 2213, 4440, 2240, 2340]$],
@@ -610,8 +641,9 @@ $[21, 12, 11]$ sorteres først på enere til $[21, 11, 12]$, så på tiere til $
 )
 
 #qcard(
-  tag: [Sortering: køretid for InsertionSort],
+  tag: [Sortering: køretid for InsertionSort (Insertion sort)],
   source: "MCQ juni 2021, Spm. 28",
+  theory: <th-sort-insertion>,
   prompt: [Vi sorterer rækken af #swap[$n$] heltal ($n$ lige): #swap[$2, 1, 2, 1, dots.h, 2, 1$]. Hvad er køretiden for INSERTIONSORT på dette input?],
   options: (
     [$Theta(1)$],
@@ -640,8 +672,9 @@ $[21, 12, 11]$ sorteres først på enere til $[21, 11, 12]$, så på tiere til $
 )
 
 #qcard(
-  tag: [Sortering: køretid for Heapsort på ens nøgler],
+  tag: [Sortering: køretid for Heapsort på ens nøgler (Heapsort)],
   source: "MCQ juni 2019, Spm. 28",
+  theory: <th-sort-heapsort>,
   prompt: [Hvad er værste-falds-køretiden for HEAPSORT, når den køres på #swap[$n$] ens elementer?],
   options: (
     [$O(1)$],

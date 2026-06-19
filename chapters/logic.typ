@@ -1,6 +1,6 @@
 #import "../lib.typ": *
 
-== Udsagnslogik og sandhedstabeller
+== Udsagnslogik og sandhedstabeller <th-logic-truthtable>
 
 Et udsagn (proposition) er enten sandt eller falsk. Konnektiverne (connectives) $not$ (ikke), $and$ (og), $or$ (eller), $->$ (medfører), $<->$ (hvis og kun hvis) og $plus.o$ (XOR) binder udsagn sammen til større udsagn.
 
@@ -46,6 +46,7 @@ Lær de fire grundkonnektiver udenad.
   [*Antal rækker*: $2^n$, hvor $n$ er antal #swap[forskellige] variable.],
 )
 
+#metadata(none) <th-logic-equiv>
 Lær de tilbagevendende ækvivalenser udenad. De Morgan:
 
 #eq[$ not(p and q) equiv not p or not q quad quad not(p or q) equiv not p and not q $]
@@ -65,8 +66,9 @@ Biimplikation (biconditional):
 === Tilbagevendende eksamensspørgsmål
 
 #qcard(
-  tag: [Udsagnslogik: hvilke udsagn er sande?],
+  tag: [Udsagnslogik: hvilke udsagn er sande? (sandhedstabel)],
   source: "MCQ juni 2023, Spm. 33",
+  theory: <th-logic-truthtable>,
   prompt: [Lad $p,q,r$ være udsagn. Hvilke af nedenstående udsagn er sande? (Et eller flere svar.)],
   options: (
     [$(p and q) or (p and not q)$ er ækvivalent med #swap[$p$].],
@@ -98,8 +100,9 @@ Biimplikation (biconditional):
 )
 
 #qcard(
-  tag: [Udsagnslogik: hvilke udsagn er sande?],
+  tag: [Udsagnslogik: hvilke udsagn er sande? (sandhedstabel)],
   source: "MCQ juni 2021, Spm. 34",
+  theory: <th-logic-truthtable>,
   prompt: [Lad $p,q,r,s$ være udsagn. Hvilke af følgende sammensatte udsagn er sande? (Et eller flere svar.)],
   options: (
     [Hvis $p$ er sand og $q$ er falsk, så er $p or q or r$ sand.],
@@ -141,8 +144,9 @@ Biimplikation (biconditional):
 )
 
 #qcard(
-  tag: [Udsagnslogik: hvilke udsagn er sande?],
+  tag: [Udsagnslogik: hvilke udsagn er sande? (sandhedstabel)],
   source: "MCQ juni 2025, Spm. 32",
+  theory: <th-logic-truthtable>,
   prompt: [Lad $p,q,r$ være udsagn. Hvilke sammensatte udsagn er sande? (Et eller flere svar.)],
   options: (
     [Hvis $p$ er sand og $q$ er falsk, så er $p or not q$ sand.],
@@ -180,8 +184,9 @@ Biimplikation (biconditional):
 )
 
 #qcard(
-  tag: [Udsagnslogik: find de ækvivalente udsagn],
+  tag: [Udsagnslogik: find de ækvivalente udsagn (ækvivalens)],
   source: "DM547 Reeksamen marts 2019, Spm. 3",
+  theory: <th-logic-equiv>,
   prompt: [Hvilke udsagn er ækvivalente med #swap[$not(p and q)$]?],
   options: (
     [$p or q$],

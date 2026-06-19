@@ -5,8 +5,9 @@
 Sorteringsopgaverne kommer i nogle få varianter. Nogle beder dig designe en sortering, der udnytter struktur i input — få distinkte værdier, små heltal, 0/1-nøgler. Andre vil have dig til at køre Radix-Sort eller Counting-Sort i hånden, eller aflæse køretider for Insertion-, Merge-, Quick-, Heap-, Counting- og Radix-Sort på et bestemt input. Og så er der den klassiker, hvor du tæller inversioner (inversions) med en let pyntet mergesort (merge sort).
 
 #qcard(
-  tag: [Sortér med få distinkte værdier],
+  tag: [Sortér med få distinkte værdier (comparison sort)],
   source: "DM02 januar 2005, Opg. 5 (20%)",
+  theory: <th-sort-lower-bound>,
   prompt: [
     Sortér $n$ heltal i tid #swap[$O(n log log n)$] når der kun er #swap[$O(log n)$] distinkte værdier. Tallene kan være astronomisk store, så du må kun *sammenligne* dem ($O(1)$ pr. sammenligning) — du må ikke indeksere på værdien (Radix-/Counting-Sort på værdiintervallet er udelukket). \
     *(a)* Beskriv en algoritme og argumentér for køretiden $O(n log log n)$. \
@@ -33,8 +34,9 @@ Sorteringsopgaverne kommer i nogle få varianter. Nogle beder dig designe en sor
 )
 
 #qcard(
-  tag: [Inversioner: tæl og vælg sortering],
+  tag: [Inversioner: tæl og vælg sortering (inversioner)],
   source: "DM02 januar 2006, Opg. 2 (25%)",
+  theory: <th-sort-merge>,
   prompt: [
     En inversion er et par $(x, y)$ med $x > y$ hvor $x$ står før $y$ i følgen. \
     *(a)* Hvad er det største antal inversioner i en følge af $n$ tal, og hvordan ser sådan en følge ud? \
@@ -64,8 +66,9 @@ Sorteringsopgaverne kommer i nogle få varianter. Nogle beder dig designe en sor
 )
 
 #qcard(
-  tag: [Radix-Sort: kør i hånden],
+  tag: [Radix-Sort: kør i hånden (Radix sort)],
   source: "DM507 juni 2008, Opg. 1a (5%)",
+  theory: <th-sort-radix>,
   prompt: [
     Kør Radix-Sort med grundtal 10 på #swap[$747, 765, 544, 754, 431, 231, 222$]. Vis resultatet efter hver iteration (pass).
   ],
@@ -92,8 +95,9 @@ Sorteringsopgaverne kommer i nogle få varianter. Nogle beder dig designe en sor
 )
 
 #qcard(
-  tag: [Radix-Sort: kør i hånden],
+  tag: [Radix-Sort: kør i hånden (Radix sort)],
   source: "DM507 juni 2014, Opg. 5 (6%)",
+  theory: <th-sort-radix>,
   prompt: [
     Givet #swap[$A = [8345, 7112, 1830, 5001, 4345, 2222, 9112, 6363]$], kør `Radix-Sort(A, 4)` (4 cifre, grundtal 10, mindst betydende først, stabil). Vis $A$ efter tre af de fire iterationer.
   ],
@@ -116,8 +120,9 @@ Sorteringsopgaverne kommer i nogle få varianter. Nogle beder dig designe en sor
 )
 
 #qcard(
-  tag: [Counting-Sort: tæl-array C],
+  tag: [Counting-Sort: tæl-array C (Counting sort)],
   source: "DM507 juni 2013, Opg. 5b (5%)",
+  theory: <th-sort-counting>,
   prompt: [
     Counting-Sort på værdier #swap[$0..7$]. Med CLRS-pseudokoden (s. 195): hvad er array `C` efter at den kumulative løkke er kørt? Input #swap[$A = 7, 4, 1, 2, 6, 4, 0, 4, 4, 4, 7, 2$]. Giv `C` fra venstre til højre.
   ],
@@ -139,8 +144,9 @@ Sorteringsopgaverne kommer i nogle få varianter. Nogle beder dig designe en sor
 )
 
 #qcard(
-  tag: [Sorteringskøretider på et givet input],
+  tag: [Sorteringskøretider på et givet input (comparison sort)],
   source: "DM507 juni 2008, Opg. 1b (10%)",
+  theory: <th-sort-runtimes>,
   prompt: [
     Angiv bedstefald (best case), værstefald (worst case) og "sorteret input" for #swap[Insertion-Sort, Merge-Sort, Quicksort]. Begrund.
   ],
@@ -167,8 +173,9 @@ Sorteringsopgaverne kommer i nogle få varianter. Nogle beder dig designe en sor
 )
 
 #qcard(
-  tag: [Sorteringskøretider på et givet input],
+  tag: [Sorteringskøretider på et givet input (comparison sort)],
   source: "DM507 juni 2011, Opg. 3 (24%)",
+  theory: <th-sort-runtimes>,
   prompt: [
     $n$ nøgler, heltal i intervallet #swap[$0..n^5$]. To input: #swap[(1) alle distinkte, omvendt sorteret; (2) alle nøgler ens]. Angiv køretiden for hvert tilfælde for #swap[Insertion-Sort, Quicksort (fast sidste-element-pivot), Heapsort, Radix-Sort].
   ],
@@ -195,8 +202,9 @@ Sorteringsopgaverne kommer i nogle få varianter. Nogle beder dig designe en sor
 )
 
 #qcard(
-  tag: [Sorteringskøretider på et givet input],
+  tag: [Sorteringskøretider på et givet input (comparison sort)],
   source: "DM507 juni 2013, Opg. 5a (5%)",
+  theory: <th-sort-runtimes>,
   prompt: [
     $n$ heltal i intervallet #swap[$0..n^4$]. Angiv værstefald for: i) Counting-Sort, ii) Radix-Sort (heltal som #swap[4 cifre, hvert i $0..n$]), iii) Quicksort, iv) Merge-Sort, v) Insertion-Sort.
   ],
@@ -218,8 +226,9 @@ Sorteringsopgaverne kommer i nogle få varianter. Nogle beder dig designe en sor
 )
 
 #qcard(
-  tag: [Sorteringskøretider på et givet input],
+  tag: [Sorteringskøretider på et givet input (comparison sort)],
   source: "DM507 juni 2014, Opg. 8 (10%)",
+  theory: <th-sort-runtimes>,
   prompt: [
     Sortér $n$ elementer hvis nøgler kun er #swap[$0$ eller $1$]. For Counting-Sort, Insertion-Sort, Merge-Sort, Quicksort: angiv værstefald og bedstefald fra A) $O(n)$, B) $O(n log n)$, C) $O(n^2)$.
   ],

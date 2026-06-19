@@ -14,7 +14,7 @@
   ))
 }
 
-== Prioritetskøer og heaps
+== Prioritetskøer og heaps <th-heap-property>
 
 En prioritetskø (priority queue) trækker hele tiden den vigtigste nøgle ud — den mindste i en min-kø, den største i en max-kø. Den implementeres typisk som en binær heap (binary heap).
 
@@ -38,7 +38,7 @@ Til eksamen skal du afgøre om et array er en heap, og trace `Extract`, `Increas
 
 Hver operation har sin egen opskrift herunder. De er skrevet for en *max-heap* (største øverst). Kører du en *min-heap*, byt blot "størst/større" ud med "mindst/mindre" overalt. Husk positions-reglerne: barn af plads $i$ ligger på $2i$ og $2i+1$; forælder ligger på $floor(i\/2)$.
 
-==== Heap-Increase-Key$(A, i, k)$ — gør en nøgle større
+==== Heap-Increase-Key$(A, i, k)$ — gør en nøgle større <th-heap-increase-key>
 
 *Hvad det gør:* sætter nøglen på plads $i$ op til en større værdi $k$, og lader den "boble opad" til sin rette plads.
 
@@ -50,7 +50,7 @@ Hver operation har sin egen opskrift herunder. De er skrevet for en *max-heap* (
   [Efter byttet står din nøgle på forælderens gamle plads. Gentag fra trin 2 derfra, indtil forælderen er større, eller du rammer roden (plads 1).],
 )
 
-==== Heap-Extract-Max$(A)$ — træk den største ud
+==== Heap-Extract-Max$(A)$ — træk den største ud <th-heap-extract>
 
 *Hvad det gør:* roden (plads 1) er altid den største. Du fjerner den, sætter en ny værdi i roden og lader den "synke nedad", til heap-ordenen passer igen.
 
@@ -63,7 +63,7 @@ Hver operation har sin egen opskrift herunder. De er skrevet for en *max-heap* (
   [Efter byttet står din nøgle på barnets plads. Gentag fra trin 3 derfra, indtil intet barn er større, eller knuden ingen børn har. Aflæs arrayet.],
 )
 
-==== Insert$(A, k)$ — indsæt en ny nøgle
+==== Insert$(A, k)$ — indsæt en ny nøgle <th-heap-insert>
 
 *Hvad det gør:* lægger en ny nøgle ind og bobler den op, præcis som Increase-Key.
 
@@ -73,7 +73,7 @@ Hver operation har sin egen opskrift herunder. De er skrevet for en *max-heap* (
   [Boble op nøjagtigt som i Increase-Key: byt med forælderen så længe din nøgle er større, stop ellers.],
 )
 
-==== Tjek om et array er en heap
+==== Tjek om et array er en heap <th-heap-validity>
 
 #recipe(
   title: "Er det en gyldig heap?",
@@ -85,13 +85,15 @@ Hver operation har sin egen opskrift herunder. De er skrevet for en *max-heap* (
 
 #trap(title: [Boble op vs. synk ned])[Den klassiske trace-fejl er at bytte retning om. Increase-Key og Insert *bobler op* (mod forælderen, $floor(i\/2)$). Extract *synker ned* (mod børnene, $2i$ og $2i+1$). Roden er min i en min-heap og max i en max-heap, aldrig begge.]
 
+#metadata(none) <th-heap-build>
 #note(title: [Build-Heap-køretid])[Build-Heap er $O(n)$, ikke $O(n log n)$. Den kalder synk-ned nedefra og op over arrayets nederste halvdel. At indsætte $n$ nøgler én ad gangen ville koste $O(n log n)$.]
 
 === Tilbagevendende eksamensspørgsmål
 
 #qcard(
-  tag: [Heap: er arrayet en (min-)heap?],
+  tag: [Heap: er arrayet en (min-)heap? (min-heap)],
   source: "DM507 juni 2012, Opg. 2a (5%)",
+  theory: <th-heap-validity>,
   prompt: [Hvilke af følgende arrays af størrelse $#swap[$10$]$ er min-heaps? \
     A1 $= [7,4,9,2,6,8,10,1,3,5]$ \
     A2 $= [1,2,3,4,5,6,7,8,9,10]$ \
@@ -119,8 +121,9 @@ Hver operation har sin egen opskrift herunder. De er skrevet for en *max-heap* (
 )
 
 #qcard(
-  tag: [Heap: er arrayet en (min-)heap?],
+  tag: [Heap: er arrayet en (min-)heap? (min-heap)],
   source: "MCQ juni 2017, Spm. 6 (flere rigtige)",
+  theory: <th-heap-validity>,
   prompt: [Hvilke af følgende arrays af størrelse $#swap[$8$]$ er min-heaps? \
     A0 $= [0,1,0,1,1,0,1,1]$ \
     A1 $= [0,0,0,1,1,1,0,1]$ \
@@ -154,8 +157,9 @@ Hver operation har sin egen opskrift herunder. De er skrevet for en *max-heap* (
 )
 
 #qcard(
-  tag: [Heap: er arrayet en (min-)heap?],
+  tag: [Heap: er arrayet en (min-)heap? (min-heap)],
   source: "MCQ juni 2019, Spm. 7 (flere rigtige)",
+  theory: <th-heap-validity>,
   prompt: [Hvilke af følgende arrays er max-heaps? (1-indekseret; en tom plads efterfulgt af en værdi er et hul og dur ikke som heap-array.) \
     A0 $= [4,3,3,2,1,#h(0.7em),1]$ (plads 6 tom, plads 7 $= 1$) \
     A1 $= [4,3,4,2,1,4]$ \
@@ -185,8 +189,9 @@ Hver operation har sin egen opskrift herunder. De er skrevet for en *max-heap* (
 )
 
 #qcard(
-  tag: [Heap: er arrayet en (min-)heap?],
+  tag: [Heap: er arrayet en (min-)heap? (min-heap)],
   source: "MCQ juni 2021, Spm. 7 (flere rigtige)",
+  theory: <th-heap-validity>,
   prompt: [Hvilke af følgende arrays $A$ er max-heaps? \
     A0 $= [2,1]$ \
     A1 $= [2,1,2,1]$ \
@@ -218,8 +223,9 @@ Hver operation har sin egen opskrift herunder. De er skrevet for en *max-heap* (
 )
 
 #qcard(
-  tag: [Heap: trace Extract-Min skridt for skridt],
+  tag: [Heap: trace Extract-Min skridt for skridt (synk ned)],
   source: "MCQ juni 2023, Spm. 7",
+  theory: <th-heap-extract>,
   prompt: [Udfør Extract-Min på min-heapen $A = #swap[$[3,5,6,10,11,8,7,18,16,15]$]$ (1-indekseret, positioner $1..10$). Hvilken position i $A$ ender $#swap[$15$]$ på bagefter?],
   options: ([$1$], [$2$], [$3$], [$4$], [$5$], [$8$], [$9$]),
   answer: [(d) position 4.],
@@ -244,8 +250,9 @@ Hver operation har sin egen opskrift herunder. De er skrevet for en *max-heap* (
 )
 
 #qcard(
-  tag: [Heap: trace Increase-Key + Extract-Max],
+  tag: [Heap: trace Increase-Key + Extract-Max (Increase-Key)],
   source: "MCQ juni 2015, Spm. 6",
+  theory: <th-heap-increase-key>,
   prompt: [Udfør først Heap-Increase-Key$(A, #swap[$9$], #swap[$15$])$ og derefter Heap-Extract-Max$(A)$ på max-heapen $A$ herunder. $A$ (positioner $1..9$) $= #swap[$[18,9,16,4,8,12,13,1,2]$]$. Hvilket af svarene viser heapen efter de to operationer?],
   options: (
     [$A = [16,15,13,9,8,4,12,1]$],
@@ -279,8 +286,9 @@ Hver operation har sin egen opskrift herunder. De er skrevet for en *max-heap* (
 )
 
 #qcard(
-  tag: [Heap: trace Extract-Max skridt for skridt],
+  tag: [Heap: trace Extract-Max skridt for skridt (Extract-Max)],
   source: "MCQ juni 2019, Spm. 8",
+  theory: <th-heap-extract>,
   prompt: [Udfør Heap-Extract-Max$(A)$ på max-heapen $A = #swap[$[5,4,3,3,4,2,3,2,1]$]$ (positioner $1..9$). Hvordan ser $A$ ud bagefter?],
   options: (
     [$A = [4,4,3,3,3,2,2,1,#h(0.7em)]$],
@@ -311,8 +319,9 @@ Hver operation har sin egen opskrift herunder. De er skrevet for en *max-heap* (
 )
 
 #qcard(
-  tag: [Heap: trace Extract-Max skridt for skridt],
+  tag: [Heap: trace Extract-Max skridt for skridt (Extract-Max)],
   source: "MCQ juni 2017, Spm. 7",
+  theory: <th-heap-extract>,
   prompt: [Udfør to gange Heap-Extract-Max$(A)$ på max-heapen $A = #swap[$[1,1,0,1,0,0,0,1]$]$ (positioner $1..8$). Hvordan ser $A$ ud bagefter?],
   options: (
     [$A = [0,1,0,1,0,0,#h(0.7em),#h(0.7em)]$],
@@ -344,8 +353,9 @@ Hver operation har sin egen opskrift herunder. De er skrevet for en *max-heap* (
 )
 
 #qcard(
-  tag: [Heap: trace Insert-sekvens],
+  tag: [Heap: trace Insert-sekvens (Insert)],
   source: "MCQ juni 2021, Spm. 8",
+  theory: <th-heap-insert>,
   prompt: [Indsæt med Max-Heap-Insert tallene #swap[$6, 12, 13, 4, 8, 14, 5$] i den rækkefølge i en tom binær max-heap $A$. Hvordan ser $A$ ud bagefter?],
   options: (
     [$A = [14,12,13,4,8,6,5]$],
@@ -378,8 +388,9 @@ Hver operation har sin egen opskrift herunder. De er skrevet for en *max-heap* (
 )
 
 #qcard(
-  tag: [Heap: trace Build-Heap],
+  tag: [Heap: trace Build-Heap (Build-Heap)],
   source: "MCQ juni 2025, Spm. 7",
+  theory: <th-heap-build>,
   prompt: [Kør Build-Min-Heap$(A, #swap[$8$])$ på arrayet $A = #swap[$[5,4,2,3,7,6,1,0]$]$ (positioner $1..8$). På hvilken position i $A$ ender nøglen $#swap[$5$]$?],
   options: ([$1$], [$2$], [$3$], [$4$], [$5$], [$6$], [$7$], [$8$]),
   answer: [Mulighed (h): position 8.],
@@ -403,8 +414,9 @@ Hver operation har sin egen opskrift herunder. De er skrevet for en *max-heap* (
 )
 
 #qcard(
-  tag: [Heap: mulige pladser for en nøgle],
+  tag: [Heap: mulige pladser for en nøgle (min-heap)],
   source: "MCQ juni 2023, Spm. 8 (flere rigtige)",
+  theory: <th-heap-property>,
   prompt: [En min-heap $A$ (array af størrelse $#swap[$5$]$, positioner $1..5$) indeholder nøglerne $#swap[${1,2,3,4,5}$]$. Angiv alle positioner i $A$, hvor nøglen $#swap[$4$]$ kan stå.],
   options: ([$1$], [$2$], [$3$], [$4$], [$5$]),
   answer: [Mulighed (c), (d), (e): positionerne 3, 4 og 5. Position 1 må være minimum, og position 2 kan ikke holde $4$.],
@@ -430,8 +442,9 @@ Hver operation har sin egen opskrift herunder. De er skrevet for en *max-heap* (
 )
 
 #qcard(
-  tag: [Heap: mulige pladser for en nøgle],
+  tag: [Heap: mulige pladser for en nøgle (min-heap)],
   source: "MCQ juni 2025, Spm. 8 (flere rigtige)",
+  theory: <th-heap-property>,
   prompt: [En min-heap $A$ (array af størrelse $#swap[$6$]$, positioner $1..6$) indeholder nøglerne $#swap[${5,6,7,8,9,10}$]$. Angiv alle positioner i $A$, hvor nøglen $#swap[$9$]$ kan stå.],
   options: ([$1$], [$2$], [$3$], [$4$], [$5$], [$6$]),
   answer: [Mulighed (c), (d), (e), (f): positionerne 3, 4, 5 og 6. Position 1 må være minimum, og position 2 har to efterkommere, der begge skulle være $> 9$.],
@@ -456,8 +469,9 @@ Hver operation har sin egen opskrift herunder. De er skrevet for en *max-heap* (
 )
 
 #qcard(
-  tag: [Heapsort: køretid på ens elementer],
+  tag: [Heapsort: køretid på ens elementer (Build-Heap)],
   source: "MCQ juni 2019, Spm. 28",
+  theory: <th-heap-build>,
   prompt: [Hvad er worst-case køretiden for Heapsort, når den køres på $#swap[$n$]$ identiske elementer?],
   options: ([$O(1)$], [$O(log n)$], [$O(n)$], [$O(n log n)$], [$O(n^2)$]),
   answer: [(c) $O(n)$.],

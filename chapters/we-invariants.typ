@@ -5,8 +5,9 @@
 De skriftlige eksamener vender den samme skabelon igen og igen: en lille iterativ eller rekursiv algoritme, hvor du skal bevise en løkkeinvariant (loop invariant) med initialisering (initialization)/vedligehold (maintenance)/afslutning (termination), bruge den til at aflæse returværdien, og til sidst sætte køretiden (running time). Et par af opgaverne spørger i stedet, hvilke udsagn der faktisk *er* invarianter.
 
 #qcard(
-  tag: [Løkkeinvariant: bevis + aflæs output + køretid],
+  tag: [Løkkeinvariant: bevis + aflæs output + køretid (terminering)],
   source: "DM507 juni 2010, Opg. 3 (25%)",
+  theory: <th-inv-prove>,
   prompt: [
     `BinaryDigits(n)` udskriver $n$ i binær:
     #eq[$
@@ -47,8 +48,9 @@ De skriftlige eksamener vender den samme skabelon igen og igen: en lille iterati
 )
 
 #qcard(
-  tag: [Løkkeinvariant: bevis + aflæs output + køretid],
+  tag: [Løkkeinvariant: bevis + aflæs output + køretid (terminering)],
   source: "DM507 juni 2012, Opg. 6 (20%)",
+  theory: <th-inv-prove>,
   prompt: [
     `IntegerLog(n)` beregner $floor(log n)$:
     #eq[$
@@ -88,8 +90,9 @@ De skriftlige eksamener vender den samme skabelon igen og igen: en lille iterati
 )
 
 #qcard(
-  tag: [Løkkeinvariant: bevis invariant + aflæs output],
+  tag: [Løkkeinvariant: bevis invariant + aflæs output (terminering)],
   source: "DM507 juni 2009, Opg. 2 (15%)",
+  theory: <th-inv-prove>,
   prompt: [
     Betragt `KvadratRod(n)`:
     #eq[$
@@ -121,8 +124,9 @@ De skriftlige eksamener vender den samme skabelon igen og igen: en lille iterati
 )
 
 #qcard(
-  tag: [Løkkeinvariant: bevis + korrekthed],
+  tag: [Løkkeinvariant: bevis + korrekthed (korrekthed)],
   source: "DM507 juni 2008, Opg. 5 (15%)",
+  theory: <th-inv-prove>,
   prompt: [
     `Eksp(a, B)` beregner $a^b$ ud fra bittene af $b$ (MSB$->$LSB, `B[k]` er MSB):
     #eq[$
@@ -157,8 +161,9 @@ De skriftlige eksamener vender den samme skabelon igen og igen: en lille iterati
 )
 
 #qcard(
-  tag: [Korrekthed ved induktion + opstil køretid],
+  tag: [Korrekthed ved induktion + opstil køretid (induktion)],
   source: "DM02 jan 2005, Opg. 2 (15%)",
+  theory: <th-inv-prove>,
   prompt: [
     Betragt `Mult(a, b)` for positive heltal:
     #eq[$
@@ -188,8 +193,9 @@ De skriftlige eksamener vender den samme skabelon igen og igen: en lille iterati
 )
 
 #qcard(
-  tag: [Løkkeinvariant: hvilke udsagn er invarianter?],
+  tag: [Løkkeinvariant: hvilke udsagn er invarianter? (løkkeinvariant)],
   source: "DM507 juni 2013, Opg. 6 (10%)",
+  theory: <th-inv-decide>,
   prompt: [
     Betragt `Factorial(n)`:
     #eq[$
@@ -222,8 +228,9 @@ De skriftlige eksamener vender den samme skabelon igen og igen: en lille iterati
 )
 
 #qcard(
-  tag: [Løkkeinvariant: hvilke udsagn er invarianter?],
+  tag: [Løkkeinvariant: hvilke udsagn er invarianter? (løkkeinvariant)],
   source: "jun 2016, Problem 8 (5%)",
+  theory: <th-inv-decide>,
   prompt: [
     Betragt `GangeSyv(n)`, som beregner $7n$:
     #eq[$

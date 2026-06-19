@@ -5,8 +5,9 @@
 Skriftlige opgaver om binære hobe falder i tre slags: kør `Build-Max-Heap` på et array, afgør om et array opfylder hob-egenskaben (heap property), og kør et `Heap-Extract-Min/Max`-trace. Alle bruger 1-indeksering (1-indexing), hvor node $i$ har børn $2i$ og $2i+1$ og forælder $floor(i\/2)$.
 
 #qcard(
-  tag: [Hob: Build-Max-Heap],
+  tag: [Hob: Build-Max-Heap (Build-Heap)],
   source: "jun 2016, Problem 3 (7%)",
+  theory: <th-heap-build>,
   prompt: [
     Kør `Build-Max-Heap` på arrayet #swap[$A = [2,1,5,4,8,6,7,9,3]$] (1-indekseret, $n = 9$). Angiv arrayet bagefter.
   ],
@@ -32,8 +33,9 @@ Skriftlige opgaver om binære hobe falder i tre slags: kør `Build-Max-Heap` på
 )
 
 #qcard(
-  tag: [Hob: Build-Max-Heap],
+  tag: [Hob: Build-Max-Heap (Build-Heap)],
   source: "DM507 juni 2014, Opg. 3 (6%)",
+  theory: <th-heap-build>,
   prompt: [
     Arrayet #swap[$A = [5,4,3,2,1,10,9,8,7,6]$] (1-indekseret, $n = 10$). Angiv arrayet efter `Build-Max-Heap`.
   ],
@@ -59,8 +61,9 @@ Skriftlige opgaver om binære hobe falder i tre slags: kør `Build-Max-Heap` på
 )
 
 #qcard(
-  tag: [Hob: genkend hob-egenskab],
+  tag: [Hob: genkend hob-egenskab (min-heap)],
   source: "DM507 juni 2012, Opg. 2a (5%)",
+  theory: <th-heap-validity>,
   prompt: [
     En binær min-hob (min-heap) i $A[1..n]$ har børn $2i, 2i+1$ til node $i$ og opfylder $A["forælder"] <= A["barn"]$ for alle noder. Afgør hvilke af følgende der er min-hobe:
     #swap[
@@ -90,8 +93,9 @@ Skriftlige opgaver om binære hobe falder i tre slags: kør `Build-Max-Heap` på
 )
 
 #qcard(
-  tag: [Hob: Heap-Extract-Min/Max],
+  tag: [Hob: Heap-Extract-Min/Max (Extract-Max)],
   source: "DM507 juni 2012, Opg. 2b (5%)",
+  theory: <th-heap-extract>,
   prompt: [
     Min-hoben #swap[$A_5 = [1,2,5,3,7,9,6,8,4,10]$]. Kør én `Heap-Extract-Min`. Angiv arrayet bagefter og den udtrukne værdi.
   ],
@@ -117,8 +121,9 @@ Skriftlige opgaver om binære hobe falder i tre slags: kør `Build-Max-Heap` på
 )
 
 #qcard(
-  tag: [Hob: Heap-Extract-Min/Max],
+  tag: [Hob: Heap-Extract-Min/Max (Extract-Max)],
   source: "DM507 juni 2009, Opg. 1a (7%)",
+  theory: <th-heap-extract>,
   prompt: [
     Kør `Heap-Extract-Max` på max-hoben #swap[$A = [10,7,6,5,4,2,3,1,2,3,1,1]$] (1-indekseret, $n = 12$). Vis hvert skridt; angiv den nye hob.
   ],
@@ -144,8 +149,9 @@ Skriftlige opgaver om binære hobe falder i tre slags: kør `Build-Max-Heap` på
 )
 
 #qcard(
-  tag: [Hob: Heap-Extract-Min/Max],
+  tag: [Hob: Heap-Extract-Min/Max (Extract-Max)],
   source: "DM507 juni 2015, Opg. 3 (7%)",
+  theory: <th-heap-increase-key>,
   prompt: [
     Max-hob #swap[$A = [18,9,16,4,8,12,13,1,2]$] (1-indekseret). Kør først `Heap-Increase-Key(A, 9, 15)`, derefter `Heap-Extract-Max(A)`. Angiv arrayet efter hver operation.
   ],
@@ -166,8 +172,9 @@ Skriftlige opgaver om binære hobe falder i tre slags: kør `Build-Max-Heap` på
 )
 
 #qcard(
-  tag: [Hob: Insert (sift-up)],
+  tag: [Hob: Insert (boble op)],
   source: "DM02 jan 2006, Opg. 1b (6%)",
+  theory: <th-heap-insert>,
   prompt: [
     Min-hob (mindst i roden) gemt som array efter niveauer: #swap[$A = [1,3,5,4,10,13,7,6,17]$]. Indsæt prioritet #swap[$2$]. Angiv hoben bagefter.
   ],
@@ -191,8 +198,9 @@ Skriftlige opgaver om binære hobe falder i tre slags: kør `Build-Max-Heap` på
 )
 
 #qcard(
-  tag: [Hob: Insert (sift-up)],
+  tag: [Hob: Insert (boble op)],
   source: "DM507 jan 2008, Opg. 1b (7%)",
+  theory: <th-heap-insert>,
   prompt: [
     Indsæt nøglen #swap[$9$] i max-hoben #swap[$A = [10,8,6,3,7,4,5,1,2]$]. Vis arrayet før hver iteration af `Max-Heap-Insert`s while-løkke (sift-up). Angiv den endelige hob.
   ],
@@ -216,8 +224,9 @@ Skriftlige opgaver om binære hobe falder i tre slags: kør `Build-Max-Heap` på
 )
 
 #qcard(
-  tag: [Hob: Insert (sift-up)],
+  tag: [Hob: Insert (boble op)],
   source: "DM507 juni 2013, Opg. 3a (4%)",
+  theory: <th-heap-insert>,
   prompt: [
     Indsæt først #swap[$1$], derefter #swap[$2$], i min-hoben #swap[$A = [2,4,5,8,7,6,6,9]$] (1-indekseret). Angiv hoben efter den anden indsættelse (venstre mod højre).
   ],

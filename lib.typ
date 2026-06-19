@@ -73,7 +73,9 @@
 // `prompt` = the question text (verbatim). `options` = array of answer choices
 // shown exactly as on the exam (optional). `answer` = the correct choice.
 // `worked` = a short solution.
-#let qcard(source: "", prompt: [], options: (), answer: [], worked: [], blueprint: [], tag: "") = block(
+// `theory` = an optional label (e.g. <th-recurrences>) pointing at the cheat-sheet
+// section that explains this question type. Renders a small clickable "Læs mere →".
+#let qcard(source: "", prompt: [], options: (), answer: [], worked: [], blueprint: [], theory: none, tag: "") = block(
   width: 100%, breakable: true, above: 18pt, below: 18pt,
 )[
   // Register this question so the problem index can list and link to it.
@@ -82,7 +84,17 @@
   #if tag != "" { heading(level: 5, outlined: false, bookmarked: true)[#tag] }
   #line(length: 100%, stroke: 0.4pt + hair)
   #v(7pt)
-  #text(size: 9pt, fill: soft)[#source]
+  // Source on the left; if a theory anchor is given, a "read more" link on the right.
+  #if theory != none {
+    grid(
+      columns: (1fr, auto),
+      align: (left, right),
+      text(size: 9pt, fill: soft)[#source],
+      text(size: 9pt)[#link(theory)[Teori: læs mere →]],
+    )
+  } else {
+    text(size: 9pt, fill: soft)[#source]
+  }
   #v(7pt)
   #prompt
   #if options.len() > 0 {

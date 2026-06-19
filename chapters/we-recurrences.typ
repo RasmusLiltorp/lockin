@@ -5,8 +5,9 @@
 De skriftlige eksamener åbner næsten altid med en rekursionsopgave (recurrence). Enten skal du løse en eller flere ligninger på formen $T(n) = a thin T(n/b) + f(n)$ med Master Theorem, eller du skal klassificere en håndfuld efter tilfælde og afgøre, hvilke der falder uden for sætningen. Tre tal styrer alt, $a$, $b$ og $f(n)$.
 
 #qcard(
-  tag: [Master Theorem: løs rekursionsligning],
+  tag: [Master Theorem: løs rekursionsligning (skelseksponenten)],
   source: "DM507 juni 2014, Opg. 1 (8%)",
+  theory: <th-rec-method>,
   prompt: [Giv løsningen til hver rekursionsligning:
     + #swap[$T(n) = 2 dot T(n\/3) + n$]
     + #swap[$T(n) = 32 dot T(n\/4) + n^(2.5)$]
@@ -27,8 +28,9 @@ De skriftlige eksamener åbner næsten altid med en rekursionsopgave (recurrence
 )
 
 #qcard(
-  tag: [Master Theorem: løs rekursionsligning],
+  tag: [Master Theorem: løs rekursionsligning (skelseksponenten)],
   source: "DM507 juni 2013, Opg. 1 (10%)",
+  theory: <th-rec-method>,
   prompt: [Giv løsningen til hver rekursionsligning:
     + #swap[$T(n) = 8 dot T(n\/3) + n^2$]
     + #swap[$T(n) = 9 dot T(n\/3) + n^2$]
@@ -53,8 +55,9 @@ De skriftlige eksamener åbner næsten altid med en rekursionsopgave (recurrence
 )
 
 #qcard(
-  tag: [Master Theorem: løs rekursionsligning],
+  tag: [Master Theorem: løs rekursionsligning (skelseksponenten)],
   source: "DM02 jan 2006, Opg. 1c (7%)",
+  theory: <th-rec-method>,
   prompt: [Giv den asymptotiske løsning til $#swap[$T(n) = 3 T(n\/3) + n^2$]$.],
   answer: [$T(n) = Theta(n^2)$ — tilfælde 3.],
   blueprint: [
@@ -74,8 +77,9 @@ De skriftlige eksamener åbner næsten altid med en rekursionsopgave (recurrence
 )
 
 #qcard(
-  tag: [Master Theorem: løs rekursionsligning],
+  tag: [Master Theorem: løs rekursionsligning (skelseksponenten)],
   source: "DM02 jan 2005, Opg. 2b (15%)",
+  theory: <th-rec-method>,
   prompt: [En rekursiv procedure halverer argumentet hvert kald og bruger konstant arbejde udenom. Opstil rekursionsligningen for køretiden $T(a)$ og løs den. Drivledet (driving term) er #swap[$Theta(1)$], og argumentet skrumper fra $a$ til #swap[$floor(a\/2)$].],
   answer: [$T(a) = T(floor(a\/2)) + Theta(1)$, som løser til $T(a) = Theta(log a)$ — tilfælde 2.],
   blueprint: [
@@ -97,8 +101,9 @@ De skriftlige eksamener åbner næsten altid med en rekursionsopgave (recurrence
 )
 
 #qcard(
-  tag: [Master Theorem: løs + klassificér],
+  tag: [Master Theorem: løs + klassificér (skelseksponenten)],
   source: "DM507 juni 2012, Opg. 3 (15%)",
+  theory: <th-rec-method>,
   prompt: [
     *a.* Løs $#swap[$T(n) = 8 dot T(n\/4) + n^(1.5)$]$.
 
@@ -128,8 +133,9 @@ De skriftlige eksamener åbner næsten altid med en rekursionsopgave (recurrence
 )
 
 #qcard(
-  tag: [Master Theorem: løs + klassificér],
+  tag: [Master Theorem: løs + klassificér (skelseksponenten)],
   source: "jun 2016, Problem 1 (10%)",
+  theory: <th-rec-method>,
   prompt: [
     For hver rekursionsligning: *(a)* afgør, om lærebogens Master Theorem gælder, og hvilket tilfælde, og *(b)* giv løsningen $T(n)$, hvor den gælder.
     + #swap[$T(n) = 2 T(n\/2) + 1$]
@@ -156,8 +162,9 @@ De skriftlige eksamener åbner næsten altid med en rekursionsopgave (recurrence
 )
 
 #qcard(
-  tag: [Master Theorem: løs rekursionsligning],
+  tag: [Master Theorem: løs rekursionsligning (skelseksponenten)],
   source: "DM507 juni 2010, Opg. 1a (5%)",
+  theory: <th-rec-method>,
   prompt: [Løs $#swap[$T(n) = 16 dot T(n\/2) + n^4 + n^2$]$.],
   answer: [$T(n) = Theta(n^4 log n)$ — tilfælde 2.],
   blueprint: [
@@ -177,8 +184,9 @@ De skriftlige eksamener åbner næsten altid med en rekursionsopgave (recurrence
 )
 
 #qcard(
-  tag: [Master Theorem: løs + klassificér],
+  tag: [Master Theorem: løs + klassificér (skelseksponenten)],
   source: "DM507 juni 2015, Opg. 1 (10%)",
+  theory: <th-rec-method>,
   prompt: [
     For hver rekursionsligning: *(a)* afgør, om lærebogens Master Theorem gælder, og hvilket tilfælde, og *(b)* giv løsningen $T(n)$, hvor den gælder.
     + #swap[$T(n) = 5 dot T(n\/2) + n^2$]

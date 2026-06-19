@@ -1,6 +1,6 @@
 #import "../lib.typ": *
 
-== Korteste veje (shortest paths)
+== Korteste veje (shortest paths) <th-sp-basics>
 
 Du har en orienteret, vægtet graf (directed, weighted graph) og en startknude $s$. Du vil finde vejen fra $s$ til hver anden knude hvor vægtene summer til mindst muligt. Den letteste vægt til $v$ kalder vi $delta(s,v)$.
 
@@ -56,6 +56,7 @@ Her er hvad hver algoritme gør, hvad den kræver, og hvorfor kravet er der. Den
   [Går grafen igennem lag for lag ud fra kilden, så knuderne nås efter hvor få kanter der er hen til dem. *Krav:* alle vægte ens — reelt en uvægtet graf. *Hvorfor:* når hver kant koster det samme, er den korteste vej bare den med færrest kanter. Så snart vægtene varierer, holder det ikke.],
 )
 
+#metadata(none) <th-sp-dijkstra>
 #algcard(
   gdiag({
     gnode((0,0), "a", $a$); gnode((1.5,0.5), "b", $b$); gnode((1.5,-0.5), "c", $c$)
@@ -65,6 +66,7 @@ Her er hvad hver algoritme gør, hvad den kræver, og hvorfor kravet er der. Den
   [Tager hele tiden den nærmeste uafklarede knude og slapper dens kanter af. *Krav:* alle vægte $>= 0$. *Hvorfor:* den regner en knude for færdig i samme øjeblik den trækkes ud af køen. En negativ kant (negative edge) kunne gøre en vej billigere bagefter, og så ville svaret være forkert. Derfor er negative vægte (negative weights) udelukket.],
 )
 
+#metadata(none) <th-sp-dag>
 #algcard(
   gdiag({
     gnode((0,0), "a", $a$); gnode((1.1,0.55), "b", $b$); gnode((2.2,0), "c", $c$)
@@ -74,6 +76,7 @@ Her er hvad hver algoritme gør, hvad den kræver, og hvorfor kravet er der. Den
   [Sorterer knuderne topologisk (topological sort) og slapper kanterne af i den orden, én gang hver. *Krav:* grafen skal være en DAG; negative vægte er fine. *Hvorfor:* i en DAG kan du stille knuderne på en række, hvor alle pile peger fremad. Tager du dem i den orden, er en knude færdig, før du bruger den. Har grafen en kreds, findes den orden ikke.],
 )
 
+#metadata(none) <th-sp-bellman-ford>
 #algcard(
   gdiag({
     gnode((0,0), "a", $a$); gnode((1.5,0.5), "b", $b$); gnode((1.5,-0.5), "c", $c$)
@@ -132,6 +135,7 @@ BELLMAN-FORD(G, w, s)          // negative vægte ok, opdager neg. kreds
 
 Bellman-Ford slapper alle kanter af $|V| - 1$ gange og tjekker så en sidste gang om en kant stadig kan forbedres. Kan den det, findes en negativ kreds.
 
+#metadata(none) <th-sp-runtimes>
 #note(title: [Køretider — alle korteste-vej-algoritmer])[
   $n$ er antal knuder, $m$ antal kanter.
 
@@ -163,8 +167,9 @@ Tæt graf (dense graph) ($m = Theta(n^2)$): $n$ kørsler af Dijkstra giver $O(n^
 === Tilbagevendende eksamensspørgsmål
 
 #qcard(
-  tag: [Korteste veje: vælg algoritme til grafen],
+  tag: [Korteste veje: vælg algoritme til grafen (Bellman-Ford)],
   source: "MCQ juni 2015, Spm. 13",
+  theory: <th-sp-basics>,
   prompt: [Which of the following algorithms can be used to find shortest paths on this graph? (Et eller flere svar.) $G_1$ er orienteret med knuder $a,b,c,d,e$ og *alle vægte* #swap[$1$], og grafen *har kredse*: $b arrow.r a$, $a arrow.r d$, $a arrow.r e$, $b arrow.r e$, $e arrow.r d$, $c arrow.r b$, $c arrow.r e$, $c arrow.r d$.],
   options: (
     [Dijkstra],
@@ -201,8 +206,9 @@ Tæt graf (dense graph) ($m = Theta(n^2)$): $n$ kørsler af Dijkstra giver $O(n^
 )
 
 #qcard(
-  tag: [Korteste veje: vælg algoritme (DAG, negative vægte)],
+  tag: [Korteste veje: vælg algoritme (DAG-Shortest-Paths)],
   source: "MCQ juni 2015, Spm. 14",
+  theory: <th-sp-basics>,
   prompt: [Which of the following algorithms can be used to find shortest paths on this graph? (Et eller flere svar.) $G_2$ er orienteret med knuder $a,b,c,d,e$, *nogle vægte* #swap[$-1$], og grafen er en *DAG* (topologisk orden $c,b,a,e,d$): $b arrow.r a (1)$, $a arrow.r d (-1)$, $a arrow.r e (1)$, $b arrow.r e (-1)$, $e arrow.r d (1)$, $c arrow.r b (1)$, $c arrow.r e (-1)$, $c arrow.r d (1)$.],
   options: (
     [Dijkstra],
@@ -238,8 +244,9 @@ Tæt graf (dense graph) ($m = Theta(n^2)$): $n$ kørsler af Dijkstra giver $O(n^
 )
 
 #qcard(
-  tag: [Korteste veje: vælg algoritme (DAG, negative vægte)],
+  tag: [Korteste veje: vælg algoritme (DAG-Shortest-Paths)],
   source: "MCQ juni 2015, Spm. 15",
+  theory: <th-sp-basics>,
   prompt: [Which of the following algorithms can be used to find shortest paths on this graph? $G_3$ er orienteret med knuder $a,b,c,d,e$ og *nogle vægte* #swap[$-1$], og grafen *har kredse* (er ikke en DAG): $b arrow.r a (1)$, $a arrow.r d (-1)$, $a arrow.r e (1)$, $b arrow.r e (-1)$, $e arrow.r d (1)$, $c arrow.r b (1)$, $c arrow.r e (-1)$, $c arrow.r d (1)$.],
   options: (
     [Dijkstra],
@@ -275,8 +282,9 @@ Tæt graf (dense graph) ($m = Theta(n^2)$): $n$ kørsler af Dijkstra giver $O(n^
 )
 
 #qcard(
-  tag: [Korteste veje: vælg algoritme (DAG, negative vægte)],
+  tag: [Korteste veje: vælg algoritme (DAG-Shortest-Paths)],
   source: "MCQ juni 2019, Spm. 19 (flere rigtige)",
+  theory: <th-sp-basics>,
   prompt: [Which of the following algorithms can be used to find shortest paths on this graph? (Et eller flere svar.) $G_4$ er orienteret med *alle vægte positive* (#swap[$1$] og #swap[$2$]), og kanterne danner *en DAG* (ingen kreds).],
   options: (
     [Dijkstra],
@@ -315,8 +323,9 @@ Tæt graf (dense graph) ($m = Theta(n^2)$): $n$ kørsler af Dijkstra giver $O(n^
 )
 
 #qcard(
-  tag: [Korteste veje: vælg algoritme (DAG, negative vægte)],
+  tag: [Korteste veje: vælg algoritme (DAG-Shortest-Paths)],
   source: "MCQ juni 2023, Spm. 19 (flere rigtige)",
+  theory: <th-sp-basics>,
   prompt: [Which algorithms can find shortest paths on the graph below? (Et eller flere svar.) Knuder $a..g$ med *nogle vægte* #swap[$-1$], grafen er *en DAG* og *uden negativ kreds*: $a arrow.r g (1)$, $a arrow.r c (1)$, $a arrow.r b (1)$, $g arrow.r e (1)$, $g arrow.r c (1)$, $c arrow.r e (1)$, $b arrow.r c (1)$, $b arrow.r d (1)$, $f arrow.r e (-1)$, $f arrow.r c (-1)$, $d arrow.r c (-1)$, $f arrow.r d (-1)$.],
   options: (
     [Dijkstra],
@@ -358,8 +367,9 @@ Tæt graf (dense graph) ($m = Theta(n^2)$): $n$ kørsler af Dijkstra giver $O(n^
 )
 
 #qcard(
-  tag: [Dijkstra: udtrækningsrækkefølge i hånden],
+  tag: [Dijkstra: udtrækningsrækkefølge i hånden (Dijkstra)],
   source: "MCQ juni 2017, Spm. 15",
+  theory: <th-sp-dijkstra>,
   prompt: [Run Dijkstra's algorithm on graph $G_2$ below, starting at node #swap[$a$]. The first node extracted from the priority queue (via EXTRACT-MIN) during the run is node $a$. Which node is the #swap[sixth] one extracted? (Ved uafgjort: alfabetisk mindste navn.) Kanter: $a arrow.r b (1)$, $a arrow.r d (3)$, $d arrow.r g (1)$, $d arrow.r e (3)$, $g arrow.r h (3)$, $g arrow.r e (1)$, $h arrow.r i (1)$, $b arrow.r d (1)$, $b arrow.r e (3)$, $b arrow.r c (2)$, $e arrow.r h (1)$, $e arrow.r f (2)$, $c arrow.r e (1)$, $c arrow.r f (3)$, $f arrow.r h (2)$, $f arrow.r i (3)$.],
   options: (
     [Node $d$],
@@ -392,8 +402,9 @@ Tæt graf (dense graph) ($m = Theta(n^2)$): $n$ kørsler af Dijkstra giver $O(n^
 )
 
 #qcard(
-  tag: [Dijkstra: udtrækningsrækkefølge i hånden],
+  tag: [Dijkstra: udtrækningsrækkefølge i hånden (Dijkstra)],
   source: "MCQ juni 2021, Spm. 19",
+  theory: <th-sp-dijkstra>,
   prompt: [Kør Dijkstra fra knude #swap[$a$]. Hvilken liste giver rækkefølgen, knuderne trækkes ud af prioritetskøen (priority queue) i? Orienterede kanter: $a arrow.r g (7)$, $a arrow.r c (2)$, $a arrow.r b (4)$, $g arrow.r e (6)$, $g arrow.r c (4)$, $c arrow.r e (8)$, $c arrow.r f (6)$, $c arrow.r b (1)$, $c arrow.r d (1)$, $f arrow.r e (1)$, $b arrow.r d (2)$, $d arrow.r f (4)$.],
   options: (
     [$a, b, c, d, g, f, e$],
@@ -422,8 +433,9 @@ Tæt graf (dense graph) ($m = Theta(n^2)$): $n$ kørsler af Dijkstra giver $O(n^
 )
 
 #qcard(
-  tag: [Dijkstra: længden af korteste vej],
+  tag: [Dijkstra: længden af korteste vej (Dijkstra)],
   source: "MCQ juni 2017, Spm. 16",
+  theory: <th-sp-dijkstra>,
   prompt: [Kør Dijkstra på $G_2$ med start i knude #swap[$a$]. Hvad er længden af en korteste vej fra #swap[$a$] til #swap[$i$]? Kanter: $a arrow.r d (3)$, $a arrow.r b (1)$, $b arrow.r d (1)$, $b arrow.r e (3)$, $b arrow.r c (2)$, $c arrow.r e (1)$, $c arrow.r f (3)$, $d arrow.r e (3)$, $d arrow.r g (1)$, $e arrow.r g (1)$, $e arrow.r h (1)$, $e arrow.r f (2)$, $f arrow.r h (1)$, $f arrow.r i (3)$, $g arrow.r h (3)$, $h arrow.r i (1)$.],
   options: (
     [$6$],
@@ -450,8 +462,9 @@ Tæt graf (dense graph) ($m = Theta(n^2)$): $n$ kørsler af Dijkstra giver $O(n^
 )
 
 #qcard(
-  tag: [Dijkstra: antal relax der ændrer v.d],
+  tag: [Dijkstra: antal relax der ændrer v.d (relax)],
   source: "MCQ juni 2021, Spm. 20",
+  theory: <th-sp-dijkstra>,
   prompt: [Fortsæt Dijkstra fra knude #swap[$a$]. RELAX kører på hver kant præcis én gang (#swap[$12$] gange i alt). I hvor mange af dem ændres $v.d$? Kanter: $g arrow.r e (6)$, $a arrow.r g (7)$, $a arrow.r c (2)$, $g arrow.r c (4)$, $c arrow.r e (8)$, $e arrow.r f (1)$, $c arrow.r f (6)$, $a arrow.r b (4)$, $b arrow.r c (1)$, $c arrow.r d (1)$, $d arrow.r f (4)$, $b arrow.r d (2)$.],
   options: (
     [$7$],
@@ -487,8 +500,9 @@ Tæt graf (dense graph) ($m = Theta(n^2)$): $n$ kørsler af Dijkstra giver $O(n^
 )
 
 #qcard(
-  tag: [Bellman-Ford: find alle afstande i hånden],
+  tag: [Bellman-Ford: find alle afstande i hånden (Bellman-Ford)],
   source: "DM507 juni 2012, Opg. 4a",
+  theory: <th-sp-bellman-ford>,
   prompt: [Kør Bellman-Ford fra #swap[$a$] på den orienterede graf $G_1$ og angiv den endelige $v.d$ for alle knuder. Kanter: $a arrow.r e (8)$, $a arrow.r f (10)$, $a arrow.r b (17)$, $e arrow.r h (-4)$, $f arrow.r h (-10)$, $f arrow.r g (25)$, $g arrow.r h (-12)$, $g arrow.r c (-3)$, $b arrow.r g (-5)$, $c arrow.r b (19)$, $c arrow.r d (2)$, $d arrow.r e (6)$, $h arrow.r d (1)$.],
   answer: [
     #table(
@@ -522,8 +536,9 @@ Tæt graf (dense graph) ($m = Theta(n^2)$): $n$ kørsler af Dijkstra giver $O(n^
 )
 
 #qcard(
-  tag: [Korteste veje: køretid ved given m],
+  tag: [Korteste veje: køretid ved given m (Dijkstra)],
   source: "MCQ juni 2015, Spm. 16",
+  theory: <th-sp-runtimes>,
   prompt: [På grafer med $n$ knuder og $m = #swap[$n log n$]$ kanter, hvad er den asymptotiske køretid som funktion af $n$ for #swap[Dijkstra] (med prioritetskøen som et binært heap (binary heap))?],
   options: (
     [$O(n)$],
@@ -551,8 +566,9 @@ Tæt graf (dense graph) ($m = Theta(n^2)$): $n$ kørsler af Dijkstra giver $O(n^
 )
 
 #qcard(
-  tag: [Korteste veje: køretid ved given m],
+  tag: [Korteste veje: køretid ved given m (Dijkstra)],
   source: "MCQ juni 2015, Spm. 17",
+  theory: <th-sp-runtimes>,
   prompt: [På grafer med $n$ knuder og $m = #swap[$n log n$]$ kanter, hvad er den asymptotiske køretid som funktion af $n$ for #swap[Bellman-Ford]?],
   options: (
     [$O(n)$],
@@ -580,8 +596,9 @@ Tæt graf (dense graph) ($m = Theta(n^2)$): $n$ kørsler af Dijkstra giver $O(n^
 )
 
 #qcard(
-  tag: [Korteste veje: køretid ved given m],
+  tag: [Korteste veje: køretid ved given m (Dijkstra)],
   source: "MCQ juni 2015, Spm. 18",
+  theory: <th-sp-runtimes>,
   prompt: [På grafer med $n$ knuder og $m = #swap[$n log n$]$ kanter, hvad er den asymptotiske køretid som funktion af $n$ for #swap[DAG-Shortest-Paths]?],
   options: (
     [$O(n)$],
@@ -611,8 +628,9 @@ Tæt graf (dense graph) ($m = Theta(n^2)$): $n$ kørsler af Dijkstra giver $O(n^
 )
 
 #qcard(
-  tag: [Alle-par: hurtigste metode],
+  tag: [Alle-par: hurtigste metode (Floyd-Warshall)],
   source: "MCQ juni 2017, Spm. 17",
+  theory: <th-sp-runtimes>,
   prompt: [På grafer med $n$ knuder og $m = #swap[$n(n-1)$]$ kanter vil du finde korteste veje mellem alle par. Det kan gøres ved at køre #swap[Dijkstra] $n$ gange (en fra hver knude) eller #swap[Floyd-Warshall] én gang. Dijkstra bruger et binært heap som prioritetskø. Hvilken metode har den bedste asymptotiske køretid som funktion af $n$ på denne slags graf?],
   options: (
     [Dijkstra kørt $n$ gange],
@@ -640,8 +658,9 @@ Tæt graf (dense graph) ($m = Theta(n^2)$): $n$ kørsler af Dijkstra giver $O(n^
 )
 
 #qcard(
-  tag: [Alle-par: hurtigste metode],
+  tag: [Alle-par: hurtigste metode (Floyd-Warshall)],
   source: "MCQ juni 2019, Spm. 20",
+  theory: <th-sp-runtimes>,
   prompt: [På grafer med $n$ knuder og $m = #swap[$3n$]$ kanter vil du finde korteste veje mellem alle par. Det kan gøres ved at køre #swap[Bellman-Ford] $n$ gange (en fra hver knude) eller #swap[Floyd-Warshall] én gang. Hvilken metode har den bedste asymptotiske køretid som funktion af $n$ på denne slags graf?],
   options: (
     [Bellman-Ford kørt $n$ gange],

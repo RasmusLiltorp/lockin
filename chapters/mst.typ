@@ -1,6 +1,6 @@
 #import "../lib.typ": *
 
-== Minimum udspændende træer
+== Minimum udspændende træer <th-mst-cut>
 
 Givet en vægtet, sammenhængende, urettet graf (weighted, connected, undirected graph) er et minimum udspændende træ (minimum spanning tree, MST) den billigste måde at forbinde alle knuderne: vælg kanter så alt hænger sammen og den samlede vægt er mindst mulig.
 
@@ -14,6 +14,7 @@ Til eksamen kører du Kruskal eller Prim i hånden. Spørgsmålet er typisk "hvi
 
 Begge algoritmer er grådige (greedy) og bygger på samme cut-idé: den letteste kant der krydser et cut gennem grafen er altid sikker at vælge. De adskiller sig kun i, hvordan de vælger næste sikre kant.
 
+#metadata(none) <th-mst-kruskal>
 #recipe(
   title: "Kruskal — sortér kanterne, tag den letteste der ikke laver en kreds",
   [Giv hver knude sin egen komponent.],
@@ -22,6 +23,7 @@ Begge algoritmer er grådige (greedy) og bygger på samme cut-idé: den letteste
   [Stop når du har #swap[$n - 1$] kanter.],
 )
 
+#metadata(none) <th-mst-prim>
 #recipe(
   title: "Prim — voks ét træ ud fra en startknude",
   [Vælg en startknude #swap[$r$]. Den besøgte mængde $C$ er ${r}$.],
@@ -54,8 +56,9 @@ Hver tagen kant smelter to komponenter til én, så efter $k$ kanter gælder:
 === Tilbagevendende eksamensspørgsmål
 
 #qcard(
-  tag: [Kruskal: hvilken kant tilføjes sidst?],
+  tag: [Kruskal: hvilken kant tilføjes sidst? (Kruskal)],
   source: "MCQ juni 2025, Spm. 21",
+  theory: <th-mst-kruskal>,
   prompt: [Brug Kruskals algoritme til at finde et MST (læs næste spørgsmål først). Knuder $a, b, c, e, f, g, h, i, j$. Kanter med vægte: $(a,c)=#swap[$2$]$, $(a,b)=#swap[$15$]$, $(b,e)=5$, $(b,f)=8$, $(c,e)=20$, $(c,j)=17$, $(e,h)=11$, $(e,j)=9$, $(f,h)=6$, $(f,g)=3$, $(g,i)=19$, $(h,i)=16$, $(h,j)=21$, $(i,j)=14$. Hvilken kant tilføjes sidst til MST'et?],
   options: ([$(a, b)$], [$(i, j)$], [$(h, j)$], [$(e, h)$], [$(h, i)$], [$(e, j)$]),
   answer: [(a) $(a, b)$.],
@@ -85,8 +88,9 @@ Hver tagen kant smelter to komponenter til én, så efter $k$ kanter gælder:
 )
 
 #qcard(
-  tag: [Kruskal: hvilken kant tilføjes sidst?],
+  tag: [Kruskal: hvilken kant tilføjes sidst? (Kruskal)],
   source: "MCQ juni 2021, Spm. 22",
+  theory: <th-mst-kruskal>,
   prompt: [Kør Kruskals algoritme på grafen (urettet, vægtet): $e a=#swap[$8$]$, $a g=9$, $g h=10$, $e f=0$, $a c=6$, $g d=7$, $g b=3$, $h b=11$, $f c=12$, $c d=2$, $d b=5$. Hvilken kant er den sidste der undersøges og tages med i MST'et?],
   options: ([$(e, a)$], [$(a, g)$], [$(g, h)$], [$(a, c)$], [$(g, d)$], [$(h, b)$]),
   answer: [Mulighed (c): $(g, h)$, vægt $10$.],
@@ -117,8 +121,9 @@ Hver tagen kant smelter to komponenter til én, så efter $k$ kanter gælder:
 )
 
 #qcard(
-  tag: [Kruskal: antal komponenter ved første forkastning],
+  tag: [Kruskal: antal komponenter ved første forkastning (sammenhængskomponenter)],
   source: "MCQ juni 2025, Spm. 22",
+  theory: <th-mst-cut>,
   prompt: [Fortsæt med Kruskals algoritme på samme graf. I det første øjeblik hvor en undersøgt kant ikke tages med, hvor mange sammenhængskomponenter (connected components) har $(V, A)$? ($V$ er alle knuder, $A$ er de kanter der er taget indtil nu.)],
   options: ([$1$], [$2$], [$3$], [$4$], [$5$], [$6$]),
   answer: [(c) #swap[$3$].],
@@ -142,8 +147,9 @@ Hver tagen kant smelter to komponenter til én, så efter $k$ kanter gælder:
 )
 
 #qcard(
-  tag: [Kruskal: antal komponenter ved første forkastning],
+  tag: [Kruskal: antal komponenter ved første forkastning (sammenhængskomponenter)],
   source: "MCQ juni 2019, Spm. 18",
+  theory: <th-mst-cut>,
   prompt: [Fortsæt med Kruskals algoritme på grafen $G_3$. Knuder $a, b, c, d, e, f, g, h, i$ med vægtede kanter: $(a,f)=3$, $(a,b)=4$, $(f,g)=8$, $(f,b)=5$, $(g,b)=2$, $(g,c)=6$, $(b,c)=1$, $(h,c)=9$, $(h,d)=6$, $(h,i)=9$, $(i,d)=7$, $(i,e)=1$, $(c,d)=8$, $(d,e)=7$. Hvor mange sammenhængskomponenter har $(V, A)$ efter at #swap[$8$] kanter er undersøgt? ($V$ er alle knuder, $A$ er de kanter der er taget indtil nu.)],
   options: ([$1$], [$2$], [$3$], [$4$], [$5$], [$6$]),
   answer: [Mulighed (c): $3$.],
@@ -170,8 +176,9 @@ Hver tagen kant smelter to komponenter til én, så efter $k$ kanter gælder:
 )
 
 #qcard(
-  tag: [Prim: hvilken knude tilføjes sidst?],
+  tag: [Prim: hvilken knude tilføjes sidst? (Prim)],
   source: "MCQ juni 2023, Spm. 20",
+  theory: <th-mst-prim>,
   prompt: [Brug Prims algoritme til at finde et MST med start i knude #swap[$a$]. Urettede vægtede kanter: $b c=5$, $c a=11$, $a f=10$, $f e=7$, $b d=13$, $c h=9$, $a h=2$, $a i=3$, $f i=4$, $e g=8$, $d h=1$, $h i=6$, $i g=12$. Hvilken knude tilføjes sidst til MST'et?],
   options: ([$b$], [$d$], [$e$], [$g$]),
   answer: [(a) #swap[$b$].],
@@ -208,8 +215,9 @@ Hver tagen kant smelter to komponenter til én, så efter $k$ kanter gælder:
 )
 
 #qcard(
-  tag: [Prim: hvilken knude tilføjes sidst?],
+  tag: [Prim: hvilken knude tilføjes sidst? (Prim)],
   source: "MCQ juni 2015, Spm. 8",
+  theory: <th-mst-prim>,
   prompt: [Kør Prims algoritme på grafen med start i knude #swap[$a$]. Den første knude der udtages af prioritetskøen med Extract-Min er $a$. Hvilken knude udtages sidst? Urettede vægtede kanter: $a b=#swap[$17$]$, $a e=11$, $a d=8$, $b e=5$, $e d=18$, $b c=14$, $e c=3$, $c d=25$.],
   options: ([Knuden $b$], [Knuden $c$], [Knuden $d$], [Knuden $e$]),
   answer: [Mulighed (a): #swap[$b$].],
@@ -237,8 +245,9 @@ Hver tagen kant smelter to komponenter til én, så efter $k$ kanter gælder:
 )
 
 #qcard(
-  tag: [Prim: vælg alle MST-kanter],
+  tag: [Prim: vælg alle MST-kanter (Prim)],
   source: "MCQ juni 2015, Spm. 9 (flere rigtige)",
+  theory: <th-mst-prim>,
   prompt: [Samme graf. Hvilke af nedenstående kanter ligger i det MST som Prims algoritme returnerer? (En eller flere.) Knuder $a, b, c, d, e$ med urettede vægtede kanter: $a b=17$, $a e=11$, $a d=#swap[$8$]$, $b e=5$, $e d=18$, $b c=14$, $e c=3$, $c d=25$.],
   options: ([Kanten $(a, b)$], [Kanten $(b, c)$], [Kanten $(c, d)$], [Kanten $(d, a)$], [Kanten $(b, e)$], [Kanten $(e, d)$]),
   answer: [Mulighed (d) og (e): kanterne $(d, a)$ og $(b, e)$.],
@@ -265,8 +274,9 @@ Hver tagen kant smelter to komponenter til én, så efter $k$ kanter gælder:
 )
 
 #qcard(
-  tag: [Kruskal: hvilken kant forkastes først?],
+  tag: [Kruskal: hvilken kant forkastes først? (Kruskal)],
   source: "MCQ juni 2019, Spm. 17",
+  theory: <th-mst-kruskal>,
   prompt: [Kør Kruskals algoritme på grafen $G_3$. Knuder $a, b, c, d, e, f, g, h, i$ med vægtede kanter: $(a,f)=3$, $(a,b)=4$, $(f,g)=8$, $(f,b)=5$, $(g,b)=2$, $(g,c)=6$, $(b,c)=1$, $(h,c)=9$, $(h,d)=6$, $(h,i)=9$, $(i,d)=7$, $(i,e)=1$, $(c,d)=8$, $(d,e)=7$. Hvilken kant er den første der undersøges af algoritmen, men ikke tages med i MST'et?],
   options: ([Kanten $(b, f)$], [Kanten $(c, g)$], [Kanten $(d, i)$], [Kanten $(d, e)$], [Kanten $(f, g)$], [Kanten $(h, i)$]),
   answer: [(a) kanten $(b, f)$, vægt #swap[$5$].],
@@ -292,8 +302,9 @@ Hver tagen kant smelter to komponenter til én, så efter $k$ kanter gælder:
 )
 
 #qcard(
-  tag: [Kruskal: hvilken kant forkastes først?],
+  tag: [Kruskal: hvilken kant forkastes først? (Kruskal)],
   source: "MCQ juni 2021, Spm. 21",
+  theory: <th-mst-kruskal>,
   prompt: [Kør Kruskals algoritme på grafen (urettet, vægtet): $e a=#swap[$8$]$, $a g=9$, $g h=10$, $e f=0$, $a c=6$, $g d=7$, $g b=3$, $h b=11$, $f c=12$, $c d=2$, $d b=5$. Hvilken kant er den første der undersøges, men ikke tages med i MST'et?],
   options: ([Kanten $(e, a)$], [Kanten $(a, g)$], [Kanten $(g, h)$], [Kanten $(a, c)$], [Kanten $(g, d)$], [Kanten $(h, b)$]),
   answer: [Mulighed (e): kanten $(g, d)$, vægt #swap[$7$].],

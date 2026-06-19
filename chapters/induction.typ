@@ -1,6 +1,6 @@
 #import "../lib.typ": *
 
-== Matematisk induktion
+== Matematisk induktion <th-ind-main>
 
 Induktion (induction) beviser, at $P(n)$ gælder for alle heltal fra et startpunkt og opefter. Du viser det for det mindste $n$, og at det gælder for det næste tal når det gælder for ét. Så vælter de som dominobrikker.
 
@@ -46,8 +46,9 @@ Tjek at to sider er lig hinanden, før du kæder dem sammen.]
 === Tilbagevendende eksamensspørgsmål
 
 #qcard(
-  tag: [Induktion: hvilke kandidatbeviser er gyldige?],
+  tag: [Induktion: hvilke kandidatbeviser er gyldige? (induction step)],
   source: "MCQ juni 2025, Spm. 34 (samme som DM547 jan 2019, Spm. 3)",
+  theory: <th-ind-main>,
   prompt: [Bevis at #swap[$3^n - 1$ er lige] for alle $n in NN$. Hvilke argumenter er gyldige induktionsbeviser (induction proofs)? (en eller flere korrekte)],
   options: (
     [Basis $3^0 - 1 = 0$ lige. Skridt ($n >= 0$): $3^(n+1) - 1 = 3 dot 3^n - 1 = 3(3^n - 1) + 2 = 3 dot 2k + 2 = 2(3k+1)$, ved IA.],
@@ -79,8 +80,9 @@ Tjek at to sider er lig hinanden, før du kæder dem sammen.]
 )
 
 #qcard(
-  tag: [Induktion: hvilke kandidatbeviser er gyldige?],
+  tag: [Induktion: hvilke kandidatbeviser er gyldige? (induction step)],
   source: "DM547 jan 2021, Spm. 5 (12%)",
+  theory: <th-ind-main>,
   prompt: [Påstand: #swap[$2^n + 3^n < 4^n$] for $n >= #swap[$2$]$. Hvilke af 5.a–5.g er gyldige induktionsbeviser?],
   options: (
     [Basis $n = 2$. Skridt ganger IA med $4$: $4(2^n + 3^n) < 4 dot 4^n$, og springer så til $2^(n+1) + 3^(n+1) < 4^(n+1)$.],
@@ -116,8 +118,9 @@ Tjek at to sider er lig hinanden, før du kæder dem sammen.]
 )
 
 #qcard(
-  tag: [Induktion: hvilke kandidatbeviser er gyldige?],
+  tag: [Induktion: hvilke kandidatbeviser er gyldige? (induction step)],
   source: "MCQ juni 2023, Spm. 35",
+  theory: <th-ind-main>,
   prompt: [Hvilke er korrekte induktionsbeviser for #swap[$sum_(i=1)^n ((1/2)^(i-1) - (1/2)^i) = 1 - (1/2)^n$] for alle $n >= 1$? (en eller flere korrekte)],
   options: (
     [Basis $n = 1, 2$ tjekket; ind.ant.: summen til $k-1$ er $1 - (1/2)^(k-1)$ for $k >= 3$; skridtet ($k >= 3$) splitter summen til $k$ og indsætter, forlæns $k-1 arrow.r.double k$.],

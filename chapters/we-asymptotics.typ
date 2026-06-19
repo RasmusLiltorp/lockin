@@ -5,8 +5,9 @@
 To slags opgaver her. Den ene beder dig afgøre rene $O$-, $Theta$-, $o$- og $omega$-påstande ved at sammenligne, hvor hurtigt to funktioner vokser. Den anden beder dig aflæse en $Theta$- eller $O$-køretid direkte fra pseudokode (pseudocode) med indlejrede løkker (nested loops).
 
 #qcard(
-  tag: [O-påstande: sandt/falsk],
+  tag: [O-påstande: sandt/falsk (vækststigen)],
   source: "DM507 jan 2007, Opg. 3 (15%)",
+  theory: <th-asym-ladder>,
   prompt: [Afgør for hver påstand, om den er sand eller falsk.
     + #swap[$n^2 in Omega(n)$]
     + #swap[$n in Theta(n^2)$]
@@ -32,8 +33,9 @@ To slags opgaver her. Den ene beder dig afgøre rene $O$-, $Theta$-, $o$- og $om
 )
 
 #qcard(
-  tag: [Sortér efter vækst],
+  tag: [Sortér efter vækst (vækststigen)],
   source: "DM507 juni 2008, Opg. 2a (10%)",
+  theory: <th-asym-ladder>,
   prompt: [Angiv den asymptotiske rækkefølge (langsomst- til hurtigst-voksende) af funktionerne #swap[$sqrt(n), 2^n, (log_10 n)^2, n, log_2 n$].],
   answer: [$log_2 n prec (log_10 n)^2 prec sqrt(n) prec n prec 2^n$.],
   blueprint: [
@@ -54,8 +56,9 @@ To slags opgaver her. Den ene beder dig afgøre rene $O$-, $Theta$-, $o$- og $om
 )
 
 #qcard(
-  tag: [O-regneregler: sandt/falsk],
+  tag: [O-regneregler: sandt/falsk (Konstante faktorer)],
   source: "DM507 juni 2011, Opg. 2 (15%)",
+  theory: <th-asym-limit>,
   prompt: [Lad $f_1, f_2, g_1, g_2$ være positive funktioner med $f_1 in O(g_1)$ og $f_2 in O(g_2)$. Hvilke af nedenstående er #emph[altid] sande?
     + #swap[$f_1(n) + f_2(n) in O(g_1(n) + g_2(n))$]
     + #swap[$g_1(n) + g_2(n) in Omega(f_1(n) + f_2(n))$]
@@ -77,8 +80,9 @@ To slags opgaver her. Den ene beder dig afgøre rene $O$-, $Theta$-, $o$- og $om
 )
 
 #qcard(
-  tag: [O-påstande: sandt/falsk],
+  tag: [O-påstande: sandt/falsk (vækststigen)],
   source: "DM507 juni 2013, Opg. 2 (10%)",
+  theory: <th-asym-ladder>,
   prompt: [Afgør for hver påstand, om den er sand eller falsk.
     + #swap[$n in O(n^(2\/3))$]
     + #swap[$n in O((3\/2)^n)$]
@@ -106,8 +110,9 @@ To slags opgaver her. Den ene beder dig afgøre rene $O$-, $Theta$-, $o$- og $om
 )
 
 #qcard(
-  tag: [O-påstande: sandt/falsk],
+  tag: [O-påstande: sandt/falsk (vækststigen)],
   source: "DM507 juni 2014, Opg. 2 (10%)",
+  theory: <th-asym-ladder>,
   prompt: [Afgør for hver påstand, om den er sand eller falsk.
     + #swap[$n^2 in O(n^2)$]
     + #swap[$n^2 in Theta(n^2)$]
@@ -143,8 +148,9 @@ To slags opgaver her. Den ene beder dig afgøre rene $O$-, $Theta$-, $o$- og $om
 )
 
 #qcard(
-  tag: [O-påstande: sandt/falsk],
+  tag: [O-påstande: sandt/falsk (vækststigen)],
   source: "DM507 juni 2015, Opg. 2 (10%)",
+  theory: <th-asym-ladder>,
   prompt: [Afgør for hver påstand, om den er sand eller falsk.
     + #swap[$2n in O(n^3)$]
     + #swap[$n^2 in O(3^n)$]
@@ -178,8 +184,9 @@ To slags opgaver her. Den ene beder dig afgøre rene $O$-, $Theta$-, $o$- og $om
 )
 
 #qcard(
-  tag: [O-påstande: sandt/falsk],
+  tag: [O-påstande: sandt/falsk (vækststigen)],
   source: "jun 2016, Problem 2 (10%)",
+  theory: <th-asym-ladder>,
   prompt: [Afgør for hver påstand, om den er sand eller falsk.
     + #swap[$1 in O(2)$]
     + #swap[$1 in Omega(2)$]
@@ -216,8 +223,9 @@ To slags opgaver her. Den ene beder dig afgøre rene $O$-, $Theta$-, $o$- og $om
 )
 
 #qcard(
-  tag: [Aflæs Theta af løkkenest],
+  tag: [Aflæs Theta af løkkenest (multiplikativ)],
   source: "DM507 juni 2014, Opg. 9 (16%)",
+  theory: <th-asym-loops>,
   prompt: [Angiv den asymptotiske $O$-køretid som funktion af $n$ for hvert fragment.
     + #swap[`for i=1..n: for j=i..n: s++`]
     + #swap[`for i=1..n: { s=n; while s>1: s=floor(s/2) }`]
@@ -242,8 +250,9 @@ To slags opgaver her. Den ene beder dig afgøre rene $O$-, $Theta$-, $o$- og $om
 )
 
 #qcard(
-  tag: [Aflæs Theta af løkkenest],
+  tag: [Aflæs Theta af løkkenest (multiplikativ)],
   source: "DM507 juni 2015, Opg. 9 (14%)",
+  theory: <th-asym-loops>,
   prompt: [Angiv $Theta$-køretiden som funktion af $n$.
     #swap[
       ```
@@ -283,8 +292,9 @@ To slags opgaver her. Den ene beder dig afgøre rene $O$-, $Theta$-, $o$- og $om
 )
 
 #qcard(
-  tag: [Aflæs Theta af løkkenest],
+  tag: [Aflæs Theta af løkkenest (multiplikativ)],
   source: "jun 2016, Problem 9 (8%)",
+  theory: <th-asym-loops>,
   prompt: [Angiv $Theta$-køretiden i $n$ for hvert fragment.
     + #swap[`for i=1..n: { j=i; while j>0: j=j-1 }`]
     + #swap[`i=1; while i<n: i=i*2`]

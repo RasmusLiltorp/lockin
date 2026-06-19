@@ -10,7 +10,7 @@ Hver gruppe er et træ med repræsentanten som rod, så hele strukturen er en sk
 
 Den dukker oftest op i Kruskals MST-algoritme: for hver kant spørger $"Find-Set"$, om endepunkterne allerede ligger i samme komponent.
 
-=== Sådan løser du den
+=== Sådan løser du den <th-ds-method>
 
 To tricks holder træerne flade. *Union by rank* hænger det lave træ under det høje. *Path compression* peger alle knuder på en $"Find-Set"$-sti direkte op på roden.
 
@@ -54,7 +54,7 @@ Union(x, y)              Link(x, y)   // x, y er rødder
 
 #trap(title: [Sti-komprimering])[Komprimering kører kun på de $"Find-Set"$-kald, unionerne faktisk udfører. Komprimér ikke alle knuder til sidst. Et afsluttende $"Find-Set"$ på en rod ændrer intet.]
 
-==== Priser
+==== Priser <th-ds-costs>
 
 Tallene gælder for $n$ $"Make-Set"$, $n-1$ $"Union"$ og $m$ $"Find-Set"$.
 
@@ -75,8 +75,9 @@ Tallene gælder for $n$ $"Make-Set"$, $n-1$ $"Union"$ og $m$ $"Find-Set"$.
 === Tilbagevendende eksamensspørgsmål
 
 #qcard(
-  tag: [Union-Find: tegn skoven efter operationerne],
+  tag: [Union-Find: tegn skoven efter operationerne (union by rank + path compression)],
   source: "MCQ juni 2025, Spm. 25",
+  theory: <th-ds-method>,
   prompt: [Disjunkt-mængde-skov med union by rank og path compression (Cormen 4. udg.). Fra tom: Make-Set på $a, b, c, d, e, f$, derefter
     #swap[$"Union"(f,e)$, $"Union"(b,f)$, $"Union"(d,a)$, $"Union"(f,d)$, $"Union"(b,c)$, $"Find-Set"(a)$].
     Hvilken figur viser strukturen bagefter?],
@@ -111,8 +112,9 @@ Tallene gælder for $n$ $"Make-Set"$, $n-1$ $"Union"$ og $m$ $"Find-Set"$.
 )
 
 #qcard(
-  tag: [Union-Find: tegn skoven (med/uden komprimering)],
+  tag: [Union-Find: tegn skoven (med/uden path compression)],
   source: "DM507 juni 2008, Opgave 3b/3c",
+  theory: <th-ds-method>,
   prompt: [Kør instruktionerne
     #swap[$"Union"(b,a)$, $"Union"(b,c)$, $"Union"(e,d)$, $"Union"(e,c)$, $"Union"(g,f)$, $"Union"(e,g)$]
     med union by rank. Ved uafgjort hænges $"root"(x)$ under $"root"(y)$, og $"root"(y)$'s rank forhøjes. Tegn skoven (b) uden path compression og (c) med.],
@@ -145,8 +147,9 @@ Tallene gælder for $n$ $"Make-Set"$, $n-1$ $"Union"$ og $m$ $"Find-Set"$.
 )
 
 #qcard(
-  tag: [Union-Find i Kruskal: næste kant + skoven],
+  tag: [Union-Find i Kruskal: næste kant + skoven (Kruskal)],
   source: "DM02 jan 2006, Opg 3a",
+  theory: <th-ds-kruskal>,
   prompt: [De første #swap[5] Kruskal-kanter er valgt, så grupperne er ${E,F,H,I}$, ${D,G}$, ${A,B}$, ${C}$. Hvilken kant tilføjer Kruskal som den #swap[6.], og hvordan ser disjunkt-mængde-skoven ud bagefter, med union by rank + path compression?],
   answer: [Næste kant er #swap[$D"-"H$] (vægt #swap[4]). $D$ hænges under $E$.],
   blueprint: [
@@ -169,4 +172,5 @@ Tallene gælder for $n$ $"Make-Set"$, $n-1$ $"Union"$ og $m$ $"Find-Set"$.
   ],
 )
 
+#metadata(none) <th-ds-kruskal>
 #note(title: [Kruskal])[Kruskal er stedet, union-find oftest dukker op. Opskrift: sortér kanterne efter stigende vægt; for hver kant, foren endepunkterne hvis deres $"Find-Set"$ er forskellige, ellers spring over. Stop ved $|V| - 1$ kanter. Antal komponenter undervejs er $|V|$ minus accepterede kanter.]

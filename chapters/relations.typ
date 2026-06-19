@@ -12,6 +12,7 @@ Til eksamen får du en relation som liste, matrix eller graf. Du skal afgøre hv
 
 Læs relationen som en graf: hvert element er en knude, og $(a,b) in R$ er en pil fra $a$ til $b$. De fire egenskaber bliver da til billeder, du kan aflæse.
 
+#metadata(none) <th-rel-properties>
 #recipe(
   title: "Tjek de fire egenskaber",
   [*Refleksiv (reflexive).* Hvert element peger på sig selv.
@@ -30,6 +31,7 @@ Læs relationen som en graf: hvert element er en knude, og $(a,b) in R$ er en pi
 
 Antisymmetrisk er ikke det modsatte af symmetrisk. En relation kan være begge dele ($=$) eller ingen af delene.
 
+#metadata(none) <th-rel-classify>
 #recipe(
   title: "Klassificér relationen",
   [*Ækvivalensrelation:* refleksiv, symmetrisk og transitiv. Den deler $A$ op i klasser. Klassen for $a$ er alt, $a$ er relateret til:
@@ -41,6 +43,7 @@ Antisymmetrisk er ikke det modsatte af symmetrisk. En relation kan være begge d
 
 En lukning er den mindste relation, der indeholder $R$ og har en ønsket egenskab. Du tilføjer kun par, fjerner aldrig.
 
+#metadata(none) <th-rel-closure>
 #recipe(
   title: "Udregn en lukning",
   [*Refleksiv lukning (reflexive closure):* tilføj en løkke på hvert element i $A$.
@@ -65,8 +68,9 @@ Et *Hasse-diagram (Hasse diagram)* tegner en partiel ordning uden støj. Fjern a
 === Tilbagevendende eksamensspørgsmål
 
 #qcard(
-  tag: [Relation: hvilke egenskaber har den?],
+  tag: [Relation: hvilke egenskaber har den? (transitiv)],
   source: "MCQ juni 2025, Spm. 35 (flere korrekte)",
+  theory: <th-rel-properties>,
   prompt: [Lad $R = #swap[${(a,a),(a,b),(b,a),(c,c)}$]$ være en relation på ${a,b,c}$. Hvilke udsagn er sande?],
   options: (
     [$R$ er refleksiv],
@@ -101,8 +105,9 @@ Et *Hasse-diagram (Hasse diagram)* tegner en partiel ordning uden støj. Fjern a
 )
 
 #qcard(
-  tag: [Relation: hvilke egenskaber har den?],
+  tag: [Relation: hvilke egenskaber har den? (transitiv)],
   source: "MCQ juni 2021, Spm. 37 (flere rigtige)",
+  theory: <th-rel-properties>,
   prompt: [Betragt relationen $R$ på ${a,b,c}$: $R = #swap[${(a,a),(a,b),(a,c),(b,b),(b,c),(c,c)}$]$. Hvilke udsagn om $R$ er sande?],
   options: (
     [$R$ er refleksiv],
@@ -137,8 +142,9 @@ Et *Hasse-diagram (Hasse diagram)* tegner en partiel ordning uden støj. Fjern a
 )
 
 #qcard(
-  tag: [Lukninger: er den angivne lukning korrekt?],
+  tag: [Lukninger: er den angivne lukning korrekt? (lukning)],
   source: "MCQ juni 2025, Spm. 36 (flere korrekte)",
+  theory: <th-rel-closure>,
   prompt: [Lad $A = {a,b,c,d}$. Hvilke udsagn er sande?],
   options: (
     [Den refleksive lukning af $emptyset$ på $A$ er ${(a,a),(b,b),(c,c),(d,d)}$],
@@ -172,8 +178,9 @@ Et *Hasse-diagram (Hasse diagram)* tegner en partiel ordning uden støj. Fjern a
 )
 
 #qcard(
-  tag: [Lukning: udregn den transitive lukning],
+  tag: [Lukning: udregn den transitive lukning (transitiv lukning)],
   source: "MCQ juni 2023, Spm. 36 (3 point)",
+  theory: <th-rel-closure>,
   prompt: [Betragt relationen på ${a,b,c}$: $R = #swap[${(a,b),(b,a),(b,b),(b,c)}$]$. Angiv den transitive lukning af $R$.],
   answer: [$t(R) = {(a,a),(a,b),(a,c),(b,a),(b,b),(b,c)}$.],
   blueprint: [
@@ -200,8 +207,9 @@ Et *Hasse-diagram (Hasse diagram)* tegner en partiel ordning uden støj. Fjern a
 )
 
 #qcard(
-  tag: [Lukning: udregn den transitive lukning],
+  tag: [Lukning: udregn den transitive lukning (transitiv lukning)],
   source: "MCQ juni 2021, Spm. 38",
+  theory: <th-rel-closure>,
   prompt: [Angiv den transitive lukning af $#swap[${(a,b),(a,c),(b,b),(c,d),(d,e)}$]$.],
   options: (
     [${}$ (tom mængde)],
@@ -241,8 +249,9 @@ Et *Hasse-diagram (Hasse diagram)* tegner en partiel ordning uden støj. Fjern a
 )
 
 #qcard(
-  tag: [Lukning: udregn den symmetriske lukning],
+  tag: [Lukning: udregn den symmetriske lukning (symmetrisk lukning)],
   source: "DM547 januar 2021, Spørgsmål 7 (3%)",
+  theory: <th-rel-closure>,
   prompt: [Angiv den symmetriske lukning af $T = #swap[${(a,b),(b,b),(c,d),(d,e)}$]$.],
   answer: [$s(T) = {(a,b),(b,a),(b,b),(c,d),(d,c),(d,e),(e,d)}$.],
   blueprint: [
@@ -270,8 +279,9 @@ Et *Hasse-diagram (Hasse diagram)* tegner en partiel ordning uden støj. Fjern a
 )
 
 #qcard(
-  tag: [Relation: hvilke egenskaber har den? (digraf)],
+  tag: [Relation: hvilke egenskaber har den? (digraf) (transitiv)],
   source: "DM547 januar 2021, Spørgsmål 6 (8%)",
+  theory: <th-rel-properties>,
   prompt: [En digraf (digraph) for relationen $S$ på ${a,b,c,d,e,f}$ har løkker på $a,b,e,f$, kanterne $a->b$, $a->c$, $a->d$, $a->e$, $b->e$, $c->d$, $f->d$, og tovejsparret $e<->f$. Hvilke af følgende gælder: refleksiv, symmetrisk, antisymmetrisk, transitiv, ækvivalensrelation, partiel ordning, total ordning?],
   answer: [Ingen af dem.],
   blueprint: [
@@ -298,8 +308,9 @@ Et *Hasse-diagram (Hasse diagram)* tegner en partiel ordning uden støj. Fjern a
 )
 
 #qcard(
-  tag: [Relation: hvilke er ækvivalensrelationer?],
+  tag: [Relation: hvilke er ækvivalensrelationer? (ækvivalensrelation)],
   source: "SE4-DMAD juni 2024, Spm. 6 (4%)",
+  theory: <th-rel-classify>,
   prompt: [På ${a,b,c}$, hvilke af disse er ækvivalensrelationer?],
   options: (
     [${(a,a),(b,b),(c,c)}$],

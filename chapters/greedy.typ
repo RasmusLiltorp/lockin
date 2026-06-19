@@ -6,7 +6,7 @@ En greedy-algoritme (greedy algorithm) bygger løsningen op ét skridt ad gangen
 
 Til eksamen kommer det to steder fra. Huffman-kodning (Huffman coding) (næsten hvert år): byg et træ ud fra symbolfrekvenser og aflæs en kodeordslængde eller det samlede antal bit. Og argumentet for, *hvorfor* et greedy-valg er optimalt — typisk et ombytningsargument (exchange argument).
 
-=== Sådan løser du den
+=== Sådan løser du den <th-greedy-huffman>
 
 Huffman giver hyppige symboler korte koder og sjældne symboler lange. Et symbols kodeordslængde er dybden af dets blad: jo dybere, jo flere bit.
 
@@ -31,6 +31,7 @@ Den sum er lig summen af alle interne knuders vægte, du skrev op undervejs:
 
 #trap(title: [Flere gyldige træer])[Ved samme vægt kan begge træer vælges først, og venstre/højre er frit, så der findes flere gyldige Huffman-træer. Men dybder og pris er ens uanset valget — svar trygt på dem. Kun "tegn træet" har flere rigtige svar.]
 
+#metadata(none) <th-greedy-producerbar>
 #trap(title: [Optimal vs. producerbar])[Optimal betyder ikke, at Huffman kan bygge det. Huffman merger altid de to aktuelt mindste vægte, så et producerbart træ må have interne vægte, der passer med den tvungne merge-rækkefølge. To optimale træer kan have hvert sit sæt interne vægte; kun dem der matcher Huffmans merges er gyldige.]
 
 Aktivitetsudvælgelse (activity selection) er det andet klassiske greedy-problem: du har aktiviteter med start- og sluttider og vil have flest mulige uden overlap.
@@ -50,13 +51,15 @@ Køretiden er domineret af sorteringen:
 
 #trap(title: [0-1-rygsæk])[Greedy efter værditæthed (value density) løser fractional rygsæk (knapsack) optimalt, men fejler for 0-1. Kapacitet 50, genstande (vægt 10, \$60), (vægt 20, \$100), (vægt 30, \$120): tæthed tager de to første og får \$160, men optimum er de to sidste med \$220. 0-1-rygsæk kræver dynamisk programmering.]
 
+#metadata(none) <th-greedy-exchange>
 Skal du *bevise* greedy optimal, brug et ombytningsargument: tag en vilkårlig optimal løsning OPT og vis, at du kan bytte ét element i OPT ud med greedy-valget uden at gøre OPT værre eller ugyldig. Gentaget bliver OPT til greedy-løsningen, så greedy er også optimal.
 
 === Tilbagevendende eksamensspørgsmål
 
 #qcard(
-  tag: [Huffman: kodeordslængde for et symbol],
+  tag: [Huffman: kodeordslængde for et symbol (kodeordslængde)],
   source: "MCQ juni 2025, Spm. 13 (samme skabelon juni 2019/2021/2023)",
+  theory: <th-greedy-huffman>,
   prompt: [En fil indeholder tegn med hyppigheder: o=#swap[$150$], p=#swap[$100$], q=#swap[$25$], r=#swap[$125$], s=#swap[$200$], t=#swap[$50$], u=#swap[$75$]. Byg et Huffman-træ. Hvor mange bit er der i kodeordet for #swap[$q$]?],
   options: ([$1$], [$2$], [$3$], [$4$], [$5$], [$6$]),
   answer: [(d) $4$.],
@@ -85,8 +88,9 @@ Skal du *bevise* greedy optimal, brug et ombytningsargument: tag en vilkårlig o
 )
 
 #qcard(
-  tag: [Huffman: samlet antal bit],
+  tag: [Huffman: samlet antal bit (interne vægte)],
   source: "MCQ juni 2025, Spm. 14",
+  theory: <th-greedy-huffman>,
   prompt: [Et Huffman-træ for en fil med hyppigheder o=#swap[$150$], p=#swap[$100$], q=#swap[$25$], r=#swap[$125$], s=#swap[$200$], t=#swap[$50$], u=#swap[$75$] (i alt #swap[$725$] symboler). Hvor mange bit fylder de 725 symboler tilsammen Huffman-kodet?],
   options: ([$1800$], [$1825$], [$1900$], [$1925$], [$2000$], [$2075$], [$2100$]),
   answer: [(c) $1900$.],
@@ -113,8 +117,9 @@ Skal du *bevise* greedy optimal, brug et ombytningsargument: tag en vilkårlig o
 )
 
 #qcard(
-  tag: [Huffman: samlet antal bit],
+  tag: [Huffman: samlet antal bit (interne vægte)],
   source: "MCQ juni 2017, Spm. 18",
+  theory: <th-greedy-huffman>,
   prompt: [En fil indeholder tegn med hyppigheder: a=#swap[$100$], b=#swap[$200$], c=#swap[$300$], d=#swap[$400$], e=#swap[$500$], f=#swap[$600$], g=#swap[$700$] (i alt #swap[$2800$] tegn). Byg et Huffman-træ. Hvor mange bit fylder den kodede fil i alt?],
   options: ([$7300$], [$7400$], [$7500$], [$7600$], [$8100$], [$8300$], [$8500$]),
   answer: [Mulighed (b): $7400$.],
@@ -144,8 +149,9 @@ Skal du *bevise* greedy optimal, brug et ombytningsargument: tag en vilkårlig o
 )
 
 #qcard(
-  tag: [Huffman: samlet antal bit],
+  tag: [Huffman: samlet antal bit (interne vægte)],
   source: "MCQ juni 2021, Spm. 13",
+  theory: <th-greedy-huffman>,
   prompt: [Et Huffman-træ for en fil med hyppigheder a=#swap[$200$], b=#swap[$250$], c=#swap[$100$], d=#swap[$350$], e=#swap[$400$] (i alt #swap[$1300$] tegn). Hvor mange bit fylder de 1300 tegn Huffman-kodet?],
   options: ([$1350$], [$2550$], [$2700$], [$2900$], [$3050$], [$3250$]),
   answer: [Mulighed (d): $2900$.],
@@ -173,8 +179,9 @@ Skal du *bevise* greedy optimal, brug et ombytningsargument: tag en vilkårlig o
 )
 
 #qcard(
-  tag: [Huffman: samlet antal bit],
+  tag: [Huffman: samlet antal bit (interne vægte)],
   source: "MCQ juni 2023, Spm. 13",
+  theory: <th-greedy-huffman>,
   prompt: [Et Huffman-træ for en fil med hyppigheder b=#swap[$90$], c=#swap[$15$], d=#swap[$40$], f=#swap[$30$], g=#swap[$125$], h=#swap[$35$] (i alt #swap[$335$] tegn). Hvor mange bit fylder de 335 tegn Huffman-kodet?],
   options: ([$770$], [$775$], [$785$], [$790$], [$795$], [$820$], [$1060$]),
   answer: [Mulighed (c): $785$.],
@@ -203,8 +210,9 @@ Skal du *bevise* greedy optimal, brug et ombytningsargument: tag en vilkårlig o
 )
 
 #qcard(
-  tag: [Huffman: kodeordslængde for et symbol],
+  tag: [Huffman: kodeordslængde for et symbol (kodeordslængde)],
   source: "MCQ juni 2021, Spm. 12",
+  theory: <th-greedy-huffman>,
   prompt: [En fil indeholder tegnene med hyppigheder: a=#swap[$200$], b=#swap[$250$], c=#swap[$100$], d=#swap[$350$], e=#swap[$400$]. Byg et Huffman-træ. Hvor mange bit er der i kodeordet for #swap[$d$]?],
   options: ([$1$], [$2$], [$3$], [$4$]),
   answer: [(b) $2$.],
@@ -231,8 +239,9 @@ Skal du *bevise* greedy optimal, brug et ombytningsargument: tag en vilkårlig o
 )
 
 #qcard(
-  tag: [Huffman: kodeordslængde for et symbol],
+  tag: [Huffman: kodeordslængde for et symbol (kodeordslængde)],
   source: "MCQ juni 2019, Spm. 21",
+  theory: <th-greedy-huffman>,
   prompt: [En fil indeholder tegn med hyppigheder: a=#swap[$500$], b=#swap[$400$], c=#swap[$300$], d=#swap[$250$], e=#swap[$200$], f=#swap[$150$]. Byg et Huffman-træ. Hvor mange bit er der i kodeordet for #swap[$c$]?],
   options: ([$1$], [$2$], [$3$], [$4$], [$5$]),
   answer: [Mulighed (c): $3$.],
@@ -260,8 +269,9 @@ Skal du *bevise* greedy optimal, brug et ombytningsargument: tag en vilkårlig o
 )
 
 #qcard(
-  tag: [Huffman: kodeordslængde for et symbol],
+  tag: [Huffman: kodeordslængde for et symbol (kodeordslængde)],
   source: "MCQ juni 2023, Spm. 12",
+  theory: <th-greedy-huffman>,
   prompt: [En fil indeholder tegn med hyppigheder: b=#swap[$90$], c=#swap[$15$], d=#swap[$40$], f=#swap[$30$], g=#swap[$125$], h=#swap[$35$]. Byg et Huffman-træ. Hvor mange bit er der i kodeordet for #swap[$d$]?],
   options: ([$1$], [$2$], [$3$], [$4$], [$5$]),
   answer: [Mulighed (d): $4$.],
@@ -289,8 +299,9 @@ Skal du *bevise* greedy optimal, brug et ombytningsargument: tag en vilkårlig o
 )
 
 #qcard(
-  tag: [Huffman: hvilke optimale træer er producerbare?],
+  tag: [Huffman: hvilke optimale træer er producerbare? (producerbart)],
   source: "DM507 juni 2012, Opg. 5c",
+  theory: <th-greedy-producerbar>,
   prompt: [Frekvenser a=#swap[$100$], b=#swap[$150$], c=#swap[$150$], d=#swap[$250$], e=#swap[$350$] (i alt 1000). Alle de viste træer er optimale (pris 2250 bit). Hvilke af træerne H2–H5 kan Huffman faktisk producere?],
   options: (
     [H2 $= ((c,d),((a,b),e))$],
@@ -325,8 +336,9 @@ Skal du *bevise* greedy optimal, brug et ombytningsargument: tag en vilkårlig o
 )
 
 #qcard(
-  tag: [Huffman: bitlængde af en streng],
+  tag: [Huffman: bitlængde af en streng (kodeordslængde)],
   source: "MCQ juni 2019, Spm. 22",
+  theory: <th-greedy-huffman>,
   prompt: [Vi ser stadig på et Huffman-træ for input a=#swap[$500$], b=#swap[$400$], c=#swap[$300$], d=#swap[$250$], e=#swap[$200$], f=#swap[$150$]. Hvor mange bit fylder strengen #swap["caffebad"] kodet med dette træ?],
   options: ([$18$], [$19$], [$20$], [$21$], [$22$], [$23$], [$24$]),
   answer: [Mulighed (d): $21$.],

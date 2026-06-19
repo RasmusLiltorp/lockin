@@ -1,6 +1,6 @@
 #import "../lib.typ": *
 
-== Prædikatlogik og kvantorer
+== Prædikatlogik og kvantorer <th-pred-truth>
 
 Et prædikat (predicate) er et udsagn med en fri variabel (free variable), fx "$x$ er lige". Det har ingen sandhedsværdi (truth value), før du binder $x$. En kvantor (quantifier) binder variablen og gør prædikatet til et færdigt udsagn.
 
@@ -30,6 +30,7 @@ Rækkefølgen er ikke ligegyldig. $forall x exists y$ lader $y$ afhænge af $x$ 
 
 #note(title: [Kvantorrækkefølge])[Bytter du en $forall$ og en $exists$, vender sandhedsværdien næsten altid. Det er den hyppigst testede fælde. "Hvert tal har et større" er sandt over $NN$; "der findes ét tal større end alle" er falsk.]
 
+#metadata(none) <th-pred-neg>
 #recipe(
   title: [Fornægt et kvantificeret udsagn (intet $not$ i svaret)],
   [Skub $not$ indad én kvantor ad gangen. Hver kvantor vender.],
@@ -50,8 +51,9 @@ Vending-reglerne er:
 === Tilbagevendende eksamensspørgsmål
 
 #qcard(
-  tag: [Kvantorer: hvilke udsagn er sande?],
+  tag: [Kvantorer: hvilke udsagn er sande? (kvantor)],
   source: "MCQ juni 2025, Spm. 33 (flere rigtige)",
+  theory: <th-pred-truth>,
   prompt: [Hvilke udsagn er sande? (Et eller flere korrekte svar.)],
   options: (
     [$forall x in ZZ^+ : x > -x$],
@@ -88,6 +90,7 @@ Vending-reglerne er:
 #qcard(
   tag: [Kvantorer: hvilke udsagn er sande? (+ fornægtelse)],
   source: "MCQ juni 2023, Spm. 34 (flere rigtige)",
+  theory: <th-pred-truth>,
   prompt: [Domæne $ZZ$. Hvilke udsagn er sande? (Et eller flere korrekte svar.)],
   options: (
     [$forall x in ZZ : x^2 > 2x$],
@@ -129,6 +132,7 @@ Vending-reglerne er:
 #qcard(
   tag: [Kvantorer: hvilke udsagn er sande? (+ fornægtelse)],
   source: "MCQ juni 2021, Spm. 35 (flere rigtige)",
+  theory: <th-pred-truth>,
   prompt: [Domæne $ZZ$. Hvilke udsagn er sande? (Et eller flere korrekte svar.)],
   options: (
     [$exists a in ZZ : a^2 + 1 = #swap[$82$]$],
@@ -169,8 +173,9 @@ Vending-reglerne er:
 )
 
 #qcard(
-  tag: [Kvantorer: sandhedsværdi + fornægt uden ¬],
+  tag: [Kvantorer: sandhedsværdi + fornægt uden ¬ (fornægtelse)],
   source: "Eksamen feb 2015, Opg. 4 (DM03 Opg. 4)",
+  theory: <th-pred-neg>,
   prompt: [$NN = {0,1,2,dots}$. Først (4a): hvilke af i og ii er sande?
     + $forall x in NN : exists y in NN : x < y$
     + $exists y in NN : forall x in NN : x < y$

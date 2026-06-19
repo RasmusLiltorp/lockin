@@ -5,8 +5,9 @@
 De grådige eksamensopgaver er af to slags. Huffman-opgaverne beder dig bygge træet ved at flette de to mindste igen og igen, og derfra læse koder af, regne den kodede størrelse eller afkode en bitstreng. Et par af dem spørger også, hvilke optimale træer Huffman faktisk kan frembringe. Den anden slags er grådige træalgoritmer som mindste knude-overdækning (minimum vertex cover), hvor du skal bevise korrektheden med et ombytningsargument (exchange argument) og bagefter give en lineær implementation.
 
 #qcard(
-  tag: [Huffman: byg træ og læs koder],
+  tag: [Huffman: byg træ og læs koder (Huffman-træ)],
   source: "DM507 jan 2007, Opg. 2a (8%)",
+  theory: <th-greedy-huffman>,
   prompt: [Tegn Huffman-træet for alfabetet #swap[${a,b,c,d,e,f}$ med frekvenser $a=33$, $b=28$, $c=52$, $d=20$, $e=10$, $f=12$]. Angiv en kode pr. symbol.],
   answer: [Kodelængder $a=2, b=2, c=2, d=3, e=4, f=4$. Fx $b=00, a=01, c=11, d=100, e=1010, f=1011$. Selve 0/1-mærkningen er ikke entydig.],
   blueprint: [
@@ -30,8 +31,9 @@ De grådige eksamensopgaver er af to slags. Huffman-opgaverne beder dig bygge tr
 )
 
 #qcard(
-  tag: [Huffman: byg træ og læs koder],
+  tag: [Huffman: byg træ og læs koder (Huffman-træ)],
   source: "DM507 jan 2008, Opg. 1a (8%)",
+  theory: <th-greedy-huffman>,
   prompt: [Tegn et Huffman-træ for alfabetet #swap[$a,b,c,d,e,f,g$ med frekvenser $a=9$, $b=7$, $c=24$, $d=10$, $e=55$, $f=15$, $g=25$].],
   answer: [Kodelængder $e=1, c=3, g=3, b=a=d=f=4$. Samlet $= 366$ bit. 0/1-tildelingen pr. kant er ikke entydig.],
   blueprint: [
@@ -56,8 +58,9 @@ De grådige eksamensopgaver er af to slags. Huffman-opgaverne beder dig bygge tr
 )
 
 #qcard(
-  tag: [Huffman: byg træ og læs koder],
+  tag: [Huffman: byg træ og læs koder (Huffman-træ)],
   source: "DM507 juni 2010, Opg. 1b (5%)",
+  theory: <th-greedy-huffman>,
   prompt: [Angiv et Huffman-træ for alfabetet med frekvenser #swap[$a=300$, $b=150$, $c=75$, $d=125$, $e=200$, $f=50$, $g=100$].],
   answer: [Kodelængder $a=2, e=2, b=3, d=3, g=3, c=4, f=4$. Samlet (vægtet stilængde) $= 2625$ bit.],
   blueprint: [
@@ -82,8 +85,9 @@ De grådige eksamensopgaver er af to slags. Huffman-opgaverne beder dig bygge tr
 )
 
 #qcard(
-  tag: [Huffman: byg træ og læs koder],
+  tag: [Huffman: byg træ og læs koder (Huffman-træ)],
   source: "DM507 juni 2014, Opg. 6 (6%)",
+  theory: <th-greedy-huffman>,
   prompt: [Byg et Huffman-træ for frekvenserne #swap[$a:400$, $e:750$, $i:300$, $o:150$, $u:200$, $y:100$ (i alt $1900$)]. Angiv hvert kodeord og den samlede kodede længde.],
   answer: [Kodelængder $e=1, u=3, i=3, a=3, y=4, o=4$. Samlet $= 4450$ bit.],
   blueprint: [
@@ -107,8 +111,9 @@ De grådige eksamensopgaver er af to slags. Huffman-opgaverne beder dig bygge tr
 )
 
 #qcard(
-  tag: [Huffman: byg træ og læs koder],
+  tag: [Huffman: byg træ og læs koder (Huffman-træ)],
   source: "jun 2016, Problem 5 (7%)",
+  theory: <th-greedy-huffman>,
   prompt: [Byg et Huffman-træ for frekvenserne #swap[$x:1000$, $y:200$, $z:600$, "æ":$800$, "ø":$300$, "å":$400$ (i alt $3300$)]. Angiv en kode pr. tegn og den samlede kodede længde i bit.],
   answer: [Kodelængder $x=2, z=2, "æ"=2, "å"=3, y=4, "ø"=4$. Samlet $= 8000$ bit.],
   blueprint: [
@@ -132,8 +137,9 @@ De grådige eksamensopgaver er af to slags. Huffman-opgaverne beder dig bygge tr
 )
 
 #qcard(
-  tag: [Huffman: kodet størrelse, afkodning, frembringelige træer],
+  tag: [Huffman: kodet størrelse, afkodning, frembringelige træer (producerbart)],
   source: "DM507 juni 2012, Opg. 5 (15%)",
+  theory: <th-greedy-producerbar>,
   prompt: [
     Frekvenser #swap[$a=100$, $b=150$, $c=150$, $d=250$, $e=350$ (i alt $1000$)]. Træet $H_1$ giver koderne #swap[$b=00, d=01, e=11, a=100, c=101$]. \
     *(a)* Hvor mange bit fylder filen kodet med $H_1$? \
@@ -166,6 +172,7 @@ De grådige eksamensopgaver er af to slags. Huffman-opgaverne beder dig bygge tr
 #qcard(
   tag: [Huffman: afkod bitstreng],
   source: "DM507 jan 2007, Opg. 2b (7%)",
+  theory: <th-greedy-huffman>,
   prompt: [Brug det givne Huffman-træ #swap[(rod: $0 -> a$, $1 -> X$; $X$: $0 -> Y$, $1 -> f$; $Y$: $0 -> P$, $1 -> Q$; $P$: $0 -> b$, $1 -> c$; $Q$: $0 -> d$, $1 -> e$)] til at afkode bitstrengen #swap[$1101001010101011$].],
   answer: [`facade`. Ingen overskydende bit.],
   blueprint: [
@@ -183,8 +190,9 @@ De grådige eksamensopgaver er af to slags. Huffman-opgaverne beder dig bygge tr
 )
 
 #qcard(
-  tag: [Grådig på træer: mindste knude-overdækning],
+  tag: [Grådig på træer: mindste knude-overdækning (ombytningsargument)],
   source: "DM507 juni 2009, Opg. 4 (20%)",
+  theory: <th-greedy-exchange>,
   prompt: [
     En knude-overdækning af $G = (V, E)$ er en delmængde $V' subset.eq V$, så hver kant rører mindst én knude i $V'$. Vi vil have en *mindste* knude-overdækning af et træ. Lad $e(v)$ være kanterne, der rører $v$. Betragt algoritmen:
     #eq[$

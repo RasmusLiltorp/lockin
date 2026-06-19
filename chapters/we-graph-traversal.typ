@@ -4,8 +4,9 @@
 De skriftlige opgaver om DFS (depth-first search) og BFS (breadth-first search) beder dig stort set altid om at køre gennemløbet i hånden og aflæse noget af det. Det kan være discovery- og finish-tider, hvad kanterne klassificeres som, hvilken rækkefølge køen tømmes i, eller afstandene fra kilden. Et par opgaver går videre til stærkt sammenhængende komponenter (strongly connected components) eller til at afgøre, om en graf er todelt (bipartite). Nabolisterne (adjacency lists) gennemgås altid alfabetisk, så der ikke er tvivl om rækkefølgen.
 
 #qcard(
-  tag: [DFS: tidsstempler + kantklassifikation],
+  tag: [DFS: tidsstempler + kantklassifikation (Kantklassifikation)],
   source: "DM507 juni 2015, Opg. 6 (10%)",
+  theory: <th-graph-edge-class>,
   prompt: [
     #swap[Hjulgraf: et centrum $i$ og en ydre ring $a-b-c-d-e-f-g-h-a$ (med uret fra toppen), hvor hvert ringhjørne også er forbundet til $i$.] Kanterne er urettede (undirected). DFS starter i $i$, og nabolister gennemgås i alfabetisk orden.
     *(a)* Angiv discovery-tid $v.d$ og finish-tid $v.f$ for alle hjørner. \
@@ -28,8 +29,9 @@ De skriftlige opgaver om DFS (depth-first search) og BFS (breadth-first search) 
 )
 
 #qcard(
-  tag: [DFS: tidsstempler + kantklassifikation],
+  tag: [DFS: tidsstempler + kantklassifikation (Kantklassifikation)],
   source: "DM507 juni 2012, Opg. 4c (10%)",
+  theory: <th-graph-dfs>,
   prompt: [
     Rettet graf (directed graph) $G 3$ på hjørnerne $a, ..., h$ med kanterne
     #swap[$a->b, a->e, a->f, b->g, c->b, c->d, d->e, e->h, f->g, g->c, g->h, h->d, h->f$.]
@@ -49,8 +51,9 @@ De skriftlige opgaver om DFS (depth-first search) og BFS (breadth-first search) 
 )
 
 #qcard(
-  tag: [BFS + DFS på rettet graf],
+  tag: [BFS + DFS på rettet graf (DFS)],
   source: "jun 2016, Problem 6 (a,b)",
+  theory: <th-graph-dfs>,
   prompt: [
     Rettet graf $G 1$ med ud-nabolister (alfabetisk sorteret, kun disse kanter må følges):
     #swap[$a: \[b\], space b: \[c\,e\], space c: \[d\,f\], space d: \[ \], space e: \[a\,f\], space f: \[b\,g\,h\], space g: \[c\,i\], space h: \[e\,i\], space i: \[f\,j\], space j: \[h\]$.]
@@ -69,8 +72,9 @@ De skriftlige opgaver om DFS (depth-first search) og BFS (breadth-first search) 
 )
 
 #qcard(
-  tag: [BFS på rettet graf],
+  tag: [BFS på rettet graf (BFS)],
   source: "DM507 juni 2013, Opg. 4a (10%)",
+  theory: <th-graph-bfs>,
   prompt: [
     Rettet, uvægtet graf $G 1$ på hjørnerne $a, ..., h$ og centrum $i$. Ud-nabolister (alfabetisk sorteret):
     #swap[$a: \[i\], space b: \[a\,c\], space c: \[d\,i\], space d: \[ \], space e: \[d\,i\], space f: \[e\,i\], space g: \[f\,i\], space h: \[a\,g\], space i: \[b\,d\,h\]$.]
@@ -93,8 +97,9 @@ De skriftlige opgaver om DFS (depth-first search) og BFS (breadth-first search) 
 )
 
 #qcard(
-  tag: [Stærkt sammenhængende komponenter (SCC)],
+  tag: [Stærkt sammenhængende komponenter (SCC) (Kosaraju)],
   source: "DM02 januar 2005, Opg. 3 (25%)",
+  theory: <th-graph-scc>,
   prompt: [
     Rettet graf $G = (V, E)$ med $V = {A, ..., N}$ (14 hjørner) og kanterne
     #swap[$A->E, E->A, B->C, B->E, C->D, C->G, C->L, E->I, F->E, F->B, F->J, G->F, G->K, H->C, H->D, H->G, I->J, J->N, K->J, L->H, M->I, M->J, N->K, N->M$.]
@@ -135,6 +140,7 @@ De skriftlige opgaver om DFS (depth-first search) og BFS (breadth-first search) 
 #qcard(
   tag: [Todelt graf (bipartit): genkend + BFS-test],
   source: "DM507 januar 2007, Opg. 4 (20%)",
+  theory: <th-graph-bfs>,
   prompt: [
     En todelt (bipartit) graf er én, hvis hjørner kan deles i to disjunkte mængder $X, Y$, så hver kant har ét endepunkt i $X$ og ét i $Y$.
     *(a)* Hvilke af disse er bipartitte (giv en 2-deling)? #swap[(i) en 5-kreds (pentagon); (ii) en 4-kreds (firkant); (iii) fem hjørner $T, L, R, B L, B R$ med kanterne $T - B R, L - R, R - B L, B L - B R, B R - L$.] \

@@ -1,6 +1,6 @@
 #import "../lib.typ": *
 
-== Grafgennemløb og sammenhængskomponenter
+== Grafgennemløb og sammenhængskomponenter <th-graph-intro>
 
 Et grafgennemløb (graph traversal) starter i én knude og udforsker grafen kant for kant. Hver knude farves hvid (ikke set), grå (set, ikke færdig) eller sort (færdig). Metoderne adskiller sig kun i, hvilken grå knude du arbejder videre på.
 
@@ -16,6 +16,7 @@ hvor $n$ er antal knuder og $m$ antal kanter.
 
 === Sådan løser du den
 
+#metadata(none) <th-graph-dfs>
 #recipe(
   title: "DFS i hånden",
   [Sortér hver naboliste (adjacency list) #swap[alfabetisk]; det gør rækkefølgen entydig.],
@@ -33,6 +34,7 @@ Hver knude får et interval $[d, f]$. To tik per knude giver sidste afslutningst
 
 Du står i $u$ og følger en kant til $v$. Stil ét spørgsmål: hvilken farve har $v$ lige nu? Farven siger, hvor $v$ ligger i forhold til dig. Hvid er forude, grå er bag dig på vejen ned (en forfader), sort er noget du er færdig med. Er $v$ sort, afgør starttiderne om du peger nedad eller til siden.
 
+#metadata(none) <th-graph-edge-class>
 #recipe(
   title: "Kantklassifikation (u, v), set fra u",
   [$v$ #strong[hvid] #sym.arrow.r tree-kant. Du opdager $v$ gennem kanten, så den bliver dit barn i træet. Intervallet for $v$ ligger inde i $u$'s: $u.d < v.d < v.f < u.f$.],
@@ -69,6 +71,7 @@ Sagt helt enkelt, med et eksempel fra grafen ovenfor (DFS fra $i$):
 
 #trap(title: [Back-kant og kredse])[En orienteret graf har en kreds netop hvis DFS finder en back-kant; ingen back-kanter betyder en DAG (directed acyclic graph). Forveksl ikke back-kant med cross-kant.]
 
+#metadata(none) <th-graph-bfs>
 #recipe(
   title: "BFS i hånden",
   [Sortér nabolisterne #swap[alfabetisk]. Sæt start #swap[$a$] til $d = 0$ og læg den i køen.],
@@ -81,6 +84,9 @@ Sagt helt enkelt, med et eksempel fra grafen ovenfor (DFS fra $i$):
 
 #note(title: [BFS niveaurækkefølge])[Alle knuder i afstand $i$ kommer ud før nogen i afstand $i + 1$. Vil du finde den første med $d = k$, fyld et niveau ad gangen: niveau 1 er de sorterede naboer til $s$, og udvid dem i rækkefølge.]
 
+#metadata(none) <th-graph-toposort>
+#metadata(none) <th-graph-components>
+#metadata(none) <th-graph-scc>
 #recipe(
   title: "Topologisk sortering og komponenter",
   [Topologisk sortering (kun DAG): kør DFS og list knuderne efter faldende `u.f`. Så peger hver kant fra venstre mod højre. Tjek en foreslået rækkefølge ved at se, at hver kant $u arrow v$ har $u$ før $v$.],
@@ -88,11 +94,16 @@ Sagt helt enkelt, med et eksempel fra grafen ovenfor (DFS fra $i$):
   [Stærkt sammenhængende komponenter (strongly connected components) (orienteret, Kosaraju): kør DFS på $G$ og gem afslutningstider. Vend alle kanter til $G^T$. Kør DFS på $G^T$ med knuderne i faldende afslutningsrækkefølge; hvert træ er én SCC.],
 )
 
+#note(title: [Hvad er en SCC])[En stærk sammenhængskomponent (SCC) er en gruppe knuder, hvor der findes en vej frem og tilbage mellem alle punkter i gruppen. To krav skal være opfyldt. For det første skal alle kunne nå alle, så starter du i et hvilket som helst punkt i gruppen, kan du følge pilene hen til ethvert andet punkt i gruppen. For det andet skal gruppen være maksimal, så du kan ikke tage et ekstra punkt udefra med, uden at reglen om at alle kan nå alle går i stykker. Et punkt du kun kan rejse til, men ikke fra, danner sin egen gruppe på ét punkt.]
+
+#trap(title: [Et enkelt punkt er også en SCC])[Det føles som snyd, at en enlig knude tæller som en hel komponent. Men en knude kan altid nå sig selv via vejen med nul pile. Står $a$ alene, skal den kun nå sig selv for at opfylde "alle kan nå alle", og det kan den. Grunden til at $a$ havner alene er udelukkelse. Den kan ikke dele gruppe med $b$, for fra $b$ når du $a$, men aldrig tilbage til $b$. Og den kan ikke dele gruppe med $f$, for fra $a$ når du slet ikke $f$. Når $a$ ikke kan være i gruppe med nogen, og hver knude skal høre til præcis én komponent, ender den på sin egen ø. Det er derfor ${a}$, ${f}$, ${e}$ og ${i}$ hver tæller med.]
+
 === Tilbagevendende eksamensspørgsmål
 
 #qcard(
-  tag: [BFS: kør i hånden, find afstand/rækkefølge],
+  tag: [BFS: kør i hånden, find afstand/rækkefølge (BFS)],
   source: "MCQ juni 2023, spm. 14",
+  theory: <th-graph-bfs>,
   prompt: [Udfør BFS($G$, $a$) med start i knude $a$ og nabolister sorteret alfabetisk. Orienterede kanter: $f arrow g$, $g arrow j$, $i arrow j$, $c arrow f$, $c arrow g$, $d arrow g$, $d arrow i$, $h arrow c$, $b arrow c$, $e arrow b$, $e arrow j$, $a arrow d$, $a arrow e$. Hvilken knude er den første, der får tildelt $d$-værdi (afstand) #swap[$4$]?],
   options: ([$c$], [$f$], [$h$], [$i$], [$j$]),
   answer: [(b) $f$.],
@@ -120,8 +131,9 @@ Sagt helt enkelt, med et eksempel fra grafen ovenfor (DFS fra $i$):
 )
 
 #qcard(
-  tag: [BFS: kør i hånden, find afstand/rækkefølge],
+  tag: [BFS: kør i hånden, find afstand/rækkefølge (BFS)],
   source: "MCQ juni 2019, Spm. 14",
+  theory: <th-graph-bfs>,
   prompt: [Udfør BFS($G_2$, $c$) med start i knude $c$ og nabolister sorteret alfabetisk. Orienterede kanter: $a arrow b$, $a arrow f$, $b arrow f$, $b arrow g$, $c arrow b$, $c arrow d$, $c arrow g$, $c arrow h$, $d arrow h$, $d arrow i$, $e arrow d$, $e arrow i$, $f arrow g$, $h arrow i$. Hvilken knude er den #swap[første], der får tildelt $d$-værdi (afstand) #swap[$2$]?],
   options: ([$a$], [$b$], [$d$], [$e$], [$f$], [$g$], [$h$], [$i$]),
   answer: [Mulighed (e): $f$.],
@@ -147,8 +159,9 @@ Sagt helt enkelt, med et eksempel fra grafen ovenfor (DFS fra $i$):
 )
 
 #qcard(
-  tag: [BFS: kør i hånden, find afstand/rækkefølge],
+  tag: [BFS: kør i hånden, find afstand/rækkefølge (BFS)],
   source: "MCQ juni 2019, Spm. 15",
+  theory: <th-graph-bfs>,
   prompt: [Fortsæt med BFS på den #swap[uorienterede] graf $G_2$ med start i knude $c$. Kanter: $a - f$, $f - g$, $f - b$, $b - g$, $c - g$, $c - b$, $c - d$, $h - i$, $h - d$, $d - i$, $e - d$, $e - i$. Hvilken knude er den #swap[sidste], der får tildelt $d$-værdi (afstand) #swap[$3$]?],
   options: ([$a$], [$b$], [$d$], [$e$], [$f$], [$g$], [$h$], [$i$]),
   answer: [Mulighed (a): $a$.],
@@ -175,8 +188,9 @@ Sagt helt enkelt, med et eksempel fra grafen ovenfor (DFS fra $i$):
 )
 
 #qcard(
-  tag: [BFS: kør i hånden, find afstand/rækkefølge],
+  tag: [BFS: kør i hånden, find afstand/rækkefølge (BFS)],
   source: "MCQ juni 2019, Spm. 16",
+  theory: <th-graph-bfs>,
   prompt: [Fortsæt med BFS på den orienterede graf $G_2$ med start i knude $c$. Kanter: $a arrow f$, $a arrow b$, $f arrow g$, $b arrow f$, $b arrow g$, $c arrow b$, $c arrow g$, $c arrow h$, $h arrow i$, $d arrow h$, $d arrow i$, $e arrow d$, $e arrow i$. Hvor mange knuder har $d$-værdi #swap[$infinity$], når algoritmen stopper (altså er #swap[unåelige] fra $c$)?],
   options: ([$0$], [$1$], [$2$], [$3$], [$4$], [$5$], [$6$]),
   answer: [Mulighed (d): $3$.],
@@ -202,8 +216,9 @@ Sagt helt enkelt, med et eksempel fra grafen ovenfor (DFS fra $i$):
 )
 
 #qcard(
-  tag: [BFS: kør i hånden, find afstand/rækkefølge],
+  tag: [BFS: kør i hånden, find afstand/rækkefølge (BFS)],
   source: "MCQ juni 2021, Spm. 14",
+  theory: <th-graph-bfs>,
   prompt: [Udfør BFS($G$, $a$) på den orienterede graf med start i $a$ og nabolister sorteret alfabetisk. Kanter: $a arrow g$, $g arrow j$, $g arrow c$, $c arrow a$, $c arrow h$, $h arrow g$, $h arrow j$, $h arrow.l.r d$, $h arrow.l.r e$, $d arrow j$, $d arrow.l.r i$, $i arrow j$, $b arrow c$, $b arrow h$, $e arrow b$, $e arrow d$, $e arrow.l.r f$, $f arrow b$. Hvilken liste giver #swap[rækkefølgen, knuderne lægges i køen $Q$]?],
   options: (
     [$a, g, c, h, d, i, j, e, b, f$],
@@ -233,8 +248,9 @@ Sagt helt enkelt, med et eksempel fra grafen ovenfor (DFS fra $i$):
 )
 
 #qcard(
-  tag: [BFS: kør i hånden, find afstand/rækkefølge],
+  tag: [BFS: kør i hånden, find afstand/rækkefølge (BFS)],
   source: "MCQ juni 2025, Spm. 15",
+  theory: <th-graph-bfs>,
   prompt: [Udfør BFS($G$, $a$) på den #swap[uorienterede] graf med start i $a$ og nabolister sorteret alfabetisk. Kanter: $j - c$, $j - i$, $c - e$, $e - h$, $h - i$, $a - b$, $b - f$, $f - g$, $c - a$, $e - b$, $h - f$, $i - g$. Hvilken knude er den #swap[sidste], der får tildelt $d$-værdi (afstand) #swap[$3$]?],
   options: ([$e$], [$f$], [$g$], [$h$], [$i$], [$j$]),
   answer: [Mulighed (e): $i$.],
@@ -259,8 +275,9 @@ Sagt helt enkelt, med et eksempel fra grafen ovenfor (DFS fra $i$):
 )
 
 #qcard(
-  tag: [DFS: klassificér kanter (tæl forward/back/cross)],
+  tag: [DFS: klassificér kanter (tæl forward/back/cross) (Kantklassifikation)],
   source: "MCQ juni 2023, spm. 16",
+  theory: <th-graph-edge-class>,
   prompt: [DFS-Visit($G$, $a$) på den orienterede graf med kanter $a arrow b$, $b arrow c$, $c arrow d$, $a arrow e$, $b arrow f$, $c arrow f$, $c arrow g$, $f arrow a$, $f arrow g$, $d arrow h$, $h arrow g$. Hvor mange #swap[forward-kanter] er der i dette gennemløb?],
   options: ([$0$], [$1$], [$2$], [$3$], [$4$]),
   answer: [(c) $2$.],
@@ -287,8 +304,9 @@ Sagt helt enkelt, med et eksempel fra grafen ovenfor (DFS fra $i$):
 )
 
 #qcard(
-  tag: [DFS: klassificér kanter (tæl forward/back/cross)],
+  tag: [DFS: klassificér kanter (tæl forward/back/cross) (Kantklassifikation)],
   source: "MCQ juni 2015, Spm. 12",
+  theory: <th-graph-edge-class>,
   prompt: [Udfør DFS på den orienterede graf med start i $i$ og nabolister sorteret alfabetisk. Kanter: $a arrow i$, $h arrow a$, $b arrow a$, $i arrow b$, $i arrow h$, $i arrow g$, $c arrow i$, $i arrow d$, $e arrow i$, $f arrow i$, $g arrow h$, $g arrow f$, $f arrow e$, $e arrow d$, $d arrow c$, $b arrow c$. Klassificér hver kant (tree, back, forward, cross). Hvilket svar indeholder #swap[præcis én kant af hver type]?],
   options: (
     [$(b,i)$, $(a,b)$, $(b,c)$, $(d,i)$],
@@ -317,8 +335,9 @@ Sagt helt enkelt, med et eksempel fra grafen ovenfor (DFS fra $i$):
 )
 
 #qcard(
-  tag: [DFS: klassificér kanter (tæl forward/back/cross)],
+  tag: [DFS: klassificér kanter (tæl forward/back/cross) (Kantklassifikation)],
   source: "MCQ juni 2017, Spm. 14",
+  theory: <th-graph-edge-class>,
   prompt: [Udfør DFS på den orienterede graf $G_1$ med start i $a$ og nabolister sorteret alfabetisk. Kanter: $a arrow b$, $a arrow d$, $b arrow c$, $b arrow d$, $c arrow e$, $c arrow f$, $d arrow e$, $e arrow b$, $e arrow f$, $e arrow g$, $f arrow c$, $f arrow h$, $f arrow i$, $g arrow d$, $g arrow h$, $h arrow e$, $h arrow i$. Klassificér hver kant. Hvilket svar indeholder #swap[præcis én kant af hver type]?],
   options: (
     [$(c,e)$, $(e,g)$, $(h,e)$, $(e,b)$],
@@ -348,8 +367,9 @@ Sagt helt enkelt, med et eksempel fra grafen ovenfor (DFS fra $i$):
 )
 
 #qcard(
-  tag: [DFS: klassificér kanter (tæl forward/back/cross)],
+  tag: [DFS: klassificér kanter (tæl forward/back/cross) (Kantklassifikation)],
   source: "MCQ juni 2021, Spm. 16",
+  theory: <th-graph-edge-class>,
   prompt: [Udfør DFS-Visit($G$, $a$) på den orienterede graf med start i $a$ og nabolister sorteret alfabetisk. Kanter: $e arrow.l.r d$, $e arrow a$, $a arrow d$, $a arrow g$, $d arrow g$, $h arrow d$, $h arrow f$, $h arrow.l.r g$, $f arrow g$, $f arrow b$, $i arrow a$, $i arrow g$, $i arrow b$, $g arrow b$, $b arrow.l.r c$. Hvor mange #swap[cross-kanter] findes i dette gennemløb?],
   options: ([$0$], [$1$], [$2$], [$3$], [$4$], [$5$]),
   answer: [Mulighed (e): $4$.],
@@ -374,8 +394,9 @@ Sagt helt enkelt, med et eksempel fra grafen ovenfor (DFS fra $i$):
 )
 
 #qcard(
-  tag: [DFS: klassificér kanter (tæl forward/back/cross)],
+  tag: [DFS: klassificér kanter (tæl forward/back/cross) (Kantklassifikation)],
   source: "MCQ juni 2025, Spm. 17",
+  theory: <th-graph-edge-class>,
   prompt: [Fortsæt med DFS-Visit($G$, $a$) fra $a$, nabolister alfabetisk. Orienterede kanter: $a arrow c$, $c arrow e$, $c arrow j$, $e arrow h$, $e arrow b$, $h arrow i$, $h arrow f$, $i arrow g$, $j arrow e$, $j arrow h$, $j arrow i$, $b arrow a$, $f arrow b$, $g arrow f$. Hvor mange #swap[cross-kanter] findes i dette gennemløb?],
   options: ([$0$], [$1$], [$2$], [$3$], [$4$], [$5$], [$6$]),
   answer: [Mulighed (f): $5$.],
@@ -400,8 +421,9 @@ Sagt helt enkelt, med et eksempel fra grafen ovenfor (DFS fra $i$):
 )
 
 #qcard(
-  tag: [Topologisk sortering: er rækkefølgen gyldig?],
+  tag: [Topologisk sortering: er rækkefølgen gyldig? (topologisk sortering)],
   source: "MCQ juni 2023, spm. 17",
+  theory: <th-graph-toposort>,
   prompt: [Orienteret graf med kanter $a arrow b$, $a arrow d$, $b arrow c$, $b arrow d$, $b arrow e$, $c arrow f$, $e arrow f$, $g arrow c$, $g arrow f$. Hvilke lister er en topologisk sortering? (Et eller flere svar.)],
   options: (
     [$a, b, c, d, e, f, g$],
@@ -430,8 +452,9 @@ Sagt helt enkelt, med et eksempel fra grafen ovenfor (DFS fra $i$):
 )
 
 #qcard(
-  tag: [Topologisk sortering: er rækkefølgen gyldig?],
+  tag: [Topologisk sortering: er rækkefølgen gyldig? (topologisk sortering)],
   source: "MCQ juni 2021, Spm. 17 (flere rigtige)",
+  theory: <th-graph-toposort>,
   prompt: [Orienteret DAG med kanter $b arrow c$, $b arrow a$, $b arrow d$, $b arrow e$, $c arrow e$, $d arrow e$, $f arrow c$, $f arrow e$. Hvilke lister er en topologisk sortering? (Et eller flere svar.)],
   options: (
     [$a, b, c, d, e, f$],
@@ -463,8 +486,9 @@ Sagt helt enkelt, med et eksempel fra grafen ovenfor (DFS fra $i$):
 )
 
 #qcard(
-  tag: [Topologisk sortering: er rækkefølgen gyldig?],
+  tag: [Topologisk sortering: er rækkefølgen gyldig? (topologisk sortering)],
   source: "MCQ juni 2025, Spm. 18 (flere rigtige)",
+  theory: <th-graph-toposort>,
   prompt: [Orienteret graf med kanter $c arrow e$, $c arrow j$, $j arrow e$, $j arrow h$, $j arrow i$, $e arrow h$, $e arrow b$, $h arrow i$, $h arrow f$, $f arrow b$. Hvilke lister er en topologisk sortering? (Et eller flere svar.)],
   options: (
     [$c, j, e, h, i, f, b$],
@@ -497,8 +521,9 @@ Sagt helt enkelt, med et eksempel fra grafen ovenfor (DFS fra $i$):
 )
 
 #qcard(
-  tag: [DFS: kør i hånden, find opdagelses-/afslutningstid],
+  tag: [DFS: kør i hånden, find opdagelses-/afslutningstid (DFS)],
   source: "MCQ juni 2015, spm. 10",
+  theory: <th-graph-dfs>,
   prompt: [Udfør DFS med start i $i$ med nabolisterne sorteret alfabetisk. Hvilken knude får opdagelsestid (starttid) #swap[$12$]? Hjulgraf med center $i$ og ydre knuder $a$ til $h$. Eger: $i arrow a$, $i arrow b$, $c arrow i$, $i arrow d$, $e arrow i$, $f arrow i$, $i arrow g$, $i arrow h$. Ydre kanter: $h arrow a$, $b arrow a$, $b arrow c$, $d arrow c$, $e arrow d$, $f arrow e$, $g arrow f$, $g arrow h$.],
   options: (
     [Knuden $d$],
@@ -531,8 +556,9 @@ Sagt helt enkelt, med et eksempel fra grafen ovenfor (DFS fra $i$):
 )
 
 #qcard(
-  tag: [DFS: kør i hånden, find opdagelses-/afslutningstid],
+  tag: [DFS: kør i hånden, find opdagelses-/afslutningstid (DFS)],
   source: "MCQ juni 2015, Spm. 11",
+  theory: <th-graph-dfs>,
   prompt: [Fortsæt med DFS på samme hjulgraf med start i $i$ og nabolister sorteret alfabetisk. Hvilken knude får afslutningstid (sluttid) #swap[$16$]? Eger: $i arrow a$, $i arrow c$, $i arrow d$, $i arrow g$, $h arrow i$, $b arrow i$, $f arrow i$, $e arrow i$. Ydre kanter: $g arrow h$, $h arrow a$, $b arrow a$, $b arrow c$, $d arrow c$, $e arrow d$, $f arrow e$, $g arrow f$.],
   options: (
     [Knuden $b$],
@@ -564,8 +590,9 @@ Sagt helt enkelt, med et eksempel fra grafen ovenfor (DFS fra $i$):
 )
 
 #qcard(
-  tag: [DFS: kør i hånden, find opdagelses-/afslutningstid],
+  tag: [DFS: kør i hånden, find opdagelses-/afslutningstid (DFS)],
   source: "MCQ juni 2017, Spm. 12",
+  theory: <th-graph-dfs>,
   prompt: [Udfør DFS på den orienterede graf $G_1$ med start i $a$ og nabolister sorteret alfabetisk. Hvilken knude får opdagelsestid (starttid) #swap[$12$]? Kanter: $a arrow b$, $a arrow d$, $b arrow c$, $b arrow d$, $c arrow e$, $d arrow e$, $e arrow b$, $e arrow f$, $e arrow g$, $f arrow c$, $f arrow h$, $g arrow d$, $g arrow h$, $h arrow e$, $h arrow i$.],
   options: (
     [Knuden $d$],
@@ -597,8 +624,9 @@ Sagt helt enkelt, med et eksempel fra grafen ovenfor (DFS fra $i$):
 )
 
 #qcard(
-  tag: [DFS: kør i hånden, find opdagelses-/afslutningstid],
+  tag: [DFS: kør i hånden, find opdagelses-/afslutningstid (DFS)],
   source: "MCQ juni 2021, Spm. 15",
+  theory: <th-graph-dfs>,
   prompt: [Udfør DFS-Visit($G$, $a$) med start i $a$ og nabolister sorteret alfabetisk. Kanter: $a arrow d$, $a arrow g$, $b arrow.l.r c$, $c arrow f$, $d arrow.l.r e$, $d arrow g$, $e arrow a$, $f arrow b$, $f arrow g$, $g arrow b$, $g arrow.l.r h$, $g arrow i$, $h arrow d$, $h arrow f$, $i arrow a$, $i arrow b$. Hvilken liste giver #swap[rækkefølgen, knuderne får opdagelsestid]?],
   options: (
     [$a, g, b, c, f, h, d, e, i$],
@@ -627,8 +655,9 @@ Sagt helt enkelt, med et eksempel fra grafen ovenfor (DFS fra $i$):
 )
 
 #qcard(
-  tag: [DFS: kør i hånden, find opdagelses-/afslutningstid],
+  tag: [DFS: kør i hånden, find opdagelses-/afslutningstid (DFS)],
   source: "MCQ juni 2023, Spm. 15",
+  theory: <th-graph-dfs>,
   prompt: [Udfør DFS-Visit($G$, $a$) fra $a$ med nabolister sorteret alfabetisk. Kanter: $a arrow b$, $b arrow c$, $c arrow d$, $a arrow e$, $f arrow a$, $b arrow f$, $c arrow f$, $c arrow g$, $d arrow h$, $f arrow e$, $f arrow g$, $g arrow d$, $h arrow g$. Hvilken knude opdages #swap[sidst] (har højeste opdagelsestid)?],
   options: ([$d$], [$e$], [$f$], [$g$], [$h$]),
   answer: [Mulighed (b): $e$.],
@@ -651,8 +680,9 @@ Sagt helt enkelt, med et eksempel fra grafen ovenfor (DFS fra $i$):
 )
 
 #qcard(
-  tag: [DFS: kør i hånden, find opdagelses-/afslutningstid],
+  tag: [DFS: kør i hånden, find opdagelses-/afslutningstid (DFS)],
   source: "MCQ juni 2025, Spm. 16",
+  theory: <th-graph-dfs>,
   prompt: [Udfør DFS-Visit($G$, $a$) fra $a$ med nabolister sorteret alfabetisk. Orienterede kanter: $a arrow c$, $c arrow e$, $c arrow j$, $e arrow b$, $e arrow h$, $h arrow f$, $h arrow i$, $i arrow g$, $j arrow c$, $j arrow e$, $j arrow h$, $j arrow i$. Hvilken knude opdages #swap[sidst] (har højeste opdagelsestid)?],
   options: ([$b$], [$c$], [$d$], [$e$], [$f$], [$g$], [$h$], [$i$], [$j$]),
   answer: [Mulighed (i): $j$.],
@@ -675,8 +705,9 @@ Sagt helt enkelt, med et eksempel fra grafen ovenfor (DFS fra $i$):
 )
 
 #qcard(
-  tag: [DFS: kør i hånden, find opdagelses-/afslutningstid],
+  tag: [DFS: kør i hånden, find opdagelses-/afslutningstid (DFS)],
   source: "MCQ juni 2017, Spm. 13",
+  theory: <th-graph-dfs>,
   prompt: [Udfør DFS på den orienterede graf $G_1$ med start i $a$ og nabolister sorteret alfabetisk. Hvilken knude får afslutningstid (sluttid) #swap[$10$]? Kanter: $a arrow b$, $a arrow d$, $b arrow c$, $b arrow d$, $c arrow e$, $c arrow f$, $d arrow e$, $e arrow b$, $e arrow f$, $e arrow g$, $f arrow c$, $f arrow h$, $f arrow i$, $g arrow d$, $g arrow h$, $h arrow e$, $h arrow i$.],
   options: (
     [Knuden $b$],
@@ -707,8 +738,9 @@ Sagt helt enkelt, med et eksempel fra grafen ovenfor (DFS fra $i$):
 )
 
 #qcard(
-  tag: [Stærke sammenhængskomponenter: tæl dem],
+  tag: [Stærke sammenhængskomponenter: tæl dem (Kosaraju)],
   source: "MCQ juni 2017, Spm. 11",
+  theory: <th-graph-scc>,
   prompt: [Hvor mange stærke sammenhængskomponenter har den orienterede graf $G_1$? Kanter: $a arrow d$, $a arrow b$, $b arrow d$, $b arrow c$, $e arrow b$, $d arrow e$, $g arrow d$, $e arrow g$, $g arrow h$, $h arrow e$, $e arrow f$, $f arrow h$, $h arrow i$, $f arrow i$, $c arrow e$, $c arrow f$.],
   options: ([$1$], [$2$], [$3$], [$4$], [$5$], [$6$]),
   answer: [Mulighed (c): $3$.],
@@ -734,8 +766,9 @@ Sagt helt enkelt, med et eksempel fra grafen ovenfor (DFS fra $i$):
 )
 
 #qcard(
-  tag: [Stærke sammenhængskomponenter: tæl dem],
+  tag: [Stærke sammenhængskomponenter: tæl dem (Kosaraju)],
   source: "MCQ juni 2019, Spm. 12",
+  theory: <th-graph-scc>,
   prompt: [Hvor mange stærke sammenhængskomponenter har den orienterede graf $G_1$? Kanter: $f arrow a$, $b arrow f$, $g arrow f$, $b arrow a$, $g arrow b$, $c arrow g$, $b arrow c$, $h arrow c$, $d arrow h$, $i arrow h$, $c arrow d$, $e arrow i$, $i arrow d$, $e arrow d$.],
   options: ([$2$], [$3$], [$4$], [$5$], [$6$]),
   answer: [Mulighed (d): $5$.],
@@ -748,20 +781,27 @@ Sagt helt enkelt, med et eksempel fra grafen ovenfor (DFS fra $i$):
     + Tæl komponenterne.
   ],
   worked: [
-    Grafen her.
+    En stærk sammenhængskomponent er en gruppe af knuder, hvor du kan rejse fra en hvilken som helst knude i gruppen til en hvilken som helst anden i samme gruppe via pilene. Resultatet 5 betyder derfor 5 grupper, ikke 5 enkeltknuder. Tænk på dem som 5 isolerede øer.
 
-    + Kreds $b arrow c arrow g arrow b$ giver ${b, c, g}$; kreds $c arrow d arrow h arrow c$ giver ${c, d, h}$. De deler $c$, så de smelter til ${b, c, d, g, h}$.
-    + $a$ er afløb (ingen udgående); $f$ når kun $a$; $e$ har ingen indgående; $i$ har ingen indgående (kun $e arrow i$). Alle fire er singletons.
+    Den store ø er ${b, c, d, g, h}$. Inden for netop denne gruppe kan du komme fra et hvilket som helst punkt til et hvilket som helst andet. Følg fx ringen $b arrow c arrow d arrow h arrow c arrow g arrow b$.
 
-    Komponenter: ${a}$, ${f}$, ${e}$, ${i}$, ${b, c, d, g, h}$ — i alt 5.
+    De fire andre er enkeltknuder, hver sin egen ø, fordi du aldrig kan rejse tilbage til dem igen:
+
+    - ${a}$ har kun indgående pile ($f arrow a$ og $b arrow a$). Når du først er i $a$, kommer du ikke væk.
+    - ${f}$ modtager pile fra $b$ og $g$, men har kun én udgående pil til $a$. Forlader du $f$, kan du ikke komme tilbage.
+    - ${e}$ har kun udgående pile ($e arrow i$ og $e arrow d$). Ingen pil peger ind i $e$.
+    - ${i}$ modtager $e arrow i$ og sender videre til $h$ og $d$, men ingen vej fører tilbage til $i$.
+
+    Det er antallet af uafhængige grupper, der giver svaret, ikke at der er 5 punkter der kan nå alt. I alt 1 stor plus 4 små = 5 komponenter.
 
     Svar: (d) $5$.
   ],
 )
 
 #qcard(
-  tag: [Stærke sammenhængskomponenter: tæl dem],
+  tag: [Stærke sammenhængskomponenter: tæl dem (Kosaraju)],
   source: "MCQ juni 2021, Spm. 18",
+  theory: <th-graph-scc>,
   prompt: [Hvor mange stærke sammenhængskomponenter har den orienterede graf? Kanter: $d arrow e$, $h arrow d$, $a arrow e$, $a arrow d$, $g arrow d$, $h arrow.l.r g$, $a arrow g$, $f arrow g$, $h arrow f$, $i arrow a$, $g arrow i$, $g arrow b$, $f arrow b$, $f arrow c$, $i arrow b$, $b arrow.l.r c$.],
   options: ([$1$], [$2$], [$3$], [$4$], [$5$], [$6$], [$7$], [$8$], [$9$]),
   answer: [Mulighed (d): $4$.],
@@ -787,8 +827,9 @@ Sagt helt enkelt, med et eksempel fra grafen ovenfor (DFS fra $i$):
 )
 
 #qcard(
-  tag: [Stærke sammenhængskomponenter: tæl dem],
+  tag: [Stærke sammenhængskomponenter: tæl dem (Kosaraju)],
   source: "MCQ juni 2023, Spm. 18",
+  theory: <th-graph-scc>,
   prompt: [Hvor mange stærke sammenhængskomponenter har den orienterede graf? Kanter: $B arrow A$, $A arrow E$, $E arrow B$, $B arrow C$, $C arrow D$, $C arrow F$, $D arrow F$, $G arrow E$, $E arrow H$, $H arrow G$, $H arrow I$, $H arrow C$, $F arrow I$, $I arrow J$, $J arrow F$.],
   options: ([$1$], [$2$], [$3$], [$4$], [$5$]),
   answer: [Mulighed (d): $4$.],
@@ -813,8 +854,9 @@ Sagt helt enkelt, med et eksempel fra grafen ovenfor (DFS fra $i$):
 )
 
 #qcard(
-  tag: [Stærke sammenhængskomponenter: par i samme komponent],
+  tag: [Stærke sammenhængskomponenter: par i samme komponent (Kosaraju)],
   source: "MCQ juni 2017, Spm. 10 (flere rigtige)",
+  theory: <th-graph-scc>,
   prompt: [I den orienterede graf $G_1$, for hvilke par af knuder ligger #swap[begge knuder i samme stærke sammenhængskomponent]? (Et eller flere svar.) Kanter: $g arrow h$, $h arrow i$, $g arrow d$, $e arrow g$, $h arrow e$, $f arrow h$, $f arrow i$, $d arrow e$, $e arrow f$, $a arrow d$, $a arrow b$, $b arrow d$, $e arrow b$, $c arrow e$, $f arrow c$, $b arrow c$.],
   options: (
     [$a$ og $f$],
@@ -843,8 +885,9 @@ Sagt helt enkelt, med et eksempel fra grafen ovenfor (DFS fra $i$):
 )
 
 #qcard(
-  tag: [Stærke sammenhængskomponenter: par i samme komponent],
+  tag: [Stærke sammenhængskomponenter: par i samme komponent (Kosaraju)],
   source: "MCQ juni 2019, Spm. 13",
+  theory: <th-graph-scc>,
   prompt: [I den orienterede graf $G_1$, for hvilken #swap[tilføjet kant] falder antallet af stærke sammenhængskomponenter til #swap[én]? Kanter: $g arrow f$, $f arrow a$, $b arrow f$, $g arrow b$, $c arrow g$, $b arrow a$, $b arrow c$, $c arrow d$, $i arrow h$, $h arrow c$, $d arrow h$, $i arrow d$, $e arrow i$, $e arrow d$. En kant fra $u$ til $v$ skrives $(u, v)$.],
   options: (
     [$(h, g)$],

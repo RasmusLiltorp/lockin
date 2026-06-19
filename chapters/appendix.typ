@@ -24,6 +24,7 @@ Basen er ligegyldig inde i $O$ og $Theta$. Basisskift ganger blot med en konstan
 
 Så $log_a n = Theta(log_b n)$ uanset basen. Derfor skriver man aldrig basen i en $O$-påstand.
 
+#metadata(none) <th-app-log>
 #recipe(
   title: [Afgør om $f$ er $O(g)$],
   [Lær vækstrækken (growth hierarchy) udenad; hver står stærkere end den foregående:
@@ -37,6 +38,7 @@ Så $log_a n = Theta(log_b n)$ uanset basen. Derfor skriver man aldrig basen i e
    #eq[$ log(n!) = Theta(n log n) $]],
 )
 
+#metadata(none) <th-app-base>
 #recipe(
   title: [Omregn et positivt heltal til base $b$],
   [Sæt $X = N$. Dividér $X$ med #swap[$b$] og notér *resten* (remainder); det er det næste ciffer, mindst betydende først.],
@@ -71,8 +73,9 @@ Hvert ciffer koster $O(1)$, og du deler $N$ ned til 0, så omregningen tager $Th
 === Tilbagevendende eksamensspørgsmål
 
 #qcard(
-  tag: [O-notation: er X = O(Y)?],
+  tag: [O-notation: er X = O(Y)? (growth hierarchy)],
   source: "MCQ juni 2021, Spm. 5",
+  theory: <th-app-log>,
   prompt: [Hvilke udsagn er sande? $log n$ er base to. (Et eller flere svar.)],
   options: (
     [$n$ er $O(log n)$],
@@ -108,8 +111,9 @@ Hvert ciffer koster $O(1)$, og du deler $N$ ned til 0, så omregningen tager $Th
 )
 
 #qcard(
-  tag: [Asymptotik: O / Ω / Θ / o / ω sand?],
+  tag: [Asymptotik: O / Ω / Θ / o / ω sand? (growth hierarchy)],
   source: "MCQ juni 2021, Spm. 6",
+  theory: <th-app-log>,
   prompt: [Hvilke udsagn er sande? $log n$ er base to. (Et eller flere svar.)],
   options: (
     [$log n$ er $omega(n^2)$],
@@ -146,8 +150,9 @@ Hvert ciffer koster $O(1)$, og du deler $N$ ned til 0, så omregningen tager $Th
 )
 
 #qcard(
-  tag: [Talrepræsentation: omregn til binær],
+  tag: [Talrepræsentation: omregn til binær (base)],
   source: "DM573, talReprSlides (omregningsøvelse)",
+  theory: <th-app-base>,
   prompt: [Omregn $N = #swap[$25$]$ til binær.],
   answer: [$25 = 11001_2$.],
   blueprint: [
@@ -179,8 +184,9 @@ Hvert ciffer koster $O(1)$, og du deler $N$ ned til 0, så omregningen tager $Th
 )
 
 #qcard(
-  tag: [Køretid: tæl løkkernes gennemløb],
+  tag: [Køretid: tæl løkkernes gennemløb (running time)],
   source: "DM507 juni 2010, Opg. 3d",
+  theory: <th-app-base>,
   prompt: [Algoritmen finder de binære cifre $b_i$ for et positivt heltal $n$ (her $n = #swap[$55$]$). Identiteten $x = y dot (x "div" y) + (x "mod" y)$ gælder for alle heltal. Hvad er køretiden?
     ```
     BinaryDigits(n)

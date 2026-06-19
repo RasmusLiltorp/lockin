@@ -30,7 +30,7 @@ De fem symboler er bare fem måder at sige "hvor hurtigt vokser $f$ i forhold ti
 
 #note(title: [Streng vs. ikke-streng])[$O$ og $Omega$ tillader lighed (loft/gulv må røres), $o$ og $omega$ gør ikke (strengt under/over). $Theta$ er $O$ og $Omega$ på én gang. Derfor: hver gang $Theta$ holder, holder $O$ og $Omega$ også — men ikke omvendt.]
 
-=== Sådan løser du den
+=== Sådan løser du den <th-asym-ladder>
 
 En påstand som "$f(n)$ er $O(g(n))$" spørger kun om én ting: *vokser $f$ højst lige så hurtigt som $g$?* Det eneste værktøj du behøver er vækststigen (growth hierarchy) — langsomst til venstre, hurtigst til højre:
 
@@ -49,6 +49,7 @@ To huskeregler dækker næsten alt: en *eksponentiel* ($2^n$, $3^n$) slår altid
 
 For et hurtigt blik: er $f$ under eller lig med $g$ på stigen, holder "$f = O(g)$"; er $f$ over $g$, gør den ikke.
 
+#metadata(none) <th-asym-limit>
 *Den præcise metode (hvis stigen ikke rækker):* del de to funktioner og se hvad forholdet går mod langt ude. Lad
 
 #eq[$ L = lim_(n -> infinity) f(n) / g(n). $]
@@ -109,7 +110,7 @@ Grænsen er $0$, fordi enhver positiv rod af $n$ slår enhver potens af $log n$,
 
 #trap(title: [Konstante faktorer])[Konstante faktorer og summer af samme grad ændrer ikke klassen: $n + n + n = Theta(n slash 3) = Theta(n)$. Men en $log$-faktor tæller. $(log n)^3$ er ikke $Theta(3 log n)$, fordi $(log n)^3 slash (3 log n) = (log n)^2 slash 3 -> infinity$.]
 
-=== O(n) eller O(n²)?
+=== O(n) eller O(n²)? <th-asym-loops>
 
 Forskellen mellem $Theta(n)$ og $Theta(n^2)$ handler kun om én ting: hvor mange gange den inderste linje kører i alt. Køretiden _er_ det tal. Så lad være med at gætte eksponenten; tæl skridtene.
 
@@ -186,13 +187,15 @@ For løkker tæller du altså to ting hver for sig: hvor mange gange den ydre l�
   [Gang ydre antal med indre omkostning, smid konstanter væk, skriv $Theta$.],
 )
 
+#metadata(none) <th-asym-loop-trap>
 #trap(title: [Indre tæller])[Sættes en indre tæller én gang uden for begge løkker og kun stiger, er det samlede indre arbejde $Theta(n)$ for hele kørslen, ikke per gennemløb. Det laver et tilsyneladende $Theta(n^2)$ om til $Theta(n)$.]
 
 === Tilbagevendende eksamensspørgsmål
 
 #qcard(
-  tag: [O-notation: er X = O(Y)?],
+  tag: [O-notation: er X = O(Y)? (vækststigen)],
   source: "MCQ juni 2023, Spm. 5",
+  theory: <th-asym-ladder>,
   prompt: [Hvilke af følgende er sande? (Et eller flere svar.)],
   options: (
     [$#swap[$n$]$ er $O(#swap[$sqrt(n)$])$],
@@ -229,8 +232,9 @@ For løkker tæller du altså to ting hver for sig: hvor mange gange den ydre l�
 )
 
 #qcard(
-  tag: [O-notation: er X = O(Y)?],
+  tag: [O-notation: er X = O(Y)? (vækststigen)],
   source: "MCQ juni 2015, Spm. 5 (flere rigtige)",
+  theory: <th-asym-ladder>,
   prompt: [Hvilke af følgende er sande? (Et eller flere svar.)],
   options: (
     [$#swap[$2^n$]$ er $O(#swap[$n^3$])$],
@@ -267,8 +271,9 @@ For løkker tæller du altså to ting hver for sig: hvor mange gange den ydre l�
 )
 
 #qcard(
-  tag: [O-notation: er X = O(Y)?],
+  tag: [O-notation: er X = O(Y)? (vækststigen)],
   source: "MCQ juni 2017, Spm. 5 (flere rigtige)",
+  theory: <th-asym-ladder>,
   prompt: [Hvilke af følgende er sande? (Et eller flere svar.)],
   options: (
     [$#swap[$n^2$]$ er $O(#swap[$n^3$])$],
@@ -308,8 +313,9 @@ For løkker tæller du altså to ting hver for sig: hvor mange gange den ydre l�
 )
 
 #qcard(
-  tag: [O-notation: er X = O(Y)?],
+  tag: [O-notation: er X = O(Y)? (vækststigen)],
   source: "MCQ juni 2019, Spm. 5 (flere rigtige)",
+  theory: <th-asym-ladder>,
   prompt: [Hvilke af følgende er sande? (Et eller flere svar.)],
   options: (
     [$#swap[$n^3$]$ er $O(#swap[$n^2$])$],
@@ -342,8 +348,9 @@ For løkker tæller du altså to ting hver for sig: hvor mange gange den ydre l�
 )
 
 #qcard(
-  tag: [O-notation: er X = O(Y)?],
+  tag: [O-notation: er X = O(Y)? (vækststigen)],
   source: "MCQ juni 2021, Spm. 5 (flere rigtige)",
+  theory: <th-asym-ladder>,
   prompt: [Hvilke af følgende er sande? ($log n$ er grundtal to.) (Et eller flere svar.)],
   options: (
     [$#swap[$n$]$ er $O(#swap[$log n$])$],
@@ -377,8 +384,9 @@ For løkker tæller du altså to ting hver for sig: hvor mange gange den ydre l�
 )
 
 #qcard(
-  tag: [O-notation: er X = O(Y)?],
+  tag: [O-notation: er X = O(Y)? (vækststigen)],
   source: "MCQ juni 2025, Spm. 5 (flere rigtige)",
+  theory: <th-asym-ladder>,
   prompt: [Hvilke af følgende er sande? Afgør for hvert par om $f(n) = O(g(n))$. (Et eller flere svar.)],
   options: (
     [$#swap[$3n^4$]$ er $O(#swap[$4n^3$])$],
@@ -413,8 +421,9 @@ For løkker tæller du altså to ting hver for sig: hvor mange gange den ydre l�
 )
 
 #qcard(
-  tag: [Asymptotik: O / Ω / Θ / o / ω sand?],
+  tag: [Asymptotik: O / Ω / Θ / o / ω sand? (grænseværdi)],
   source: "MCQ juni 2023, Spm. 6",
+  theory: <th-asym-limit>,
   prompt: [Hvilke af følgende er sande? (Et eller flere svar.)],
   options: (
     [$#swap[$n$]$ er $Omega(#swap[$(log n)^2$])$],
@@ -450,8 +459,9 @@ For løkker tæller du altså to ting hver for sig: hvor mange gange den ydre l�
 )
 
 #qcard(
-  tag: [Asymptotik: O / Ω / Θ / o / ω sand?],
+  tag: [Asymptotik: O / Ω / Θ / o / ω sand? (grænseværdi)],
   source: "MCQ juni 2019, Spm. 6 (flere rigtige)",
+  theory: <th-asym-limit>,
   prompt: [Hvilke af følgende er sande? (Et eller flere svar.)],
   options: (
     [$#swap[$n^(1 slash 2) + 2n^2 + (log n)^2$]$ er $Theta(#swap[$n^2$])$],
@@ -483,8 +493,9 @@ For løkker tæller du altså to ting hver for sig: hvor mange gange den ydre l�
 )
 
 #qcard(
-  tag: [Asymptotik: O / Ω / Θ / o / ω sand?],
+  tag: [Asymptotik: O / Ω / Θ / o / ω sand? (grænseværdi)],
   source: "MCQ juni 2021, Spm. 6 (flere rigtige)",
+  theory: <th-asym-limit>,
   prompt: [Hvilke af følgende er sande? ($log n$ er grundtal to.) (Et eller flere svar.)],
   options: (
     [$#swap[$log n$]$ er $omega(#swap[$n^2$])$],
@@ -516,8 +527,9 @@ For løkker tæller du altså to ting hver for sig: hvor mange gange den ydre l�
 )
 
 #qcard(
-  tag: [Asymptotik: O / Ω / Θ / o / ω sand?],
+  tag: [Asymptotik: O / Ω / Θ / o / ω sand? (grænseværdi)],
   source: "MCQ juni 2025, Spm. 6 (flere rigtige)",
+  theory: <th-asym-limit>,
   prompt: [Hvilke af følgende er sande? (Et eller flere svar.)],
   options: (
     [$#swap[$2^n$]$ er $Omega(#swap[$n^4$])$],
@@ -550,8 +562,9 @@ For løkker tæller du altså to ting hver for sig: hvor mange gange den ydre l�
 )
 
 #qcard(
-  tag: [Køretid: tæl løkkernes gennemløb],
+  tag: [Køretid: tæl løkkernes gennemløb (multiplikativ)],
   source: "MCQ juni 2023, Spm. 25",
+  theory: <th-asym-loops>,
   prompt: [Hvad er den asymptotiske køretid i $Theta$-notation? \
     `ALGORITME3(n): i = 1; while i <= n: { j = n; while j > 1: j = j - 1; i = `#swap[$2$]`*i }`],
   options: (
@@ -580,8 +593,9 @@ For løkker tæller du altså to ting hver for sig: hvor mange gange den ydre l�
 )
 
 #qcard(
-  tag: [Køretid: tæl løkkernes gennemløb],
+  tag: [Køretid: tæl løkkernes gennemløb (multiplikativ)],
   source: "MCQ juni 2015, Spm. 21",
+  theory: <th-asym-loops>,
   prompt: [Hvad er den asymptotiske køretid i $Theta$-notation? \
     `ALGORITME1(n): i = n; while i > 1: { j = n; while j > `#swap[$i$]`: j = j - 1; i = i - 1 }`],
   options: (
@@ -610,8 +624,9 @@ For løkker tæller du altså to ting hver for sig: hvor mange gange den ydre l�
 )
 
 #qcard(
-  tag: [Køretid: tæl løkkernes gennemløb],
+  tag: [Køretid: tæl løkkernes gennemløb (multiplikativ)],
   source: "MCQ juni 2015, Spm. 23",
+  theory: <th-asym-loops>,
   prompt: [Hvad er den asymptotiske køretid i $Theta$-notation? \
     `ALGORITME3(n): i = 1; while i <= n: { j = 1; while j <= `#swap[$i$]`: j = j + 1; i = `#swap[$2$]`*i }`],
   options: (
@@ -640,8 +655,9 @@ For løkker tæller du altså to ting hver for sig: hvor mange gange den ydre l�
 )
 
 #qcard(
-  tag: [Køretid: tæl løkkernes gennemløb],
+  tag: [Køretid: tæl løkkernes gennemløb (multiplikativ)],
   source: "MCQ juni 2015, Spm. 24",
+  theory: <th-asym-loops>,
   prompt: [Hvad er den asymptotiske køretid i $Theta$-notation? \
     `ALGORITME4(n): i = 1; while i <= n: { j = 1; while j <= i: j = `#swap[$2$]`*j; i = i + `#swap[$1$]` }`],
   options: (
@@ -670,8 +686,9 @@ For løkker tæller du altså to ting hver for sig: hvor mange gange den ydre l�
 )
 
 #qcard(
-  tag: [Køretid: tæl løkkernes gennemløb],
+  tag: [Køretid: tæl løkkernes gennemløb (multiplikativ)],
   source: "MCQ juni 2017, Spm. 20",
+  theory: <th-asym-loops>,
   prompt: [Hvad er den asymptotiske køretid i $Theta$-notation? \
     `ALGORITHM1(n): s = 0; for i = 1 to n: for j = 1 to n: if i == j: for k = 1 to n: s = s + 1`],
   options: (
@@ -700,8 +717,9 @@ For løkker tæller du altså to ting hver for sig: hvor mange gange den ydre l�
 )
 
 #qcard(
-  tag: [Køretid: tæl løkkernes gennemløb],
+  tag: [Køretid: tæl løkkernes gennemløb (multiplikativ)],
   source: "MCQ juni 2017, Spm. 22",
+  theory: <th-asym-loops>,
   prompt: [Hvad er den asymptotiske køretid i $Theta$-notation? \
     `ALGORITME3(n): i = n; while i > 1: { j = i; while j < n: j = j + 1; i = i/`#swap[$2$]` }`],
   options: (
@@ -730,8 +748,9 @@ For løkker tæller du altså to ting hver for sig: hvor mange gange den ydre l�
 )
 
 #qcard(
-  tag: [Køretid: tæl løkkernes gennemløb],
+  tag: [Køretid: tæl løkkernes gennemløb (multiplikativ)],
   source: "MCQ juni 2019, Spm. 24",
+  theory: <th-asym-loops>,
   prompt: [Hvad er den asymptotiske køretid i $Theta$-notation? \
     `ALGORITME1(n): i = 1; j = n; while i < j: { i = i + `#swap[$1$]`; j = j - `#swap[$1$]` }`],
   options: (
@@ -761,8 +780,9 @@ For løkker tæller du altså to ting hver for sig: hvor mange gange den ydre l�
 )
 
 #qcard(
-  tag: [Køretid: tæl løkkernes gennemløb],
+  tag: [Køretid: tæl løkkernes gennemløb (multiplikativ)],
   source: "MCQ juni 2019, Spm. 25",
+  theory: <th-asym-loops>,
   prompt: [Hvad er den asymptotiske køretid i $Theta$-notation? \
     `ALGORITME3(n): i = n; while i > 1: { j = 1; while j < i: j = `#swap[$2$]`*j; i = i - `#swap[$1$]` }`],
   options: (
@@ -792,8 +812,9 @@ For løkker tæller du altså to ting hver for sig: hvor mange gange den ydre l�
 )
 
 #qcard(
-  tag: [Køretid: tæl løkkernes gennemløb],
+  tag: [Køretid: tæl løkkernes gennemløb (multiplikativ)],
   source: "MCQ juni 2019, Spm. 26",
+  theory: <th-asym-loops>,
   prompt: [Hvad er den asymptotiske køretid i $Theta$-notation? \
     `ALGORITME4(n): i = 1; while i < n: { j = i; while j > 1: j = j/`#swap[$2$]`; i = `#swap[$2$]`*i }`],
   options: (
@@ -823,8 +844,9 @@ For løkker tæller du altså to ting hver for sig: hvor mange gange den ydre l�
 )
 
 #qcard(
-  tag: [Køretid: tæl løkkernes gennemløb],
+  tag: [Køretid: tæl løkkernes gennemløb (multiplikativ)],
   source: "MCQ juni 2021, Spm. 24",
+  theory: <th-asym-loops>,
   prompt: [Hvad er den asymptotiske køretid i $Theta$-notation? \
     `ALGORITHM1(n): s = 0; for i = 1 to n: s = i + s`],
   options: (
@@ -852,8 +874,9 @@ For løkker tæller du altså to ting hver for sig: hvor mange gange den ydre l�
 )
 
 #qcard(
-  tag: [Køretid: tæl løkkernes gennemløb],
+  tag: [Køretid: tæl løkkernes gennemløb (multiplikativ)],
   source: "MCQ juni 2021, Spm. 25",
+  theory: <th-asym-loops>,
   prompt: [Hvad er den asymptotiske køretid i $Theta$-notation? \
     `ALGORITME2(n): s = 1; for i = 1 to `#swap[$n n$]`: for j = 1 to `#swap[$n$]`: s = s + 1`],
   options: (
@@ -882,8 +905,9 @@ For løkker tæller du altså to ting hver for sig: hvor mange gange den ydre l�
 )
 
 #qcard(
-  tag: [Køretid: tæl løkkernes gennemløb],
+  tag: [Køretid: tæl løkkernes gennemløb (multiplikativ)],
   source: "MCQ juni 2021, Spm. 26",
+  theory: <th-asym-loops>,
   prompt: [Hvad er den asymptotiske køretid i $Theta$-notation? \
     `ALGORITHM3(n): i = 1; j = n; while i <= j: { j = j - `#swap[$1$]`; i = `#swap[$2$]`*i }`],
   options: (
@@ -912,8 +936,9 @@ For løkker tæller du altså to ting hver for sig: hvor mange gange den ydre l�
 )
 
 #qcard(
-  tag: [Køretid: tæl løkkernes gennemløb],
+  tag: [Køretid: tæl løkkernes gennemløb (multiplikativ)],
   source: "MCQ juni 2021, Spm. 27",
+  theory: <th-asym-loops>,
   prompt: [Hvad er den asymptotiske køretid i $Theta$-notation? \
     `ALGORITME4(n): i = n; s = 0; while i >= 1: { for j = i to `#swap[$2i$]`: s = s + 1; i = floor(i/`#swap[$2$]`) }`],
   options: (
@@ -942,8 +967,9 @@ For løkker tæller du altså to ting hver for sig: hvor mange gange den ydre l�
 )
 
 #qcard(
-  tag: [Køretid: tæl løkkernes gennemløb],
+  tag: [Køretid: tæl løkkernes gennemløb (multiplikativ)],
   source: "MCQ juni 2023, Spm. 23",
+  theory: <th-asym-loops>,
   prompt: [Hvad er den asymptotiske køretid i $Theta$-notation? \
     `ALGORITHM1(n): i = 1; while i <= n: i = i + i`],
   options: (
@@ -972,8 +998,9 @@ For løkker tæller du altså to ting hver for sig: hvor mange gange den ydre l�
 )
 
 #qcard(
-  tag: [Køretid: tæl løkkernes gennemløb],
+  tag: [Køretid: tæl løkkernes gennemløb (multiplikativ)],
   source: "MCQ juni 2023, Spm. 26",
+  theory: <th-asym-loops>,
   prompt: [Hvad er den asymptotiske køretid i $Theta$-notation? \
     `ALGORITME4(n): i = 1; j = n; while i <= j: { i = `#swap[$4$]`*i; j = `#swap[$2$]`*j }`],
   options: (
@@ -1002,8 +1029,9 @@ For løkker tæller du altså to ting hver for sig: hvor mange gange den ydre l�
 )
 
 #qcard(
-  tag: [Køretid: tæl løkkernes gennemløb],
+  tag: [Køretid: tæl løkkernes gennemløb (multiplikativ)],
   source: "MCQ juni 2025, Spm. 26",
+  theory: <th-asym-loops>,
   prompt: [Hvad er den asymptotiske køretid i $Theta$-notation? \
     `ALGORITME1(n): s = 0; while s < n: s = s + `#swap[$3$]],
   options: (
@@ -1032,8 +1060,9 @@ For løkker tæller du altså to ting hver for sig: hvor mange gange den ydre l�
 )
 
 #qcard(
-  tag: [Køretid: tæl løkkernes gennemløb],
+  tag: [Køretid: tæl løkkernes gennemløb (multiplikativ)],
   source: "MCQ juni 2025, Spm. 27",
+  theory: <th-asym-loops>,
   prompt: [Hvad er den asymptotiske køretid i $Theta$-notation? \
     `ALGORITME2(n): s = 0; i = 0; while i < n/2: { for j = i to i + `#swap[$n\/2$]`: s = s + 1; i = i + `#swap[$1$]` }`],
   options: (
@@ -1062,8 +1091,9 @@ For løkker tæller du altså to ting hver for sig: hvor mange gange den ydre l�
 )
 
 #qcard(
-  tag: [Køretid: tæl løkkernes gennemløb],
+  tag: [Køretid: tæl løkkernes gennemløb (multiplikativ)],
   source: "MCQ juni 2025, Spm. 28",
+  theory: <th-asym-loops>,
   prompt: [Hvad er den asymptotiske køretid i $Theta$-notation? \
     `ALGORITME3(n): i = 1; while i <= n: { j = 1; while j <= n: j = `#swap[$2$]`*j; i = i + `#swap[$2$]` }`],
   options: (
@@ -1092,8 +1122,9 @@ For løkker tæller du altså to ting hver for sig: hvor mange gange den ydre l�
 )
 
 #qcard(
-  tag: [Køretid: tæl løkkernes gennemløb],
+  tag: [Køretid: tæl løkkernes gennemløb (multiplikativ)],
   source: "MCQ juni 2025, Spm. 29",
+  theory: <th-asym-loops>,
   prompt: [Hvad er den asymptotiske køretid i $Theta$-notation? \
     `ALGORITME4(n): i = 1; j = n; while i <= j: { i = `#swap[$2$]`*i; j = j/`#swap[$2$]` }`],
   options: (
@@ -1122,8 +1153,9 @@ For løkker tæller du altså to ting hver for sig: hvor mange gange den ydre l�
 )
 
 #qcard(
-  tag: [Køretid: løkke-fælde (tæller nulstilles ikke)],
+  tag: [Køretid: løkke-fælde, tæller nulstilles ikke (nulstilles)],
   source: "MCQ juni 2023, Spm. 24",
+  theory: <th-asym-loop-trap>,
   prompt: [Hvad er den asymptotiske køretid i $Theta$-notation? \
     `ALGORITME2(n): i = 1; j = 1; while i <= n: { i = i + `#swap[$5$]`; while j < i: j = j + 1 }`],
   options: (
@@ -1153,8 +1185,9 @@ For løkker tæller du altså to ting hver for sig: hvor mange gange den ydre l�
 )
 
 #qcard(
-  tag: [Køretid: løkke-fælde (tæller nulstilles ikke)],
+  tag: [Køretid: løkke-fælde, tæller nulstilles ikke (nulstilles)],
   source: "MCQ juni 2015, Spm. 22",
+  theory: <th-asym-loop-trap>,
   prompt: [Hvad er den asymptotiske køretid i $Theta$-notation? \
     `ALGORITME2(n): i = 1; j = 1; while i <= n: { while j <= i: j = j + `#swap[$1$]`; i = `#swap[$2$]`*i }`],
   options: (
@@ -1184,8 +1217,9 @@ For løkker tæller du altså to ting hver for sig: hvor mange gange den ydre l�
 )
 
 #qcard(
-  tag: [Køretid: løkke-fælde (tæller nulstilles ikke)],
+  tag: [Køretid: løkke-fælde, tæller nulstilles ikke (nulstilles)],
   source: "MCQ juni 2017, Spm. 21",
+  theory: <th-asym-loop-trap>,
   prompt: [Hvad er den asymptotiske køretid i $Theta$-notation? \
     `ALGORITME2(n): i = n; j = n; while i > 1: { while j > i: j = j - `#swap[$1$]`; i = i - `#swap[$1$]` }`],
   options: (

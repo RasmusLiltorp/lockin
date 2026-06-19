@@ -6,8 +6,9 @@ En løkkeinvariant (loop invariant) er et udsagn, der er sandt hver gang løkkeb
 
 Beviset er induktion: invarianten holder før første test, ét gennemløb bevarer den, og løkken stopper til sidst. Til eksamen skal du enten *bevise* en given invariant eller *afgøre*, hvilke udsagn der er invarianter.
 
-=== Sådan løser du den
+=== Sådan løser du den <th-inv-method>
 
+#metadata(none) <th-inv-prove>
 #recipe(
   title: "Bevis en løkkeinvariant",
   [Skriv invarianten op med kodens variabler, fx $s = i^2$.],
@@ -18,6 +19,7 @@ Beviset er induktion: invarianten holder før første test, ét gennemløb bevar
 
 Initialisering er basistilfældet (base case), vedligeholdelse er induktionsskridtet (induction step), og terminering er hvor du høster korrektheden (correctness).
 
+#metadata(none) <th-inv-decide>
 #recipe(
   title: "Afgør hvilke kandidater der er invarianter",
   [Skriv starttilstanden op (værdierne lige før første test) og hvad kroppen gør ved hver variabel.],
@@ -35,8 +37,9 @@ Initialisering er basistilfældet (base case), vedligeholdelse er induktionsskri
 === Tilbagevendende eksamensspørgsmål
 
 #qcard(
-  tag: [Løkkeinvariant: bevis invariant + aflæs output],
+  tag: [Løkkeinvariant: bevis invariant + aflæs output (terminering)],
   source: "DM507 juni 2009, Opg. 2",
+  theory: <th-inv-prove>,
   prompt: [
     Betragt `KvadratRod(n)`:
     #eq[$
@@ -73,8 +76,9 @@ Initialisering er basistilfældet (base case), vedligeholdelse er induktionsskri
 )
 
 #qcard(
-  tag: [Løkkeinvariant: hvilke udsagn er invarianter?],
+  tag: [Løkkeinvariant: hvilke udsagn er invarianter? (løkkeinvariant)],
   source: "DM507 juni 2013, Opg. 6",
+  theory: <th-inv-decide>,
   prompt: [
     Betragt `Factorial(n)`:
     #eq[$
@@ -114,8 +118,9 @@ Initialisering er basistilfældet (base case), vedligeholdelse er induktionsskri
 )
 
 #qcard(
-  tag: [Løkkeinvariant: bevis invariant + aflæs output],
+  tag: [Løkkeinvariant: bevis invariant + aflæs output (terminering)],
   source: "DM507 juni 2012, Opg. 6",
+  theory: <th-inv-prove>,
   prompt: [
     `IntegerLog(n)` beregner $floor(log n)$:
     #eq[$
@@ -153,8 +158,9 @@ Initialisering er basistilfældet (base case), vedligeholdelse er induktionsskri
 )
 
 #qcard(
-  tag: [Løkkeinvariant: hvilke udsagn er invarianter?],
+  tag: [Løkkeinvariant: hvilke udsagn er invarianter? (løkkeinvariant)],
   source: "MCQ juni 2017, Spm. 23",
+  theory: <th-inv-decide>,
   prompt: [
     `LogBaseTo(n)` beregner $ceil(log_2 n)$:
     #eq[$

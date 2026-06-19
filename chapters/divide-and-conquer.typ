@@ -19,7 +19,7 @@ Hvert kald deler i #swap[$a$] delproblemer af størrelse #swap[$n/b$] og bruger 
 
 Den løses med Master Theorem: sammenlign $f(n)$ med $n^(log_b a)$ og find det dominerende led. Resten af kapitlet er to algoritmer: Strassen og max-sum.
 
-=== Sådan løser du den
+=== Sådan løser du den <th-dc-method>
 
 #recipe(
   title: "Analysér en divide-and-conquer-algoritme",
@@ -31,7 +31,7 @@ Den løses med Master Theorem: sammenlign $f(n)$ med $n^(log_b a)$ og find det d
 
 #note(title: [Rekursionstræet])[Rekursionstræet (recursion tree) er kontrolflowet tegnet ud: hver knude er ét kald, roden er det øverste kald, bladene er basistilfælde. Afviklingen er dybde-først (depth-first): ned i et barn, bliv færdig, videre til næste. Kaldstakken (call stack) er stien fra rod til det kald, du er i nu.]
 
-==== Strassen: matrixmultiplikation (matrix multiplication)
+==== Strassen: matrixmultiplikation (matrix multiplication) <th-dc-strassen>
 
 Naiv multiplikation af to $n times n$-matricer koster $Theta(n^3)$: hver af de $n^2$ outputtal er et prikprodukt med $n$ multiplikationer.
 
@@ -47,7 +47,7 @@ Strassen [1969] regner de samme fire outputblokke ud med kun *7* produkter. De e
 
 #trap(title: [7 mod 8 produkter])[Gevinsten er 7 mod 8, fordi $log_2 7 = 2.807 < 3$. Matrixprodukter er ikke kommutative, så rækkefølgen af faktorerne i hvert produkt $P_i$ skal holdes.]
 
-==== Max-sum: maximum subarray
+==== Max-sum: maximum subarray <th-dc-maxsum>
 
 Find det sammenhængende stykke af et array med den største sum. Det tomme stykke tæller med og har værdien 0, så svaret bliver aldrig negativt; er alle tal negative, vinder det tomme stykke.
 
@@ -85,8 +85,9 @@ MaxSum3(n)                              // Kadane, Theta(n)
 === Tilbagevendende eksamensspørgsmål
 
 #qcard(
-  tag: [Strassen: køretid for naiv blokmultiplikation],
+  tag: [Strassen: køretid for naiv blokmultiplikation (Master Theorem)],
   source: "Strassen slides (SE4-DMAD F26)",
+  theory: <th-dc-strassen>,
   prompt: [Naiv rekursiv matrixmultiplikation deler hver $n times n$-matrix i fire blokke og kalder rekursivt med #swap[$8$] delmultiplikationer:
   #eq[$ T(n) = #swap[$8$] thin T(n\/#swap[$2$]) + n^2 $]
   Hvilken $Theta$-grænse gælder, og slår den den naive $Theta(n^3)$?],
@@ -114,8 +115,9 @@ MaxSum3(n)                              // Kadane, Theta(n)
 )
 
 #qcard(
-  tag: [Strassen: køretid med 7 delprodukter],
+  tag: [Strassen: køretid med 7 delprodukter (Master Theorem)],
   source: "Strassen slides (SE4-DMAD F26)",
+  theory: <th-dc-strassen>,
   prompt: [Strassen regner de fire outputblokke ud med #swap[$7$] delmultiplikationer i stedet for 8:
   #eq[$ T(n) = #swap[$7$] thin T(n\/#swap[$2$]) + n^2 $]
   Hvad er køretiden?],
@@ -143,8 +145,9 @@ MaxSum3(n)                              // Kadane, Theta(n)
 )
 
 #qcard(
-  tag: [Max-sum: køretid og plads for Kadane],
+  tag: [Max-sum: køretid og plads for Kadane (maximum subarray)],
   source: "Max-sum slides (SE4-DMAD F26)",
+  theory: <th-dc-maxsum>,
   prompt: [Hvad er køretid og ekstra pladsforbrug for #swap[Kadanes algoritme (MaxSum3)] til maximum subarray-problemet?],
   answer: [$Theta(n)$ tid, $O(1)$ plads.],
   blueprint: [
@@ -168,8 +171,9 @@ MaxSum3(n)                              // Kadane, Theta(n)
 )
 
 #qcard(
-  tag: [Master Theorem: løs rekursionsligning],
+  tag: [Master Theorem: løs rekursionsligning (Master Theorem)],
   source: "MCQ juni 2023, Spm. 2",
+  theory: <th-dc-method>,
   prompt: [Hvilket af nedenstående svar gælder for følgende rekursionsligning?
   #eq[$ T(n) = #swap[$1$] thin T(n\/#swap[$2$]) + #swap[$n^(1\/2)$] $]],
   options: (

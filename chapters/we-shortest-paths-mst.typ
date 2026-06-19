@@ -5,8 +5,9 @@
 De skriftlige opgaver her falder i to slags. Den ene er korteste veje (shortest paths) fra en kilde, hvor du enten skal vælge den simplest mulige algoritme til en given graf eller køre Bellman-Ford eller Dijkstra igennem. Den anden er minimumsudspændende træer (minimum spanning trees) med Kruskal eller Prim, hvor union-find (union-find) holder styr på, hvilke knuder der allerede hænger sammen. Graferne står som kantlister (edge lists), præcis som de gives i opgaven.
 
 #qcard(
-  tag: [Korteste vej: vælg simpleste algoritme],
+  tag: [Korteste vej: vælg simpleste algoritme (Dijkstra)],
   source: "DM507 juni 2009, Opg. 3 (20%)",
+  theory: <th-sp-dijkstra>,
   prompt: [
     For hver af tre rettede grafer $G_1, G_2, G_3$ med kilde $s$: angiv den #emph[simplest mulige] algoritme til korteste veje fra $s$ til alle knuder, begrund valget, og giv alle afstande. Knuderne i et $3 times 3$-gitter hedder $v_(r c)$, $s = v_00$.
 
@@ -36,8 +37,9 @@ De skriftlige opgaver her falder i to slags. Den ene er korteste veje (shortest 
 )
 
 #qcard(
-  tag: [Korteste vej: vælg simpleste algoritme],
+  tag: [Korteste vej: vælg simpleste algoritme (Dijkstra)],
   source: "DM507 juni 2011, Opg. 4 (18%)",
+  theory: <th-sp-dijkstra>,
   prompt: [
     For tre rettede vægtede grafer med kilde $s$ og mål $t$: afgør for hver algoritme (BFS, DAG-Shortest-Paths, Dijkstra) om den korrekt beregner afstanden $s arrow.r t$.
 
@@ -61,8 +63,9 @@ De skriftlige opgaver her falder i to slags. Den ene er korteste veje (shortest 
 )
 
 #qcard(
-  tag: [Bellman-Ford afstande],
+  tag: [Bellman-Ford afstande (Bellman-Ford)],
   source: "DM507 juni 2012, Opg. 4a (10%)",
+  theory: <th-sp-bellman-ford>,
   prompt: [
     Kør Bellman-Ford fra $a$ på den rettede graf og giv $v.d$ for hver knude. Kanter:
     #swap[$a arrow.r e(8), a arrow.r f(10), a arrow.r b(17), e arrow.r h(-4), f arrow.r h(-10), f arrow.r g(25), g arrow.r h(-12), g arrow.r c(-3), b arrow.r g(-5), c arrow.r b(19), c arrow.r d(2), d arrow.r e(6), h arrow.r d(1)$].]
@@ -81,8 +84,9 @@ De skriftlige opgaver her falder i to slags. Den ene er korteste veje (shortest 
 )
 
 #qcard(
-  tag: [Dijkstra: Extract-Min-orden + afstande],
+  tag: [Dijkstra: Extract-Min-orden + afstande (Dijkstra)],
   source: "DM507 juni 2013, Opg. 4b (10%)",
+  theory: <th-sp-dijkstra>,
   prompt: [
     Kør Dijkstra fra $a$ på den rettede graf $G_2$. Giv Extract-Min-rækkefølgen og endelige $v.d$. Kanter (ring + eger):
     #swap[$h arrow.r a(8), b arrow.r a(4), h arrow.r g(9), b arrow.r c(2), g arrow.r f(10), c arrow.r d(11), f arrow.r e(15), e arrow.r d(21)$; $a arrow.r i(7), i arrow.r h(17), i arrow.r b(6), g arrow.r i(13), c arrow.r i(22), f arrow.r i(5), e arrow.r i(14), i arrow.r d(18)$].]
@@ -110,8 +114,9 @@ De skriftlige opgaver her falder i to slags. Den ene er korteste veje (shortest 
 )
 
 #qcard(
-  tag: [Dijkstra: Extract-Min-orden + afstande],
+  tag: [Dijkstra: Extract-Min-orden + afstande (Dijkstra)],
   source: "jun 2016, Problem 6c (7%)",
+  theory: <th-sp-dijkstra>,
   prompt: [
     Kør Dijkstra fra $a$ på den rettede vægtede graf $G_2$ (triangulært gitter; følg kun pile i deres retning). Giv Extract-Min-rækkefølge og endelige $v.d$. Kanter:
     #swap[$a arrow.r b(6), b arrow.r c(9), c arrow.r d(2); e arrow.r f(21), f arrow.r g(19), h arrow.r i(17); j arrow.r h(1), h arrow.r e(14), e arrow.r a(13); i arrow.r j(12), g arrow.r i(4), d arrow.r g(5); b arrow.r e(8), f arrow.r h(15); i arrow.r f(3), g arrow.r c(7); c arrow.r f(16), f arrow.r b(11)$].]
@@ -130,8 +135,9 @@ De skriftlige opgaver her falder i to slags. Den ene er korteste veje (shortest 
 )
 
 #qcard(
-  tag: [Dijkstra: korteste-vej-træ fra kilden],
+  tag: [Dijkstra: korteste-vej-træ fra kilden (korteste-vej-træ)],
   source: "DM507 jan 2008, Opg. 2c (8%)",
+  theory: <th-sp-dijkstra>,
   prompt: [
     Kør Dijkstra fra $s$ og angiv korteste-vej-træet (shortest-path tree) (forgænger-kanterne) samt afstanden fra $s$ til hver knude. Uorienterede vægtede kanter:
     #swap[$s{-}A{=}1, s{-}B{=}12, A{-}B{=}13, B{-}C{=}30, B{-}G{=}5, P{-}Q{=}9, P{-}R{=}10, Q{-}R{=}2, R{-}C{=}8, R{-}D{=}15, C{-}D{=}7, C{-}G{=}17, D{-}E{=}3, D{-}F{=}11, E{-}F{=}14, G{-}H{=}8, G{-}I{=}4, H{-}I{=}6, F{-}I{=}15$].]
@@ -153,8 +159,9 @@ De skriftlige opgaver her falder i to slags. Den ene er korteste veje (shortest 
 )
 
 #qcard(
-  tag: [Dijkstra: korteste-vej-træ fra kilden],
+  tag: [Dijkstra: korteste-vej-træ fra kilden (korteste-vej-træ)],
   source: "DM02 jan 2006, Opg. 3d (8%)",
+  theory: <th-sp-dijkstra>,
   prompt: [
     Kør Dijkstra fra $A$ og angiv korteste-vej-træet samt afstanden fra $A$ til hver knude. Uorienterede vægtede kanter:
     #swap[$A{-}B{=}2, B{-}C{=}7, A{-}D{=}6, B{-}D{=}6, B{-}E{=}5, C{-}F{=}5, D{-}E{=}5, E{-}F{=}1, D{-}G{=}1, D{-}H{=}4, E{-}H{=}3, F{-}I{=}4, H{-}I{=}2$].]
@@ -176,8 +183,9 @@ De skriftlige opgaver her falder i to slags. Den ene er korteste veje (shortest 
 )
 
 #qcard(
-  tag: [Kruskal: byg MST],
+  tag: [Kruskal: byg MST (Kruskal)],
   source: "DM507 juni 2012, Opg. 4b (10%)",
+  theory: <th-mst-kruskal>,
   prompt: [
     Kør Kruskal på den uorienterede graf $G_2$ og giv MST-kanterne i den rækkefølge de tilføjes, samt totalvægten. Kanter:
     #swap[$a{-}e(8), a{-}f(10), a{-}b(17), e{-}h(-4), f{-}h(-10), g{-}f(25), g{-}h(-12), g{-}c(-3), d{-}e(6), h{-}d(1), c{-}d(2), c{-}b(19), b{-}g(-5)$].]
@@ -204,8 +212,9 @@ De skriftlige opgaver her falder i to slags. Den ene er korteste veje (shortest 
 )
 
 #qcard(
-  tag: [Kruskal: byg MST],
+  tag: [Kruskal: byg MST (Kruskal)],
   source: "jun 2016, Problem 6d (5%)",
+  theory: <th-mst-kruskal>,
   prompt: [
     Kør Kruskal på den uorienterede graf $G_3$ og giv MST-kanterne. Kanter:
     #swap[$j{-}h(1), j{-}i(12), h{-}i(17), h{-}e(14), h{-}f(15), i{-}f(3), i{-}g(4), e{-}f(21), f{-}g(19), e{-}a(13), e{-}b(8), f{-}b(11), f{-}c(16), g{-}c(7), g{-}d(5), a{-}b(6), b{-}c(9), c{-}d(2)$].]
@@ -227,8 +236,9 @@ De skriftlige opgaver her falder i to slags. Den ene er korteste veje (shortest 
 )
 
 #qcard(
-  tag: [Kruskal: byg MST + argumentér],
+  tag: [Kruskal: byg MST + argumentér (snit-egenskaben)],
   source: "DM507 jan 2008, Opg. 2b (8%)",
+  theory: <th-mst-cut>,
   prompt: [
     Tegn et MST for grafen og argumentér for at det er minimalt (og entydigt). Uorienterede kanter:
     #swap[$s{-}A{=}1, s{-}B{=}12, A{-}B{=}13, B{-}C{=}30, B{-}G{=}5, P{-}Q{=}9, P{-}R{=}10, Q{-}R{=}2, R{-}C{=}8, R{-}D{=}15, C{-}D{=}7, C{-}G{=}17, D{-}E{=}3, D{-}F{=}11, E{-}F{=}14, G{-}H{=}8, G{-}I{=}4, H{-}I{=}6, F{-}I{=}15$].]
@@ -252,8 +262,9 @@ De skriftlige opgaver her falder i to slags. Den ene er korteste veje (shortest 
 )
 
 #qcard(
-  tag: [Kruskal-skridt + union-find-skov],
+  tag: [Kruskal-skridt + union-find-skov (union-find)],
   source: "DM02 jan 2006, Opg. 3a (8%)",
+  theory: <th-mst-kruskal>,
   prompt: [
     Grafen har kanter #swap[$A{-}B{=}2, B{-}C{=}7, A{-}D{=}6, B{-}D{=}6, B{-}E{=}5, C{-}F{=}5, D{-}E{=}5, E{-}F{=}1, D{-}G{=}1, D{-}H{=}4, E{-}H{=}3, F{-}I{=}4, H{-}I{=}2$]. De første 5 Kruskal-kanter er $E{-}F(1), D{-}G(1), A{-}B(2), H{-}I(2), E{-}H(3)$, så mængderne er $\{E,F,H,I\}, \{D,G\}, \{A,B\}, \{C\}$. \
     *(a)* Hvilken kant tilføjer Kruskal som nr. 6? \
@@ -278,8 +289,9 @@ De skriftlige opgaver her falder i to slags. Den ene er korteste veje (shortest 
 )
 
 #qcard(
-  tag: [Prim: byg MST],
+  tag: [Prim: byg MST (Prim)],
   source: "DM507 juni 2013, Opg. 4c (10%)",
+  theory: <th-mst-prim>,
   prompt: [
     Kør Prim fra $a$ på den uorienterede graf $G_3$. Giv Extract-Min-rækkefølge og MST-kanterne. Kanter:
     #swap[$a{-}b(4), a{-}h(8), a{-}i(7), b{-}c(2), b{-}i(6), h{-}g(9), h{-}i(17), g{-}i(13), g{-}f(10), i{-}c(22), i{-}f(5), i{-}e(14), i{-}d(18), c{-}d(11), f{-}e(15), e{-}d(21)$].]
@@ -306,8 +318,9 @@ De skriftlige opgaver her falder i to slags. Den ene er korteste veje (shortest 
 )
 
 #qcard(
-  tag: [Prim: byg MST],
+  tag: [Prim: byg MST (Prim)],
   source: "DM02 jan 2006, Opg. 3b (6%)",
+  theory: <th-mst-prim>,
   prompt: [
     Kør Prim fra $A$ og angiv MST-kanterne i den rækkefølge Prim vælger dem. Kanter:
     #swap[$A{-}B{=}2, B{-}C{=}7, A{-}D{=}6, B{-}D{=}6, B{-}E{=}5, C{-}F{=}5, D{-}E{=}5, E{-}F{=}1, D{-}G{=}1, D{-}H{=}4, E{-}H{=}3, F{-}I{=}4, H{-}I{=}2$].]
@@ -326,8 +339,9 @@ De skriftlige opgaver her falder i to slags. Den ene er korteste veje (shortest 
 )
 
 #qcard(
-  tag: [Union-find: træk en sekvens af unioner],
+  tag: [Union-find: træk en sekvens af unioner (union-by-rank)],
   source: "DM507 juni 2008, Opg. 3 (a, b, c) (18%)",
+  theory: <th-mst-kruskal>,
   prompt: [
     Udfør unionerne #swap[$1.mono("Union")(b,a) thin 2.mono("Union")(b,c) thin 3.mono("Union")(e,d) thin 4.mono("Union")(e,c) thin 5.mono("Union")(g,f) thin 6.mono("Union")(e,g)$]. Ved uafgjort hænges mængden med $x$ under/efter mængden med $y$. \
     *(a)* Vægtet union (union by size) med hægtede lister. \
@@ -358,8 +372,9 @@ De skriftlige opgaver her falder i to slags. Den ene er korteste veje (shortest 
 )
 
 #qcard(
-  tag: [Union-find: hvilke grafer giver skovens form],
+  tag: [Union-find: hvilke grafer giver skovens form (union-by-rank)],
   source: "DM507 juni 2008, Opg. 3d (7%)",
+  theory: <th-mst-kruskal>,
   prompt: [
     Et union-by-rank-skovtræ (Figur 3) har rod $a$ med direkte børn $b, c, d, e$, og $f$ er barn af $e$. Fire vægtede grafer køres gennem Kruskal — hvilke kan producere dette træ? Begrund. \
     *(a)* sti #swap[$a{-}2{-}b{-}4{-}c{-}6{-}d{-}8{-}e{-}10{-}f$]. \
@@ -383,8 +398,9 @@ De skriftlige opgaver her falder i to slags. Den ene er korteste veje (shortest 
 )
 
 #qcard(
-  tag: [MST-bevis: tungeste kant i en kreds],
+  tag: [MST-bevis: tungeste kant i en kreds (udspændende træ)],
   source: "DM507 jan 2008, Opg. 2a (9%)",
+  theory: <th-mst-cut>,
   prompt: [
     $G$ er vægtet, $e$ en kant. Antag der findes en kreds $C$ med $e in C$ og #swap[$w(e) > w(e')$ for hver anden kant $e'$ i $C$]. Bevis at $e$ ikke kan ligge i noget MST.
   ],
@@ -405,8 +421,9 @@ De skriftlige opgaver her falder i to slags. Den ene er korteste veje (shortest 
 )
 
 #qcard(
-  tag: [MST-design: rummer et MST en given kantmængde?],
+  tag: [MST-design: rummer et MST en given kantmængde? (udspændende træ)],
   source: "DM02 jan 2006, Opg. 3c (8%)",
+  theory: <th-mst-cut>,
   prompt: [
     Graf $G$ med kanter $\{e_1, ..., e_k\}$. Afgør om #emph[et] MST af $G$ indeholder alle $k$ kanter. Angiv køretiden.
   ],
@@ -425,8 +442,9 @@ De skriftlige opgaver her falder i to slags. Den ene er korteste veje (shortest 
 )
 
 #qcard(
-  tag: [Fælles graf: BFS, Dijkstra og MST],
+  tag: [Fælles graf: BFS, Dijkstra og MST (Kruskal)],
   source: "DM507 juni 2010, Opg. 2 (25%)",
+  theory: <th-mst-kruskal>,
   prompt: [
     Fire grafer deler samme knude-layout: $s$ til venstre; øverste række $T L, T R$; midterste $M L, C, M R$; nederste $B L, B R$. Løs sub-opgaverne på de grafer der angives. \
     *(a)* BFS-afstande $v.d$ fra $s$ på den rettede $G_1$. Kanter: #swap[$s arrow.r T L, s arrow.r M L; T L arrow.r T R, T L arrow.r M L, T L arrow.r C; T R arrow.r C, T R arrow.r M R; M L arrow.r C; M R arrow.r C, M R arrow.r B R; B L arrow.r s, B L arrow.r M L, B L arrow.r C; B R arrow.r B L, B R arrow.r C$]. \
@@ -455,8 +473,9 @@ De skriftlige opgaver her falder i to slags. Den ene er korteste veje (shortest 
 )
 
 #qcard(
-  tag: [Kruskal-skridt + union-find-skov],
+  tag: [Kruskal-skridt + union-find-skov (union-find)],
   source: "DM507 juni 2014, Opg. 7 (17%)",
+  theory: <th-mst-kruskal>,
   prompt: [
     Kør Kruskal på den uorienterede graf $G$. Kanter: #swap[$a{-}c(5), a{-}e(18), a{-}f(3), c{-}f(16), b{-}c(2), b{-}f(11), e{-}f(21), d{-}e(8), d{-}f(12), b{-}d(13), b{-}g(19), d{-}g(15)$]. Spørgsmål (a), (b), (d) angår tilstanden efter 7 undersøgte kanter (7 gennemløb af den indre løkke). Ved uafgjort rank bliver den alfabetisk mindste knude ny rod. \
     *(a)* Hvilke kanter er valgt (i $A$) efter 7 undersøgte? \
@@ -490,8 +509,9 @@ De skriftlige opgaver her falder i to slags. Den ene er korteste veje (shortest 
 )
 
 #qcard(
-  tag: [Korteste-vej-algoritme på struktureret graf],
+  tag: [Korteste-vej-algoritme på struktureret graf (topologisk orden)],
   source: "DM507 juni 2014, Opg. 10 (15%)",
+  theory: <th-sp-dag>,
   prompt: [
     En #emph[kvadrat-graf] er en rettet graf med $k$ rækker à $k$ knuder, $v_(i j)$ for $i$ række $1..k$, $j$ søjle $1..k$. Kanter: $(v_(i j), v_(i+1,j))$ (op en række), $(v_(i j), v_(i,j+1))$ (højre) og $(v_(i j), v_(i,j-1))$ (venstre), når begge ender findes. Alle vægte $>= 0$. \
     *(a)* Udtryk $n$ og $m$ som funktioner af $k$. \
@@ -522,8 +542,9 @@ De skriftlige opgaver her falder i to slags. Den ene er korteste veje (shortest 
 )
 
 #qcard(
-  tag: [Prim: byg MST],
+  tag: [Prim: byg MST (Prim)],
   source: "DM507 juni 2015, Opg. 5 (7%)",
+  theory: <th-mst-prim>,
   prompt: [
     Kør Prim fra $a$ på den uorienterede vægtede graf. Giv Extract-Min-rækkefølge og MST-kanterne. Kanter:
     #swap[$a{-}b(17), a{-}e(11), a{-}d(8), b{-}e(5), e{-}d(18), b{-}c(14), e{-}c(3), c{-}d(25)$].]
@@ -546,8 +567,9 @@ De skriftlige opgaver her falder i to slags. Den ene er korteste veje (shortest 
 )
 
 #qcard(
-  tag: [Korteste vej: vælg simpleste algoritme],
+  tag: [Korteste vej: vælg simpleste algoritme (Dijkstra)],
   source: "DM507 juni 2015, Opg. 7 (10%)",
+  theory: <th-sp-dijkstra>,
   prompt: [
     *(a)* Tre grafer deler topologi (kilde-agtig $c$, dræn-agtig $d$): kanter $b arrow.r a, a arrow.r e, a arrow.r d, b arrow.r e, c arrow.r b, c arrow.r e, e arrow.r d$, plus én kant nederst til højre der varierer. Markér hvilke af Dijkstra (D), Bellman-Ford (BF), DAG-Shortest-Paths (DAG), BFS, DFS (depth-first search) der korrekt beregner korteste veje. \
     #swap[$G_1$]: alle vægte 1. \

@@ -6,7 +6,7 @@ Når et problem deles op i mindre udgaver af sig selv, og udgaverne overlapper, 
 
 Til eksamen får du typisk en færdig rekursion og skal angive køretid eller mindste plads. Sjældnere skal du selv opstille rekursionen, fylde tabellen og rekonstruere løsningen.
 
-=== Sådan løser du den
+=== Sådan løser du den <th-dp-runtime>
 
 To tal aflæses direkte af rekursionen, uden at køre den.
 
@@ -21,11 +21,25 @@ Mindste plads er den største mængde tidligere celler, du er nødt til at holde
 #recipe(
   title: "Læs køretid og plads af en given rekursion",
   [Find tabellens størrelse ud fra indeksenes intervaller. $i$ i $0..m$ og $j$ i $0..n$ giver $Theta(m n)$ celler. Et par $i <= j$ giver en trekant på $n(n+1)\/2 = Theta(n^2)$ celler.],
-  [Find arbejdet per celle. Et #swap[$min$] eller #swap[$max$] over op til $j$ tidligere celler koster $Theta(j)$; to opslag plus aritmetik koster $Theta(1)$.],
+  [Find arbejdet per celle. Kig på hvad én celle gør: et fast antal opslag koster $Theta(1)$, mens et #swap[$min$], $max$ eller $sum$ over et interval koster lige så meget, som intervallet er langt.],
   [Gang de to sammen.],
   [For plads: se hvilke tidligere celler en celle læser. Kun den forrige række $->$ én række er nok. Alle tidligere celler $->$ intet kan smides væk.],
 )
 
+#note(title: [Arbejde per celle på 1 sekund])[Ser du et $min$, $max$, $sum$ eller en løkke i formlen, så tæl hvor mange led den løber over. Det tal er arbejdet per celle. Ser du kun et fast antal opslag, er det $Theta(1)$.]
+
+#table(
+  columns: (auto, auto),
+  inset: 7pt,
+  align: (left, left),
+  stroke: 0.4pt + hair,
+  table.header([*Hvad står der i cellens formel?*], [*Arbejde per celle*]),
+  [Fast antal opslag + regning, fx $b(i-1, j-1) + c$], [$Theta(1)$],
+  [$min$ / $max$ / $sum$ / løkke over $k$ led, fx $min_(k < j)$], [$Theta(k)$ — tæl leddene, typisk $Theta(n)$],
+  [To løkker oven i hinanden], [gang længderne, fx $Theta(n^2)$],
+)
+
+#metadata(none) <th-dp-build>
 #recipe(
   title: "Byg en DP-løsning fra bunden",
   [Vælg delproblemets størrelse som ét eller flere heltalsindeks. Det fastlægger tabellens dimensioner.],
@@ -50,6 +64,7 @@ Mindste plads er den største mængde tidligere celler, du er nødt til at holde
 
 #trap(title: [Arbejde per celle])[Tabellens størrelse er ikke køretiden — gang med arbejdet per celle. Et min over op til $j$ tidligere celler koster $Theta(j)$, ikke $Theta(1)$, og gør en $Theta(m n)$-tabel til $Theta(m n^2)$.]
 
+#metadata(none) <th-dp-space>
 #trap(title: [Rullende array])[Mindste plads er ikke altid tabellens størrelse. Afhænger en celle kun af den forrige række, nøjes et rullende array (rolling array) med én række, og pladsen falder fra $Theta(m n)$ til $Theta(n)$. Læser en celle alle tidligere indgange, kan intet frigives.]
 
 ==== Rekonstruktion
@@ -59,8 +74,9 @@ Tabellen rummer kun den optimale værdi. Vil du have løsningen, så gem det vin
 === Tilbagevendende eksamensspørgsmål
 
 #qcard(
-  tag: [DP: aflæs køretid af given rekursion],
+  tag: [DP: aflæs køretid af given rekursion (arbejde per celle)],
   source: "MCQ juni 2017, Spm. 25",
+  theory: <th-dp-runtime>,
   prompt: [For et optimeringsproblem er inputtet en omkostning $c_(i j)$ for alle $i$ og $j$. En løsning $b(i,j)$ kan beskrives ved rekursionen
   #eq[$ b(i,j) = cases(
     0 & "hvis " i=0 "eller " j=0,
@@ -91,8 +107,9 @@ Tabellen rummer kun den optimale værdi. Vil du have løsningen, så gem det vin
 )
 
 #qcard(
-  tag: [DP: mindste pladsforbrug for given rekursion],
+  tag: [DP: mindste pladsforbrug for given rekursion (rullende array)],
   source: "MCQ juni 2017, Spm. 26",
+  theory: <th-dp-space>,
   prompt: [Samme problem og samme rekursion for $b(i,j)$. Hvis $b(#swap[$m$], #swap[$n$])$ findes ved dynamisk programmering, hvad er det mindste pladsforbrug, der kan opnås?],
   options: (
     [$Theta(1)$], [$Theta(m)$], [$Theta(n)$], [$Theta(m n)$],
@@ -118,8 +135,9 @@ Tabellen rummer kun den optimale værdi. Vil du have løsningen, så gem det vin
 )
 
 #qcard(
-  tag: [DP: mindste pladsforbrug for given rekursion],
+  tag: [DP: mindste pladsforbrug for given rekursion (rullende array)],
   source: "MCQ juni 2025, Spm. 31",
+  theory: <th-dp-space>,
   prompt: [Samme problem og samme rekursion for $B(n)$, antallet af binære træer med $n$ knuder, ved
   #eq[$ B(0) = 1, quad B(n) = sum_(i=0)^(n-1) B(i) dot B(n-i-1) "for " n > 0 $]
   Beregnet ved dynamisk programmering, hvad er det mindste pladsforbrug, der kan opnås?],
@@ -147,8 +165,9 @@ Tabellen rummer kun den optimale værdi. Vil du have løsningen, så gem det vin
 )
 
 #qcard(
-  tag: [DP: mindste pladsforbrug for given rekursion],
+  tag: [DP: mindste pladsforbrug for given rekursion (rullende array)],
   source: "MCQ juni 2021, Spm. 33",
+  theory: <th-dp-space>,
   prompt: [Samme problem og rekursion som før: med
   #eq[$ W(i,j) = cases(
     0 & "hvis " i = 0 "eller " j = 0,
@@ -181,6 +200,7 @@ Tabellen rummer kun den optimale værdi. Vil du have løsningen, så gem det vin
 #qcard(
   tag: [DP: mindste pladsforbrug for given rekursion (trekant)],
   source: "MCQ juni 2019, Spm. 30",
+  theory: <th-dp-space>,
   prompt: [Samme problem og samme rekursion for $L(i,j)$:
   #eq[$ L(i,j) = cases(
     c_i & "hvis " i = j,
@@ -211,8 +231,9 @@ Tabellen rummer kun den optimale værdi. Vil du have løsningen, så gem det vin
 )
 
 #qcard(
-  tag: [DP: aflæs køretid af given rekursion],
+  tag: [DP: aflæs køretid af given rekursion (arbejde per celle)],
   source: "MCQ juni 2025, Spm. 30",
+  theory: <th-dp-runtime>,
   prompt: [Find $B(n)$, antallet af binære træer med $n$ knuder (fx $B(3) = 5$), ved rekursionen
   #eq[$ B(0) = 1, quad B(n) = sum_(i=0)^(n-1) B(i) dot B(n-i-1) "for " n > 0 $]
   Beregnet ved dynamisk programmering på denne rekursion, hvilken køretid opnås?],
@@ -242,8 +263,9 @@ Tabellen rummer kun den optimale værdi. Vil du have løsningen, så gem det vin
 )
 
 #qcard(
-  tag: [DP: aflæs køretid af given rekursion],
+  tag: [DP: aflæs køretid af given rekursion (arbejde per celle)],
   source: "MCQ juni 2021, Spm. 32",
+  theory: <th-dp-runtime>,
   prompt: [Et problem med ikke-krydsende parring løses med DP. Mængderne $U = {u_1, ..., u_m}$ og $V = {v_1, ..., v_n}$ ligger på to parallelle linjer; par $(u_i, v_j)$ forbindes med linjer, der ikke må overlappe, hver med værdi $w(i,j)$ (kan være negativ), og den samlede værdi skal maksimeres. Med
   #eq[$ W(i,j) = cases(
     0 & "hvis " i = 0 "eller " j = 0,
@@ -276,6 +298,7 @@ Tabellen rummer kun den optimale værdi. Vil du have løsningen, så gem det vin
 #qcard(
   tag: [DP: aflæs køretid af given rekursion (trekant)],
   source: "MCQ juni 2019, Spm. 29",
+  theory: <th-dp-runtime>,
   prompt: [For et optimeringsproblem er inputtet værdier $c_k$ for $k = 1, 2, ..., n$. En løsning $L(i,j)$ kan beskrives ved rekursionen
   #eq[$ L(i,j) = cases(
     c_i & "hvis " i = j,
@@ -308,8 +331,9 @@ Tabellen rummer kun den optimale værdi. Vil du have løsningen, så gem det vin
 )
 
 #qcard(
-  tag: [DP: find den rigtige rekursion],
+  tag: [DP: find den rigtige rekursion (optimale delproblemer)],
   source: "MCQ juni 2017, Spm. 24 (flere rigtige)",
+  theory: <th-dp-build>,
   prompt: [For to følger $X = x_1, ..., x_m$ og $Y = y_1, ..., y_n$ søges en følge $S$, der har både $X$ og $Y$ som delsekvenser (subsequences). En sådan $S$ kaldes en supersekvens (supersequence) af $X$ og $Y$. En supersekvens findes altid (fx $S = X Y$), så en korteste supersekvens findes også. Lad $l(i,j)$ være længden af en korteste supersekvens af præfikserne #swap[$X_i = x_1, ..., x_i$] og #swap[$Y_j = y_1, ..., y_j$], for $0 <= i <= m$ og $0 <= j <= n$. Basistilfælde: $l(0,j) = j$ og $l(i,0) = i$. Hvilke af følgende er korrekte rekursioner for $i > 0, j > 0$?],
   options: (
     [$l(i,j) = 1 + min{l(i-1,j), l(i,j-1)}$ hvis $x_i != y_j$; $l(i-1,j-1)$ hvis $x_i = y_j$],

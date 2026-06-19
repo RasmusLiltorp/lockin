@@ -5,8 +5,9 @@
 De store DP-opgaver fra de skriftlige eksamener. De spørger næsten altid om det samme. Udfyld en tabel ud fra en given rekursion (recurrence), skriv den iterative bottom-up-algoritme med køretid og plads, og argumentér for korrektheden via optimal delstruktur (optimal substructure). Varianterne her dækker strenge, træer, 2-D-bjælker og de opgaver, hvor man bare skal tælle strukturer.
 
 #qcard(
-  tag: [DP: udfyld tabel + bottom-up + korrekthed],
+  tag: [DP: udfyld tabel + bottom-up + korrekthed (bottom-up)],
   source: "DM507 juni 2010, Opg. 4 (25%)",
+  theory: <th-dp-build>,
   prompt: [
     Vægtet længste fælles delsekvens (longest common subsequence). Tegn $w(a) = #swap[$2$]$, $w(b) = #swap[$4$]$, $w(c) = #swap[$1$]$, $w(d) = #swap[$3$]$, og find den fælles delsekvens af $X$ og $Y$ med størst samlet vægt. $W(i, j)$ er værdien for præfikserne $X_i$ og $Y_j$:
     #eq[$
@@ -58,8 +59,9 @@ De store DP-opgaver fra de skriftlige eksamener. De spørger næsten altid om de
 )
 
 #qcard(
-  tag: [DP: udfyld tabel + bottom-up + korrekthed],
+  tag: [DP: udfyld tabel + bottom-up + korrekthed (bottom-up)],
   source: "DM507 juni 2009, Opg. 5 (25%)",
+  theory: <th-dp-build>,
   prompt: [
     Længste palindromiske delsekvens (longest palindromic subsequence). For $S = x_1 ... x_n$ findes længden af den længste delsekvens, der er et palindrom (palindrome). Rekursionen (1-indekseret):
     #eq[$
@@ -112,8 +114,9 @@ De store DP-opgaver fra de skriftlige eksamener. De spørger næsten altid om de
 )
 
 #qcard(
-  tag: [DP: udfyld tabel + bottom-up + korrekthed],
+  tag: [DP: udfyld tabel + bottom-up + korrekthed (bottom-up)],
   source: "DM02 januar 2006, Opg. 4 (25%)",
+  theory: <th-dp-build>,
   prompt: [
     Strengfletning. $z$ er en flet af $x$ og $y$, hvis $z$ kan dannes ved at flette karaktererne fra $x$ og $y$, så hver streng beholder sin rækkefølge. $T[i][j]$ er sand netop når præfikset $z[1..i+j]$ er en fletning af $x[1..i]$ og $y[1..j]$:
     #eq[$
@@ -160,8 +163,9 @@ De store DP-opgaver fra de skriftlige eksamener. De spørger næsten altid om de
 )
 
 #qcard(
-  tag: [DP: udfyld tabel + bottom-up + korrekthed],
+  tag: [DP: udfyld tabel + bottom-up + korrekthed (bottom-up)],
   source: "DM02 januar 2005, Opg. 4 (25%)",
+  theory: <th-dp-build>,
   prompt: [
     Blokscore. En fælles delsekvens $F$ af strengene $S$ og $T$ deles i færrest mulige blokke $b$, hvor hver blok er en sammenhængende delstreng i både $S$ og $T$. Blokscoren er $|F| - b$, og parrets blokscore er max over alle fælles delsekvenser. $B(i, j)$ er blokscoren af præfikserne $S_i$ og $T_j$:
     #eq[$
@@ -213,8 +217,9 @@ De store DP-opgaver fra de skriftlige eksamener. De spørger næsten altid om de
 )
 
 #qcard(
-  tag: [DP: udfyld tabel + bottom-up + korrekthed],
+  tag: [DP: udfyld tabel + bottom-up + korrekthed (bottom-up)],
   source: "DM507 januar 2008, Opg. 4 (25%)",
+  theory: <th-dp-build>,
   prompt: [
     Ujævnhed. Sorteret følge af positive heltal $X = chevron.l x_1, ..., x_n chevron.r$ og et heltal $W$. Find en delfølge $Y = chevron.l y_1, ..., y_m chevron.r$ med $y_1 = x_1$ og $y_m = x_n$, der minimerer ujævnheden $U = sum_(i=1)^(m-1) (y_(i+1) - y_i - W)^2$. $U(k)$ er den mindste ujævnhed af en delfølge af $chevron.l x_1, ..., x_k chevron.r$ (med $y_1 = x_1$, sluttende i $x_k$):
     #eq[$
@@ -258,8 +263,9 @@ De store DP-opgaver fra de skriftlige eksamener. De spørger næsten altid om de
 )
 
 #qcard(
-  tag: [DP: udfyld tabel + bottom-up + korrekthed],
+  tag: [DP: udfyld tabel + bottom-up + korrekthed (bottom-up)],
   source: "jun 2016, Problem 10 (12%)",
+  theory: <th-dp-build>,
   prompt: [
     Mindste antal kvadrater. For $n >= 0$ er $K(n)$ det mindste antal heltal, hvis kvadrater summer til $n$:
     #eq[$
@@ -297,8 +303,9 @@ De store DP-opgaver fra de skriftlige eksamener. De spørger næsten altid om de
 )
 
 #qcard(
-  tag: [DP på 2-D bjælke],
+  tag: [DP på 2-D bjælke (optimale delproblemer)],
   source: "DM507 juni 2013, Opg. 7 (18%)",
+  theory: <th-dp-build>,
   prompt: [
     2-D opskæring. En $i times j$ chokoladebjælke skæres langs hele furer i mindre rektangulære bjælker; en $k times l$ bjælke sælges for $P(k, l)$. $C(i, j)$ er den bedste samlede salgsværdi af en $i times j$ bjælke:
     #eq[$
@@ -366,8 +373,9 @@ De store DP-opgaver fra de skriftlige eksamener. De spørger næsten altid om de
 )
 
 #qcard(
-  tag: [DP på rodfæstet træ],
+  tag: [DP på rodfæstet træ (optimale delproblemer)],
   source: "DM507 juni 2008, Opg. 6 (25%)",
+  theory: <th-dp-build>,
   prompt: [
     Sti-dækning af et vægtet binært træ. En sti-dækning er en delmængde $X$ af knuder, så hver rod-til-blad-sti indeholder netop én knude fra $X$. Maksimér den samlede vægt. $W(x)$ er den optimale vægt for deltræet med rod $x$:
     #eq[$
@@ -419,8 +427,9 @@ De store DP-opgaver fra de skriftlige eksamener. De spørger næsten altid om de
 )
 
 #qcard(
-  tag: [DP på rodfæstet træ],
+  tag: [DP på rodfæstet træ (optimale delproblemer)],
   source: "DM507 juni 2011, Opg. 5 (25%)",
+  theory: <th-dp-build>,
   prompt: [
     Maksimum-vægt uafhængig mængde (maximum-weight independent set) i et rodfæstet træ (rooted tree). Hver knude har en positiv vægt. En mængde er uafhængig, hvis den ikke indeholder to naboer (er $x$ med, er hverken $x$'s børn eller forælder med). To værdier pr. knude:
     #eq[$
@@ -472,8 +481,9 @@ De store DP-opgaver fra de skriftlige eksamener. De spørger næsten altid om de
 )
 
 #qcard(
-  tag: [DP på rodfæstet træ],
+  tag: [DP på rodfæstet træ (optimale delproblemer)],
   source: "DM507 januar 2007, Opg. 5 (30%)",
+  theory: <th-dp-build>,
   prompt: [
     Parsimoni på et binært træ (small phylogeny / Fitch). Et binært træ, hvor hver knude har 0 eller 2 børn; hvert blad holder et tegn fra alfabetet $Sigma$. Tildel tegn til de interne knuder, så antallet af overgangskanter (kanter, hvis to ender har forskellige tegn) minimeres. Pr. knude:
     #eq[$
@@ -510,6 +520,7 @@ De store DP-opgaver fra de skriftlige eksamener. De spørger næsten altid om de
 #qcard(
   tag: [Tæl strukturer (Catalan, heap, BST)],
   source: "jun 2016, Problem 7 (9%)",
+  theory: <th-dp-build>,
   prompt: [
     Tæl binære træer. \
     *(a)* Hvor mange former har et binært træ med #swap[$3$] knuder? \
@@ -539,6 +550,7 @@ De store DP-opgaver fra de skriftlige eksamener. De spørger næsten altid om de
 #qcard(
   tag: [Tæl strukturer (Catalan, heap, BST)],
   source: "DM507 juni 2008, Opg. 4 (10%)",
+  theory: <th-dp-build>,
   prompt: [
     Tæl strukturer. \
     *(a)* Skriv alle binære min-heaps (min-heaps) på prioriteterne #swap[$1, 2, 3, 4$]. \

@@ -10,7 +10,7 @@ At *augmentere* (augment) et BST betyder, at hver knude gemmer ekstra info om he
 
 Til eksamen skal du opstille ligningerne for et augmenteret felt, simulere en hashtabel skridt for skridt og udvælge worst-case-køretider.
 
-=== Sådan løser du den
+=== Sådan løser du den <th-bst-augment>
 
 #recipe(
   title: "Augmentér et BST med deltræs-info",
@@ -26,6 +26,7 @@ For et aggregat over data, som største $y$-værdi i deltræet:
 
 #eq[$ v."ymax" = max(v.y, space v."left"."ymax", space v."right"."ymax") $]
 
+#metadata(none) <th-bst-bst-ops>
 #note(title: [Nøglefelt vs. ikke-nøglefelt])[Nøglefelt vs. ikke-nøglefelt afgør formlen. Træet er sorteret efter *én* nøgle, fx $x$. Et ekstremum af *nøglen* ligger fast: største $x$ er den højreste knude, mindste $x$ den venstreste. Selve ekstremerne af nøglen henter du med Tree-Minimum og Tree-Maximum fra lærebogen: Tree-Minimum følger venstre barn fra roden hele vejen ned og ender i den mindste nøgle (venstreste knude), Tree-Maximum følger højre barn ned til den største nøgle (højreste knude). Begge er $O(log n)$ i et balanceret træ.
 
 #eq[$ v."xmax" = v."right"."xmax", quad v."xmin" = v."left"."xmin" $]
@@ -35,6 +36,7 @@ Et ikke-nøglefelt (fx $y$) er ikke sorteret af træet, så kig på begge børn 
 #eq[$ v."ymax" = max(v.y, space v."left"."ymax", space v."right"."ymax") $]
 ]
 
+#metadata(none) <th-bst-augment-maintain>
 #trap(title: [Vedligeholdelse af augmentering])[Vedligeholdelse rører ikke kun bladet eller kun roden. En indsæt eller slet ændrer knuderne langs én rod-til-blad-sti plus $O(1)$ rotationer; du genberegner felterne nedefra og op langs den sti, altså $O(log n)$ knuder. Et fuldt inorder-gennemløb (inorder traversal) er $O(n)$ og dermed forkert svar på et $O(log n)$-spørgsmål.]
 
 For ordensstatistik (order statistics) gemmer hver knude `size`. NIL er en sentinel med `size = 0`, så `x.left.size` altid er defineret. Rangen (rank) i eget deltræ:
@@ -58,20 +60,42 @@ OS-RANK(T, x)                // rang af x i hele træet
   return r
 ```
 
+#metadata(none) <th-bst-hashing>
 #recipe(
   title: "Simulér en hashtabel med open addressing",
   [Noter tabelstørrelsen #swap[$m$] og hvilke pladser der er optaget før indsættelsen.],
   [Find probe-sekvensen (probe sequence). Linear probing:],
   [Indsæt ved at prøve $i = 0, 1, 2, dots$ til *første tomme plads*. Søgning gør det samme og stopper ved nøglen eller en tom plads.],
-  [Til "hvilke $h'$-værdier er mulige": prøv hver kandidat, simulér probingen, og behold den hvis landingen rammer den observerede plads.],
+  [Skal du finde "hvilke $h'$-værdier er mulige": tag én kandidat ad gangen. Lad som om $h'(k)$ er den værdi, kør indsættelsen, og se hvor nøglen lander. Lander den på den plads, nøglen rent faktisk fik, er kandidaten mulig — ellers ikke.],
 )
+
+Linear probing prøver pladserne ét hak ad gangen:
 
 #eq[$ h(k, i) = (h'(k) + i) mod m $]
 
-Double hashing bruger en anden funktion til skridtlængden:
+$i$ er hvor mange skridt du har taget: $i = 0$ er hjemmepladsen, $i = 1$ er den næste, og så videre, til du finder en tom plads.
+
+$mod m$ betyder "rest efter division med $m$", og det er bare måden at vikle rundt på, når du løber ud over kanten af tabellen. Med $m = 7$ har du pladserne $0$ til $6$. Lander du på $7$, starter du forfra på plads $0$, $8$ bliver plads $1$, og så videre. For eksempel er $9 mod 7 = 2$, fordi $9 = 7 + 2$. Plads $9$ findes ikke; den er i virkeligheden plads $2$.
+
+I praksis gør det regningen nem. Er tallet allerede under $m$, sker der ingenting, og resten er bare tallet selv. $5 mod 7 = 5$, fordi $5$ er mindre end $7$. Først når summen når $7$ eller derover, wrapper du rundt, så $8 mod 7 = 1$ og $14 mod 7 = 0$. Du kigger altså bare på, om summen har ramt $7$ endnu.
+
+En rest på $0$ betyder ikke "går ikke op", men det modsatte. Resten er $0$, netop når $7$ deler tallet rent, som i $7 mod 7 = 0$, $14 mod 7 = 0$ og $21 mod 7 = 0$. Går det ikke op, er resten det, der bliver tilovers, fx $8 mod 7 = 1$ og $10 mod 7 = 3$.
+
+Pas på rækkefølgen, når du regner. Det er hele summen, der tages modulo, altså $(h'(k) + i) mod m$. Du lægger først sammen og tager så resten, ikke omvendt.
+
+Prøv det med $m = 7$. Sig at både $10$ og $17$ hører hjemme på plads $3$ (deres $h'$ er $3$). Du indsætter $10$ først, og plads $3$ er tom, så $10$ lander der. Nu kommer $17$, men plads $3$ er optaget. Du tager ét skridt ($i = 1$) og får $(3 + 1) mod 7 = 4$. Plads $4$ er tom, så $17$ lander der. Mere er der ikke i probingen: de to stødte sammen, og den nye gik ét skridt frem til en ledig plads.
+
+Double hashing gør det samme, men skridtlængden er ikke altid 1. En ekstra funktion $h_2(k)$ bestemmer, hvor langt hvert hop er:
 
 #eq[$ h(k, i) = (h_1(k) + i dot h_2(k)) mod m $]
 
+$h_1$ siger "start her", og $h_2$ siger "hop så mange ad gangen". Ved hver kollision tager du endnu et hop af samme størrelse. Linear probing er egentlig bare det specialtilfælde, hvor $h_2$ altid er $1$, og double hashing gør springtallet afhængigt af nøglen i stedet.
+
+Læg mærke til, at $h_2(k)$ ikke genberegnes ved hver kollision. Den er en fast værdi for nøglen, ligesom $h_1(k)$, og det eneste, der ændrer sig undervejs, er tælleren $i$.
+
+Det samme eksempel med $m = 7$: nu hører $17$ hjemme på plads $3$ ($h_1 = 3$) med skridtlængde $h_2 = 2$. Plads $3$ er optaget af $10$, så du hopper, og $i = 1$ giver $(3 + 1 dot 2) mod 7 = 5$. Er $5$ tom, lander $17$ der. Linear probing ville have prøvet plads $4$ først, mens double hashing springer direkte til $5$, fordi hoppet er $2$.
+
+#metadata(none) <th-bst-chaining>
 #note(title: [Chaining])[Chaining er den anden kollisionsmetode (collision resolution method): hver plads peger på en liste over de nøgler, der hasher dertil. Indsæt er $O(1)$ (forrest i listen), søg og slet er $Theta(|"liste"|)$. Worst case hasher alle $n$ nøgler til samme plads, så listen får længde $n$ og søgning bliver $Theta(n)$. Bruger du balancerede træer i stedet for lister, falder worst case til $O(log n)$. I praksis er hashing $O(1)$ for søg, indsæt og slet.]
 
 #trap(title: [Open addressing])[Open addressing kræver $n <= m$; sigt efter en fyldningsgrad (load factor) omkring $n approx m\/4$. Slet markerer pladsen som slettet uden at tømme den, ellers afbryder en senere søgning for tidligt. Vælg $m$ som primtal, så probe-sekvensen når alle pladser. Quadratic probing er ude af pensum.]
@@ -89,10 +113,76 @@ Valget mellem de to strukturer afgøres af spørgsmålstypen:
   [Sorteret gennemløb], [$O(n)$], [ikke understøttet],
 )
 
-=== Rød-sort træ
+=== Open addressing trin for trin <th-bst-linear-probing>
+
+I open addressing bor nøglerne direkte i tabellen, uden lister hængt udenpå. Vil to nøgler have samme plads, rykker den nye videre til den næste ledige efter en fast regel. Reglen kaldes probe-sekvensen (probe sequence), og pensum har to af dem: linear probing og double hashing.
+
+Begge starter med en hjælpe-hashfunktion $h'(k)$ (auxiliary hash function), der giver nøglens hjemmeplads. Er hjemmepladsen ledig, lander nøglen der. Er den optaget, prober du videre, og måden du gør det på er hele forskellen mellem de to metoder.
+
+*Linear probing* rykker ét hak ad gangen:
+
+#eq[$ h(k, i) = (h'(k) + i) mod m $]
+
+Er hjemmepladsen optaget, prøver du plads $h'+1$, så $h'+2$, og så videre til den første tomme. Falder du ud over kanten, wrapper du tilbage til plads 0.
+
+Tag tre nøgler med samme hjemmeplads og indsæt dem i en tom tabel ($m = 7$, $h'(k) = k mod 7$, så $10$, $17$ og $24$ alle hører hjemme på plads #swap[3]):
+
+#let htab(..cells) = table(
+  columns: (auto,) * 8,
+  align: center + horizon,
+  stroke: 0.4pt + hair,
+  inset: 6pt,
+  table.header([], [*0*], [*1*], [*2*], [*3*], [*4*], [*5*], [*6*]),
+  ..cells.pos(),
+)
+
+#align(center)[
+  #stack(
+    spacing: 8pt,
+    [Indsæt $10$ (plads 3 tom $-> $ lander på 3):],
+    htab([værdi], [], [], [], [10], [], [], []),
+    [Indsæt $17$ (3 optaget $-> $ prøv 4, tom $->$ lander på 4):],
+    htab([værdi], [], [], [], [10], [17], [], []),
+    [Indsæt $24$ (3, 4 optaget $-> $ prøv 5, tom $->$ lander på 5):],
+    htab([værdi], [], [], [], [10], [17], [24], []),
+  )
+]
+
+Bemærk hvordan nøglerne klumper sammen i én sammenhængende blok. Det hedder primær klyngedannelse (primary clustering): jo længere blokken bliver, jo længere skal den næste nøgle probe, før den finder plads.
+
+#metadata(none) <th-bst-double-hashing>
+*Double hashing* fjerner klyngerne ved at gøre selve skridtlængden afhængig af nøglen:
+
+#eq[$ h(k, i) = (h_1(k) + i dot h_2(k)) mod m $]
+
+$h_1$ giver hjemmepladsen som før, men i stedet for at hoppe ét frem hopper du $h_2(k)$ ad gangen. To nøgler kan dele hjemmeplads og alligevel følge hver sin sti gennem tabellen, fordi deres $h_2$ er forskellig.
+
+Tag tabellen fra før med $10$, $17$, $24$ på plads 3, 4, 5, og indsæt en nøgle med $h_1 = 3$ og $h_2 = 2$:
+
+#align(center)[
+  #stack(
+    spacing: 8pt,
+    htab([værdi], [], [], [], [10], [17], [24], []),
+    [
+      $i = 0$: plads $3$ optaget. \
+      $i = 1$: plads $(3 + 1 dot 2) = 5$ optaget. \
+      $i = 2$: plads $(3 + 2 dot 2) = 7 equiv 0$ tom $->$ lander på 0.
+    ],
+    htab([værdi], [ny], [], [], [10], [17], [24], []),
+  )
+]
+
+Linear probing ville have lagt den på plads 6; det større skridt springer hen over klyngen i stedet for at lægge sig bag i køen.
+
+#trap(title: [Vælg $h_2$ med omhu])[Skridtlængden $h_2(k)$ skal være forskellig fra 0, ellers står du stille på hjemmepladsen for evigt. Og $h_2(k)$ skal være indbyrdes primisk med $m$ (relatively prime), ellers rammer probe-sekvensen kun nogle af pladserne og kan løbe tør, selvom tabellen ikke er fuld. Vælger du $m$ som primtal, er ethvert $h_2 in {1, dots, m-1}$ automatisk i orden.]
+
+*Baglæns-opgaverne.* Til eksamen får du som regel tabellen før og efter plus landingspladsen, og skal finde hvilke $h'$- eller $h_2$-værdier der kunne have ført dertil. Fremgangen er den samme uanset metode: prøv hver kandidat. Simulér probingen fra den værdi, og behold den, hvis sekvensen ender på den plads, nøglen faktisk fik. Med $m$ lille (typisk 7) er der kun en håndfuld kandidater at tjekke, så det er hurtigere at simulere dem alle end at lede efter en smart genvej.
+
+=== Rød-sort træ <th-bst-rbtree>
 
 Et rød-sort træ er et binært søgetræ (binary search tree), hvor hver knude har en farve, rød eller sort. Farverne er der kun for at holde træet i balance, så højden bliver $O(log n)$ uanset i hvilken rækkefølge du indsætter.
 
+#metadata(none) <th-bst-rb-rules>
 #recipe(
   title: "De fem rød-sorte regler",
   [Hver knude er enten rød eller sort.],
@@ -179,6 +269,7 @@ En rotation bytter om på en knude og et af dens børn, men holder søgeordenen 
 Højrerotation (right rotation) er det spejlvendte og løfter venstre barn op. De to er hinandens modsatte, så en højrerotation kan altid fortrydes med en venstrerotation.
 
 #metadata(none) <rb-indsaet>
+#metadata(none) <th-bst-rb-insert>
 #recipe(
   title: "Indsæt og ret op",
   [Indsæt den nye knude som i et almindeligt BST, og farv den *rød*. En rød knude kan kun bryde regel 4 (to røde i træk), aldrig sort-højden, så du har kun ét problem at rette.],
@@ -219,6 +310,7 @@ Et fuldt eksempel binder reglerne sammen. Indsæt $10, 20, 30, 15, 25, 5$ i et t
 Sletning bruger samme to værktøjer, men er tungere. Du fjerner knuden som i et almindeligt BST. Var den fjernede knude rød, sker der ikke noget med balancen. Var den sort, mangler der nu en sort på den sti, og knuden, der tog dens plads, bærer en ekstra "dobbelt-sort", som du skubber væk:
 
 #metadata(none) <rb-slet>
+#metadata(none) <th-bst-rb-delete>
 #recipe(
   title: "Slet og ret op (dobbelt-sort knude x, søskende w)",
   [*w rød:* rotér om forælderen og farv om, så $w$ bliver sort. Det fører dig ned i et af de tre tilfælde nedenfor.],
@@ -234,8 +326,9 @@ Sletning bruger samme to værktøjer, men er tungere. Du fjerner knuden som i et
 === Tilbagevendende eksamensspørgsmål
 
 #qcard(
-  tag: [Augmenteret BST: vælg opdateringsligninger],
+  tag: [Augmenteret BST: vælg opdateringsligninger (augmentering)],
   source: "MCQ juni 2015, Spm. 25",
+  theory: <th-bst-augment>,
   prompt: [En mængde punkter i planen gemmes i et balanceret binært søgetræ (BST) med punkternes #swap[$x$]-koordinat som nøgle. Hver knude svarer til et punkt og gemmer derudover fire felter for hele sit deltræ: `v.xmax`, `v.xmin`, `v.ymax`, `v.ymin`. Hvilket sæt opdateringsligninger vedligeholder felterne korrekt i knude $v$ ud fra dens børn `v.left`, `v.right` og dens egne koordinater `v.x`, `v.y`?],
   options: (
     [`v.xmax = v.left.xmax`; `v.xmin = v.right.xmin`; `v.ymax = max(v.left.ymax, v.right.ymax, v.y)`; `v.ymin = min(v.left.ymin, v.right.ymin, v.y)`],
@@ -270,8 +363,9 @@ Sletning bruger samme to værktøjer, men er tungere. Du fjerner knuden som i et
 )
 
 #qcard(
-  tag: [Augmenteret BST: vælg opdateringsligninger],
+  tag: [Augmenteret BST: vælg opdateringsligninger (augmentering)],
   source: "MCQ juni 2021, Spm. 31",
+  theory: <th-bst-augment>,
   prompt: [For en sorteret liste $x_1 <= dots.h <= x_n$ defineres summen af kvadrerede mellemrum $"ssg" = sum_(i=2)^n (x_i - x_(i-1))^2$. Hver knude $v$ gemmer $v.x$ samt $v."min"$, $v."max"$ og $v."ssg"$ for hele sit deltræ. Børnene er $v.l$ og $v.r$. Hvilken formel giver #swap[$v."ssg"$] ud fra børnenes værdier (begge børn findes)?],
   options: (
     [$v."ssg" = v.l."ssg" + v.r."ssg"$],
@@ -303,8 +397,9 @@ Sletning bruger samme to værktøjer, men er tungere. Du fjerner knuden som i et
 )
 
 #qcard(
-  tag: [Augmenteret BST: vælg opdateringsligninger],
+  tag: [Augmenteret BST: vælg opdateringsligninger (augmentering)],
   source: "MCQ juni 2023, Spm. 30",
+  theory: <th-bst-augment>,
   prompt: [Nøgler $x_1 < dots.h < x_n$ ligger i et rød-sort træ, hver farvet sort eller hvid. En *stime* er et maksimalt løb af på hinanden følgende sort-farvede knuder i inorder. Hver knude $v$ gemmer $v."maxS"$ (længste stime i $T(v)$), $v."maxLS"$ (længste stime der starter ved venstreste nøgle), $v."maxRS"$ (længste stime der ender ved højreste nøgle) og $v."hasWhite"$. Hvilken rekursion beregner #swap[$v."maxS"$] korrekt ud fra børnene $v.l$ og $v.r$?],
   options: (
     [sort: $max{v.l."maxS", space v.r."maxS", space v.l."maxRS" + v.r."maxLS"}$; hvid: $max{v.l."maxS", space v.r."maxS"}$],
@@ -334,8 +429,9 @@ Sletning bruger samme to værktøjer, men er tungere. Du fjerner knuden som i et
 )
 
 #qcard(
-  tag: [Augmenteret BST: vælg opdateringsligninger],
+  tag: [Augmenteret BST: vælg opdateringsligninger (augmentering)],
   source: "MCQ juni 2023, Spm. 31",
+  theory: <th-bst-augment>,
   prompt: [Samme augmenterede træ med stimer. Hvordan beregnes #swap[$v."maxLS"$] (længste stime der starter ved venstreste nøgle) ud fra børnene (begge børn findes)?],
   options: (
     [$v."maxLS" = v.l."maxLS"$ hvis $v$'s nøgle er hvid; $v.l."maxS" + 1 + v.r."maxLS"$ hvis $v$'s nøgle er sort],
@@ -361,8 +457,9 @@ Sletning bruger samme to værktøjer, men er tungere. Du fjerner knuden som i et
 )
 
 #qcard(
-  tag: [Augmenteret BST: hvorfor bevares O(log n)?],
+  tag: [Augmenteret BST: hvorfor bevares O(log n)? (augmentering)],
   source: "MCQ juni 2015, Spm. 26",
+  theory: <th-bst-augment-maintain>,
   prompt: [Lad nu søgetræet være et rød-sort træ. Hvilke af følgende er korrekte argumenter for, at informationen i træets knuder kan vedligeholdes under indsættelser og sletninger, uden at ændre de rød-sorte træers køretid på $O(log n)$ for indsættelser og sletninger?],
   options: (
     [Ingen information i knuderne behøver at ændres under indsættelser og sletninger, så de rød-sorte træers $O(log n)$-køretid holder stadig.],
@@ -400,8 +497,9 @@ Sletning bruger samme to værktøjer, men er tungere. Du fjerner knuden som i et
 )
 
 #qcard(
-  tag: [Augmenteret BST: O(1)-forespørgsel fra roden],
+  tag: [Augmenteret BST: O(1)-forespørgsel fra roden (augmentering)],
   source: "MCQ juni 2015, Spm. 27",
+  theory: <th-bst-augment>,
   prompt: [Punkterne ligger i et balanceret BST nøglet på $x$, og hver knude gemmer deltræs-felterne `xmin`, `xmax`, `ymin`, `ymax`. Hvordan kan arealet af det rektangel, punkterne udspænder, bestemmes i #swap[$O(1)$] ud fra træet?],
   options: (
     [Arealet er $v."ymin" times u."ymax"$, hvor $v$ er det venstreste blad og $u$ det højreste blad.],
@@ -432,8 +530,9 @@ Sletning bruger samme to værktøjer, men er tungere. Du fjerner knuden som i et
 )
 
 #qcard(
-  tag: [Augmenteret BST: O(1)-forespørgsel fra roden],
+  tag: [Augmenteret BST: O(1)-forespørgsel fra roden (augmentering)],
   source: "MCQ juni 2015, Spm. 29",
+  theory: <th-bst-augment>,
   prompt: [Vi vil nu nå de samme resultater på en anden måde: arealet af det udspændte rektangel i #swap[$O(1)$] og et punkt på hver af de fire sider i #swap[$O(log n)$], stadig med indsæt og slet i $O(log n)$. Antag at ingen to punkter deler $x$-koordinat, og ingen to deler $y$-koordinat. Det skal klares med *to træer uden ekstra information i nogen knude*. Hvilken datastruktur virker?],
   options: (
     [Et træ er en max-heap nøglet på punkternes $x$; det andet en max-heap nøglet på $y$.],
@@ -463,8 +562,9 @@ Sletning bruger samme to værktøjer, men er tungere. Du fjerner knuden som i et
 )
 
 #qcard(
-  tag: [Augmenteret BST: O(log n)-forespørgsel ned ad træet (flere rigtige)],
+  tag: [Augmenteret BST: O(log n)-forespørgsel ned ad træet (flere rigtige) (augmentering)],
   source: "MCQ juni 2015, Spm. 28 (flere rigtige)",
+  theory: <th-bst-augment>,
   prompt: [Træet er et balanceret BST nøglet på $x$ og augmenteret i hver knude med deltræs-`xmin`, `xmax`, `ymin`, `ymax`. For hver af de fire sider af det udspændte rektangel vil vi finde et punkt på siden. Hvordan gøres det i #swap[$O(log n)$] med træet? (et eller flere svar)],
   options: (
     [Punkterne på de *vandrette* sider findes med Tree-Maximum og Tree-Minimum. Punktet på højre lodrette side findes med en rekursiv søgning fra roden, der via `xmax`-værdierne går mod største $x$; venstre side via `xmin`.],
@@ -501,8 +601,9 @@ Sletning bruger samme to værktøjer, men er tungere. Du fjerner knuden som i et
 )
 
 #qcard(
-  tag: [Augmenteret BST: O(log n)-forespørgsel ned ad træet (flere rigtige)],
+  tag: [Augmenteret BST: O(log n)-forespørgsel ned ad træet (flere rigtige) (augmentering)],
   source: "MCQ juni 2023, Spm. 32",
+  theory: <th-bst-augment>,
   prompt: [Med $r."maxS"$ kender vi den længste sorte stimes længde i $O(1)$. Vi vil nu i #swap[$O(log n)$] finde en knude, hvis nøgle er en del af en længste sort stime. Hver algoritme starter med $v = $ rod; kun tilfældet, hvor begge børn findes, beskrives. Hvilken algoritme virker?],
   options: (
     [Hvis $v."maxS" > v.l."maxS"$ og $v."maxS" > v.r."maxS"$, returnér $v$. Ellers hvis $v."maxS" = v.l."maxS"$, gå til $v.l$. Ellers gå til $v.r$.],
@@ -531,6 +632,7 @@ Sletning bruger samme to værktøjer, men er tungere. Du fjerner knuden som i et
 #qcard(
   tag: [Hashing: hvilke h'-værdier passer? (linear probing)],
   source: "MCQ juni 2021, Spm. 9 (samme type 2015/2017/2019/2023)",
+  theory: <th-bst-linear-probing>,
   prompt: [En hashtabel $H$ bruger linear probing og en hjælpe-hashfunktion $h'(x)$. Tabellen er nu (indeks 0..6): plads 0 $=$ #swap[12], plads 1 tom, plads 2 $=$ #swap[10], plads 3 tom, plads 4 $=$ #swap[22], plads 5 tom, plads 6 $=$ #swap[31]. Derefter indsættes #swap[97], og tabellen er bagefter: plads 0 $=$ 12, plads 1 $=$ 97, plads 2 $=$ 10, plads 3 tom, plads 4 $=$ 22, plads 5 tom, plads 6 $=$ 31. Tabelstørrelse #swap[$m = 7$]. Hvilke værdier af $h'(97)$ er mulige? (et eller flere svar)],
   options: (
     [$h'(97) = 0$],
@@ -572,6 +674,7 @@ Sletning bruger samme to værktøjer, men er tungere. Du fjerner knuden som i et
 #qcard(
   tag: [Hashing: hvilke h'-værdier passer? (linear probing)],
   source: "MCQ juni 2019, Spm. 9 (samme type 2015/2017/2021/2023) (flere rigtige)",
+  theory: <th-bst-linear-probing>,
   prompt: [En hashtabel $H$ bruger linear probing og en hjælpe-hashfunktion $h'(x)$. Tabellen er nu (indeks 0..6): plads 0 $=$ #swap[33], plads 1 tom, plads 2 $=$ #swap[27], plads 3 $=$ #swap[32], plads 4 $=$ #swap[55], plads 5 tom, plads 6 $=$ #swap[47]. Derefter indsættes #swap[99], og tabellen er bagefter: plads 0 $=$ 33, plads 1 $=$ 99, plads 2 $=$ 27, plads 3 $=$ 32, plads 4 $=$ 55, plads 5 tom, plads 6 $=$ 47. Tabelstørrelse #swap[$m = 7$]. Hvilke værdier af $h'(99)$ er mulige? (et eller flere svar)],
   options: (
     [$h'(99) = 0$],
@@ -613,6 +716,7 @@ Sletning bruger samme to værktøjer, men er tungere. Du fjerner knuden som i et
 #qcard(
   tag: [Hashing: hvilken rækkefølge/nøgle passer? (linear probing)],
   source: "MCQ juni 2017, Spm. 8 (flere rigtige)",
+  theory: <th-bst-linear-probing>,
   prompt: [For en funktion $h'(x)$ gælder #swap[$h'(7)=2$, $h'(9)=2$, $h'(13)=3$, $h'(17)=4$]. En hashtabel $H$ bruger linear probing med $h'(x)$. Fra en tom tabel er #swap[${7,9,13,17}$] indsat i en eller anden rækkefølge, og resultatet er: plads 2 $=$ 9, plads 3 $=$ 7, plads 4 $=$ 17, plads 5 $=$ 13 (resten tomme, $m = 11$). Hvilke af følgende indsættelsesrækkefølger kan have været brugt? (et eller flere svar)],
   options: (
     [$7, 9, 13, 17$],
@@ -646,6 +750,7 @@ Sletning bruger samme to værktøjer, men er tungere. Du fjerner knuden som i et
 #qcard(
   tag: [Hashing: hvilken rækkefølge/nøgle passer? (linear probing)],
   source: "MCQ juni 2023, Spm. 9 (flere rigtige)",
+  theory: <th-bst-linear-probing>,
   prompt: [For en funktion $h_1(x)$ gælder #swap[$h_1(22)=6$, $h_1(33)=1$, $h_1(44)=4$, $h_1(55)=1$, $h_1(66)=6$, $h_1(77)=1$]. En hashtabel af længde syv bruger linear probing med $h_1$. Fra en tom tabel er #swap[${22,33,44,55,66,77}$] indsat i en eller anden rækkefølge, og resultatet er: plads 0 $=$ 22, plads 1 $=$ 77, plads 2 $=$ 55, plads 3 $=$ 33, plads 4 $=$ 44, plads 5 tom, plads 6 $=$ 66. Hvilke nøgler kan være indsat #swap[først]? (et eller flere svar)],
   options: (
     [$22$],
@@ -680,6 +785,7 @@ Sletning bruger samme to værktøjer, men er tungere. Du fjerner knuden som i et
 #qcard(
   tag: [Hashing: hvilken rækkefølge/nøgle passer? (linear probing)],
   source: "MCQ juni 2025, Spm. 9 (flere rigtige)",
+  theory: <th-bst-linear-probing>,
   prompt: [For en funktion $h_1(x)$ gælder #swap[$h_1(44)=2$, $h_1(55)=5$, $h_1(66)=1$, $h_1(77)=2$, $h_1(88)=5$, $h_1(99)=6$]. En hashtabel af længde syv bruger linear probing med $h_1$. Fra en tom tabel er #swap[${44,55,66,77,88,99}$] indsat i en eller anden rækkefølge, og resultatet er: plads 0 $=$ 99, plads 1 $=$ 66, plads 2 $=$ 44, plads 3 $=$ 77, plads 4 tom, plads 5 $=$ 88, plads 6 $=$ 55. Hvilke nøgler kan være indsat #swap[sidst]? (et eller flere svar)],
   options: (
     [$44$],
@@ -713,8 +819,9 @@ Sletning bruger samme to værktøjer, men er tungere. Du fjerner knuden som i et
 )
 
 #qcard(
-  tag: [Hashing: trace med quadratic probing],
+  tag: [Hashing: trace med quadratic probing (quadratic probing)],
   source: "MCQ juni 2015, Spm. 7",
+  theory: <th-bst-linear-probing>,
   prompt: [Hashtabellen $H$ bruger quadratic probing med hjælpe-hashfunktion #swap[$h'(x) = (3x + 5) mod 11$] og konstanter #swap[$c_1 = 3$, $c_2 = 1$]. Probe-sekvens: $h(x,i) = (h'(x) + c_1 dot i + c_2 dot i^2) mod #swap[$11$]$. Starttabel (indeks: værdi): #swap[$0:13$, $1:39$, $3:36$, $8:23$, $9:5$] (pladserne 2,4,5,6,7,10 tomme). Indsæt værdierne #swap[$22$, $16$, $17$] (i den rækkefølge). Hvilken tabel viser $H$ bagefter?],
   options: (
     [$0:13 thin 1:39 thin 2:17 thin 3:36 thin 5:22 thin 8:23 thin 9:5 thin 10:16$],
@@ -744,6 +851,7 @@ Sletning bruger samme to værktøjer, men er tungere. Du fjerner knuden som i et
 #qcard(
   tag: [Hashing: hvilke h₂-værdier passer? (double hashing)],
   source: "MCQ juni 2019, Spm. 10 (samme type 2021/2023/2025) (flere rigtige)",
+  theory: <th-bst-double-hashing>,
   prompt: [En hashtabel $H$ bruger double hashing med hjælpe-hashfunktioner $h_1(x)$ og $h_2(x)$. Tabellen er nu (indeks 0..6): #swap[$0:33$, 1 tom, $2:27$, $3:32$, $4:55$, 5 tom, $6:47$]. Derefter indsættes #swap[99], som ender på plads #swap[1]. Probe-sekvens: $h(x,i) = (h_1(x) + i dot h_2(x)) mod #swap[$7$]$. Hvis #swap[$h_1(99) = 2$], hvilke værdier af $h_2(99)$ er mulige? (et eller flere svar)],
   options: (
     [$h_2(99) = 1$],
@@ -779,6 +887,7 @@ Sletning bruger samme to værktøjer, men er tungere. Du fjerner knuden som i et
 #qcard(
   tag: [Hashing: hvilke h₂-værdier passer? (double hashing)],
   source: "MCQ juni 2021, Spm. 10 (flere rigtige)",
+  theory: <th-bst-double-hashing>,
   prompt: [En hashtabel $H$ bruger double hashing med $h_1(x)$ og $h_2(x)$. Tabellen er nu (indeks 0..6): #swap[$0:12$, 1 tom, $2:10$, 3 tom, $4:22$, 5 tom, $6:31$]. Derefter indsættes #swap[97], som ender på plads #swap[1]. Probe-sekvens: $h(x,i) = (h_1(x) + i dot h_2(x)) mod #swap[$7$]$. Hvis #swap[$h_1(97) = 0$], hvilke værdier af $h_2(97)$ er mulige? (et eller flere svar)],
   options: (
     [$h_2(97) = 1$],
@@ -814,6 +923,7 @@ Sletning bruger samme to værktøjer, men er tungere. Du fjerner knuden som i et
 #qcard(
   tag: [Hashing: hvilke h₂-værdier passer? (double hashing)],
   source: "MCQ juni 2023, Spm. 10 (flere rigtige)",
+  theory: <th-bst-double-hashing>,
   prompt: [En hashtabel $H$ af længde #swap[$8$] bruger double hashing med $h_1, h_2$. Før indsættelse af #swap[25] (indeks 0..7): #swap[$0:13$, $1:56$, $3:32$, $4:91$, $6:82$], resten tomme. 25 ender på plads #swap[5]. Probe-sekvens: $h(x,i) = (h_1(x) + i dot h_2(x)) mod #swap[$8$]$. Hvis #swap[$h_1(25) = 3$], hvilke værdier af $h_2(25)$ er mulige? (et eller flere svar)],
   options: (
     [$h_2(25) = 1$],
@@ -851,6 +961,7 @@ Sletning bruger samme to værktøjer, men er tungere. Du fjerner knuden som i et
 #qcard(
   tag: [Hashing: hvilke h₂-værdier passer? (double hashing)],
   source: "MCQ juni 2025, Spm. 10 (flere rigtige)",
+  theory: <th-bst-double-hashing>,
   prompt: [En hashtabel $H$ af længde #swap[$7$] bruger double hashing med $h_1(x)$ og $h_2(x)$. Før indsættelse: #swap[$H = [47, 50, \_, \_, 35, 21, \_]$] (pladserne 0,1,4,5 optaget; 2,3,6 tomme). #swap[99] indsættes på plads #swap[2]. Probe-sekvens: $h(x,i) = (h_1(x) + i dot h_2(x)) mod #swap[$7$]$. Hvis #swap[$h_2(99) = 2$], hvilke værdier af $h_1(99)$ er mulige? (et eller flere svar)],
   options: (
     [$h_1(99) = 0$],
@@ -886,8 +997,9 @@ Sletning bruger samme to værktøjer, men er tungere. Du fjerner knuden som i et
 )
 
 #qcard(
-  tag: [Sortering: hvilke er Θ(n²) i værste fald?],
+  tag: [Sortering: hvilke er Θ(n²) i værste fald? (sortering)],
   source: "MCQ juni 2019, Spm. 27 (worst-case sortering, går igen bredt)",
+  theory: <th-bst-rbtree>,
   prompt: [Vi betragter sortering af #swap[$n$] heltal med værdier i intervallet $[0, #swap[$n^2$])$. Med TreeSort menes algoritmen, der indsætter tallene ét ad gangen i et søgetræ og derefter laver et inorder-gennemløb. Hvilke af følgende algoritmer har worst-case-køretid $Theta(n^2)$? (et eller flere svar)],
   options: (
     [CountingSort],
@@ -924,8 +1036,9 @@ Sletning bruger samme to værktøjer, men er tungere. Du fjerner knuden som i et
 )
 
 #qcard(
-  tag: [Rød-sort træ: gyldig farvelægning? (flere rigtige)],
+  tag: [Rød-sort træ: gyldig farvelægning? (flere rigtige) (farvelægning)],
   source: "MCQ juni 2015, Spm. 19 (flere rigtige)",
+  theory: <th-bst-rb-rules>,
   prompt: [Hvilke farvelægninger af knuderne i træet gør det til et lovligt rød-sort træ? (et eller flere svar) Træet: rod #swap[$b$] med børn #swap[$a$] og #swap[$d$]; $a$ har to NIL-børn; $d$ har børn $c$ og $e$; både $c$ og $e$ har to NIL-børn.],
   options: (
     [Sorte: $b, d$; Røde: $a, c, e$],
@@ -957,8 +1070,9 @@ Sletning bruger samme to værktøjer, men er tungere. Du fjerner knuden som i et
 )
 
 #qcard(
-  tag: [Rød-sort træ: gyldig farvelægning? (flere rigtige)],
+  tag: [Rød-sort træ: gyldig farvelægning? (flere rigtige) (farvelægning)],
   source: "MCQ juni 2017, Spm. 19 (flere rigtige)",
+  theory: <th-bst-rb-rules>,
   prompt: [For hvilke af træerne nedenfor kan knuderne farvelægges, så træet bliver et lovligt rød-sort træ? (et eller flere svar) Cirkler er indre knuder, der skal farves rød eller sort; sorte firkanter er NIL-blade.],
   options: (
     [Rod med venstre $=$ NIL-blad og højre $=$ indre knude med to NIL-børn.],
@@ -990,8 +1104,9 @@ Sletning bruger samme to værktøjer, men er tungere. Du fjerner knuden som i et
 )
 
 #qcard(
-  tag: [Rød-sort træ: gyldig farvelægning? (flere rigtige)],
+  tag: [Rød-sort træ: gyldig farvelægning? (flere rigtige) (farvelægning)],
   source: "MCQ juni 2023, Spm. 21 (flere rigtige)",
+  theory: <th-bst-rb-rules>,
   prompt: [Hvilke delmængder af knuder gør træet til et lovligt rød-sort træ, hvis præcis den delmængde farves rød (resten sort)? (et eller flere svar) BST: rod #swap[$5$]; $5$'s børn $3$ og $7$; $3$'s børn $2$ og $4$; $7$'s børn $6$ og $9$; $2$'s venstre barn $1$; $9$'s venstre barn $8$; knuderne $4, 6, 1, 8$ har kun NIL-børn.],
   options: (
     [${1, 3, 6, 8, 9}$],
@@ -1021,8 +1136,9 @@ Sletning bruger samme to værktøjer, men er tungere. Du fjerner knuden som i et
 )
 
 #qcard(
-  tag: [Rød-sort træ: gyldig farvelægning? (flere rigtige)],
+  tag: [Rød-sort træ: gyldig farvelægning? (flere rigtige) (farvelægning)],
   source: "MCQ juni 2025, Spm. 23 (flere rigtige)",
+  theory: <th-bst-rb-rules>,
   prompt: [Hvilke delmængder af knuder gør træet til et lovligt rød-sort træ, når de farves rød (resten sort)? (et eller flere svar) BST: rod #swap[$5$]; $5 ->$ venstre $3$, højre $8$; $3 ->$ venstre $1$, højre $4$; $8 ->$ venstre $6$, højre $9$; $1 ->$ højre barn $2$; $6 ->$ venstre barn $7$. NIL-blade er sorte.],
   options: (
     [${2, 7}$],
@@ -1054,8 +1170,9 @@ Sletning bruger samme to værktøjer, men er tungere. Du fjerner knuden som i et
 )
 
 #qcard(
-  tag: [Rød-sort træ: gyldig farvelægning? (flere rigtige)],
+  tag: [Rød-sort træ: gyldig farvelægning? (flere rigtige) (farvelægning)],
   source: "MCQ juni 2019, Spm. 23",
+  theory: <th-bst-rb-rules>,
   prompt: [På hvor mange måder kan knuderne i træet farves, så det bliver et lovligt rød-sort træ? Cirkler er indre knuder (farves rød eller sort), sorte firkanter er NIL-blade. Struktur: rod med børn #swap[$A$] og #swap[$B$]; $A ->$ børn $A_1, A_2$, hver med to NIL-børn; $B ->$ børn $B_1$ og $B_2$; $B_1$ har venstre NIL og højre indre knude $C$ (to NIL-børn); $B_2$ har venstre NIL og højre indre knude $D$; $D$ har venstre NIL og højre indre knude $E$ (to NIL-børn). Rod-til-NIL-stierne passerer 3, 4 eller 5 indre knuder.],
   options: (
     [På ingen måder.],
@@ -1086,8 +1203,9 @@ Sletning bruger samme to værktøjer, men er tungere. Du fjerner knuden som i et
 )
 
 #qcard(
-  tag: [Rød-sort træ: indsæt og ret op],
+  tag: [Rød-sort træ: indsæt og ret op (rød-sort træ)],
   source: "MCQ juni 2015, Spm. 20",
+  theory: <th-bst-rb-insert>,
   prompt: [I det rød-sorte træ indsættes #swap[$11$] med lærebogens algoritme. Hvordan ser træet ud bagefter? Starttræ: rod #swap[$5$] (sort); $5 ->$ venstre $3$ (sort), højre $7$ (rød); $3 ->$ børn $2$ (rød), $4$ (rød); $7 ->$ børn $6$ (sort), $9$ (sort); $9 ->$ børn $8$ (rød), $10$ (rød).],
   options: (
     [$11$ indsat som rødt højrebarn af $10$; ingen omfarvning/rotation (rød-rød ikke rettet).],
@@ -1116,8 +1234,9 @@ Sletning bruger samme to værktøjer, men er tungere. Du fjerner knuden som i et
 )
 
 #qcard(
-  tag: [Rød-sort træ: indsæt og ret op],
+  tag: [Rød-sort træ: indsæt og ret op (rød-sort træ)],
   source: "MCQ juni 2021, Spm. 23",
+  theory: <th-bst-rb-insert>,
   prompt: [Indsæt nøglen #swap[$21$] i det rød-sorte træ (dobbeltcirkler $=$ røde). Starttræ: rod #swap[$24$] (sort); venstre $18$ (rød) med venstre $5$ (sort, med røde børn $2$ og $7$) og højre $20$ (sort, med rødt højrebarn $23$); rodens højre $26$ (sort, med rødt højrebarn $27$). Hvilket træ er resultatet?],
   options: (
     [Naiv BST-indsæt: $20$(sort) beholder rødt højrebarn $23$, og $23$ får nyt rødt venstrebarn $21$. Rød-rød ikke rettet.],
@@ -1145,8 +1264,9 @@ Sletning bruger samme to værktøjer, men er tungere. Du fjerner knuden som i et
 )
 
 #qcard(
-  tag: [Rød-sort træ: indsæt og ret op],
+  tag: [Rød-sort træ: indsæt og ret op (rød-sort træ)],
   source: "MCQ juni 2023, Spm. 22",
+  theory: <th-bst-rb-insert>,
   prompt: [Indsæt nøglen #swap[$25$] i det rød-sorte træ (dobbeltcirkler $=$ røde). Starttræ: rod #swap[$18$] (sort); venstre $9$ (rød), $9 ->$ venstre $7$ (sort) med venstre rødt $4$, $9 ->$ højre $15$ (sort) med røde børn $11$ og $16$; rodens højre $21$ (sort), $21 ->$ venstre NIL, højre $24$ (rød). Hvilket træ er resultatet?],
   options: (
     [Højre $21$(sort), $21 ->$ højre $24$(rød), $24 ->$ højre $25$(rød); rød-rød $24 "-" 25$ ikke rettet.],
@@ -1173,8 +1293,9 @@ Sletning bruger samme to værktøjer, men er tungere. Du fjerner knuden som i et
 )
 
 #qcard(
-  tag: [Rød-sort træ: indsæt og ret op],
+  tag: [Rød-sort træ: indsæt og ret op (rød-sort træ)],
   source: "MCQ juni 2025, Spm. 24",
+  theory: <th-bst-rb-insert>,
   prompt: [Indsæt nøglen #swap[$10$] i det rød-sorte træ (dobbeltcirkler $=$ røde). Starttræ: rod #swap[$22$] (sort); venstre $17$ (rød); $17 ->$ venstre $8$ (sort) med rødt højrebarn $12$; $17 ->$ højre $20$ (sort) med røde børn $19$ (venstre), $21$ (højre); rodens højre $25$ (sort) med rødt højrebarn $26$. Hvilket træ er resultatet?],
   options: (
     [Ny rod $20$: $20$(B) med røde børn $17$ og $25$; $17$ har børn $10$(B) [med røde $8, 12$] og $19$; $25$ har børn $22$ og $26$.],
