@@ -27,18 +27,18 @@ Typisk spørgsmål: "sortér $n$ heltal i et givet interval — hvad er værste-
 
 #metadata(none) <th-sort-runtimes>
 #table(
-  columns: (auto, auto, auto, 1fr),
+  columns: (auto, auto, auto, auto, auto, 1fr),
   inset: 7pt,
-  align: (left, center, center, left),
+  align: (left, center, center, center, center, left),
   stroke: 0.4pt + hair,
-  table.header([*Algoritme*], [*Værste fald*], [*In-place*], [*Note*]),
-  [Insertion sort], [$Theta(n^2)$], [ja], [Bedste fald $Theta(n)$ på sorteret input.],
-  [Selection sort], [$Theta(n^2)$], [ja], [Altid $Theta(n^2)$, også på sorteret input.],
-  [Merge sort], [$Theta(n log n)$], [nej], [Altid $Theta(n log n)$. Bruger et ekstra array.],
-  [Quicksort], [$Theta(n^2)$], [ja], [Typisk $Theta(n log n)$; værst på sorteret input.],
-  [Heapsort], [$Theta(n log n)$], [ja], [Build-heap $Theta(n)$, derefter $n$ heapify.],
-  [Counting sort], [$Theta(n + k)$], [nej], [$k$ er værdiområdet. Stabil.],
-  [Radix sort], [$Theta(d(n + k))$], [nej], [$d$ gennemløb af counting sort, $k$ er cifferområdet.],
+  table.header([*Algoritme*], [*Bedste fald*], [*Gns. fald*], [*Værste fald*], [*In-place*], [*Note*]),
+  [Insertion sort], [$Theta(n)$], [$Theta(n^2)$], [$Theta(n^2)$], [ja], [Bedste fald på sorteret input; værst på omvendt sorteret. Stabil.],
+  [Selection sort], [$Theta(n^2)$], [$Theta(n^2)$], [$Theta(n^2)$], [ja], [Altid $Theta(n^2)$, uanset input.],
+  [Merge sort], [$Theta(n log n)$], [$Theta(n log n)$], [$Theta(n log n)$], [nej], [Altid $Theta(n log n)$. Kræver $Theta(n)$ ekstra array. Stabil.],
+  [Quicksort], [$Theta(n log n)$], [$Theta(n log n)$], [$Theta(n^2)$], [ja], [Bedst ved balancerede splits; værst på sorteret input eller mange dubletter (Lomuto).],
+  [Heapsort], [$Theta(n log n)$], [$Theta(n log n)$], [$Theta(n log n)$], [ja], [Altid $Theta(n log n)$. Særtilfælde: $n$ ens nøgler giver $O(n)$.],
+  [Counting sort], [$Theta(n + k)$], [$Theta(n + k)$], [$Theta(n + k)$], [nej], [Kræver heltal i kendt område $[0, k)$. Kun lineær når $k = O(n)$. Stabil.],
+  [Radix sort], [$Theta(d(n + k))$], [$Theta(d(n + k))$], [$Theta(d(n + k))$], [nej], [$d$ cifre, $k$ er cifferområdet. Kræver fast $d$, lille $k$; lineær når $d$ konstant og $k = O(n)$. Stabil.],
 )
 
 Counting sort tæller hver værdis forekomster, summerer tællingerne til en prefix-sum og placerer elementerne bagfra, så ens værdier holder rækkefølge (stabilitet/stability):
@@ -96,7 +96,7 @@ Det følgende er den rene mekaniske opskrift på hver algoritme — hvad du fysi
   [Bliv ved til der ikke er flere tal tilbage.],
 )
 
-I $[3, 1, 2]$ tager du $1$, skubber $3$ til højre og får $[1, 3, 2]$. Koster $Theta(n^2)$.
+I $[3, 1, 2]$ tager du $1$, skubber $3$ til højre og får $[1, 3, 2]$. Bedste fald $Theta(n)$ på allerede sorteret input, gennemsnit $Theta(n^2)$, værste fald $Theta(n^2)$ på omvendt sorteret input.
 
 #metadata(none) <th-sort-selection>
 #recipe(
@@ -107,7 +107,7 @@ I $[3, 1, 2]$ tager du $1$, skubber $3$ til højre og får $[1, 3, 2]$. Koster $
   [Gør det samme med resten, til kun ét tal er tilbage.],
 )
 
-I $[3, 1, 2]$ finder du $1$, bytter med $3$ og får $[1, 3, 2]$. Koster $Theta(n^2)$.
+I $[3, 1, 2]$ finder du $1$, bytter med $3$ og får $[1, 3, 2]$. Bedste, gennemsnitlige og værste fald er alle $Theta(n^2)$, uanset input — den scanner altid hele det usorterede stykke.
 
 #metadata(none) <th-sort-merge>
 #recipe(
@@ -118,7 +118,7 @@ I $[3, 1, 2]$ finder du $1$, bytter med $3$ og får $[1, 3, 2]$. Koster $Theta(n
   [Arbejd dig opad, så bidderne bliver dobbelt så store hver gang, til hele arrayet er én sorteret bid.],
 )
 
-$[3, 1]$ og $[2, 4]$ flettes ved at sammenligne forrest hver gang til $[1, 2, 3, 4]$. Koster $Theta(n log n)$.
+$[3, 1]$ og $[2, 4]$ flettes ved at sammenligne forrest hver gang til $[1, 2, 3, 4]$. Bedste, gennemsnitlige og værste fald er alle $Theta(n log n)$, uanset input. Kræver $Theta(n)$ ekstra array.
 
 #metadata(none) <th-sort-quicksort>
 #recipe(
@@ -130,7 +130,7 @@ $[3, 1]$ og $[2, 4]$ flettes ved at sammenligne forrest hver gang til $[1, 2, 3,
   [Når alle stykker har længde ét, er arrayet sorteret.],
 )
 
-Typisk $Theta(n log n)$, men $Theta(n^2)$ når pivoten lander yderst hver gang (fx på sorteret input).
+Bedste fald $Theta(n log n)$ ved balancerede splits, gennemsnit $Theta(n log n)$, værste fald $Theta(n^2)$ når pivoten lander yderst hver gang (sorteret input eller mange dubletter med Lomuto).
 
 #metadata(none) <th-sort-heapsort>
 #recipe(
@@ -142,7 +142,7 @@ Typisk $Theta(n log n)$, men $Theta(n^2)$ når pivoten lander yderst hver gang (
   [Gentag byt, skrump og synk, til heapen er tom. Så er arrayet sorteret.],
 )
 
-Build-heap koster $Theta(n)$, derefter $n$ sift-downs. Samlet $Theta(n log n)$.
+Build-heap koster $Theta(n)$, derefter $n$ sift-downs. Bedste, gennemsnitlige og værste fald er alle $Theta(n log n)$. Særtilfælde: $n$ ens nøgler giver $O(n)$, fordi hver sift-down stopper på første niveau.
 
 #metadata(none) <th-sort-counting>
 #recipe(
@@ -153,7 +153,7 @@ Build-heap koster $Theta(n)$, derefter $n$ sift-downs. Samlet $Theta(n log n)$.
   [At gå bagfra holder ens værdier i deres oprindelige rækkefølge (stabilt/stable).],
 )
 
-Koster $Theta(n + k)$, hvor $k$ er værdiområdet.
+Bedste, gennemsnitlige og værste fald er alle $Theta(n + k)$, hvor $k$ er værdiområdet. Kræver heltal i et kendt område $[0, k)$ og er kun lineær, når $k = O(n)$.
 
 #metadata(none) <th-sort-radix>
 #recipe(
@@ -164,7 +164,7 @@ Koster $Theta(n + k)$, hvor $k$ er værdiområdet.
   [Fordi hver ciffer-sortering er stabil, bevares ordenen fra de tidligere cifre. Når du har været alle cifre igennem, er arrayet sorteret.],
 )
 
-$[21, 12, 11]$ sorteres først på enere til $[21, 11, 12]$, så på tiere til $[11, 12, 21]$. Koster $Theta(d(n + k))$.
+$[21, 12, 11]$ sorteres først på enere til $[21, 11, 12]$, så på tiere til $[11, 12, 21]$. Bedste, gennemsnitlige og værste fald er alle $Theta(d(n + k))$ med $d$ cifre og cifferområde $k$. Kræver fast antal cifre $d$ og lille $k$; lineær når $d$ er konstant og $k = O(n)$.
 
 === Tilbagevendende eksamensspørgsmål
 

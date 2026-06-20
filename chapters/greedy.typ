@@ -19,6 +19,43 @@ Huffman giver hyppige symboler korte koder og sjældne symboler lange. Et symbol
   [Kodeordslængden for et symbol er dybden af dets blad.],
 )
 
+Tanken er, at sjældne tegn skal langt ned i træet og dermed have lange koder, mens hyppige tegn skal sidde tæt på roden med korte koder. Du slår altid de to mindste vægte sammen, igen og igen, til der kun er én knude tilbage. Den er roden.
+
+Koderne aflæser du bagefter ved at gå fra roden ned til hvert tegn. Venstre kant tæller som 0 og højre som 1, og antallet af kanter ned til tegnet er antallet af bit i dets kode, altså bladets dybde.
+
+Tag puljen $a:500$, $b:400$, $c:300$, $d:250$, $e:200$, $f:150$. De fem merges bliver:
+
+#table(
+  columns: (auto, auto, auto),
+  inset: 7pt,
+  align: (center, left, left),
+  stroke: 0.4pt + hair,
+  table.header([*Trin*], [*To mindste*], [*Ny knude*]),
+  [1], [$f:150 + e:200$], [$"ef" = 350$],
+  [2], [$d:250 + c:300$], [$"cd" = 550$],
+  [3], [$"ef":350 + b:400$], [$"efb" = 750$],
+  [4], [$a:500 + "cd":550$], [$"acd" = 1050$],
+  [5], [$"efb":750 + "acd":1050$], [$"rod" = 1800$],
+)
+
+Det giver træet:
+
+```
+rod
+├─ efb
+│  ├─ ef
+│  │  ├─ f
+│  │  └─ e
+│  └─ b
+└─ acd
+   ├─ a
+   └─ cd
+      ├─ c
+      └─ d
+```
+
+Vil du fx have kodelængden for $c$, tæller du kanterne fra roden: $"rod" -> "acd" -> "cd" -> c$, altså 3 kanter, så $c$ fylder 3 bit.
+
 For et symbol $s$ med frekvens $"freq"(s)$ og bladdybde $"depth"(s)$ er det samlede antal bit:
 
 #eq[$ sum_s "freq"(s) dot "depth"(s) $]

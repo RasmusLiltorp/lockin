@@ -18,6 +18,8 @@ mod arbejdet uden for, $f(n)$. Den, der vokser hurtigst, bestemmer svaret.
 
 #note(title: [Skelseksponenten])[Skelseksponenten $alpha = log_b a$ er det samme som $p$ i eksamenens svar: skriver opgaven $Theta(n^p)$, så er $p = alpha = log_b a$. Du regner altså $p$ ved at tage $log$ af $a$ med grundtal $b$ — fx $T(n) = 5 T(n/2) + n^2$ giver $p = log_2 5$. Pas på rækkefølgen: det er $log_b a$, ikke $log_a b$.]
 
+#note(title: [Regn $log_b a$ i hovedet])[Spørg dig selv: hvilken potens skal $b$ opløftes i for at give $a$? Det tal er $log_b a$. Er $a$ en potens af $b$, går det glat op: $log_2 8 = 3$ fordi $2^3 = 8$, og $log_4 2 = 0.5$ fordi $4^(0.5) = 2$. To faste holdepunkter er $log_b b = 1$ og $log_b 1 = 0$. Går det ikke op, så klem værdien inde mellem to nabopotenser: $log_2 5$ ligger mellem $log_2 4 = 2$ og $log_2 8 = 3$, altså lidt over $2$ (præcist $approx 2.32$). Til Master Theorem behøver du sjældent mere end den indklemning, for du skal bare vide, om $n^alpha$ lander til venstre eller højre for $f(n)$ på stigen.]
+
 #note(title: [Hvornår $p$ optræder])[*$p$ optræder kun når svaret er $n^alpha$ (tilfælde 1).* Vinder $f(n)$ (tilfælde 3), er svaret $f(n)$ selv — fx $Theta(n^(1/2))$ — uden noget $p$. Tommelfinger: ser du "$p = log_b a$", er det tilfælde 1; ser du en ren funktion som $n^(1/2)$ eller $n^2$, er det tilfælde 3.]
 
 #recipe(
@@ -44,7 +46,7 @@ De tre udfald handler kun om: er $n^alpha$ eller $f(n)$ størst?
       [$n^alpha$ størst], [$f(n) = sqrt(n)$], [1], [$Theta(n^alpha)$],
       [lige store], [$f(n) = n$], [2], [$Theta(n^alpha log n)$],
       [$f(n)$ størst — _en hel potens_], [$f(n) = n^2$], [3], [$Theta(f(n))$],
-      [$f(n)$ større, men _kun et $log$_], [$f(n) = n log n$], [—], [kan ikke løses],
+      [lige store med en $log$-faktor ($k = 1$)], [$f(n) = n log n$], [2], [$Theta(n^alpha log^2 n)$],
     )
   ]
 ]
@@ -56,15 +58,17 @@ For at se *hvem der er størst*, placér både $n^alpha$ og $f(n)$ på vækststi
 #note(title: [Potenser på stigen])[Et $n^c$ med større potens slår altid et med mindre ($n^2 > n^(1.5) > n$), uanset $log$-faktorer: ethvert $n^c$ slår $log n$, og enhver eksponentiel ($2^n$) slår alle $n^c$. Til Master Theorem: er $n^alpha$ længere til højre end $f(n)$, er det tilfælde 1; står de på samme plads, tilfælde 2; er $f(n)$ en *hel potens* længere til højre, tilfælde 3. Bemærk $n^alpha$ kan have skæv potens, fx $n^(log_2 5) approx n^(2.32)$, som ligger mellem $n^2$ og $n^3$.]
 
 #metadata(none) <th-rec-hole>
-#trap(title: [Hullet i tilfælde 3])[Tilfælde 3 kræver, at $f(n)$ er en *hel potens* større end $n^alpha$ (et helt trin på stigen, fx $n^2$ mod $n$). Er $f(n)$ kun en $log$-faktor større — som $f(n) = n log n$ når $n^alpha = n$ — så er den for stor til tilfælde 2 og for lille til tilfælde 3. Den falder i hullet, og Master Theorem kan *ikke* løse den.]
+#trap(title: [En $log$-faktor er tilfælde 2 — ikke et hul])[I 3. udgave faldt $f(n) = n log n$ (med $n^alpha = n$) i et hul mellem tilfælde 2 og 3 og kunne ikke løses. *Det hul er lukket i 4. udgave.* En $log$-faktor oven på $n^alpha$ er tilfælde 2 med $k = 1$, og svaret er $Theta(n log^2 n)$. Gamle eksamenssæt og løsningsforslag svarer "kan ikke løses" her — det er den gamle sætning, og det er forkert i år. Tilfælde 3 kræver stadig, at $f(n)$ er en *hel potens* større end $n^alpha$ (fx $n^2$ mod $n$); en ren $log$-faktor er ikke nok til tilfælde 3.]
 
 *Tilfælde 1 — $n^alpha$ er størst.* Rekursionen vinder, og svaret er $n^alpha$.
 
 #eq[$ "Tilfælde 1:" quad f(n) = O(n^(alpha - epsilon)) quad ==> quad T(n) = Theta(n^alpha). $]
 
-*Tilfælde 2 — de er lige store.* Uafgjort, så du lægger et $log n$ oveni.
+*Tilfælde 2 — de er lige store.* Står $f(n)$ på samme trin som $n^alpha$, lægger du et $log$ oveni. 4. udgave skriver det med en parameter $k >= 0$, så det også dækker, når $f(n)$ allerede bærer en $log$-faktor:
 
-#eq[$ "Tilfælde 2:" quad f(n) = Theta(n^alpha) quad ==> quad T(n) = Theta(n^alpha log n). $]
+#eq[$ "Tilfælde 2:" quad f(n) = Theta(n^alpha log^k n), thick k >= 0 quad ==> quad T(n) = Theta(n^alpha log^(k+1) n). $]
+
+Det velkendte tilfælde er $k = 0$: $f(n) = Theta(n^alpha)$ giver $Theta(n^alpha log n)$. Men $k = 1$ tæller med — fx $f(n) = n log n$ med $n^alpha = n$ giver $Theta(n log^2 n)$. Hver ekstra $log$ i $f$ giver én ekstra $log$ i svaret.
 
 *Tilfælde 3 — $f(n)$ er størst.* Toparbejdet vinder, og svaret er $f(n)$.
 
@@ -72,7 +76,7 @@ For at se *hvem der er størst*, placér både $n^alpha$ og $f(n)$ på vækststi
 
 I tilfælde 3 skal du tjekke regularitetsbetingelsen (regularity condition): at et $c < 1$ opfylder $a thin f(n/b) <= c thin f(n)$ for store $n$. For polynomielle $f$ holder den altid.
 
-#note(title: [Fast svarmenu])[MCQ'en har samme faste svarmenu hvert år: $Theta(1)$, $Theta(log n)$, $Theta(n^(log_4 3))$, $Theta(n)$, $Theta(n log n)$, $Theta(n^(log_3 4))$, $Theta(n^2)$, $Theta(n^2 log n)$, $Theta(n^3)$ og "kan ikke løses med Master Theorem". Løs ligningen, og find svaret i menuen.]
+#note(title: [Fast svarmenu])[De gamle sæt har samme faste svarmenu: $Theta(1)$, $Theta(log n)$, $Theta(n^(log_4 3))$, $Theta(n)$, $Theta(n log n)$, $Theta(n^(log_3 4))$, $Theta(n^2)$, $Theta(n^2 log n)$, $Theta(n^3)$ og "kan ikke løses med Master Theorem". Med 4. udgaves tilfælde 2 kan en $log^2$-grænse som $Theta(n log^2 n)$ nu også være det rigtige svar, så regn med, at menuen i år kan rumme den slags. Løs ligningen, og find svaret i menuen.]
 
 Tre situationer giver svaret *"kan ikke løses med Master Theorem"*:
 
@@ -87,7 +91,7 @@ Tre situationer giver svaret *"kan ikke løses med Master Theorem"*:
         [*Fælde*], [*Eksempel*], [*Hvorfor*],
       ),
       table.hline(stroke: 0.4pt + hair),
-      [Hullet ($log$-faktor)], [$2 T(n/2) + n log n$], [$f(n)$ kun et $log$ større end $n^alpha$ — for stor til tilfælde 2, for lille til tilfælde 3],
+      [Negativ $log$-faktor], [$2 T(n/2) + n\/log n$], [$f(n) = n^alpha \/ log n$ ligger et $log$ *under* $n^alpha$ — det svarer til $k = -1$, og tilfælde 2 kræver $k >= 0$],
       [Ulige stykker], [$T(n/3) + T(2n/3) + n$], [kaldene har ikke samme størrelse $n/b$],
       [Subtraktion], [$2 T(n-2) + n$], [problemet divideres ikke ($T(n-c)$, ikke $T(n/b)$) — der findes intet $b$],
     )
@@ -604,7 +608,7 @@ Tre situationer giver svaret *"kan ikke løses med Master Theorem"*:
   ),
   answer: [Mulighed (d): $T(n) = Theta(n log n)$ — tilfælde 3.],
   blueprint: [
-    Her ligner $f(n) = n log n$ hullet, men fordi $n^alpha$ ligger en hel potens under $n$, vinder $f(n)$ rent i tilfælde 3.
+    $f(n) = n log n$ har en $log$-faktor, men afgørelsen er ren tilfælde 3: $n^alpha$ ligger en hel potens under $n$, så $f(n)$ vinder.
 
     + *Aflæs.* Find #swap[$a$], #swap[$b$] og #swap[$f(n)$].
     + *Skelseksponent.* Regn $alpha = log_b a$ og skriv $n^alpha$.
@@ -777,7 +781,7 @@ Tre situationer giver svaret *"kan ikke løses med Master Theorem"*:
   ),
   answer: [Mulighed (i): $T(n) = Theta(n^(log_3 4))$ — tilfælde 1.],
   blueprint: [
-    De samme tre tal. Fælden her er, at $f(n) = n log n$ ligner hullet, men $n^alpha$ ligger en hel potens over, så rekursionen vinder.
+    De samme tre tal. $f(n) = n log n$ har en $log$-faktor, men $n^alpha$ ligger en hel potens over, så rekursionen vinder i tilfælde 1.
 
     + *Aflæs.* Find #swap[$a$], #swap[$b$] og #swap[$f(n)$].
     + *Skelseksponent.* Regn $alpha = log_b a$ og skriv $n^alpha$.
@@ -796,39 +800,37 @@ Tre situationer giver svaret *"kan ikke løses med Master Theorem"*:
 )
 
 #qcard(
-  tag: [Master Theorem: kan den løses? (hullet)],
+  tag: [Master Theorem: log-faktor er tilfælde 2],
   source: "MCQ juni 2025, Spm. 2 (samme menu)",
   theory: <th-rec-hole>,
   prompt: [Hvilket af nedenstående svar gælder for følgende rekursionsligning? $T(n) = #swap[$5$] dot T(n\/#swap[$5$]) + #swap[$n log n$]$],
   options: (
     [$T(n) = Theta(n^p)$ med $p = log_5 5$],
-    [$T(n) = Theta(n^p log n)$ med $p = log_5 5$],
+    [$T(n) = Theta(n^p log^2 n)$ med $p = log_5 5$],
     [Rekursionsligningen kan ikke løses med Master Theorem.],
   ),
-  answer: [Mulighed (c): rekursionsligningen *kan ikke løses* med Master Theorem.],
+  answer: [Mulighed (b): $T(n) = Theta(n log^2 n)$ — tilfælde 2 med $k = 1$.],
   blueprint: [
-    Den korte menu spørger reelt om én ting. Lander $f(n)$ i hullet eller ej?
+    Klassikeren, der i 3. udgave faldt i hullet. Med 4. udgaves $k$-led er $f(n) = n log n$ tilfælde 2.
 
     + *Aflæs.* Find #swap[$a$], #swap[$b$] og #swap[$f(n)$].
     + *Skelseksponent.* Regn $alpha = log_b a$ og skriv $n^alpha$.
-    + *Sammenlign.* Hold $f(n)$ op mod $n^alpha$. Lige store giver tilfælde 2. En hel potens fra hinanden giver tilfælde 1 eller 3.
-    + *Tjek hullet.* Er $f(n)$ kun en $log$-faktor fra $n^alpha$, falder den i hullet og kan ikke løses.
-    + *Vælg svaret.* Match med en af de tre muligheder.
+    + *Sammenlign.* Er $f(n) = Theta(n^alpha log^k n)$ med $k >= 0$, er det tilfælde 2.
+    + *Skriv svaret.* Tilfælde 2 giver $Theta(n^alpha log^(k+1) n)$.
   ],
   worked: [
     Tallene her er $a = #swap[$5$]$, $b = #swap[$5$]$ og $f(n) = #swap[$n log n$]$.
 
     + Skelseksponenten: $alpha = log_5 5 = 1$, så $n^alpha = n$.
-    + Sammenlign $n log n$ mod $n$. $f$ er størst, så det er hverken tilfælde 1 eller 2.
-    + Men $f$ er kun en $log$-faktor større, ikke en hel potens. Så $f$ er ikke $Omega(n^(1 + epsilon))$, og det er ikke tilfælde 3.
-    + Den falder i hullet mellem tilfælde 2 og 3.
+    + $f(n) = n log n = Theta(n^1 log^1 n)$, altså tilfælde 2 med $k = 1$.
+    + Svaret er $Theta(n^alpha log^(k+1) n) = Theta(n log^2 n)$.
 
-    Svar: kan ikke løses med Master Theorem.
+    Svar: $T(n) = Theta(n log^2 n)$. (I 3. udgave faldt denne i hullet og blev svaret "kan ikke løses".)
   ],
 )
 
 #qcard(
-  tag: [Master Theorem: kan den løses? (hullet)],
+  tag: [Master Theorem: kan den løses? (subtraktiv form)],
   source: "MCQ juni 2015, Spm. 4",
   theory: <th-rec-hole>,
   prompt: [Hvilket af nedenstående svar gælder for følgende rekursionsligning? $T(n) = #swap[$2$] dot T(n - #swap[$2$]) + #swap[$n$]$],
@@ -858,7 +860,7 @@ Tre situationer giver svaret *"kan ikke løses med Master Theorem"*:
 )
 
 #qcard(
-  tag: [Master Theorem: kan den løses? (hullet)],
+  tag: [Master Theorem: kan den løses? (forkert form)],
   source: "MCQ juni 2017, Spm. 4",
   theory: <th-rec-hole>,
   prompt: [Hvilket af nedenstående svar gælder for følgende rekursionsligning? $T(n) = #swap[$3$] thin T(n^(#swap[$1\/4$])) + #swap[$n^(3\/4)$]$],
@@ -891,70 +893,66 @@ Tre situationer giver svaret *"kan ikke løses med Master Theorem"*:
 )
 
 #qcard(
-  tag: [Master Theorem: kan den løses? (hullet)],
+  tag: [Master Theorem: log-faktor er tilfælde 2],
   source: "MCQ juni 2019, Spm. 3",
   theory: <th-rec-hole>,
   prompt: [Hvilket af nedenstående svar gælder for følgende rekursionsligning? $T(n) = T(n\/#swap[$4$]) + #swap[$log n$]$],
   options: (
     [$T(n) = Theta(1)$],
     [$T(n) = Theta(log n)$],
+    [$T(n) = Theta(log^2 n)$],
     [$T(n) = Theta(n^(1\/4))$],
     [$T(n) = Theta(n)$],
     [$T(n) = Theta(n log n)$],
-    [$T(n) = Theta(n^4)$],
     [Rekursionsligningen kan ikke løses med Master Theorem.],
   ),
-  answer: [Mulighed (g): rekursionsligningen *kan ikke løses* med Master Theorem.],
+  answer: [Mulighed (c): $T(n) = Theta(log^2 n)$ — tilfælde 2 med $k = 1$.],
   blueprint: [
-    Endnu et hul-tilfælde. Her er $f(n) = log n$ større end en konstant, men ikke en hel potens større.
+    Med $a = 1$ er $n^alpha = 1$, og $f(n) = log n = Theta(n^0 log^1 n)$. Det er tilfælde 2, ikke et hul.
 
     + *Aflæs.* Find #swap[$a$], #swap[$b$] og #swap[$f(n)$].
-    + *Skelseksponent.* Regn $alpha = log_b a$ og skriv $n^alpha$.
-    + *Sammenlign.* Hold $f(n)$ op mod $n^alpha$.
-    + *Tjek hullet.* Er $f(n)$ asymptotisk større end $n^alpha$, men ikke med en hel potens ($n^epsilon$), falder den i hullet mellem tilfælde 1 og 3.
-    + *Vælg svaret.* Vælg "kan ikke løses".
+    + *Skelseksponent.* Regn $alpha = log_b a$. Er $a = 1$, er $alpha = 0$ og $n^alpha = 1$.
+    + *Sammenlign.* Er $f(n) = Theta(n^alpha log^k n)$ med $k >= 0$, er det tilfælde 2.
+    + *Skriv svaret.* Tilfælde 2 giver $Theta(n^alpha log^(k+1) n)$, her $Theta(log^2 n)$.
   ],
   worked: [
     Tallene her er $a = 1$, $b = #swap[$4$]$ og $f(n) = #swap[$log n$]$.
 
     + Skelseksponenten: $alpha = log_4 1 = 0$, så $n^alpha = 1$.
-    + Sammenlign $log n$ mod $1$. $f$ er større, så det er ikke tilfælde 1.
-    + Det er heller ikke tilfælde 2 ($f$ er ikke $Theta(1)$), og ikke tilfælde 3 ($log n$ er ikke $Omega(n^epsilon)$ for noget $epsilon > 0$).
-    + Den falder i hullet mellem tilfælde 1 og 3. (Den sande løsning er $Theta(log^2 n)$, som ikke står i menuen.)
+    + $f(n) = log n = Theta(n^0 log^1 n)$, altså tilfælde 2 med $k = 1$.
+    + Svaret er $Theta(n^alpha log^(k+1) n) = Theta(1 dot log^2 n) = Theta(log^2 n)$.
 
-    Svar: kan ikke løses med Master Theorem.
+    Svar: $T(n) = Theta(log^2 n)$. (I 3. udgave manglede $k$-leddet, og den blev svaret "kan ikke løses".)
   ],
 )
 
 #qcard(
-  tag: [Master Theorem: kan den løses? (hullet)],
+  tag: [Master Theorem: svaret skiftede med 4. udgave],
   source: "MCQ juni 2015, Spm. 2",
   theory: <th-rec-hole>,
   prompt: [Hvilket af nedenstående svar gælder for følgende rekursionsligning? $T(n) = #swap[$5$] dot T(n\/#swap[$5$]) + #swap[$n log n$]$],
   options: (
     [$T(n) = Theta(n^p)$ med $p = log_5 5$],
-    [$T(n) = Theta(n^p log n)$ med $p = log_5 5$],
+    [$T(n) = Theta(n^p log^2 n)$ med $p = log_5 5$],
     [Rekursionsligningen kan ikke løses med Master Theorem.],
   ),
-  answer: [Mulighed (c): rekursionsligningen *kan ikke løses* med Master Theorem.],
+  answer: [Mulighed (b): $T(n) = Theta(n log^2 n)$ — tilfælde 2 med $k = 1$ (4. udgave). I 2015 var nøglen "kan ikke løses", fordi sættet brugte 3. udgave.],
   blueprint: [
-    Den korte menu spørger reelt om én ting. Lander $f(n)$ i hullet eller ej?
+    Samme ligning som i 2021-sættet, men her ser du, hvordan svaret flyttede sig. Før 2023 faldt $n log n$ i hullet; med 4. udgaves $k$-led er den tilfælde 2.
 
     + *Aflæs.* Find #swap[$a$], #swap[$b$] og #swap[$f(n)$].
     + *Skelseksponent.* Regn $alpha = log_b a$ og skriv $n^alpha$.
-    + *Sammenlign.* Hold $f(n)$ op mod $n^alpha$. Lige store giver tilfælde 2. En hel potens fra hinanden giver tilfælde 1 eller 3.
-    + *Tjek hullet.* Er $f(n)$ kun en $log$-faktor fra $n^alpha$, falder den i hullet og kan ikke løses.
-    + *Vælg svaret.* Match med en af de tre muligheder.
+    + *Sammenlign.* Er $f(n) = Theta(n^alpha log^k n)$ med $k >= 0$, er det tilfælde 2.
+    + *Skriv svaret.* Tilfælde 2 giver $Theta(n^alpha log^(k+1) n)$.
   ],
   worked: [
     Tallene her er $a = #swap[$5$]$, $b = #swap[$5$]$ og $f(n) = #swap[$n log n$]$.
 
     + Skelseksponenten: $alpha = log_5 5 = 1$, så $n^alpha = n$.
-    + Sammenlign $n log n$ mod $n$. $f$ er størst, så det er hverken tilfælde 1 eller 2.
-    + Men $f$ er kun en $log$-faktor større, ikke en hel potens. Så $f$ er ikke $Omega(n^(1 + epsilon))$, og det er ikke tilfælde 3.
-    + Den falder i hullet mellem tilfælde 2 og 3.
+    + $f(n) = n log n = Theta(n^1 log^1 n)$, altså tilfælde 2 med $k = 1$.
+    + Svaret er $Theta(n^alpha log^(k+1) n) = Theta(n log^2 n)$.
 
-    Svar: kan ikke løses med Master Theorem.
+    Svar: $T(n) = Theta(n log^2 n)$ til eksamen i år. (Den oprindelige 2015-nøgle svarede "kan ikke løses" under 3. udgave.)
   ],
 )
 
