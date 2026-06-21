@@ -189,10 +189,16 @@ $[21, 12, 11]$ sorteres først på enere til $[21, 11, 12]$, så på tiere til $
     + *Behold det hurtigste led.* Det led der vokser hurtigst, slår det andet ihjel. Det er svaret.
   ],
   worked: [
-    Inputtet er $n$ elementer i $[0, #swap[$n^3$])$, så $k = n^3$.
+    CountingSort koster altid $Theta(n + k)$, hvor $n$ er antallet af elementer og $k$ er størrelsen af værdiområdet (én plads i tælle-arrayet per mulig værdi). Det er en distributionssortering, så værdiområdet tæller direkte med — modsat en sammenligningssortering.
 
-    + Sæt ind i formlen: $Theta(n + k) = Theta(n + n^3)$.
-    + $n^3$ vokser hurtigere end $n$, så $n$ falder væk.
+    + *Find $n$.* Der skal sorteres $n$ elementer, så $n$ er bare $n$.
+    + *Find $k$.* Værdierne ligger i $[0, #swap[$n^3$])$, så der skal være én tæller per værdi fra $0$ til $n^3 - 1$. Det giver $k = n^3$ pladser i $C$.
+    + *Sæt ind i formlen.* $Theta(n + k) = Theta(n + n^3)$.
+    + *Sammenlign leddene.* For voksende $n$ vokser $n^3$ hurtigere end $n$: forholdet $n^3 \/ n = n^2 -> infinity$. Altså dominerer $n^3$, og $n$ falder væk.
+
+    Det dominerende led står tilbage:
+
+    #eq[$ Theta(n + n^3) = Theta(n^3) $]
 
     Svar: $Theta(n^3)$.
   ],
@@ -220,10 +226,14 @@ $[21, 12, 11]$ sorteres først på enere til $[21, 11, 12]$, så på tiere til $
     + *Behold det hurtigste led.* Er $k$ en konstant, falder den væk, og svaret er $Theta(n)$.
   ],
   worked: [
-    Input: #swap[$2, 1, 2, 1, dots.h$], altså kun værdierne $1$ og $2$.
+    Fælden her er at blande antallet af elementer sammen med antallet af forskellige værdier. CountingSort koster $Theta(n + k)$, hvor $k$ er værdiområdets størrelse — altså hvor mange forskellige værdier der kan optræde, ikke hvor tit de gentages.
 
-    + Værdierne er $1$ og $2$, så $k = 2$ — en konstant, uafhængig af $n$.
-    + Sæt ind: $Theta(n + k) = Theta(n + 2) = Theta(n)$.
+    + *Find $n$.* Rækken er #swap[$2, 1, 2, 1, dots.h$] med $n$ elementer i alt.
+    + *Find $k$.* Der optræder kun to forskellige værdier, $1$ og $2$. Tælle-arrayet behøver altså kun pladser for værdierne op til $2$, så $k = 2$ — en konstant, helt uafhængig af $n$.
+    + *Sæt ind i formlen.* $Theta(n + k) = Theta(n + 2)$.
+    + *Behold det dominerende led.* En konstant forsvinder i $Theta$: $Theta(n + 2) = Theta(n)$.
+
+    Bemærk, at gentagelserne (mange $1$- og $2$-er) ikke ændrer noget — de tæller bare op i de samme to tællere.
 
     Svar: $Theta(n)$.
   ],
@@ -250,11 +260,19 @@ $[21, 12, 11]$ sorteres først på enere til $[21, 11, 12]$, så på tiere til $
     + *Gang med $d$.* Samlet $Theta(d(n + k))$. Er $d$ en konstant, falder den væk i $Theta$.
   ],
   worked: [
-    Her er $d = 3$ cifre, hvert i $[0, #swap[$n$])$, så $k = n$.
+    RadixSort kører én stabil CountingSort per ciffer. Prisen er derfor $Theta(d(n + k))$, hvor $d$ er antallet af cifre og $k$ er cifferområdets størrelse (ikke hele tallets værdiområde).
 
-    + Ét gennemløb koster $Theta(n + n) = Theta(n)$.
-    + Tre gennemløb giver $3 dot Theta(n)$.
-    + $3$ er en konstant og forsvinder i $Theta$.
+    + *Tæl cifrene.* Tallene behandles som tre cifre, så $d = 3$.
+    + *Find cifferområdet $k$.* Hvert enkelt ciffer ligger i $[0, #swap[$n$])$, så et ciffers CountingSort skal bruge $k = n$ tællere.
+    + *Pris per gennemløb.* Ét ciffers CountingSort koster $Theta(n + k) = Theta(n + n) = Theta(2n) = Theta(n)$.
+    + *Gang med antal cifre.* Tre gennemløb: $3 dot Theta(n) = Theta(3n)$.
+    + *Behold det dominerende led.* Faktoren $3$ er en konstant og forsvinder i $Theta$.
+
+    Sat ind i formlen direkte:
+
+    #eq[$ Theta(d(n + k)) = Theta(3 (n + n)) = Theta(6 n) = Theta(n) $]
+
+    Bemærk fælden: selvom selve tallene ligger i $[0, n^3)$, gør opdelingen i tre cifre med lille cifferområde det lineært — det er netop fordelen ved radix frem for ren CountingSort her.
 
     Svar: $Theta(n)$.
   ],
@@ -281,11 +299,20 @@ $[21, 12, 11]$ sorteres først på enere til $[21, 11, 12]$, så på tiere til $
     + *Løs den.* Summen $1 + 2 + ... + n$ giver svaret.
   ],
   worked: [
-    QuickSort sammenligner, så $[0, #swap[$n^3$])$ er ligegyldigt.
+    Første spørgsmål: er algoritmen sammenligningsbaseret? QuickSort sammenligner par af elementer, så værdiområdet $[0, #swap[$n^3$])$ er ren støj — det påvirker ikke køretiden.
 
-    + Værste fald: pivoten ender yderst hver gang, så partitionerne bliver $n-1$ og $0$.
-    + Det giver rekursionen $T(n) = T(n-1) + Theta(n)$.
-    + Den summer til $sum_(i=1)^n i = Theta(n^2)$.
+    + *Find værste-falds-inputtet.* QuickSorts pris afgøres af, hvor skæve partitionerne bliver. Det værste er, at pivoten lander yderst hver gang: så ryger alle de øvrige $n-1$ elementer i den ene del, og den anden del er tom. (Det sker fx på allerede sorteret input med Lomuto.)
+    + *Skriv rekursionen op.* Et PARTITION-kald på $n$ elementer koster $Theta(n)$ (det løber hele stykket igennem). Derefter er der ét rekursivt kald på $n-1$ elementer og ét på $0$:
+
+    #eq[$ T(n) = T(n-1) + T(0) + Theta(n) = T(n-1) + Theta(n) $]
+
+    + *Fold rekursionen ud.* Hvert niveau tager ét element mindre, og PARTITION-prisen falder tilsvarende:
+
+    #eq[$ T(n) = Theta(n) + Theta(n-1) + Theta(n-2) + dots.h + Theta(1) = Theta(sum_(i=1)^n i) $]
+
+    + *Læg summen sammen.* Den aritmetiske sum er
+
+    #eq[$ sum_(i=1)^n i = (n(n+1)) / 2 = Theta(n^2) $]
 
     Svar: $Theta(n^2)$.
   ],
@@ -313,11 +340,29 @@ $[21, 12, 11]$ sorteres først på enere til $[21, 11, 12]$, så på tiere til $
     + *Løs den.* Summen $1 + 2 + dots.h + n$ giver $Theta(n^2)$.
   ],
   worked: [
-    Input: #swap[$2, 1, 2, 1, dots.h$] — kun to forskellige nøgler.
+    Standard CLRS-QuickSort bruger Lomuto-partition med sidste element som pivot og sammenligner med $<=$. Den har ingen tre-vejs-deling, så ens nøgler gør ingen forskel — alle elementer $<= $ pivoten ryger til venstre, også dem der er lig pivoten. Med kun to forskellige værdier giver det maksimalt skæve splits.
 
-    + Standard QuickSort har ingen særbehandling af ens elementer, så hver partition bliver maksimalt skæv.
-    + Kører man Lomuto-QuickSort, er sammenligningstallet præcis $n^2\/4$ ($n=4 -> 4$, $8 -> 16$, $16 -> 64$).
-    + Det giver rekursionen $T(n) = T(n-1) + Theta(n)$, der summer til $Theta(n^2)$.
+    Lad os se det konkret på det lille input $[2, 1, 2, 1]$ ($n = 4$). Pivoten er altid sidste element:
+
+    ```
+    [2, 1, 2, 1]   pivot = A[4] = 1
+      j=1: 2 > 1  spring over
+      j=2: 1 <=1  swap ind   -> [1, 2, 2, 1]
+      j=3: 2 > 1  spring over
+      swap pivot ind          -> [1, 1, 2, 2]   pivot lander paa idx 2
+    ```
+
+    Pivoten $1$ ender på indeks $2$. Venstre del er $[1]$ (ét element), højre del er $[2, 2]$ (to elementer) — altså et split på $1$ og $2$ ud af $3$ resterende. Det er det skæve mønster, der gentager sig hele vejen ned.
+
+    + *Skriv rekursionen op.* Fordi hvert PARTITION-kald kun skærer en konstant brøkdel fra og efterlader $Theta(n)$ i den ene del, koster det rekursivt:
+
+    #eq[$ T(n) = T(n-1) + Theta(n) $]
+
+    + *Løs den.* Foldet ud bliver det en aritmetisk sum:
+
+    #eq[$ T(n) = Theta(n) + Theta(n-1) + dots.h + Theta(1) = Theta(sum_(i=1)^n i) = Theta(n^2) $]
+
+    + *Tjek med sammenligningstallet.* Et fuldt Lomuto-trace giver $n^2 \/ 4$ sammenligninger: $n = 4 -> 4$, $n = 8 -> 16$, $n = 16 -> 64$. Det vokser kvadratisk, præcis som $Theta(n^2)$ forudsiger.
 
     Svar: $Theta(n^2)$.
   ],
@@ -348,15 +393,17 @@ $[21, 12, 11]$ sorteres først på enere til $[21, 11, 12]$, så på tiere til $
     + *Saml svaret.* Alle med $Theta(n^2)$ i værste fald.
   ],
   worked: [
-    Her er $k = #swap[$n^2$]$. Jeg går listen igennem.
+    Værdiområdet er $[0, #swap[$n^2$])$, så $k = n^2$. Det betyder kun noget for de to distributionssorteringer; for de sammenligningsbaserede er værdiområdet støj, og kun det velkendte værste fald i $n$ tæller. Jeg går listen igennem én linje ad gangen.
 
-    - CountingSort: $k = n^2$ dominerer, så $Theta(n^2)$. Ja.
-    - RadixSort, to cifre i base $n$: to gennemløb à $Theta(n)$. Nej.
-    - MergeSort: altid $Theta(n log n)$. Nej.
-    - Rød-sort TreeSort: $n$ indsættelser à $O(log n)$, altså $Theta(n log n)$. Nej.
-    - Ubalanceret TreeSort: sorteret input degenererer til en sti, og indsættelse $i$ koster $i$. Summen $sum_(i=1)^n i = Theta(n^2)$. Ja.
-    - QuickSort: $Theta(n^2)$. Ja.
-    - InsertionSort: $Theta(n^2)$. Ja.
+    - *CountingSort* — distributionssortering, $Theta(n + k)$. Med $k = n^2$ er $Theta(n + n^2) = Theta(n^2)$, fordi $n^2$ dominerer $n$ ($n^2 \/ n = n -> infinity$). *Ja.*
+    - *RadixSort, to cifre i base $n$* — to stabile counting sorts à $Theta(n + k)$ med cifferområde $k = n$, altså $Theta(n + n) = Theta(n)$ per gennemløb. To gennemløb: $2 dot Theta(n) = Theta(n)$. *Nej.*
+    - *MergeSort* — deler altid midt over og fletter i $Theta(n)$ per niveau over $log n$ niveauer: $Theta(n log n)$ uanset input. *Nej.*
+    - *TreeSort med rød-sort træ* — træet er balanceret, så hver af de $n$ indsættelser koster $O(log n)$. Inorder-gennemløbet er $Theta(n)$. Samlet $Theta(n log n)$. *Nej.*
+    - *TreeSort med ubalanceret søgetræ* — på allerede sorteret input degenererer træet til en kæde (hver ny nøgle hænges yderst til højre). Indsættelse nummer $i$ vandrer forbi de $i - 1$ tidligere knuder, så prisen er $sum_(i=1)^n (i - 1) = (n(n-1)) / 2 = Theta(n^2)$. *Ja.*
+    - *QuickSort* — Lomuto med sidste element som pivot rammer maksimalt skæve splits på sorteret input: $T(n) = T(n-1) + Theta(n) = Theta(sum_(i=1)^n i) = Theta(n^2)$. *Ja.*
+    - *InsertionSort* — på omvendt sorteret input skal hvert element skubbes forbi alle de tidligere: $sum_(i=1)^n (i-1) = Theta(n^2)$. *Ja.*
+
+    De fire med $Theta(n^2)$ i værste fald er altså CountingSort, ubalanceret TreeSort, QuickSort og InsertionSort.
 
     Svar: CountingSort, ubalanceret TreeSort, QuickSort og InsertionSort.
   ],
@@ -385,16 +432,28 @@ $[21, 12, 11]$ sorteres først på enere til $[21, 11, 12]$, så på tiere til $
     + *Til sidst.* Swap $A[i+1]$ med pivoten $A[r]$. Nu står pivoten på sin endelige plads.
   ],
   worked: [
-    Pivot $x = A[7] = 3$, start $i = 0$. Array: #swap[$[6, 2, 4, 5, 1, 7, 3]$].
+    Pivoten er sidste element, $x = A[7] = 3$. Grænsen starter på $i = p - 1 = 0$, altså lige før udsnittet, og $j$ løber fra $1$ til $6$. Reglen: rammer $j$ et tal $<= 3$, så ryk $i$ ét frem og swap $A[i]$ med $A[j]$; ellers lad det ligge.
 
-    - $j = 1$: $6 > 3$, spring over.
-    - $j = 2$: $2 <= 3$, $i = 1$, swap $A[1]$ og $A[2]$ #sym.arrow.r $[2, 6, 4, 5, 1, 7, 3]$.
-    - $j = 3$: $4 > 3$, spring over.
-    - $j = 4$: $5 > 3$, spring over.
-    - $j = 5$: $1 <= 3$, $i = 2$, swap $A[2]$ og $A[5]$ #sym.arrow.r $[2, 1, 4, 5, 6, 7, 3]$.
-    - $j = 6$: $7 > 3$, spring over.
+    Hele arrayet vises på hver linje, så swappene er nemme at følge:
 
-    Til sidst swap $A[i+1] = A[3]$ med $A[7]$ #sym.arrow.r $[2, 1, 3, 5, 6, 7, 4]$.
+    ```
+    Start: [ 6, 2, 4, 5, 1, 7, 3 ]   pivot x = A[7] = 3, i = 0
+
+    j=1:   [ 6, 2, 4, 5, 1, 7, 3 ]    6 > 3:  gør intet
+    j=2:   [ 2, 6, 4, 5, 1, 7, 3 ]    2 <= 3: i=1, swap idx 1 & 2
+    j=3:   [ 2, 6, 4, 5, 1, 7, 3 ]    4 > 3:  gør intet
+    j=4:   [ 2, 6, 4, 5, 1, 7, 3 ]    5 > 3:  gør intet
+    j=5:   [ 2, 1, 4, 5, 6, 7, 3 ]    1 <= 3: i=2, swap idx 2 & 5
+    j=6:   [ 2, 1, 4, 5, 6, 7, 3 ]    7 > 3:  gør intet
+    ```
+
+    Efter løkken er $i = 2$, så alle tal $<= 3$ ($2$ og $1$) ligger forrest på indeks $1..2$. Sidste skridt swapper pivoten $A[7]$ med det første store tal, $A[i+1] = A[3] = 4$, så pivoten lander på sin endelige plads:
+
+    ```
+    Slut:  [ 2, 1, 3, 5, 6, 7, 4 ]   swap pivot idx 7 & idx 3
+    ```
+
+    Pivoten $3$ står nu på indeks $3$ med mindre tal til venstre og større til højre.
 
     Svar: $A = [2, 1, 3, 5, 6, 7, 4]$.
   ],
@@ -421,13 +480,33 @@ $[21, 12, 11]$ sorteres først på enere til $[21, 11, 12]$, så på tiere til $
     + *Splejs.* Kun indeks $p..r$ ændrer sig; de uberørte ender står som før.
   ],
   worked: [
-    Stykket er indeks 4..13, pivot $x = A[13] = 13$. Elementerne $A[4..12] = 14, 9, 18, 6, 1, 26, 15, 30, 7$.
+    Stykket er indeks 4..13, så pivoten er $x = A[13] = 13$. Grænsen $i$ starter på $3$, lige uden for stykket, og $j$ løber fra $4$ til $12$. Reglen: rammer $j$ et tal $<= 13$, så ryk $i$ ét frem og swap $A[i]$ med $A[j]$; ellers lad det ligge.
 
-    + Værdier $<= 13$ i rækkefølge er $9, 6, 1, 7$, der skubbes frem i stykket.
-    + Værdier $> 13$ ($14, 18, 26, 15, 30$) skubbes til højre.
-    + Efter $j$-løkken og det sidste pivot-swap bliver stykket 4..13 til $9, 6, 1, 7, 13, 26, 15, 30, 14, 18$.
+    Herunder vises kun delstykket (indeks 4..13), så de enkelte swaps er nemme at følge:
 
-    Splejs med de uberørte ender: $A = 21, 17, 28, thin 9, 6, 1, 7, 13, 26, 15, 30, 14, 18, thin 19, 2$.
+    ```
+    Start: [ 14,  9, 18,  6,  1, 26, 15, 30,  7, 13 ]
+
+    j=4:   [ 14,  9, 18,  6,  1, 26, 15, 30,  7, 13 ]   14 > 13: gør intet
+    j=5:   [  9, 14, 18,  6,  1, 26, 15, 30,  7, 13 ]    9 <= 13: swap idx 4 & 5
+    j=6:   [  9, 14, 18,  6,  1, 26, 15, 30,  7, 13 ]   18 > 13: gør intet
+    j=7:   [  9,  6, 18, 14,  1, 26, 15, 30,  7, 13 ]    6 <= 13: swap idx 5 & 7
+    j=8:   [  9,  6,  1, 14, 18, 26, 15, 30,  7, 13 ]    1 <= 13: swap idx 6 & 8
+    j=9:   [  9,  6,  1, 14, 18, 26, 15, 30,  7, 13 ]   26 > 13: gør intet
+    j=10:  [  9,  6,  1, 14, 18, 26, 15, 30,  7, 13 ]   15 > 13: gør intet
+    j=11:  [  9,  6,  1, 14, 18, 26, 15, 30,  7, 13 ]   30 > 13: gør intet
+    j=12:  [  9,  6,  1,  7, 18, 26, 15, 30, 14, 13 ]    7 <= 13: swap idx 7 & 12
+    ```
+
+    Efter løkken står alle tal $<= 13$ forrest i stykket (indeks 4..7), og $i$ er endt på $7$. Sidste skridt swapper pivoten $A[13]$ med det første store tal, $A[i+1] = A[8]$, så den lander mellem de små og de store:
+
+    ```
+    Slut:  [  9,  6,  1,  7, 13, 26, 15, 30, 14, 18 ]   swap pivot idx 13 & idx 8
+    ```
+
+    Splejs så de uberørte ender på igen ($21, 17, 28$ foran, $19, 2$ bagved):
+
+    #eq[$ A = 21, 17, 28, thin 9, 6, 1, 7, 13, 26, 15, 30, 14, 18, thin 19, 2 $]
 
     Svar: $A = [21, 17, 28, 9, 6, 1, 7, 13, 26, 15, 30, 14, 18, 19, 2]$.
   ],
@@ -496,17 +575,28 @@ $[21, 12, 11]$ sorteres først på enere til $[21, 11, 12]$, så på tiere til $
     + *Saml svaret.* Alle værdier der opfylder det.
   ],
   worked: [
-    Array: #swap[$[2, 1, 3, 4, 6, 5, 8, 7, 9]$]. Tjek hver $p$ med krav $A[p] = p$, venstre alle $< p$, højre alle $> p$:
+    Lomuto efterlader pivoten på sin endelige sorterede plads $q$: alt på indeks $1..q-1$ er $<$ pivoten, og alt på $q+1..9$ er $>$ pivoten. Da arrayet indeholder netop ${1, dots.h, 9}$, er den sorterede plads for værdien $v$ præcis indeks $v$. En værdi $v$ kan altså kun have været pivot, hvis den nu står på indeks $v$ med alt mindre til venstre og alt større til højre. Det er kun en nødvendig betingelse, men det er det opgaven beder os tjekke.
+
+    Array med indeks under hvert tal:
+
+    ```
+    idx:  1  2  3  4  5  6  7  8  9
+    A  :  2  1  3  4  6  5  8  7  9
+    ```
+
+    Tjek hver $p$ med kravet $A[p] = p$, venstre alle $< p$, højre alle $> p$:
 
     - $p = 1$: $A[1] = 2 != 1$. Nej.
     - $p = 2$: $A[2] = 1 != 2$. Nej.
-    - $p = 3$: $A[3] = 3$; venstre ${2, 1}$ alle $< 3$, højre alle $> 3$. Ja.
-    - $p = 4$: $A[4] = 4$; venstre ${2, 1, 3}$ alle $< 4$, højre alle $> 4$. Ja.
+    - $p = 3$: $A[3] = 3$; venstre ${2, 1}$ alle $< 3$, højre ${4, 6, 5, 8, 7, 9}$ alle $> 3$. Ja.
+    - $p = 4$: $A[4] = 4$; venstre ${2, 1, 3}$ alle $< 4$, højre ${6, 5, 8, 7, 9}$ alle $> 4$. Ja.
     - $p = 5$: $A[5] = 6 != 5$. Nej.
     - $p = 6$: $A[6] = 5 != 6$. Nej.
     - $p = 7$: $A[7] = 8 != 7$. Nej.
     - $p = 8$: $A[8] = 7 != 8$. Nej.
-    - $p = 9$: $A[9] = 9$; venstre alle $< 9$, højre er tom. Ja.
+    - $p = 9$: $A[9] = 9$; venstre ${2, 1, 3, 4, 6, 5, 8, 7}$ alle $< 9$, højre er tom. Ja.
+
+    Læg mærke til at parrene $(6, 5)$ og $(8, 7)$ står "byttet om": de kan ikke selv have været pivot, for ingen af dem står på sin sorterede plads. Kun $3$, $4$ og $9$ opfylder alle tre krav.
 
     Svar: $3$, $4$ og $9$.
   ],
@@ -534,11 +624,32 @@ $[21, 12, 11]$ sorteres først på enere til $[21, 11, 12]$, så på tiere til $
     + *Læs svaret af det rigtige $C$.* Det opgaven spørger om (her summen) regnes på det kumulative $C$, ikke det rå.
   ],
   worked: [
-    Array: #swap[$[2, 0, 6, 2, 3, 5, 5, 1, 2]$], værdier $0..6$.
+    Array: #swap[$[2, 0, 6, 2, 3, 5, 5, 1, 2]$], værdier $0..6$. CLRS overskriver $C$ med prefix-summer inden placeringen, så det er det kumulative $C$ vi skal summere — ikke de rå tællinger.
 
-    + Rå tællinger: $C = [1, 1, 3, 1, 0, 2, 1]$, sum $9$.
-    + Prefix-summer, $C[i] "+=" C[i-1]$: $C = [1, 2, 5, 6, 6, 8, 9]$.
-    + Summen er $1 + 2 + 5 + 6 + 6 + 8 + 9 = 37$.
+    + *Tæl forekomster.* Løb $A$ igennem og tæl hver værdi (indeks $0..6$ i $C$):
+
+      ```
+      værdi:  0   1   2   3   4   5   6
+      tæl:    1   1   3   1   0   2   1
+      ```
+
+      Tjek: $1 + 1 + 3 + 1 + 0 + 2 + 1 = 9 = n$, som det skal være efter tælle-fasen.
+
+    + *Lav prefix-summer.* Sæt $C[i] "+=" C[i-1]$ fra venstre, så $C[i]$ bliver antallet af værdier $<= i$:
+
+      ```
+      C[0] = 1
+      C[1] = 1 + 1 = 2
+      C[2] = 2 + 3 = 5
+      C[3] = 5 + 1 = 6
+      C[4] = 6 + 0 = 6
+      C[5] = 6 + 2 = 8
+      C[6] = 8 + 1 = 9
+      ```
+
+      Altså $C = [1, 2, 5, 6, 6, 8, 9]$.
+
+    + *Summér det kumulative $C$.* $1 + 2 + 5 + 6 + 6 + 8 + 9 = 37$.
 
     Svar: $37$.
   ],
@@ -568,10 +679,23 @@ $[21, 12, 11]$ sorteres først på enere til $[21, 11, 12]$, så på tiere til $
     + *Aflæs $n$.* Læs antallet af elementer i opgaven.
   ],
   worked: [
-    Array: #swap[$[2, 2, 5, 1, 3, 5, 2, 3, 2, 5, 2]$], værdier $0..5$.
+    Array: #swap[$[2, 2, 5, 1, 3, 5, 2, 3, 2, 5, 2]$], værdier $0..5$. Opgaven spørger om $C$ ved terminering af tælle-fasen, hvor $C[i]$ er antallet af elementer lig $i$ (ikke prefix-summen).
 
-    + Tællinger: værdi $0 -> 0$, $1 -> 1$, $2 -> 5$, $3 -> 2$, $4 -> 0$, $5 -> 3$, altså $C = [0, 1, 5, 2, 0, 3]$.
-    + Hvert af de $11$ elementer øger præcis én tæller, så summen er $n = 11$.
+    + *Tæl forekomster.* Gå rækken igennem og før streg ved hver værdi:
+
+      - værdi $0$: optræder $0$ gange.
+      - værdi $1$: optræder $1$ gang (det ene $1$).
+      - værdi $2$: optræder $5$ gange (positionerne $1, 2, 7, 9, 11$).
+      - værdi $3$: optræder $2$ gange (positionerne $5, 8$).
+      - værdi $4$: optræder $0$ gange.
+      - værdi $5$: optræder $3$ gange (positionerne $3, 6, 10$).
+
+      ```
+      værdi:  0   1   2   3   4   5
+      C[i]:   0   1   5   2   0   3
+      ```
+
+    + *Summér.* $0 + 1 + 5 + 2 + 0 + 3 = 11$. Det er ingen tilfældighed: hvert af de $n$ input-elementer øger præcis én tæller, så summen af alle tællere er altid $n$. Her $n = 11$.
 
     Svar: $11$.
   ],
@@ -600,11 +724,42 @@ $[21, 12, 11]$ sorteres først på enere til $[21, 11, 12]$, så på tiere til $
     + *Match.* Find den i svarmenuen.
   ],
   worked: [
+    LSD radix sort kører en stabil counting sort per ciffer, fra enere og opefter. Efter $k$ gennemløb er arrayet sorteret på de $k$ laveste cifre, og elementer med samme ciffer beholder den indbyrdes orden fra det forrige gennemløb. Tre af fire iterationer betyder enere, tiere og hundreder.
+
     Start: #swap[$[2452, 5363, 4433, 1413, 2433, 3222, 2121]$].
 
-    + Gennemløb 1 (enere): cifre $2, 3, 3, 3, 3, 2, 1 ->$ $[2121, 2452, 3222, 5363, 4433, 1413, 2433]$.
-    + Gennemløb 2 (tiere): stabil sortering giver $[1413, 2121, 3222, 4433, 2433, 2452, 5363]$.
-    + Gennemløb 3 (hundreder): cifre $4, 1, 2, 4, 4, 4, 3 ->$ $[2121, 3222, 5363, 1413, 4433, 2433, 2452]$.
+    + *Gennemløb 1 — enere.* Enercifrene er $2, 3, 3, 3, 3, 2, 1$. Grupér stabilt efter ener (bevar rækkefølgen inden for hver gruppe):
+
+      ```
+      ener 1:  2121
+      ener 2:  2452, 3222
+      ener 3:  5363, 4433, 1413, 2433
+      ```
+
+      Sat efter hinanden: $[2121, 2452, 3222, 5363, 4433, 1413, 2433]$.
+
+    + *Gennemløb 2 — tiere.* Tiercifrene af det nye array ($2121, 2452, 3222, 5363, 4433, 1413, 2433$) er $2, 5, 2, 6, 3, 1, 3$. Grupér stabilt efter tier:
+
+      ```
+      tier 1:  1413
+      tier 2:  2121, 3222
+      tier 3:  4433, 2433
+      tier 5:  2452
+      tier 6:  5363
+      ```
+
+      Sat efter hinanden: $[1413, 2121, 3222, 4433, 2433, 2452, 5363]$.
+
+    + *Gennemløb 3 — hundreder.* Hundredecifrene af det array ($1413, 2121, 3222, 4433, 2433, 2452, 5363$) er $4, 1, 2, 4, 4, 4, 3$. Grupér stabilt efter hundrede:
+
+      ```
+      hund. 1:  2121
+      hund. 2:  3222
+      hund. 3:  5363
+      hund. 4:  1413, 4433, 2433, 2452
+      ```
+
+      Sat efter hinanden: $[2121, 3222, 5363, 1413, 4433, 2433, 2452]$.
 
     Svar: $[2121, 3222, 5363, 1413, 4433, 2433, 2452]$.
   ],
@@ -631,10 +786,31 @@ $[21, 12, 11]$ sorteres først på enere til $[21, 11, 12]$, så på tiere til $
     + *Aflæs.* Skriv arrayet ned efter det andet gennemløb.
   ],
   worked: [
+    LSD radix sort kører en stabil counting sort per ciffer, fra enere og opefter. To af fire iterationer betyder de to laveste cifre: enere, så tiere.
+
     Start: #swap[$[0113, 4102, 4440, 2240, 2213, 2340]$].
 
-    + Gennemløb 1 (enere, stabil): cifre $3, 2, 0, 0, 3, 0 ->$ $[4440, 2240, 2340, 4102, 0113, 2213]$.
-    + Gennemløb 2 (tiere, stabil): tiere er $4, 4, 4, 0, 1, 1$. Grupér med bevaret orden: tier $0 ->$ 4102; tier $1 ->$ 0113, 2213; tier $4 ->$ 4440, 2240, 2340.
+    + *Gennemløb 1 — enere.* Enercifrene er $3, 2, 0, 0, 3, 0$. Grupér stabilt efter ener (bevar rækkefølgen inden for hver gruppe):
+
+      ```
+      ener 0:  4440, 2240, 2340
+      ener 2:  4102
+      ener 3:  0113, 2213
+      ```
+
+      Sat efter hinanden: $[4440, 2240, 2340, 4102, 0113, 2213]$.
+
+    + *Gennemløb 2 — tiere.* Tiercifrene af det nye array ($4440, 2240, 2340, 4102, 0113, 2213$) er $4, 4, 4, 0, 1, 1$. Grupér stabilt efter tier:
+
+      ```
+      tier 0:  4102
+      tier 1:  0113, 2213
+      tier 4:  4440, 2240, 2340
+      ```
+
+      Sat efter hinanden: $[4102, 0113, 2213, 4440, 2240, 2340]$.
+
+    Bemærk, at $4440, 2240, 2340$ stadig står i den rækkefølge, de fik i gennemløb 1 — det er stabiliteten, der bærer den orden videre.
 
     Svar: $[4102, 0113, 2213, 4440, 2240, 2340]$.
   ],
@@ -661,11 +837,26 @@ $[21, 12, 11]$ sorteres først på enere til $[21, 11, 12]$, så på tiere til $
     + *Mange inversioner?* Er de $Theta(n^2)$, er svaret $Theta(n^2)$.
   ],
   worked: [
-    Input: #swap[$2, 1, 2, 1, dots.h$].
+    InsertionSort tager ét element ad gangen og skubber det til venstre forbi alle større elementer i det allerede sorterede præfiks. Prisen på element $i$ er derfor antallet af elementer foran det, der er større end det — antallet af inversioner det indgår i. Samlet tid er $Theta(n + "antal inversioner")$.
 
-    + Når det $k$.-te "$1$" indsættes, sidder de $k$ tidligere "$2$"-er allerede forrest i det sorterede præfiks. Det "$1$" skal skifte forbi dem alle.
-    + Samlede skift: $1 + 2 + dots.h + n\/2 approx n^2\/8$. Et trace bekræfter: $n = 4, 8, 16$ giver $3, 10, 36$ skift.
-    + Inputtet har altså $Theta(n^2)$ inversioner, og samlet tid $Theta(n^2)$.
+    Input: #swap[$2, 1, 2, 1, dots.h$]. Lad os først følge det lille tilfælde $[2, 1, 2, 1]$ ($n = 4$). Det venstre stykke er det sorterede præfiks, og tallet i hånden står i parentes:
+
+    ```
+    Start:      [ 2 | 1, 2, 1 ]
+    indsæt (1): 1 < 2, skub 2 til højre   -> [ 1, 2 | 2, 1 ]   1 skift
+    indsæt (2): 2 >= 2, bliver hvor det er -> [ 1, 2, 2 | 1 ]   0 skift
+    indsæt (1): 1 < 2,2 skub begge frem    -> [ 1, 1, 2, 2 ]    2 skift
+    ```
+
+    Det giver $1 + 0 + 2 = 3$ skift for $n = 4$.
+
+    + *Hvor mange skift i alt?* Når det $k$.-te "$1$" skal ind, ligger der allerede $k$ stykker "$2$" forrest i præfikset (alle de $2$-er, der kom før), og det "$1$" må skubbe forbi dem alle — $k$ skift. De "$2$"-er, der indsættes, koster $0$, for de er $>=$ alt foran sig.
+    + *Summér.* Der er $n\/2$ stykker "$1$", det $k$.-te koster $k$ skift:
+
+      #eq[$ sum_(k=1)^(n\/2) k = ((n\/2)(n\/2 + 1)) / 2 approx n^2 / 8 $]
+
+      Et trace bekræfter væksten: $n = 4, 8, 16$ giver $3, 10, 36$ skift — kvadratisk.
+    + *Konkludér.* Inputtet har $Theta(n^2)$ inversioner, så samlet tid er $Theta(n^2)$.
 
     Svar: $Theta(n^2)$.
   ],
@@ -693,11 +884,17 @@ $[21, 12, 11]$ sorteres først på enere til $[21, 11, 12]$, så på tiere til $
     + *Læg sammen.* $O(n)$ kald à $O(1)$ giver $O(n)$.
   ],
   worked: [
-    Input: #swap[$n$] ens elementer.
+    HEAPSORT er to faser: BUILD-MAX-HEAP, der kalder SIFT-DOWN på de $floor(n\/2)$ indre knuder nedefra og op, og derefter $n - 1$ runder af EXTRACT-MAX, der hver bytter roden ned bagest og kalder én SIFT-DOWN på den nye rod. Prisen for HEAPSORT er summen af alle disse SIFT-DOWN-kald, og en SIFT-DOWN koster så mange niveauer, som knuden faktisk synker.
 
-    + Med ens elementer bliver intet swap nogensinde tvunget — en knude er aldrig strengt mindre end et barn.
-    + Hver SIFT-DOWN sammenligner knuden med op til to børn og stopper på første niveau, altså $O(1)$.
-    + Der er $O(n)$ sift-downs ($n\/2$ i build, $n-1$ i udtræk), hver $O(1)$.
+    Input: #swap[$n$] ens elementer, fx alle lig $v$.
+
+    + *Hvornår synker en knude?* SIFT-DOWN bytter kun, hvis knuden er strengt mindre end et af sine børn. Den finder det største barn og stopper, så snart knuden er $>=$ begge børn.
+    + *Med ens nøgler.* Forælder og børn er alle $v$, så $v >= v$ er altid sandt. Ingen knude er nogensinde strengt mindre end et barn, så hvert SIFT-DOWN-kald laver sine op til to sammenligninger på første niveau og stopper med det samme — $O(1)$ per kald. (Arrayet er i forvejen en gyldig max-heap og ændrer sig aldrig.)
+    + *Tæl kaldene.* Build-fasen laver $floor(n\/2)$ kald, udtræk-fasen $n - 1$ kald, altså $O(n)$ kald i alt — hver $O(1)$:
+
+      #eq[$ (floor(n\/2) + (n-1)) dot O(1) = O(n) $]
+
+    Det er særtilfældet: normalt koster en SIFT-DOWN op til $O(log n)$, men her stopper alle på første niveau.
 
     Svar: $O(n)$.
   ],

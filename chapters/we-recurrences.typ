@@ -22,8 +22,23 @@ De skriftlige eksamener åbner næsten altid med en rekursionsopgave (recurrence
     + *Vælg tilfælde.* $c < alpha$ giver tilfælde 1 ($Theta(n^alpha)$), $c = alpha$ giver tilfælde 2 ($Theta(n^alpha log n)$), $c > alpha$ giver tilfælde 3 ($Theta(f(n))$).
   ],
   worked: [
-    + (i) $a = 2$, $b = 3$, $f(n) = n$. Skelseksponenten: $alpha = log_3 2 approx 0.63$. Her er $c = 1 > 0.63$ med en hel potens, så $f$ vinder. Tilfælde 3. Regularitet (regularity condition): $2(n/3) = (2/3)n <= c thin n$ med $c = 2/3 < 1$. Svar: $T(n) = Theta(n)$.
-    + (ii) $a = 32$, $b = 4$, $f(n) = n^(2.5)$. Skelseksponenten: $alpha = log_4 32 = 5/2 = 2.5$. Her er $c = 2.5 = alpha$, så $f(n) = Theta(n^alpha)$. Tilfælde 2. Svar: $T(n) = Theta(n^(2.5) log n)$.
+    *(i)* Aflæs: $a = 2$, $b = 3$, $f(n) = n = n^1$, altså $c = 1$.
+
+    Skelseksponent:
+    #eq[$ alpha = log_b a = log_3 2 = (ln 2)/(ln 3) approx 0.631, quad n^alpha = n^(0.631). $]
+
+    Sammenlign $f(n) = n^1$ mod $n^alpha = n^(0.631)$. Da $c = 1 > 0.631 = alpha$, og gabet $1 - 0.631 = 0.369 > 0$ er en hel positiv potens, gælder $f(n) = Omega(n^(alpha + epsilon))$ med f.eks. $epsilon = 0.3$. Så $f$ vinder polynomielt: tilfælde 3.
+
+    Regularitet (regularity condition): vi skal finde $d < 1$, så $a thin f(n/b) <= d thin f(n)$:
+    #eq[$ a thin f(n/b) = 2 dot (n/3) = 2/3 n = 0.667 thin n <= d thin n, quad d = 2/3 < 1. qed $]
+    Betingelsen holder. Svar: $T(n) = Theta(f(n)) = Theta(n)$.
+
+    *(ii)* Aflæs: $a = 32$, $b = 4$, $f(n) = n^(2.5)$, altså $c = 2.5$.
+
+    Skelseksponent: skriv $32 = 2^5$ og $4 = 2^2$, så
+    #eq[$ alpha = log_4 32 = (log_2 32)/(log_2 4) = 5/2 = 2.5, quad n^alpha = n^(2.5). $]
+
+    Sammenlign $f(n) = n^(2.5)$ mod $n^alpha = n^(2.5)$. Da $c = 2.5 = alpha$, er $f(n) = Theta(n^alpha)$: tilfælde 2. Svar: $T(n) = Theta(n^alpha log n) = Theta(n^(2.5) log n)$.
   ],
 )
 

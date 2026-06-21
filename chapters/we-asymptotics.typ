@@ -24,11 +24,23 @@ To slags opgaver her. Den ene beder dig afgøre rene $O$-, $Theta$-, $o$- og $om
     + *Brug vækststigen ved tvivl.* $log n < sqrt(n) < n < n log n < n^2 < dots.h < 2^n < n!$.
   ],
   worked: [
-    + $n^2\/n = n -> oo$, så $n^2$ vokser mindst lige så hurtigt som $n$. Sand.
-    + $n\/n^2 = 1\/n -> 0$, så $n in o(n^2)$, og dermed $n in.not Theta(n^2)$. Falsk.
-    + $(n log n)\/n^2 = (log n)\/n -> 0$, så $n log n in o(n^2)$. Sand.
-    + $(log n)\/sqrt(n) -> 0$, så $log n in O(sqrt(n))$ (faktisk $o$). Sand.
-    + $n!\/2^n -> oo$, fordi hver ny faktor $k$ til sidst overstiger $2$. Sand.
+    Hver test er forholdet $f(n)\/g(n)$ for $n -> oo$. Husk: grænse $> 0$ (gerne $oo$) giver $Omega$; grænse $oo$ giver $omega$; grænse $0$ giver $o$; endelig grænse giver $O$; konstant $> 0$ giver $Theta$.
+
+    + $f = n^2, g = n$. Forholdet:
+      #eq[$ (n^2)/n = n -> oo. $]
+      Grænsen er $oo > 0$, så $n^2 in Omega(n)$. *Sand.*
+    + $f = n, g = n^2$. Forholdet:
+      #eq[$ n/(n^2) = 1/n -> 0. $]
+      Grænsen er $0$, ikke en konstant $> 0$, så $n in o(n^2)$ og dermed $n in.not Theta(n^2)$. *Falsk.*
+    + $f = n log n, g = n^2$. Forholdet:
+      #eq[$ (n log n)/(n^2) = (log n)/n -> 0, $]
+      da $log n$ vokser langsommere end $n$. Grænse $0$ giver $n log n in o(n^2)$. *Sand.*
+    + $f = log n, g = sqrt(n)$. Sæt $m = sqrt(n)$, så $log n = 2 log m$, og forholdet bliver
+      #eq[$ (log n)/sqrt(n) = (2 log m)/m -> 0. $]
+      Grænse $0$ (endelig), så $log n in O(sqrt(n))$ (endda $o$). *Sand.*
+    + $f = n!, g = 2^n$. Skriv forholdet som et produkt af faktorer:
+      #eq[$ (n!)/(2^n) = 1/2 dot 2/2 dot 3/2 dot 4/2 dots.h n/2 = product_(k=1)^n k/2. $]
+      For $k >= 3$ er hver faktor $k\/2 > 1$, og de bliver vilkårligt store, så produktet $-> oo$. Altså $n! in omega(2^n)$. *Sand.*
   ],
 )
 
@@ -46,12 +58,20 @@ To slags opgaver her. Den ene beder dig afgøre rene $O$-, $Theta$-, $o$- og $om
     + *Sortér inden for polynomierne.* Mindre eksponent kommer først ($n^(1\/2) prec n^1$).
   ],
   worked: [
-    + $log_2 n = Theta(log n)$ er den langsomste.
-    + $(log_10 n)^2 = Theta((log n)^2)$ er poly-logaritmisk: hurtigere end $log n$, men langsommere end enhver positiv potens af $n$.
-    + $sqrt(n) = n^(1\/2) prec n^1 = n$ (mindre eksponent).
-    + $2^n$ slår ethvert polynomium.
+    Først fjernes grundtal og konstante faktorer, da de ikke ændrer vækstklassen:
+    #eq[$ log_2 n = (ln n)/(ln 2) = Theta(log n), quad (log_10 n)^2 = ((ln n)/(ln 10))^2 = Theta((log n)^2). $]
 
-    Rækkefølge: $log_2 n prec (log_10 n)^2 prec sqrt(n) prec n prec 2^n$.
+    Nu rangeres parvis med forholdstesten.
+
+    + $log n$ mod $(log n)^2$: forholdet $(log n)\/(log n)^2 = 1\/log n -> 0$, så $log_2 n prec (log_10 n)^2$.
+    + $(log n)^2$ mod $sqrt(n)$: sæt $m = log n$, så $n = 2^m$ (basis $2$) og $sqrt(n) = 2^(m\/2)$. Forholdet
+      #eq[$ ((log n)^2)/sqrt(n) = m^2/2^(m\/2) -> 0, $]
+      da en eksponentiel i $m$ slår ethvert polynomium i $m$. Altså $(log_10 n)^2 prec sqrt(n)$.
+    + $sqrt(n)$ mod $n$: forholdet $n^(1\/2)\/n^1 = n^(-1\/2) -> 0$ (mindre eksponent), så $sqrt(n) prec n$.
+    + $n$ mod $2^n$: forholdet $n\/2^n -> 0$, da enhver eksponentiel med grundtal $> 1$ slår ethvert polynomium. Altså $n prec 2^n$.
+
+    Kæd uligheder sammen:
+    #eq[$ log_2 n prec (log_10 n)^2 prec sqrt(n) prec n prec 2^n. $]
   ],
 )
 
@@ -73,9 +93,20 @@ To slags opgaver her. Den ene beder dig afgøre rene $O$-, $Theta$-, $o$- og $om
     + *Find modeksempel, hvis den ikke holder.* Vælg simple konkrete $f_1, f_2, g_1, g_2$ der opfylder forudsætningerne, men bryder konklusionen.
   ],
   worked: [
-    + *(a) sand.* $f_1 <= c_1 g_1$ og $f_2 <= c_2 g_2$ for store $n$, så $f_1 + f_2 <= c_1 g_1 + c_2 g_2 <= max(c_1, c_2)(g_1 + g_2)$. Med $c = max(c_1, c_2)$ er det $O$-grænsen.
-    + *(b) sand.* Det er (a) skrevet om: $f_1 + f_2 <= c(g_1 + g_2)$ giver $g_1 + g_2 >= (1\/c)(f_1 + f_2)$, altså $Omega$. Generelt $f in O(g) <==> g in Omega(f)$.
-    + *(c) falsk.* Tag $f_1 = n, g_1 = n$ og $f_2 = 1, g_2 = n$ (begge forudsætninger holder, da $1 <= n$). Så er $f_1\/f_2 = n$, men $g_1\/g_2 = n\/n = 1$, og $n in.not O(1)$.
+    Start fra definitionen. Forudsætningerne giver konstanter $c_1, c_2 > 0$ og et $n_0$, så for alle $n >= n_0$:
+    #eq[$ f_1(n) <= c_1 g_1(n), quad f_2(n) <= c_2 g_2(n). $]
+
+    + *(a) sand.* Læg de to uligheder sammen:
+      #eq[$ f_1 + f_2 <= c_1 g_1 + c_2 g_2 <= max(c_1, c_2) dot (g_1 + g_2). $]
+      Sæt $c = max(c_1, c_2)$. Så gælder $f_1 + f_2 <= c (g_1 + g_2)$ for alle $n >= n_0$, hvilket er præcis $f_1 + f_2 in O(g_1 + g_2)$.
+    + *(b) sand.* Tag uligheden fra (a), $f_1 + f_2 <= c(g_1 + g_2)$, og divider med $c$:
+      #eq[$ g_1 + g_2 >= 1/c (f_1 + f_2). $]
+      Det er definitionen på $g_1 + g_2 in Omega(f_1 + f_2)$ med konstant $1\/c$. (Generelt: $f in O(g) <==> g in Omega(f)$.)
+    + *(c) falsk.* Et modeksempel er nok. Vælg
+      #eq[$ f_1 = n, thick g_1 = n, quad f_2 = 1, thick g_2 = n. $]
+      Forudsætningerne holder: $n <= 1 dot n$ og $1 <= 1 dot n$. Men forholdene er
+      #eq[$ f_1/f_2 = n/1 = n, quad g_1/g_2 = n/n = 1, $]
+      og $(f_1\/f_2)\/(g_1\/g_2) = n\/1 = n -> oo$. Så $n in.not O(1)$, og påstanden brydes.
   ],
 )
 
@@ -100,12 +131,26 @@ To slags opgaver her. Den ene beder dig afgøre rene $O$-, $Theta$-, $o$- og $om
     + *Test forholdet.* Går $f(n)\/g(n)$ mod $oo$, er $f in.not O(g)$.
   ],
   worked: [
-    + $n\/n^(2\/3) = n^(1\/3) -> oo$. En højere potens er ikke $O$ af en lavere. Falsk.
-    + $(3\/2)^n$ er eksponentiel og slår det lineære $n$. Sand.
-    + Ledende led $5n^7$, og $n^7\/n^6 = n -> oo$. Falsk.
-    + $2^(log n) = n$ (grundtal $2$). $(log n)^2\/n -> 0$, så $(log n)^2 in O(n)$. Sand.
-    + $n\/1 = n -> oo$. Falsk.
-    + $1\/n -> 0$, begrænset af $log n$ for $n >= 1$. Sand.
+    For hver: tjek om $f(n)\/g(n)$ holder sig begrænset. Går forholdet mod $oo$, er $f in.not O(g)$.
+
+    + $f = n, g = n^(2\/3)$:
+      #eq[$ n/(n^(2\/3)) = n^(1 - 2\/3) = n^(1\/3) -> oo. $]
+      Ubegrænset, så en højere potens er ikke $O$ af en lavere. *Falsk.*
+    + $f = n, g = (3\/2)^n$:
+      #eq[$ n/((3\/2)^n) -> 0, $]
+      da enhver eksponentiel med grundtal $> 1$ slår det lineære $n$. Begrænset, så *sand.*
+    + $f = 5n^7 + 7n^5, g = n^6$. Det ledende led er $5n^7$, så
+      #eq[$ (5n^7 + 7n^5)/(n^6) = 5n + 7/n -> oo. $]
+      Ubegrænset. *Falsk.*
+    + $f = (log n)^2, g = 2^(log n)$. Med grundtal $2$ er $2^(log_2 n) = n$, så
+      #eq[$ ((log n)^2)/(2^(log n)) = ((log n)^2)/n -> 0 $]
+      (poly-log slår enhver positiv potens). Begrænset, så $(log n)^2 in O(n)$. *Sand.*
+    + $f = n, g = 1$:
+      #eq[$ n/1 = n -> oo. $]
+      Ubegrænset. *Falsk.*
+    + $f = 1\/n, g = log n$. For $n -> oo$ er $1\/n -> 0$ mens $log n -> oo$, så
+      #eq[$ (1\/n)/(log n) = 1/(n log n) -> 0. $]
+      Begrænset. *Sand.*
   ],
 )
 
@@ -134,16 +179,28 @@ To slags opgaver her. Den ene beder dig afgøre rene $O$-, $Theta$-, $o$- og $om
     + *Pas på strikse notationer.* $o$ og $omega$ kræver streng ulighed: en funktion er aldrig $o$ eller $omega$ af sig selv.
   ],
   worked: [
-    + Samme orden. Sand.
-    + Samme orden. Sand.
-    + Højre side er $Theta(n^5) >= n^4$. Sand.
-    + Højre side er $Theta(n^5)$, og $n^4$ er mindre. Falsk.
-    + $log n = o(n^(0.5))$, så $n log n = o(n^(1.5))$. Sand.
-    + $n$ vokser hurtigere end $log n$. Falsk.
-    + Enhver $log$-potens er $o$ af enhver positiv potens. Sand.
-    + Konstant $<= n$. Sand.
-    + $n^2\/n^3 = 1\/n -> 0$. Sand.
-    + Samme orden, forholdet $-> 1$, ikke $oo$. Falsk.
+    For hver: dan forholdet $f(n)\/g(n)$ og se, hvad det går mod. Husk skellet mellem de svage notationer ($O, Omega, Theta$) og de strikse ($o, omega$): de strikse kræver streng ulighed, så en funktion er aldrig $o$ eller $omega$ af sig selv.
+
+    + $f = n^2, g = n^2$. Forholdet $n^2\/n^2 = 1$, en endelig konstant. Endelig grænse giver $O$. *Sand.*
+    + Samme forhold $n^2\/n^2 = 1$, en konstant $> 0$. Konstant $> 0$ giver $Theta$. *Sand.*
+    + $f = n^4, g = 5n^3 + 3n^5$. Det ledende led i $g$ er $3n^5$, så $g = Theta(n^5)$. Forholdet
+      #eq[$ (n^4)/(5n^3 + 3n^5) = (n^4)/(3n^5 (1 + 5\/(3n^2))) = 1/(3n) dot 1/(1 + 5\/(3n^2)) -> 0. $]
+      Grænse $0$ er begrænset, så $n^4 in O(n^5)$. *Sand.*
+    + Samme $g = Theta(n^5)$, og $n^4$ er en lavere potens. For $Theta$ skal forholdet gå mod en konstant $> 0$, men her gik det mod $0$ (og det omvendte forhold $-> oo$), så de er ikke samme orden. *Falsk.*
+    + $f = n log n, g = n^(1.5)$. Forholdet
+      #eq[$ (n log n)/(n^(1.5)) = (log n)/(n^(0.5)) -> 0, $]
+      da enhver positiv potens af $n$ slår enhver potens af $log n$. Begrænset, så $n log n in O(n^(1.5))$. *Sand.*
+    + $f = n, g = log n$. Forholdet
+      #eq[$ n/(log n) -> oo, $]
+      da $n$ vokser hurtigere end $log n$. Ubegrænset, så $n in.not O(log n)$. *Falsk.*
+    + $f = (log n)^(10), g = n^(0.10)$. Forholdet
+      #eq[$ ((log n)^(10))/(n^(0.10)) -> 0, $]
+      da enhver positiv potens af $n$ (også den lille eksponent $0.10$) til sidst slår enhver potens af $log n$. Begrænset. *Sand.*
+    + $f = 1, g = n$. Forholdet $1\/n -> 0$, begrænset, så $1 in O(n)$. *Sand.*
+    + $f = n^2, g = n^3$. Forholdet
+      #eq[$ (n^2)/(n^3) = 1/n -> 0. $]
+      Grænse $0$ (ikke bare begrænset) giver den strikse $o$, så $n^2 in o(n^3)$. *Sand.*
+    + $f = n^3, g = n^3$. Forholdet $n^3\/n^3 = 1 -> 1$, ikke $oo$. $omega$ kræver grænse $oo$, så en funktion er aldrig $omega$ af sig selv. *Falsk.*
   ],
 )
 

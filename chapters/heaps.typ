@@ -109,12 +109,26 @@ Hver operation har sin egen opskrift herunder. De er skrevet for en *max-heap* (
     + *Stop ved første brud.* Holder alle uligheder, er det en min-heap. Ellers ikke.
   ],
   worked: [
-    Tjek $A[i] <= A[2i]$ og $A[i] <= A[2i+1]$ for $i = 1..5$.
+    For $n = 10$ er de interne knuder $i = 1..5$. For hver tjekkes $A[i] <= A[2i]$ (venstre barn) og $A[i] <= A[2i+1]$ (højre barn). Første brud forkaster arrayet.
 
-    - A1 $= [7,4,9,2,6,8,10,1,3,5]$: $A[1]=7 > A[2]=4$. Brud med det samme, ikke en heap.
-    - A2 $= [1,2,3,4,5,6,7,8,9,10]$: sorteret stigende, så hver forælder er $<=$ begge børn. Min-heap.
-    - A3 $= [1,2,3,4,1,2,3,4,5,6]$: $A[2]=2 > A[5]=1$. Brud, ikke en heap.
-    - A4 $= [1,1,1,1,1,1,1,1,1,1]$: alle nøgler ens, så alle uligheder holder. Min-heap.
+    ```
+    A1 = [7,4,9,2,6,8,10,1,3,5]
+      i=1: A[1]=7 vs A[2]=4 -> 7 <= 4 ? NEJ            BRUD -> ikke min-heap
+
+    A2 = [1,2,3,4,5,6,7,8,9,10]
+      i=1: 1 <= A[2]=2 og 1 <= A[3]=3      ok
+      i=2: 2 <= A[4]=4 og 2 <= A[5]=5      ok
+      i=3: 3 <= A[6]=6 og 3 <= A[7]=7      ok
+      i=4: 4 <= A[8]=8 og 4 <= A[9]=9      ok
+      i=5: 5 <= A[10]=10                   ok    -> min-heap
+
+    A3 = [1,2,3,4,1,2,3,4,5,6]
+      i=1: 1 <= A[2]=2 og 1 <= A[3]=3      ok
+      i=2: A[2]=2 vs A[5]=1 -> 2 <= 1 ? NEJ          BRUD -> ikke min-heap
+
+    A4 = [1,1,1,1,1,1,1,1,1,1]
+      alle nøgler ens: hver A[i] <= begge børn (1 <= 1)  -> min-heap
+    ```
 
     Svar: A2 og A4.
   ],
@@ -142,15 +156,44 @@ Hver operation har sin egen opskrift herunder. De er skrevet for en *max-heap* (
     + *Stop ved første brud.* Holder alt, er det en min-heap.
   ],
   worked: [
-    Tjek $A[i] <= A[2i]$ og $A[i] <= A[2i+1]$ for $i = 1..4$.
+    For $n = 8$ er de interne knuder $i = 1..4$. Børn af $i$ står på $2i$ og $2i+1$ (knude $4$ har kun ét barn, på plads $8$). Tjek $A[i] <= A[2i]$ og $A[i] <= A[2i+1]$.
 
-    - A0 $= [0,1,0,1,1,0,1,1]$: $0 <= 1,0$; $1 <= 1,1$; $0 <= 0,1$; $1 <= 1$. Min-heap.
-    - A1 $= [0,0,0,1,1,1,0,1]$: alle forældre $<=$ deres børn. Min-heap.
-    - A2 $= [0,0,1,0,0,1,1,0]$: alle uligheder holder. Min-heap.
-    - A3 $= [0,1,0,1,0,1,0,1]$: $A[2]=1 > A[5]=0$. Brud, ikke en heap.
-    - A4 $= [0,0,0,0,1,1,1,1]$: alle forældre $<=$ deres børn. Min-heap.
-    - A5 $= [1,1,1,1,0,0,0,0]$: $A[2]=1 > A[5]=0$. Brud, ikke en heap.
-    - A6 $= [0,0,0,0,0,0,0,0]$: alle nøgler ens. Min-heap.
+    ```
+    A0 = [0,1,0,1,1,0,1,1]
+      i=1: 0 <= A[2]=1, 0 <= A[3]=0   ok
+      i=2: 1 <= A[4]=1, 1 <= A[5]=1   ok
+      i=3: 0 <= A[6]=0, 0 <= A[7]=1   ok
+      i=4: 1 <= A[8]=1                ok   -> min-heap
+
+    A1 = [0,0,0,1,1,1,0,1]
+      i=1: 0 <= 0, 0 <= 0   ok
+      i=2: 0 <= A[4]=1, 0 <= A[5]=1   ok
+      i=3: 0 <= A[6]=1, 0 <= A[7]=0   ok
+      i=4: 1 <= A[8]=1                ok   -> min-heap
+
+    A2 = [0,0,1,0,0,1,1,0]
+      i=1: 0 <= 0, 0 <= 1   ok
+      i=2: 0 <= A[4]=0, 0 <= A[5]=0   ok
+      i=3: 1 <= A[6]=1, 1 <= A[7]=1   ok
+      i=4: 0 <= A[8]=0                ok   -> min-heap
+
+    A3 = [0,1,0,1,0,1,0,1]
+      i=1: 0 <= 1, 0 <= 0   ok
+      i=2: A[2]=1 vs A[5]=0 -> 1 <= 0 ? NEJ   BRUD -> ikke min-heap
+
+    A4 = [0,0,0,0,1,1,1,1]
+      i=1: 0 <= 0, 0 <= 0   ok
+      i=2: 0 <= A[4]=0, 0 <= A[5]=1   ok
+      i=3: 0 <= A[6]=1, 0 <= A[7]=1   ok
+      i=4: 0 <= A[8]=1                ok   -> min-heap
+
+    A5 = [1,1,1,1,0,0,0,0]
+      i=1: 1 <= 1, 1 <= 1   ok
+      i=2: A[2]=1 vs A[5]=0 -> 1 <= 0 ? NEJ   BRUD -> ikke min-heap
+
+    A6 = [0,0,0,0,0,0,0,0]
+      alle nøgler ens (0 <= 0)   -> min-heap
+    ```
 
     Svar: A0, A1, A2, A4 og A6.
   ],
@@ -177,12 +220,31 @@ Hver operation har sin egen opskrift herunder. De er skrevet for en *max-heap* (
     + *Stop ved første brud.*
   ],
   worked: [
-    - A0: hul på plads 6 med værdi på plads 7. Ugyldigt array.
-    - A1 $= [4,3,4,2,1,4]$: $4 >= 3,4$; $3 >= 2,1$; $4 >= 4$. Max-heap.
-    - A2: hul på plads 6 med værdi på plads 7 (og roden $3 <$ barnet $4$). Ugyldigt.
-    - A3 $= [4,4,4,4,4,4]$: alle nøgler ens. Max-heap.
-    - A4 $= [1,2,3,4,5,6]$: roden $1 < 2$. Ikke en heap.
-    - A5 $= [-1,-2,-3,-4,-5,-6]$: $-1 >= -2,-3$; $-2 >= -4,-5$; $-3 >= -6$. Max-heap.
+    To ting forkaster et array: et hul (en tom plads med en værdi efter sig) og et brud på max-uligheden $A[i] >= A[2i], A[2i+1]$. De fulde arrays har $n = 6$, så de interne knuder er $i = 1..3$ (knude $3$ har kun barnet på plads $6$).
+
+    ```
+    A0 = [4,3,3,2,1, _ ,1]   plads 6 tom, plads 7 = 1
+      hul: værdi efter tom plads -> UGYLDIGT array
+
+    A1 = [4,3,4,2,1,4]
+      i=1: A[1]=4 >= A[2]=3 og 4 >= A[3]=4   ok
+      i=2: A[2]=3 >= A[4]=2 og 3 >= A[5]=1   ok
+      i=3: A[3]=4 >= A[6]=4                  ok   -> max-heap
+
+    A2 = [3,4,4,2,1, _ ,4]   plads 6 tom, plads 7 = 4
+      hul -> UGYLDIGT array (og roden 3 < barnet 4)
+
+    A3 = [4,4,4,4,4,4]
+      alle nøgler ens (4 >= 4)   -> max-heap
+
+    A4 = [1,2,3,4,5,6]
+      i=1: A[1]=1 >= A[2]=2 ? NEJ            BRUD -> ikke max-heap
+
+    A5 = [-1,-2,-3,-4,-5,-6]
+      i=1: -1 >= A[2]=-2 og -1 >= A[3]=-3    ok
+      i=2: -2 >= A[4]=-4 og -2 >= A[5]=-5    ok
+      i=3: -3 >= A[6]=-6                     ok   -> max-heap
+    ```
 
     Svar: A1, A3 og A5.
   ],
@@ -210,13 +272,34 @@ Hver operation har sin egen opskrift herunder. De er skrevet for en *max-heap* (
     + *Stop ved første brud.*
   ],
   worked: [
-    - A0 $= [2,1]$: $2 >= 1$. Max-heap.
-    - A1 $= [2,1,2,1]$: $2 >= 1,2$; $1 >= 1$. Max-heap.
-    - A2 $= [2,1,2,1,2,1]$: $A[2]=1 < A[5]=2$. Brud, ikke en heap.
-    - A3 $= [2,1,2,1,2,1,2,1]$: $A[2]=1 < A[5]=2$. Brud, ikke en heap.
-    - A4 $= [-2,-2,-2,-2,-2,-2]$: alle nøgler ens. Max-heap.
-    - A5 $= [1,2,4,8,16,32,64]$: roden $1 < 2$. Ikke en heap.
-    - A6 $= [1,-1,-1,-2,-2,-2]$: $1 >= -1,-1$; $-1 >= -2,-2$; $-1 >= -2$. Max-heap.
+    Max-heap kræver $A[i] >= A[2i]$ og $A[i] >= A[2i+1]$ for alle interne knuder. Fælden er en knude *under* roden, der er mindre end sit barn — så tjek hver intern knude, ikke kun plads 1.
+
+    ```
+    A0 = [2,1]                  n=2, intern: i=1
+      i=1: A[1]=2 >= A[2]=1     ok   -> max-heap
+
+    A1 = [2,1,2,1]              n=4, interne: i=1,2
+      i=1: 2 >= A[2]=1 og 2 >= A[3]=2   ok
+      i=2: A[2]=1 >= A[4]=1             ok   -> max-heap
+
+    A2 = [2,1,2,1,2,1]          n=6, interne: i=1,2,3
+      i=1: 2 >= 1, 2 >= 2       ok
+      i=2: A[2]=1 vs A[5]=2 -> 1 >= 2 ? NEJ   BRUD -> ikke max-heap
+
+    A3 = [2,1,2,1,2,1,2,1]      n=8, interne: i=1..4
+      i=1: 2 >= 1, 2 >= 2       ok
+      i=2: A[2]=1 vs A[5]=2 -> 1 >= 2 ? NEJ   BRUD -> ikke max-heap
+
+    A4 = [-2,-2,-2,-2,-2,-2]    alle nøgler ens (-2 >= -2)   -> max-heap
+
+    A5 = [1,2,4,8,16,32,64]
+      i=1: A[1]=1 vs A[2]=2 -> 1 >= 2 ? NEJ   BRUD -> ikke max-heap
+
+    A6 = [1,-1,-1,-2,-2,-2]     n=6, interne: i=1,2,3
+      i=1: 1 >= A[2]=-1 og 1 >= A[3]=-1     ok
+      i=2: -1 >= A[4]=-2 og -1 >= A[5]=-2   ok
+      i=3: -1 >= A[6]=-2                    ok   -> max-heap
+    ```
 
     Svar: A0, A1, A4 og A6.
   ],
@@ -238,14 +321,23 @@ Hver operation har sin egen opskrift herunder. De er skrevet for en *max-heap* (
     + *Gentag,* til ingen børn er mindre, eller knuden ingen børn har. Aflæs arrayet.
   ],
   worked: [
-    Her er heapen: #swap[$[3,5,6,10,11,8,7,18,16,15]$].
+    Min-heap, så roden $A[1] = 3$ er det mindste og bliver trukket ud. Det sidste element $A[10] = 15$ flyttes op i roden, heapen krymper til størrelse $9$, og $15$ synker ned: sammenlign med begge børn ($2i$ og $2i+1$), og byt med det *mindste* barn så længe et barn er mindre.
 
-    + Tag roden $3$ ud, flyt sidste element $15$ op. Størrelse $9$: $[15,5,6,10,11,8,7,18,16]$.
-    + Idx 1: børn er $5$ og $6$. Mindst er $5$, og $5 < 15$, så byt. $15$ rykker til idx 2: $[5,15,6,10,11,8,7,18,16]$.
-    + Idx 2: børn er $10$ og $11$. Mindst er $10$, og $10 < 15$, så byt. $15$ rykker til idx 4: $[5,10,6,15,11,8,7,18,16]$.
-    + Idx 4: børn er $18$ (idx 8) og $16$ (idx 9). Begge $> 15$, så stop.
+    Hvert skridt herunder viser hele arrayet (indeks $1..9$ efter krympningen) med $15$ markeret undervejs:
 
-    Slutarray: $[5,10,6,15,11,8,7,18,16]$. $15$ står på position 4.
+    ```
+    Start:        [  3,  5,  6, 10, 11,  8,  7, 18, 16, 15 ]   (størrelse 10)
+    Tag rod 3 ud, flyt sidste 15 op i plads 1, størrelse -> 9:
+    Efter:        [ 15,  5,  6, 10, 11,  8,  7, 18, 16 ]
+
+    i=1: børn A[2]=5, A[3]=6.  mindst=5 < 15: byt plads 1 & 2
+                  [  5, 15,  6, 10, 11,  8,  7, 18, 16 ]   15 -> plads 2
+    i=2: børn A[4]=10, A[5]=11. mindst=10 < 15: byt plads 2 & 4
+                  [  5, 10,  6, 15, 11,  8,  7, 18, 16 ]   15 -> plads 4
+    i=4: børn A[8]=18, A[9]=16. begge > 15: stop
+    ```
+
+    Slut: $A = [5,10,6,15,11,8,7,18,16]$. Nøglen $15$ står på position 4.
   ],
 )
 
@@ -269,19 +361,33 @@ Hver operation har sin egen opskrift herunder. De er skrevet for en *max-heap* (
     + *Synk ned.* Byt med det *største* barn så længe et barn er større. Aflæs arrayet.
   ],
   worked: [
-    Start: #swap[$[18,9,16,4,8,12,13,1,2]$].
+    Max-heap. Først Increase-Key$(A, 9, 15)$: skriv $15$ ind på plads 9 (gammel værdi $2$, og $15 >= 2$, så det er lovligt) og boble op mod roden — byt med forælderen på $floor(i\/2)$ så længe din nøgle er *større*.
 
-    *Increase-Key$(A, 9, 15)$* — sæt pos 9 til $15$ og boble op:
-    + Forælder på pos 4 er $4 < 15$, byt. $15$ til pos 4.
-    + Forælder på pos 2 er $9 < 15$, byt. $15$ til pos 2.
-    + Forælder på pos 1 er $18 > 15$, stop. Nu: $[18,15,16,9,8,12,13,1,4]$.
+    ```
+    Start:        [ 18,  9, 16,  4,  8, 12, 13,  1,  2 ]
+    Sæt A[9]=15:  [ 18,  9, 16,  4,  8, 12, 13,  1, 15 ]   15 på plads 9
 
-    *Extract-Max$(A)$* — tag $18$ ud, flyt sidste $4$ op, størrelse $8$, synk ned:
-    + Idx 1: børn $15$ og $16$. Størst er $16 > 4$, byt. $4$ til idx 3.
-    + Idx 3: børn $12$ og $13$. Størst er $13 > 4$, byt. $4$ til idx 7.
-    + Idx 7: barn $1 < 4$, stop.
+    forælder(9)=4: A[4]=4 < 15: byt plads 9 & 4
+                  [ 18,  9, 16, 15,  8, 12, 13,  1,  4 ]   15 -> plads 4
+    forælder(4)=2: A[2]=9 < 15: byt plads 4 & 2
+                  [ 18, 15, 16,  9,  8, 12, 13,  1,  4 ]   15 -> plads 2
+    forælder(2)=1: A[1]=18 > 15: stop
+    ```
 
-    Slutarray: $[16,15,13,9,8,12,4,1]$.
+    Heapen er nu $[18,15,16,9,8,12,13,1,4]$. Så Extract-Max: roden $18$ ud, det sidste element $A[9] = 4$ op i plads 1, størrelse $8$, og $4$ synker ned mod det *største* barn.
+
+    ```
+    Tag rod 18 ud, flyt sidste 4 op, størrelse -> 8:
+    Efter:        [  4, 15, 16,  9,  8, 12, 13,  1 ]
+
+    i=1: børn A[2]=15, A[3]=16. størst=16 > 4: byt plads 1 & 3
+                  [ 16, 15,  4,  9,  8, 12, 13,  1 ]   4 -> plads 3
+    i=3: børn A[6]=12, A[7]=13. størst=13 > 4: byt plads 3 & 7
+                  [ 16, 15, 13,  9,  8, 12,  4,  1 ]   4 -> plads 7
+    i=7: børn ville stå på plads 14,15, uden for størrelse 8: stop
+    ```
+
+    Slut: $A = [16,15,13,9,8,12,4,1]$, svar (b).
   ],
 )
 
@@ -307,14 +413,21 @@ Hver operation har sin egen opskrift herunder. De er skrevet for en *max-heap* (
     + *Gentag,* til intet barn er større, eller knuden ingen børn har. Aflæs arrayet.
   ],
   worked: [
-    Her er heapen: #swap[$[5,4,3,3,4,2,3,2,1]$].
+    Max-heap. Roden $A[1] = 5$ er den største og trækkes ud; det sidste element $A[9] = 1$ flyttes op i plads 1, heapen krymper til størrelse $8$, og $1$ synker ned mod det *største* barn.
 
-    + Tag roden $5$ ud, flyt sidste element $1$ op. Størrelse $8$: $[1,4,3,3,4,2,3,2]$.
-    + Idx 1: børn $4$ (idx 2) og $3$ (idx 3). Størst er $4$, og $4 > 1$, så byt. $1$ rykker til idx 2: $[4,1,3,3,4,2,3,2]$.
-    + Idx 2: børn $3$ (idx 4) og $4$ (idx 5). Størst er $4$, og $4 > 1$, så byt. $1$ rykker til idx 5: $[4,4,3,3,1,2,3,2]$.
-    + Idx 5: børnene ville stå på idx 10 og 11, uden for heapen (størrelse 8). Stop.
+    ```
+    Start:        [  5,  4,  3,  3,  4,  2,  3,  2,  1 ]   (størrelse 9)
+    Tag rod 5 ud, flyt sidste 1 op i plads 1, størrelse -> 8:
+    Efter:        [  1,  4,  3,  3,  4,  2,  3,  2 ]
 
-    Slutarray: $[4,4,3,3,1,2,3,2]$, plads 9 tom.
+    i=1: børn A[2]=4, A[3]=3.  størst=4 > 1: byt plads 1 & 2
+                  [  4,  1,  3,  3,  4,  2,  3,  2 ]   1 -> plads 2
+    i=2: børn A[4]=3, A[5]=4.  størst=4 > 1: byt plads 2 & 5
+                  [  4,  4,  3,  3,  1,  2,  3,  2 ]   1 -> plads 5
+    i=5: børn ville stå på plads 10,11, uden for størrelse 8: stop
+    ```
+
+    Slut: $A = [4,4,3,3,1,2,3,2]$, plads 9 tom. Svar (d).
   ],
 )
 
@@ -339,16 +452,34 @@ Hver operation har sin egen opskrift herunder. De er skrevet for en *max-heap* (
     + *Synk ned.* Byt altid med det *største* barn så længe et barn er større. Aflæs arrayet.
   ],
   worked: [
-    Start: #swap[$[1,1,0,1,0,0,0,1]$], størrelse $8$.
+    Max-heap, to Extract-Max i træk. Hver gang: roden ud, sidste element op i plads 1, synk ned mod det *største* barn (ved lige store børn er der intet krav om at bytte, kun hvis et barn er *strengt* større).
 
-    *Første Extract-Max:* tag $1$ ud, flyt sidste $1$ op, størrelse $7$: $[1,1,0,1,0,0,0]$. Børn af roden er $1$ og $0$, begge $<= 1$, intet byt. Tilstand $[1,1,0,1,0,0,0]$.
+    *Første Extract-Max* — roden $A[1] = 1$ ud, sidste element $A[8] = 1$ op, størrelse $7$:
 
-    *Anden Extract-Max:* tag $1$ ud, flyt sidste $0$ op, størrelse $6$: $[0,1,0,1,0,0]$.
-    + Idx 1: børn $1$ (idx 2) og $0$ (idx 3). Størst er $1 > 0$, byt: $[1,0,0,1,0,0]$.
-    + Idx 2: børn $1$ (idx 4) og $0$ (idx 5). Størst er $1 > 0$, byt: $[1,1,0,0,0,0]$.
-    + Idx 4: ingen børn inden for størrelse 6. Stop.
+    ```
+    Start:        [  1,  1,  0,  1,  0,  0,  0,  1 ]   (størrelse 8)
+    Tag rod 1 ud, flyt sidste 1 op, størrelse -> 7:
+    Efter:        [  1,  1,  0,  1,  0,  0,  0 ]
 
-    Slutarray: $[1,1,0,0,0,0]$, pladserne 7 og 8 tomme.
+    i=1: børn A[2]=1, A[3]=0. størst=1, ikke > 1: stop (intet byt)
+    ```
+
+    Tilstand efter første: $[1,1,0,1,0,0,0]$, størrelse $7$.
+
+    *Anden Extract-Max* — roden $A[1] = 1$ ud, sidste element $A[7] = 0$ op, størrelse $6$:
+
+    ```
+    Tag rod 1 ud, flyt sidste 0 op, størrelse -> 6:
+    Efter:        [  0,  1,  0,  1,  0,  0 ]
+
+    i=1: børn A[2]=1, A[3]=0. størst=1 > 0: byt plads 1 & 2
+                  [  1,  0,  0,  1,  0,  0 ]   0 -> plads 2
+    i=2: børn A[4]=1, A[5]=0. størst=1 > 0: byt plads 2 & 4
+                  [  1,  1,  0,  0,  0,  0 ]   0 -> plads 4
+    i=4: børn ville stå på plads 8,9, uden for størrelse 6: stop
+    ```
+
+    Slut: $A = [1,1,0,0,0,0]$, pladserne 7 og 8 tomme. Svar (c).
   ],
 )
 
@@ -373,17 +504,28 @@ Hver operation har sin egen opskrift herunder. De er skrevet for en *max-heap* (
     + *Gentag* for hvert tal i rækkefølgen, og aflæs arrayet til sidst.
   ],
   worked: [
-    Indsæt #swap[$6, 12, 13, 4, 8, 14, 5$] et ad gangen, max-heap:
+    Max-heap. Hvert tal lægges på første ledige plads og bobler op: byt med forælderen på $floor(i\/2)$ så længe det indsatte tal er *større*. Arrayet vokser ét felt ad gangen.
 
-    + $6$: $[6]$.
-    + $12$ på plads 2, $12 > 6$ byt: $[12,6]$.
-    + $13$ på plads 3, $13 > 12$ byt: $[13,6,12]$.
-    + $4$ på plads 4, forælder $6 > 4$ stop: $[13,6,12,4]$.
-    + $8$ på plads 5, forælder $6 < 8$ byt til plads 2, forælder $13 > 8$ stop: $[13,8,12,4,6]$.
-    + $14$ på plads 6, forælder $12 < 14$ byt til plads 3, forælder $13 < 14$ byt til plads 1: $[14,8,13,4,6,12]$.
-    + $5$ på plads 7, forælder $13 > 5$ stop: $[14,8,13,4,6,12,5]$.
+    ```
+    indsæt 6:  på plads 1                              [ 6 ]
+    indsæt 12: på plads 2; forælder(2)=1 A[1]=6 < 12: byt
+               [ 12,  6 ]
+    indsæt 13: på plads 3; forælder(3)=1 A[1]=12 < 13: byt
+               [ 13,  6, 12 ]
+    indsæt 4:  på plads 4; forælder(4)=2 A[2]=6 > 4: stop
+               [ 13,  6, 12,  4 ]
+    indsæt 8:  på plads 5; forælder(5)=2 A[2]=6 < 8: byt -> plads 2
+               [ 13,  8, 12,  4,  6 ]
+               forælder(2)=1 A[1]=13 > 8: stop
+    indsæt 14: på plads 6; forælder(6)=3 A[3]=12 < 14: byt -> plads 3
+               [ 13,  8, 14,  4,  6, 12 ]
+               forælder(3)=1 A[1]=13 < 14: byt -> plads 1
+               [ 14,  8, 13,  4,  6, 12 ]
+    indsæt 5:  på plads 7; forælder(7)=3 A[3]=13 > 5: stop
+               [ 14,  8, 13,  4,  6, 12,  5 ]
+    ```
 
-    Slutarray: $[14,8,13,4,6,12,5]$.
+    Slut: $A = [14,8,13,4,6,12,5]$, svar (c). Bemærk, at resultatet ikke er sorteret — det afhænger af indsættelsesrækkefølgen.
   ],
 )
 
@@ -402,14 +544,32 @@ Hver operation har sin egen opskrift herunder. De er skrevet for en *max-heap* (
     + *Aflæs.* Når alle knuder er kørt, læs slutarrayet og find nøglen.
   ],
   worked: [
-    Start: #swap[$[5,4,2,3,7,6,1,0]$], $n=8$. Heapify knuderne $4,3,2,1$.
+    Build-Min-Heap kører Min-Heapify på de interne knuder fra $i = floor(n\/2) = 4$ ned til $1$. Min-Heapify$(i)$: find den mindste af knuden og dens børn ($2i$, $2i+1$); er et barn mindre, byt med det *mindste* barn og fortsæt rekursivt ned i den plads, nøglen landede på.
 
-    + $i=4$ (værdi 3): barn på plads 8 er $0$, byt: $[5,4,2,0,7,6,1,3]$.
-    + $i=3$ (værdi 2): børn $6$ og $1$, mindst er $1$, byt: $[5,4,1,0,7,6,2,3]$.
-    + $i=2$ (værdi 4): børn $0$ og $7$, mindst er $0$, byt: $[5,0,1,4,7,6,2,3]$; rekursér på plads 4 (værdi 4): barn på plads 8 er $3$, byt: $[5,0,1,3,7,6,2,4]$.
-    + $i=1$ (værdi 5): børn $0$ og $1$, mindst er $0$, byt: $[0,5,1,3,7,6,2,4]$; rekursér på plads 2 (værdi 5): børn $3$ og $7$, mindst er $3$, byt: $[0,3,1,5,7,6,2,4]$; rekursér på plads 4 (værdi 5): barn på plads 8 er $4$, byt: $[0,3,1,4,7,6,2,5]$.
+    ```
+    Start:                [  5,  4,  2,  3,  7,  6,  1,  0 ]   n=8, heapify i=4,3,2,1
 
-    Slutarray: $[0,3,1,4,7,6,2,5]$. Nøglen $5$ står på position 8.
+    i=4 (A[4]=3): barn A[8]=0. mindst=0 < 3: byt plads 4 & 8
+                          [  5,  4,  2,  0,  7,  6,  1,  3 ]
+                  plads 8 er blad: stop
+    i=3 (A[3]=2): børn A[6]=6, A[7]=1. mindst=1 < 2: byt plads 3 & 7
+                          [  5,  4,  1,  0,  7,  6,  2,  3 ]
+                  plads 7 er blad: stop
+    i=2 (A[2]=4): børn A[4]=0, A[5]=7. mindst=0 < 4: byt plads 2 & 4
+                          [  5,  0,  1,  4,  7,  6,  2,  3 ]
+                  rekursér plads 4 (A[4]=4): barn A[8]=3. mindst=3 < 4: byt plads 4 & 8
+                          [  5,  0,  1,  3,  7,  6,  2,  4 ]
+                  plads 8 er blad: stop
+    i=1 (A[1]=5): børn A[2]=0, A[3]=1. mindst=0 < 5: byt plads 1 & 2
+                          [  0,  5,  1,  3,  7,  6,  2,  4 ]
+                  rekursér plads 2 (A[2]=5): børn A[4]=3, A[5]=7. mindst=3 < 5: byt plads 2 & 4
+                          [  0,  3,  1,  5,  7,  6,  2,  4 ]
+                  rekursér plads 4 (A[4]=5): barn A[8]=4. mindst=4 < 5: byt plads 4 & 8
+                          [  0,  3,  1,  4,  7,  6,  2,  5 ]
+                  plads 8 er blad: stop
+    ```
+
+    Slut: $A = [0,3,1,4,7,6,2,5]$. Nøglen $5$ er endt på position 8, svar (h).
   ],
 )
 
@@ -429,13 +589,26 @@ Hver operation har sin egen opskrift herunder. De er skrevet for en *max-heap* (
     + *Saml de gyldige positioner.* Tjek evt. ved at prøve en konkret heap for hver.
   ],
   worked: [
-    Form for 5 elementer: plads 1 er rod; plads 2 har børn ${4,5}$; plads 3 har ingen børn; plads 4 og 5 er blade. Nøglen $4$ er næststørst (kun $5$ er større).
+    En knude i en min-heap skal være $<=$ alle sine efterkommere. Så en position med $k$ efterkommere kan kun holde en nøgle, hvis der findes mindst $k$ nøgler større end den. Nøglen $4$ har præcis én større nøgle ($5$), så $4$ kan kun stå et sted med $<= 1$ efterkommer.
 
-    - Plads 1: roden skal være minimum ($1$), så $4$ er udelukket.
-    - Plads 2: to efterkommere (plads 4 og 5) skal begge være $> 4$, men kun $5$ er det. Umuligt.
-    - Plads 3: ingen efterkommere, fx $[1,2,4,3,5]$. Gyldig.
-    - Plads 4: blad, fx $[1,2,3,4,5]$. Gyldig.
-    - Plads 5: blad, fx $[1,3,2,5,4]$. Gyldig.
+    Træformen for $5$ elementer og hver positions antal efterkommere:
+
+    ```
+                1            plads 1: efterkommere = {2,3,4,5}  -> 4 stk
+              /   \
+            2       3        plads 2: efterkommere = {4,5}      -> 2 stk
+           / \              plads 3: efterkommere = {}          -> 0 stk
+          4   5              plads 4: blad                       -> 0 stk
+                             plads 5: blad                       -> 0 stk
+    ```
+
+    Nøgler større end $4$: kun $5$, altså $1$ stk til rådighed.
+
+    - Plads 1: roden skal være minimum ($1$), og $4 != 1$. Udelukket.
+    - Plads 2: kræver $2$ større nøgler (til plads 4 og 5), men kun $1$ findes. Umuligt.
+    - Plads 3: $0$ efterkommere, kravet $0 <= 1$ holder. Konkret: $[1,2,4,3,5]$. Gyldig.
+    - Plads 4: blad, $0$ efterkommere. Konkret: $[1,2,3,4,5]$. Gyldig.
+    - Plads 5: blad, $0$ efterkommere. Konkret: $[1,3,2,5,4]$. Gyldig.
 
     Svar: positionerne 3, 4 og 5.
   ],
@@ -457,12 +630,26 @@ Hver operation har sin egen opskrift herunder. De er skrevet for en *max-heap* (
     + *Saml de gyldige positioner.*
   ],
   worked: [
-    Form for 6 elementer: plads 1 er rod; plads 2 har børn ${4,5}$; plads 3 har barn ${6}$; plads 4, 5, 6 er blade. Nøglen $9$ er næststørst (kun $10$ er større).
+    Samme regel: en position med $k$ efterkommere kræver $k$ nøgler større end målnøglen. Nøglen $9$ er næststørst, så kun $10$ er større — altså $1$ større nøgle til rådighed.
 
-    - Plads 1: roden skal være minimum ($5$), så $9$ er udelukket.
-    - Plads 2: to efterkommere (plads 4 og 5) skal begge være $> 9$, men kun $10$ er det. Umuligt.
-    - Plads 3: én efterkommer (plads 6); læg $10$ der. Gyldig.
-    - Plads 4, 5, 6: blade under en forælder $< 9$. Gyldige.
+    Træformen for $6$ elementer og hver positions antal efterkommere:
+
+    ```
+                1                  plads 1: efterkommere = {2,3,4,5,6} -> 5 stk
+              /   \
+            2       3              plads 2: efterkommere = {4,5}        -> 2 stk
+           / \     /              plads 3: efterkommer  = {6}          -> 1 stk
+          4   5   6                plads 4: blad                         -> 0 stk
+                                   plads 5: blad                         -> 0 stk
+                                   plads 6: blad                         -> 0 stk
+    ```
+
+    Nøgler større end $9$: kun $10$, altså $1$ stk til rådighed.
+
+    - Plads 1: roden skal være minimum ($5$), og $9 != 5$. Udelukket.
+    - Plads 2: kræver $2$ større nøgler (plads 4 og 5), men kun $1$ findes. Umuligt.
+    - Plads 3: $1$ efterkommer (plads 6); læg $10$ der, kravet $1 <= 1$ holder. Konkret: $[5,6,9,7,8,10]$. Gyldig.
+    - Plads 4, 5, 6: blade, $0$ efterkommere, under en forælder $< 9$. Gyldige.
 
     Svar: positionerne 3, 4, 5 og 6.
   ],
@@ -483,11 +670,15 @@ Hver operation har sin egen opskrift herunder. De er skrevet for en *max-heap* (
     + *Gang sammen.* Antal kald gange pris per kald.
   ],
   worked: [
-    Input: #swap[$n$ identiske elementer].
+    Input: $n$ identiske elementer. Heapsort har to faser, og pointen er, at hvert sift-ned bliver billigt, når alle nøgler er ens.
 
-    + Build-Max-Heap kører $~n\/2$ sift-ned. Med ens nøgler stopper hvert kald straks, så fasen er $O(n)$.
-    + Extract-Max kører $n-1$ gange. Hver gang stopper sift-ned efter en sammenligning eller to, altså $O(1)$ per kald. Fasen er $O(n)$.
+    Et sift-ned sammenligner en forælder med sine børn og bytter kun, hvis et barn er *strengt* større. Med ens nøgler er forælder $=$ barn, så uligheden "barn $>$ forælder" er aldrig sand: sift-ned stopper efter $1$ niveau, altså $O(1)$ pr. kald — uanset $n$.
 
-    Begge faser er $O(n)$, så i alt $O(n)$.
+    + *Fase 1 — Build-Max-Heap:* kalder sift-ned på $floor(n\/2)$ knuder. Hver koster $O(1)$, så fasen koster
+      #eq[$ floor(n\/2) dot O(1) = O(n). $]
+    + *Fase 2 — $n-1$ gange Extract-Max:* hvert kald flytter sidste element op i roden og kører ét sift-ned. Med ens nøgler koster hvert sift-ned $O(1)$, så fasen koster
+      #eq[$ (n-1) dot O(1) = O(n). $]
+
+    Samlet: $O(n) + O(n) = O(n)$. (Til sammenligning er worst-case for vilkårligt input $O(n log n)$, fordi hvert sift-ned dér kan løbe op til $log n$ niveauer.) Svar (c).
   ],
 )

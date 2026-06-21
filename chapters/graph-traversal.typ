@@ -116,15 +116,32 @@ Sagt helt enkelt, med et eksempel fra grafen ovenfor (DFS fra $i$):
     + Stop ved det niveau du leder efter, og læs den første knude af.
   ],
   worked: [
-    Grafen her, start i $a$, naboer sorteret.
+    Sortér ud-nabolisterne alfabetisk: $a:[d, e]$, $b:[c]$, $c:[f]$, $d:[g, i]$, $e:[b, j]$, $f:[g]$, $g:[j]$, $h:[c]$, $i:[j]$, $j:[]$. Start: $a.d = 0$, læg $a$ i køen. Reglen: tag forreste $u$ ud, og for hver hvid nabo $v$ sæt $v.d = u.d + 1$ og læg bagest. Køen $Q$ vises efter hvert udtag, opdagede $d$-værdier til højre.
 
-    + $d = 0$: $a$.
-    + $d = 1$: $a$ peger på $d, e$.
-    + $d = 2$: $d$ giver $g, i$, og $e$ giver $b, j$.
-    + $d = 3$: $b$ giver $c$.
-    + $d = 4$: $c$ giver $f$.
+    ```
+    Q=[a]                a.d=0  (start)
 
-    Første knude i afstand 4 er $f$.
+    pop a: naboer d,e begge hvide
+    Q=[d,e]              d.d=1, e.d=1
+    pop d: naboer g,i begge hvide
+    Q=[e,g,i]            g.d=2, i.d=2
+    pop e: naboer b,j begge hvide
+    Q=[g,i,b,j]          b.d=2, j.d=2
+    pop g: nabo j allerede set -> intet
+    Q=[i,b,j]
+    pop i: nabo j allerede set -> intet
+    Q=[b,j]
+    pop b: nabo c hvid
+    Q=[j,c]              c.d=3
+    pop j: ingen naboer
+    Q=[c]
+    pop c: nabo f hvid
+    Q=[f]                f.d=4
+    pop f: nabo g allerede set
+    Q=[]                 (færdig)
+    ```
+
+    $d$-værdierne tildelt i orden: $a(0)$, $d(1)$, $e(1)$, $g(2)$, $i(2)$, $b(2)$, $j(2)$, $c(3)$, $f(4)$. Den eneste knude med $d = 4$ er $f$, så den er også den første.
 
     Svar: (b) $f$.
   ],
@@ -146,13 +163,28 @@ Sagt helt enkelt, med et eksempel fra grafen ovenfor (DFS fra $i$):
     + Læs den første knude af, der rammer afstanden #swap[$2$].
   ],
   worked: [
-    Grafen her, start i $c$, naboer sorteret.
+    Sortér ud-nabolisterne: $a:[b, f]$, $b:[f, g]$, $c:[b, d, g, h]$, $d:[h, i]$, $e:[d, i]$, $f:[g]$, $g:[]$, $h:[i]$. Start: $c.d = 0$, læg $c$ i køen. Køen vises efter hvert udtag.
 
-    + $d = 0$: $c$.
-    + $d = 1$: $c$ peger på $b, d, g, h$ (i den orden).
-    + Tag $b$ ud først; $b$'s naboer er $f, g$. $g$ har allerede $d = 1$, så $f$ får $d = 2$ først.
+    ```
+    Q=[c]                c.d=0  (start)
 
-    Rækkefølge: $c(0), b(1), d(1), g(1), h(1), f(2), i(2)$. Første knude i afstand 2 er $f$.
+    pop c: naboer b,d,g,h alle hvide
+    Q=[b,d,g,h]          b.d=1, d.d=1, g.d=1, h.d=1
+    pop b: nabo f hvid; g allerede set
+    Q=[d,g,h,f]          f.d=2
+    pop d: h allerede set; nabo i hvid
+    Q=[g,h,f,i]          i.d=2
+    pop g: ingen naboer
+    Q=[h,f,i]
+    pop h: nabo i allerede set
+    Q=[f,i]
+    pop f: nabo g allerede set
+    Q=[i]
+    pop i: ingen naboer
+    Q=[]                 (færdig)
+    ```
+
+    Tildelingsorden: $c(0)$, $b(1)$, $d(1)$, $g(1)$, $h(1)$, $f(2)$, $i(2)$. Inden for niveau $2$ kommer $f$ ud før $i$, fordi $b$ (som opdager $f$) stod før $d$ (som opdager $i$) i køen. Første med $d = 2$ er $f$.
 
     Svar: (e) $f$.
   ],
@@ -174,14 +206,29 @@ Sagt helt enkelt, med et eksempel fra grafen ovenfor (DFS fra $i$):
     + Svaret er den #swap[sidste] af dem (den, der nås længst ude).
   ],
   worked: [
-    Grafen her, uorienteret, start i $c$.
+    Uorienteret: hver kant tæller begge veje. Nabolister sorteret: $a:[f]$, $b:[c, f, g]$, $c:[b, d, g]$, $d:[c, e, h, i]$, $e:[d, i]$, $f:[a, b, g]$, $g:[b, c, f]$, $h:[d, i]$, $i:[d, e, h]$. Start: $c.d = 0$, køen $= [c]$.
 
-    + $d = 0$: $c$.
-    + $d = 1$: naboer til $c$ er $b, d, g$.
-    + $d = 2$: $b$ giver $f$; $d$ giver $e, h, i$.
-    + $d = 3$: eneste tilbageværende knude er $a$, nået via $f$.
+    ```
+    Q=[c]                c.d=0  (start)
 
-    $a$ er den eneste i afstand 3 og dermed også den sidste.
+    pop c: naboer b,d,g hvide
+    Q=[b,d,g]            b.d=1, d.d=1, g.d=1
+    pop b: c,g set; nabo f hvid
+    Q=[d,g,f]            f.d=2
+    pop d: c set; naboer e,h,i hvide
+    Q=[g,f,e,h,i]        e.d=2, h.d=2, i.d=2
+    pop g: b,c,f alle set
+    Q=[f,e,h,i]
+    pop f: b,g set; nabo a hvid
+    Q=[e,h,i,a]          a.d=3
+    pop e: d,i set
+    pop h: d,i set
+    pop i: d,e,h set
+    pop a: f set
+    Q=[]                 (færdig)
+    ```
+
+    Knuder med $d = 3$ i tildelingsorden: kun $a$. Den er dermed både den eneste og den sidste i afstand $3$.
 
     Svar: (a) $a$.
   ],
@@ -203,13 +250,26 @@ Sagt helt enkelt, med et eksempel fra grafen ovenfor (DFS fra $i$):
     + Enhver knude, der stadig har $d = infinity$ til sidst, er unåelig. Tæl dem.
   ],
   worked: [
-    Grafen her, orienteret, start i $c$.
+    Kun udgående pile bruges. Ud-nabolister: $a:[b, f]$, $b:[f, g]$, $c:[b, g, h]$, $d:[h, i]$, $e:[d, i]$, $f:[g]$, $h:[i]$. Alle $d$-værdier starter på $infinity$, undtagen $c.d = 0$.
 
-    + Nået: $c(0)$; så $c arrow b$, $c arrow g$, $c arrow h$ giver $b, g, h$ i afstand $1$.
-    + $b arrow f$ giver $f$ i afstand $2$; $h arrow i$ giver $i$ i afstand $2$.
-    + Nået-mængden er ${c, b, g, h, f, i}$. Ingen af dem peger ind i $a, d, e$.
+    ```
+    Q=[c]                c.d=0  (start)
 
-    Så $a, d, e$ beholder $d = infinity$. Antal $= 3$.
+    pop c: naboer b,g,h hvide
+    Q=[b,g,h]            b.d=1, g.d=1, h.d=1
+    pop b: f hvid; g set
+    Q=[g,h,f]            f.d=2
+    pop g: ingen naboer
+    Q=[h,f]
+    pop h: nabo i hvid
+    Q=[f,i]              i.d=2
+    pop f: g set
+    Q=[i]
+    pop i: ingen naboer
+    Q=[]                 (færdig)
+    ```
+
+    Nået: ${c, b, g, h, f, i}$. Tilbage med $d = infinity$: $a$, $d$, $e$. Ingen kant fra den nåede mængde peger ind i dem ($a$, $d$, $e$ har kun udgående eller indbyrdes kanter), så de forbliver unåelige. Antal $= 3$.
 
     Svar: (d) $3$.
   ],
@@ -236,12 +296,32 @@ Sagt helt enkelt, med et eksempel fra grafen ovenfor (DFS fra $i$):
     + Listen, du bygger, er svaret.
   ],
   worked: [
-    Grafen her, start i $a$, ud-lister sorteret.
+    En dobbeltpil tæller som to orienterede kanter. Ud-nabolister sorteret: $a:[g]$, $b:[c, h]$, $c:[a, h]$, $d:[h, i, j]$, $e:[b, d, f, h]$, $f:[b, e]$, $g:[c, j]$, $h:[d, e, g, j]$, $i:[d, j]$, $j:[]$. Listen bygges, hver gang en knude lægges bagest i køen.
 
-    + Lister: $a:[g]$, $g:[c, j]$, $c:[a, h]$, $h:[d, e, g, j]$, $d:[h, i, j]$, $i:[d, j]$, $e:[b, d, f, h]$, $b:[c, h]$, $f:[b, e]$, $j:[]$.
-    + $a$ lægger $g$; $g$ lægger $c, j$; $c$ ($a$ set) lægger $h$; $j$ intet; $h$ ($g, j$ set) lægger $d, e$; $d$ ($h, j$ set) lægger $i$; $e$ ($d, h$ set) lægger $b, f$; $i, b, f$ alle set.
+    ```
+    Q=[a]                lagt: a
 
-    Rækkefølge: $a, g, c, j, h, d, e, i, b, f$.
+    pop a: g hvid
+    Q=[g]                lagt: g
+    pop g: c,j hvide
+    Q=[c,j]              lagt: c, j
+    pop c: a set; h hvid
+    Q=[j,h]              lagt: h
+    pop j: ingen naboer
+    Q=[h]
+    pop h: d,e hvide; g,j set
+    Q=[d,e]              lagt: d, e
+    pop d: h set; i hvid; j set
+    Q=[e,i]              lagt: i
+    pop e: b hvid; d,h set; f hvid
+    Q=[i,b,f]            lagt: b, f
+    pop i: d,j set
+    pop b: c,h set
+    pop f: b,e set
+    Q=[]                 (færdig)
+    ```
+
+    Indsættelsesrækkefølge: $a, g, c, j, h, d, e, i, b, f$.
 
     Svar: (d).
   ],
@@ -263,12 +343,30 @@ Sagt helt enkelt, med et eksempel fra grafen ovenfor (DFS fra $i$):
     + Svaret er den #swap[sidste] af dem.
   ],
   worked: [
-    Grafen her, uorienteret, start i $a$, naboer sorteret.
+    Uorienteret, hver kant begge veje, lister sorteret: $a:[b, c]$, $b:[a, e, f]$, $c:[a, e, j]$, $e:[b, c, h]$, $f:[b, g, h]$, $g:[f, i]$, $h:[e, f, i]$, $i:[g, h, j]$, $j:[c, i]$. Start: $a.d = 0$.
 
-    + Lister: $a:[b, c]$, $b:[a, e, f]$, $c:[a, e, j]$, $e:[b, c, h]$, $f:[b, g, h]$, $g:[f, i]$, $h:[e, f, i]$, $i:[g, h, j]$, $j:[c, i]$.
-    + $a = 0$; $b = 1, c = 1$; fra $b$: $e = 2, f = 2$; fra $c$: $j = 2$; fra $e$: $h = 3$; fra $f$: $g = 3$; fra $h$: $i = 3$.
+    ```
+    Q=[a]                a.d=0  (start)
 
-    Knuder med $d = 3$ i orden: $h, g, i$. Sidste er $i$.
+    pop a: b,c hvide
+    Q=[b,c]              b.d=1, c.d=1
+    pop b: a set; e,f hvide
+    Q=[c,e,f]            e.d=2, f.d=2
+    pop c: a,e set; j hvid
+    Q=[e,f,j]            j.d=2
+    pop e: b,c set; h hvid
+    Q=[f,j,h]            h.d=3
+    pop f: b,h set; g hvid
+    Q=[j,h,g]            g.d=3
+    pop j: c set; i hvid
+    Q=[h,g,i]            i.d=3
+    pop h: e,f,i set
+    pop g: f,i set
+    pop i: g,h,j set
+    Q=[]                 (færdig)
+    ```
+
+    Knuder med $d = 3$ i tildelingsorden: $h$, $g$, $i$. Den sidste er $i$.
 
     Svar: (e) $i$.
   ],
@@ -289,15 +387,34 @@ Sagt helt enkelt, med et eksempel fra grafen ovenfor (DFS fra $i$):
     + Tæl den type opgaven spørger om, her #swap[forward].
   ],
   worked: [
-    Grafen her, start i $a$.
+    Ud-nabolister sorteret: $a:[b, e]$, $b:[c, f]$, $c:[d, f, g]$, $d:[h]$, $f:[a, g]$, $g:[]$, $h:[g]$. Kør DFS med tæller `time`; `(d` = opdag, `f)` = afslut.
 
-    + Intervaller: $a[1,16]$, $b[2,13]$, $c[3,12]$, $d[4,9]$, $h[5,8]$, $g[6,7]$, $f[10,11]$, $e[14,15]$.
-    + $f arrow a$: $a$ er grå, altså back.
-    + $f arrow g$: $g$ er sort og $u.d = 10 > 6$, altså cross.
-    + $c arrow g$: $g$ er sort og $u.d = 3 < 6$, altså forward.
-    + $b arrow f$: $f$ er sort og $u.d = 2 < 10$, altså forward.
+    ```
+    time=1   d a      stak [a]
+    time=2   d b      stak [a,b]      (a->b tree)
+    time=3   d c      stak [a,b,c]    (b->c tree)
+    time=4   d d      stak [..,c,d]   (c->d tree)
+    time=5   d h      stak [..,d,h]   (d->h tree)
+    time=6   d g      stak [..,h,g]   (h->g tree)
+    time=7   f g      g ingen naboer
+    time=8   f h
+    time=9   f d
+             tilbage i c: c->f
+    time=10  d f      stak [a,b,c,f]  (c->f tree)
+             f->a: a grå          -> BACK
+             f->g: g sort, 10>6   -> CROSS
+    time=11  f f
+             c->g: g sort, 3<6    -> FORWARD
+    time=12  f c
+             b->f: f sort, 2<10   -> FORWARD
+    time=13  f b
+             a->e
+    time=14  d e      stak [a,e]      (a->e tree)
+    time=15  f e
+    time=16  f a
+    ```
 
-    To forward-kanter.
+    Intervaller: $a[1,16]$, $b[2,13]$, $c[3,12]$, $d[4,9]$, $h[5,8]$, $g[6,7]$, $f[10,11]$, $e[14,15]$. Forward-kanter (sort mål, $u.d < v.d$): $c arrow g$ og $b arrow f$. I alt $2$.
 
     Svar: (c) $2$.
   ],
@@ -323,12 +440,42 @@ Sagt helt enkelt, med et eksempel fra grafen ovenfor (DFS fra $i$):
     + Slå de fire kanter i hver mulighed op, og vælg den med præcis én af hver type.
   ],
   worked: [
-    Grafen her, start i $i$.
+    Ud-nabolister sorteret: $a:[i]$, $b:[a, c]$, $c:[i]$, $d:[c]$, $e:[d, i]$, $f:[e, i]$, $g:[f, h]$, $h:[a]$, $i:[b, d, g, h]$. DFS fra $i$:
 
-    + Opdagelsesorden: $i(1), b(2), a(3), c(5), d(8), g(10), f(11), e(12), h(15)$.
-    + Tree-kanter inkluderer $i arrow b$, $b arrow a$, $b arrow c$, $i arrow g$, $i arrow d$, $g arrow h$, $g arrow f$, $f arrow e$.
-    + Mulighed (b): $i arrow b$ = tree, $a arrow i$ = back (peger op til forfader $i$), $i arrow h$ = forward ($h$ opdaget senere ad anden vej), $d arrow c$ = cross ($c$ færdig i andet undertræ). Præcis én af hver.
-    + De øvrige: (a) er tree, tree, tree, tree; (c) er tree, back, cross, tree; (d) er back, forward, cross, back.
+    ```
+    time=1   d i      (start)
+    time=2   d b      i->b tree
+    time=3   d a      b->a tree
+             a->i: i grå           -> BACK
+    time=4   f a
+             b->c
+    time=5   d c      b->c tree
+             c->i: i grå           -> BACK
+    time=6   f c
+    time=7   f b
+             i->d
+    time=8   d d      i->d tree
+             d->c: c sort, 8>5     -> CROSS
+    time=9   f d
+             i->g
+    time=10  d g      i->g tree
+    time=11  d f      g->f tree
+    time=12  d e      f->e tree
+             e->d: d sort, 12>8    -> CROSS
+             e->i: i grå           -> BACK
+    time=13  f e
+             f->i: i grå           -> BACK
+    time=14  f f
+             g->h
+    time=15  d h      g->h tree
+             h->a: a sort, 15>3    -> CROSS
+    time=16  f h
+    time=17  f g
+             i->h: h sort, 1<15    -> FORWARD
+    time=18  f i
+    ```
+
+    Intervaller: $i[1,18]$, $b[2,7]$, $a[3,4]$, $c[5,6]$, $d[8,9]$, $g[10,17]$, $f[11,14]$, $e[12,13]$, $h[15,16]$. Slå mulighed (b) op: $(b,i)$ er kanten $i arrow b$ = tree; $(a,i)$ er $a arrow i$ = back; $(h,i)$ er $i arrow h$ = forward; $(c,d)$ er $d arrow c$ = cross. Præcis én af hver. De øvrige: (a) er fire tree; (c) er tree, back, cross, tree; (d) er back, forward, cross, back.
 
     Svar: (b).
   ],
@@ -354,13 +501,39 @@ Sagt helt enkelt, med et eksempel fra grafen ovenfor (DFS fra $i$):
     + Find muligheden med én kant af hver af de fire typer.
   ],
   worked: [
-    Grafen her, start i $a$.
+    Ud-nabolister sorteret: $a:[b, d]$, $b:[c, d]$, $c:[e, f]$, $d:[e]$, $e:[b, f, g]$, $f:[c, h, i]$, $g:[d, h]$, $h:[e, i]$, $i:[]$. DFS fra $a$:
 
-    + Tree: $a arrow b$, $b arrow c$, $c arrow e$, $e arrow f$, $f arrow h$, $h arrow i$, $e arrow g$, $g arrow d$.
-    + Back: $e arrow b$, $f arrow c$, $h arrow e$, $d arrow e$.
-    + Forward: $f arrow i$, $b arrow d$, $a arrow d$.
-    + Cross: $g arrow h$.
-    + Mulighed (c): $(b,d)$ = forward, $(d,e)$ = back, $(g,d)$ = tree, $(g,h)$ = cross. Én af hver.
+    ```
+    time=1   d a      (start)
+    time=2   d b      a->b tree
+    time=3   d c      b->c tree
+    time=4   d e      c->e tree
+             e->b: b grå           -> BACK
+    time=5   d f      e->f tree
+             f->c: c grå           -> BACK
+    time=6   d h      f->h tree
+             h->e: e grå           -> BACK
+    time=7   d i      h->i tree
+    time=8   f i
+    time=9   f h
+             f->i: i sort, 5<7     -> FORWARD
+    time=10  f f
+             e->g
+    time=11  d g      e->g tree
+    time=12  d d      g->d tree
+             d->e: e grå           -> BACK
+    time=13  f d
+             g->h: h sort, 11>6    -> CROSS
+    time=14  f g
+    time=15  f e
+    time=16  f c
+             b->d: d sort, 2<12    -> FORWARD
+    time=17  f b
+             a->d: d sort, 1<12    -> FORWARD
+    time=18  f a
+    ```
+
+    Intervaller: $a[1,18]$, $b[2,17]$, $c[3,16]$, $e[4,15]$, $f[5,10]$, $h[6,9]$, $i[7,8]$, $g[11,14]$, $d[12,13]$. Mulighed (c): $(b,d)$ = $b arrow d$ forward; $(d,e)$ = $d arrow e$ back; $(g,d)$ = $g arrow d$ tree; $(g,h)$ = $g arrow h$ cross. Én af hver type.
 
     Svar: (c).
   ],
@@ -381,13 +554,44 @@ Sagt helt enkelt, med et eksempel fra grafen ovenfor (DFS fra $i$):
     + Klassificér: $v$ sort med $u.d > v.d$ er cross. Tæl dem.
   ],
   worked: [
-    Grafen her, start i $a$.
+    Hver dobbeltpil er to kanter. Ud-nabolister sorteret: $a:[d, g]$, $b:[c]$, $c:[b]$, $d:[e, g]$, $e:[a, d]$, $f:[b, g]$, $g:[b, h]$, $h:[d, f, g]$, $i:[a, b, g]$. DFS-Visit fra $a$, derefter ydre loop i resterende hvide alfabetisk.
 
-    + $i$ har ingen indgående kanter, så træet fra $a$ når den aldrig; $i$ starter et nyt DFS-træ.
-    + Tider: $a(1,16)$, $d(2,15)$, $e(3,4)$, $g(5,14)$, $b(6,9)$, $c(7,8)$, $h(10,13)$, $f(11,12)$, $i(17,18)$.
-    + Cross-kanter er $f arrow b$, $i arrow a$, $i arrow g$, $i arrow b$: hver peger på en knude, der blev færdig før kilden blev opdaget.
+    ```
+    time=1   d a      (start)
+    time=2   d d      a->d tree
+    time=3   d e      d->e tree
+             e->a: a grå           -> BACK
+             e->d: d grå           -> BACK
+    time=4   f e
+             d->g
+    time=5   d g      d->g tree
+    time=6   d b      g->b tree
+    time=7   d c      b->c tree
+             c->b: b grå           -> BACK
+    time=8   f c
+    time=9   f b
+             g->h
+    time=10  d h      g->h tree
+             h->d: d grå           -> BACK
+    time=11  d f      h->f tree
+             f->b: b sort, 11>6    -> CROSS
+             f->g: g grå           -> BACK
+    time=12  f f
+             h->g: g grå           -> BACK
+    time=13  f h
+    time=14  f g
+    time=15  f d
+             a->g: g sort, 1<5     -> FORWARD
+    time=16  f a
+             ydre loop: i er hvid
+    time=17  d i      (ny rod)
+             i->a: a sort, 17>1    -> CROSS
+             i->b: b sort, 17>6    -> CROSS
+             i->g: g sort, 17>5    -> CROSS
+    time=18  f i
+    ```
 
-    Cross-kanter $= 4$.
+    $i$ har ingen indgående kant, så den nås aldrig fra $a$ og starter sit eget træ. Tider: $a[1,16]$, $d[2,15]$, $e[3,4]$, $g[5,14]$, $b[6,9]$, $c[7,8]$, $h[10,13]$, $f[11,12]$, $i[17,18]$. Cross-kanter (sort mål, $u.d > v.d$): $f arrow b$, $i arrow a$, $i arrow b$, $i arrow g$. I alt $4$.
 
     Svar: (e) $4$.
   ],
@@ -408,11 +612,39 @@ Sagt helt enkelt, med et eksempel fra grafen ovenfor (DFS fra $i$):
     + Tæl cross-kanterne.
   ],
   worked: [
-    Grafen her, start i $a$.
+    Ud-nabolister sorteret: $a:[c]$, $b:[a]$, $c:[e, j]$, $e:[b, h]$, $f:[b]$, $g:[f]$, $h:[f, i]$, $i:[g]$, $j:[e, h, i]$. DFS-Visit fra $a$:
 
-    + $a arrow c$ (tree), $c arrow e$ (tree), $e arrow b$ (tree), $b arrow a$ back; $e arrow h$ (tree), $h arrow f$ (tree), $f arrow b$ cross; $h arrow i$ (tree), $i arrow g$ (tree), $g arrow f$ cross; $c arrow j$ (tree).
-    + $j arrow e$, $j arrow h$, $j arrow i$ peger alle på færdige (sorte) knuder med $d[j] > d["mål"]$ — tre cross-kanter.
-    + I alt: 8 tree, 1 back, 5 cross, 0 forward.
+    ```
+    time=1   d a      (start)
+    time=2   d c      a->c tree
+    time=3   d e      c->e tree
+    time=4   d b      e->b tree
+             b->a: a grå           -> BACK
+    time=5   f b
+             e->h
+    time=6   d h      e->h tree
+    time=7   d f      h->f tree
+             f->b: b sort, 7>4     -> CROSS
+    time=8   f f
+             h->i
+    time=9   d i      h->i tree
+    time=10  d g      i->g tree
+             g->f: f sort, 10>7    -> CROSS
+    time=11  f g
+    time=12  f i
+    time=13  f h
+    time=14  f e
+             c->j
+    time=15  d j      c->j tree
+             j->e: e sort, 15>3    -> CROSS
+             j->h: h sort, 15>6    -> CROSS
+             j->i: i sort, 15>9    -> CROSS
+    time=16  f j
+    time=17  f c
+    time=18  f a
+    ```
+
+    Tider: $a[1,18]$, $c[2,17]$, $e[3,14]$, $b[4,5]$, $h[6,13]$, $f[7,8]$, $i[9,12]$, $g[10,11]$, $j[15,16]$. Optælling: 8 tree, 1 back ($b arrow a$), 0 forward, 5 cross ($f arrow b$, $g arrow f$, $j arrow e$, $j arrow h$, $j arrow i$).
 
     Cross-kanter $= 5$.
 
@@ -441,11 +673,15 @@ Sagt helt enkelt, med et eksempel fra grafen ovenfor (DFS fra $i$):
     + En liste uden brudt kant er gyldig. Spørger opgaven om #swap[flere svar], saml dem alle.
   ],
   worked: [
-    Grafen her.
+    Bindinger (hver kant $u arrow v$ kræver $u$ før $v$): $a$ før $b, d$; $b$ før $c, d, e$; $c$ før $f$; $e$ før $f$; $g$ før $c, f$. Gå hver liste igennem og find første brudte kant.
 
-    + Bindinger: $g$ før $c, f$; $b$ før $c, d, e$; $c, e$ før $f$; $a$ før $b, d$.
-    + (a) og (b): $g$ står efter $c$, så $g arrow c$ brydes. Ugyldige.
-    + (c), (d) og (e): hver kant peger fremad. Gyldige.
+    ```
+    (a) a,b,c,d,e,f,g   g står sidst (pos7), men g før c (pos3) -> BRUDT (g->c). Ugyldig
+    (b) a,b,e,d,c,g,f   g pos6 efter c pos5 -> BRUDT (g->c). Ugyldig
+    (c) a,b,e,d,g,c,f   a<b,a<d,b<c,b<d,b<e,c<f,e<f,g<c,g<f alle OK. Gyldig
+    (d) a,b,g,c,e,d,f   a<b,a<d,b<c,b<d,b<e,c<f,e<f,g<c,g<f alle OK. Gyldig
+    (e) g,a,b,e,c,f,d   g<c,g<f,a<b,a<d,b<c,b<d,b<e,c<f,e<f alle OK. Gyldig
+    ```
 
     Svar: (c), (d) og (e).
   ],
@@ -472,14 +708,15 @@ Sagt helt enkelt, med et eksempel fra grafen ovenfor (DFS fra $i$):
     + En liste uden brudt kant er gyldig. Spørger opgaven om #swap[flere svar], saml dem alle.
   ],
   worked: [
-    Grafen her.
+    Bindinger: $b$ før $a, c, d, e$; $c$ før $e$; $d$ før $e$; $f$ før $c, e$. Tjek hver liste.
 
-    + Bindinger: $b$ før $a, c, d, e$; $c, d$ før $e$; $f$ før $c, e$.
-    + (a): $f$ står efter $c$, så $f arrow c$ brydes. Ugyldig.
-    + (b): hver kant peger fremad. Gyldig.
-    + (c): $e$ står før sine forgængere. Ugyldig.
-    + (d): $e$ står før $c$ og $d$, så $c arrow e$ og $d arrow e$ brydes. Ugyldig.
-    + (e): hver kant peger fremad. Gyldig.
+    ```
+    (a) a,b,c,d,e,f   f sidst (pos6), men f før c (pos3) -> BRUDT (f->c). Ugyldig
+    (b) b,d,f,c,e,a   b<c,b<a,b<d,b<e,c<e,d<e,f<c,f<e alle OK. Gyldig
+    (c) f,e,d,c,b,a   b pos5 efter c pos4 -> BRUDT (b->c). Ugyldig
+    (d) b,f,e,d,c,a   c pos5 efter e pos3 -> BRUDT (c->e). Ugyldig
+    (e) f,b,c,d,a,e   f<c,f<e,b<c,b<a,b<d,b<e,c<e,d<e alle OK. Gyldig
+    ```
 
     Svar: (b) og (e).
   ],
@@ -507,14 +744,16 @@ Sagt helt enkelt, med et eksempel fra grafen ovenfor (DFS fra $i$):
     + Saml alle lister uden brud — opgaven har #swap[flere rigtige].
   ],
   worked: [
-    Grafen her.
+    Bindinger: $c$ før $e, j$; $j$ før $e, h, i$; $e$ før $b, h$; $h$ før $f, i$; $f$ før $b$. Tjek hver liste.
 
-    + (a) $c, j, e, h, i, f, b$: alle kanter opfyldt. Gyldig.
-    + (b) slutter med $j$: bryder $j arrow e$, $j arrow h$, $j arrow i$. Ugyldig.
-    + (c) starter med $b$: bryder $e arrow b$, $h arrow f$, $f arrow b$. Ugyldig.
-    + (d) slutter med $c$: bryder $c arrow e$, $c arrow j$. Ugyldig.
-    + (e) $c, j, e, h, f, i, b$: alle kanter opfyldt ($h arrow i$ holder, $f arrow b$ holder). Gyldig.
-    + (f) $c, j, e, h, i, b, f$: $f$ står efter $b$, men $f arrow b$ kræver $f$ før $b$. Ugyldig.
+    ```
+    (a) c,j,e,h,i,f,b   c<e,c<j,j<e,j<h,j<i,e<h,e<b,h<i,h<f,f<b alle OK. Gyldig
+    (b) c,e,h,i,f,b,j   j sidst (pos7), men j før e (pos2) -> BRUDT (j->e). Ugyldig
+    (c) b,c,e,f,h,i,j   b først (pos1), men e før b -> BRUDT (e->b). Ugyldig
+    (d) j,e,h,i,f,b,c   c sidst (pos7), men c før e (pos2) -> BRUDT (c->e). Ugyldig
+    (e) c,j,e,h,f,i,b   c<e,c<j,j<e,j<h,j<i,e<h,e<b,h<i,h<f,f<b alle OK. Gyldig
+    (f) c,j,e,h,i,b,f   f pos7 efter b pos6 -> BRUDT (f->b). Ugyldig
+    ```
 
     Svar: (a) og (e).
   ],
@@ -542,14 +781,41 @@ Sagt helt enkelt, med et eksempel fra grafen ovenfor (DFS fra $i$):
     + Læs den knude af, der rammer tidsstemplet #swap[$12$].
   ],
   worked: [
-    Hjulgrafen her, start i $i$, nabolister sorteret.
+    Ud-nabolister sorteret: $i:[a, b, d, g, h]$, $a:[]$, $b:[a, c]$, $c:[i]$, $d:[c]$, $e:[d, i]$, $f:[e, i]$, $g:[f, h]$, $h:[a]$. DFS fra $i$; `(d` opdag, `f)` afslut.
 
-    + Lister: $i:[a, b, d, g, h]$, $b:[a, c]$, $c:[i]$, $d:[c]$, $e:[d, i]$, $f:[e, i]$, $g:[f, h]$, $h:[a]$.
-    + $i$ opd 1; $a$ opd 2 afs 3; $b$ opd 4; $c$ opd 5 afs 6; $b$ afs 7.
-    + $d$ opd 8 afs 9; $g$ opd 10; $f$ opd 11; $e$ opd 12 afs 13.
-    + $f$ afs 14; $h$ opd 15 afs 16; $g$ afs 17; $i$ afs 18.
+    ```
+    time=1   d i      (start)
+    time=2   d a      i->a tree;  a ingen naboer
+    time=3   f a
+             i->b
+    time=4   d b      i->b tree
+             b->a: a sort
+    time=5   d c      b->c tree
+             c->i: i grå (back)
+    time=6   f c
+    time=7   f b
+             i->d
+    time=8   d d      i->d tree
+             d->c: c sort
+    time=9   f d
+             i->g
+    time=10  d g      i->g tree
+    time=11  d f      g->f tree
+    time=12  d e      f->e tree   <-- opdagelsestid 12
+             e->d: d sort;  e->i: i grå (back)
+    time=13  f e
+             f->i: i grå (back)
+    time=14  f f
+             g->h
+    time=15  d h      g->h tree
+             h->a: a sort
+    time=16  f h
+    time=17  f g
+             i->h: h sort
+    time=18  f i
+    ```
 
-    Opdagelsestid 12 lander på $e$.
+    Opdagelsestid $12$ lander på $e$.
 
     Svar: (b) knuden $e$.
   ],
@@ -577,13 +843,34 @@ Sagt helt enkelt, med et eksempel fra grafen ovenfor (DFS fra $i$):
     + Match tidsstemplet #swap[$16$] til en knude; er den ikke blandt mulighederne, vælg "ingen knude".
   ],
   worked: [
-    Hjulgrafen her, start i $i$, naboer $a, c, d, g$.
+    Ud-nabolister sorteret: $i:[a, c, d, g]$, $a:[]$, $b:[a, c, i]$, $c:[]$, $d:[c]$, $e:[d, i]$, $f:[e, i]$, $g:[f, h]$, $h:[a, i]$. DFS fra $i$, ydre loop bagefter.
 
-    + $i$ opd 1; $a$ opd 2 afs 3; $c$ opd 4 afs 5; $d$ opd 6 afs 7.
-    + $g$ opd 8; $f$ opd 9; $e$ opd 10 afs 11; $f$ afs 12; $h$ opd 13 afs 14; $g$ afs 15; $i$ afs 16.
-    + $b$ ligger i et separat træ: opd 17, afs 18.
+    ```
+    time=1   d i      (start)
+    time=2   d a      i->a tree;  a ingen naboer
+    time=3   f a
+    time=4   d c      i->c tree;  c ingen naboer
+    time=5   f c
+    time=6   d d      i->d tree;  d->c sort
+    time=7   f d
+             i->g
+    time=8   d g      i->g tree
+    time=9   d f      g->f tree
+    time=10  d e      f->e tree;  e->d sort; e->i grå (back)
+    time=11  f e
+             f->i: i grå (back)
+    time=12  f f
+             g->h
+    time=13  d h      g->h tree;  h->a sort; h->i grå (back)
+    time=14  f h
+    time=15  f g
+    time=16  f i      <-- afslutningstid 16
+             ydre loop: b er hvid
+    time=17  d b      (ny rod); b->a sort, b->c sort, b->i sort
+    time=18  f b
+    ```
 
-    Afslutningstid 16 lander på $i$, som ikke er blandt $b, d, f, h$.
+    Afslutningstid $16$ lander på $i$ selv, som ikke er blandt mulighederne $b, d, f, h$.
 
     Svar: (e) ingen knude har afslutningstid 16.
   ],
@@ -611,13 +898,38 @@ Sagt helt enkelt, med et eksempel fra grafen ovenfor (DFS fra $i$):
     + Læs den knude af, der rammer tidsstemplet #swap[$12$].
   ],
   worked: [
-    Grafen her, start i $a$, naboer sorteret.
+    Ud-nabolister sorteret: $a:[b, d]$, $b:[c, d]$, $c:[e]$, $d:[e]$, $e:[b, f, g]$, $f:[c, h]$, $g:[d, h]$, $h:[e, i]$, $i:[]$. DFS fra $a$:
 
-    + Lister: $a:[b, d]$, $b:[c, d]$, $c:[e]$, $d:[e]$, $e:[b, f, g]$, $f:[c, h]$, $g:[d, h]$, $h:[e, i]$, $i:[]$.
-    + $a = 1$, $b = 2$, $c = 3$, $e = 4$, $f = 5$, $h = 6$, $i = 7$.
-    + $i$ afslutter; tilbage gennem $h, f$ til $e$; $e$'s næste hvide nabo er $g = 11$; $g$'s første hvide nabo er $d = 12$.
+    ```
+    time=1   d a      (start)
+    time=2   d b      a->b tree
+    time=3   d c      b->c tree
+    time=4   d e      c->e tree
+             e->b: b grå (back)
+    time=5   d f      e->f tree
+             f->c: c grå (back)
+    time=6   d h      f->h tree
+             h->e: e grå (back)
+    time=7   d i      h->i tree
+    time=8   f i
+    time=9   f h
+    time=10  f f
+             e->g
+    time=11  d g      e->g tree
+    time=12  d d      g->d tree   <-- opdagelsestid 12
+             d->e: e grå (back)
+    time=13  f d
+             g->h: h sort
+    time=14  f g
+    time=15  f e
+    time=16  f c
+             b->d: d sort
+    time=17  f b
+             a->d: d sort
+    time=18  f a
+    ```
 
-    Opdagelsestid 12 lander på $d$.
+    Opdagelsestid $12$ lander på $d$.
 
     Svar: (a) knuden $d$.
   ],
@@ -643,12 +955,34 @@ Sagt helt enkelt, med et eksempel fra grafen ovenfor (DFS fra $i$):
     + Kør rekursiv DFS-Visit fra #swap[$a$]: ved første besøg gives opdagelsestid (føj til listen) og knuden bliver grå; gå ned i ud-naboerne alfabetisk og spring de sete over.
   ],
   worked: [
-    Grafen her, start i $a$, ud-lister sorteret.
+    En dobbeltpil er to kanter. Ud-nabolister sorteret: $a:[d, g]$, $b:[c]$, $c:[b, f]$, $d:[e, g]$, $e:[a, d]$, $f:[b, g]$, $g:[b, h, i]$, $h:[d, f, g]$, $i:[a, b]$. DFS-Visit fra $a$; knuden føjes til listen ved opdagelse.
 
-    + Lister: $a:[d, g]$, $b:[c]$, $c:[b, f]$, $d:[e, g]$, $e:[a, d]$, $f:[b, g]$, $g:[b, h, i]$, $h:[d, f, g]$, $i:[a, b]$.
-    + Opdag $a$; ned til $d$; opdag $d$; ned til $e$; $e$'s naboer $a, d$ set, tilbage; fra $d$ til $g$; opdag $g$; ned til $b$; opdag $b$; ned til $c$; opdag $c$; ned til $f$; opdag $f$; tilbage; fra $g$ næste er $h$; opdag $h$; fra $g$ næste er $i$; opdag $i$.
+    ```
+    time=1   d a      liste: a       stak [a]
+    time=2   d d      liste: d       a->d, stak [a,d]
+    time=3   d e      liste: e       d->e, stak [a,d,e]
+             e->a set; e->d set -> tilbage
+    time=4   f e
+             d->g
+    time=5   d g      liste: g       d->g, stak [a,d,g]
+    time=6   d b      liste: b       g->b, stak [a,d,g,b]
+    time=7   d c      liste: c       b->c, stak [..,b,c]
+             c->b set
+    time=8   d f      liste: f       c->f, stak [..,c,f]
+             f->b set; f->g set -> tilbage
+    time=9   f f
+    time=10  f c
+    time=11  f b
+             g->h
+    time=12  d h      liste: h       g->h
+             h->d,f,g alle set -> tilbage
+    time=13  f h
+             g->i
+    time=14  d i      liste: i       g->i
+    ...
+    ```
 
-    Rækkefølge: $a, d, e, g, b, c, f, h, i$.
+    Opdagelsesrækkefølge: $a, d, e, g, b, c, f, h, i$.
 
     Svar: (b).
   ],
@@ -669,11 +1003,35 @@ Sagt helt enkelt, med et eksempel fra grafen ovenfor (DFS fra $i$):
     + Den knude, der får den højeste opdagelsestid, er svaret.
   ],
   worked: [
-    Grafen her, start i $a$.
+    Ud-nabolister sorteret: $a:[b, e]$, $b:[c, f]$, $c:[d, f, g]$, $d:[h]$, $e:[]$, $f:[a, e, g]$, $g:[d]$, $h:[g]$. DFS-Visit fra $a$:
 
-    + Lister: $a:[b, e]$, $b:[c, f]$, $c:[d, f, g]$, $d:[h]$, $f:[a, e, g]$, $g:[d]$, $h:[g]$, $e:[]$.
-    + Opdagelse: $a = 1$, $b = 2$, $c = 3$, $d = 4$, $h = 5$, $g = 6$ ($g arrow d$ set, tilbage til $c$), så $c arrow f = 7$, $f arrow e = 8$.
-    + Rækkefølge $a, b, c, d, h, g, f, e$; højeste er $e$ (tid 8).
+    ```
+    time=1   d a      (start)
+    time=2   d b      a->b tree
+    time=3   d c      b->c tree
+    time=4   d d      c->d tree
+    time=5   d h      d->h tree
+    time=6   d g      h->g tree
+             g->d: d grå (back)
+    time=7   f g
+    time=8   f h
+    time=9   f d
+             c->f
+    time=10  d f      c->f tree
+             f->a: a grå (back)
+    time=11  d e      f->e tree   <-- højeste opdagelsestid
+    time=12  f e
+             f->g: g sort
+    time=13  f f
+             c->g: g sort
+    time=14  f c
+             b->f: f sort
+    time=15  f b
+             a->e: e sort
+    time=16  f a
+    ```
+
+    Opdagelsesrækkefølge: $a(1)$, $b(2)$, $c(3)$, $d(4)$, $h(5)$, $g(6)$, $f(10)$, $e(11)$. Den sidst opdagede er $e$ med opdagelsestid $11$. ($e$ nås først via $f$, efter hele $d$/$h$/$g$-undertræet er lukket.)
 
     Svar: (b) $e$.
   ],
@@ -694,11 +1052,32 @@ Sagt helt enkelt, med et eksempel fra grafen ovenfor (DFS fra $i$):
     + Knuden med den højeste opdagelsestid er svaret.
   ],
   worked: [
-    Grafen her, start i $a$.
+    Ud-nabolister sorteret: $a:[c]$, $b:[]$, $c:[e, j]$, $e:[b, h]$, $f:[]$, $g:[]$, $h:[f, i]$, $i:[g]$, $j:[c, e, h, i]$. DFS-Visit fra $a$:
 
-    + Lister: $a:[c]$, $c:[e, j]$, $e:[b, h]$, $h:[f, i]$, $i:[g]$.
-    + $a(1) arrow c(2) arrow e(3) arrow b(4$, blindgyde$)$ tilbage $arrow h(5) arrow f(6$, blindgyde$)$ tilbage $arrow i(7) arrow g(8$, blindgyde$)$ tilbage til $c arrow j(9)$.
-    + $j$ nås først via $c$'s anden kant, efter hele $e$/$h$/$i$-undertræet er færdigt, så den får opdagelsestid 9 — den højeste.
+    ```
+    time=1   d a      (start)
+    time=2   d c      a->c tree
+    time=3   d e      c->e tree
+    time=4   d b      e->b tree;  b blindgyde
+    time=5   f b
+             e->h
+    time=6   d h      e->h tree
+    time=7   d f      h->f tree;  f blindgyde
+    time=8   f f
+             h->i
+    time=9   d i      h->i tree
+    time=10  d g      i->g tree;  g blindgyde
+    time=11  f g
+    time=12  f i
+    time=13  f h
+    time=14  f e
+             c->j
+    time=15  d j      c->j tree   <-- højeste opdagelsestid
+             j->c,e,h,i alle sorte
+    time=16  f j
+    ```
+
+    $j$ nås først via $c$'s anden kant, efter hele $e$/$h$/$i$-undertræet er lukket, så den får opdagelsestid $15$ — den højeste.
 
     Svar: (i) $j$.
   ],
@@ -726,12 +1105,25 @@ Sagt helt enkelt, med et eksempel fra grafen ovenfor (DFS fra $i$):
     + Læs den knude af, der rammer afslutningstiden #swap[$10$].
   ],
   worked: [
-    Grafen her, start i $a$, naboer sorteret.
+    Samme graf $G_1$ som før. Ud-nabolister sorteret: $a:[b, d]$, $b:[c, d]$, $c:[e]$, $d:[e]$, $e:[b, f, g]$, $f:[c, h]$, $g:[d, h]$, $h:[e, i]$, $i:[]$. DFS fra $a$:
 
-    + Opdagelse: $a = 1$, $b = 2$, $c = 3$, $e = 4$, $f = 5$, $h = 6$, $i = 7$.
-    + $i$ er en blindgyde og afslutter som 8. Derfra lukkes undertræet nedefra, så $h$ afslutter 9 og $f$ afslutter 10.
+    ```
+    time=1   d a      (start)
+    time=2   d b      a->b tree
+    time=3   d c      b->c tree
+    time=4   d e      c->e tree;  e->b grå (back)
+    time=5   d f      e->f tree;  f->c grå (back)
+    time=6   d h      f->h tree;  h->e grå (back)
+    time=7   d i      h->i tree;  i blindgyde
+    time=8   f i
+    time=9   f h
+    time=10  f f      <-- afslutningstid 10
+    ...
+    ```
 
-    Afslutningstid 10 lander på $f$.
+    $i$ er en blindgyde og afslutter som $8$. Undertræet lukkes nedefra: $h$ afslutter $9$, derefter $f$ afslutter $10$ (dens eneste hvide nabo $h$ er nu sort).
+
+    Afslutningstid $10$ lander på $f$.
 
     Svar: (c) knuden $f$.
   ],
@@ -753,13 +1145,21 @@ Sagt helt enkelt, med et eksempel fra grafen ovenfor (DFS fra $i$):
     + Tæl komponenterne.
   ],
   worked: [
-    Grafen her.
+    To knuder er i samme SCC, netop hvis der findes en vej begge veje mellem dem. Find kredsene og smelt dem, der deler en knude.
 
-    + $a$ har ingen indgående kant: singleton ${a}$.
-    + $i$ har ingen udgående kant: singleton ${i}$.
-    + De midterste 7 knuder hænger sammen via kredsene $d arrow e arrow g arrow d$, $e arrow g arrow h arrow e$, $e arrow f arrow h arrow e$ og $b arrow c arrow e arrow b$, så ${b, c, d, e, f, g, h}$ er én SCC.
+    ```
+    Kilde/afløb:
+      a: kun udgående (a->d, a->b), intet peger ind  -> singleton {a}
+      i: kun indgående (h->i, f->i), intet udgående   -> singleton {i}
 
-    Komponenter: ${a}$, ${b, c, d, e, f, g, h}$, ${i}$ — i alt 3.
+    Kredse blandt de øvrige:
+      d -> e -> g -> d      binder {d, e, g}
+      e -> g -> h -> e      trækker h ind   -> {d, e, g, h}
+      e -> f -> h -> e      trækker f ind   -> {d, e, f, g, h}
+      b -> c -> e -> b      trækker b, c ind-> {b, c, d, e, f, g, h}
+    ```
+
+    Alle kredse deler mindst én knude og smelter til én SCC ${b, c, d, e, f, g, h}$. Komponenter i alt: ${a}$, ${b, c, d, e, f, g, h}$, ${i}$ — $3$.
 
     Svar: (c) $3$.
   ],
@@ -784,6 +1184,18 @@ Sagt helt enkelt, med et eksempel fra grafen ovenfor (DFS fra $i$):
     En stærk sammenhængskomponent er en gruppe af knuder, hvor du kan rejse fra en hvilken som helst knude i gruppen til en hvilken som helst anden i samme gruppe via pilene. Resultatet 5 betyder derfor 5 grupper, ikke 5 enkeltknuder. Tænk på dem som 5 isolerede øer.
 
     Den store ø er ${b, c, d, g, h}$. Inden for netop denne gruppe kan du komme fra et hvilket som helst punkt til et hvilket som helst andet. Følg fx ringen $b arrow c arrow d arrow h arrow c arrow g arrow b$.
+
+    ```
+    Kredse, der smelter sammen:
+      c -> d -> h -> c     binder {c, d, h}
+      b -> c -> g -> b     trækker b, g ind  -> {b, c, d, g, h}
+
+    Resten (ingen returvej -> hver sin singleton):
+      a: ind f->a, b->a;  ud kun a-ingen        -> {a}
+      f: ind b->f, g->f;  ud kun f->a (a lukket) -> {f}
+      e: ud e->i, e->d;   intet peger ind i e     -> {e}
+      i: ind e->i;        ud i->h, i->d, ingen retur -> {i}
+    ```
 
     De fire andre er enkeltknuder, hver sin egen ø, fordi du aldrig kan rejse tilbage til dem igen:
 
@@ -814,13 +1226,21 @@ Sagt helt enkelt, med et eksempel fra grafen ovenfor (DFS fra $i$):
     + Tæl komponenterne.
   ],
   worked: [
-    Grafen her.
+    En dobbeltpil binder de to knuder sammen med det samme. Find kredsene og smelt dem.
 
-    + $g arrow.l.r h$ binder $g, h$. Kredsen $g arrow i arrow a arrow g$ trækker $i, a$ ind; $h arrow f arrow g arrow h$ trækker $f$ ind. Så ${a, f, g, h, i}$ er én SCC.
-    + $b arrow.l.r c$ er en anden SCC ${b, c}$.
-    + $d$ har indgående kanter, men kun $d arrow e$ udgående: singleton. $e$ er rent afløb: singleton.
+    ```
+    g <-> h              binder {g, h}
+    g -> i -> a -> g     trækker i, a ind  -> {a, g, h, i}
+    h -> f -> g -> h     trækker f ind     -> {a, f, g, h, i}
 
-    Komponenter: ${a, f, g, h, i}$, ${b, c}$, ${d}$, ${e}$ — i alt 4.
+    b <-> c              egen SCC          -> {b, c}
+
+    Singletons (ingen returvej):
+      d: ind h->d, a->d, g->d; ud kun d->e -> {d}
+      e: rent afløb, ingen udgående         -> {e}
+    ```
+
+    Komponenter: ${a, f, g, h, i}$, ${b, c}$, ${d}$, ${e}$ — i alt $4$.
 
     Svar: (d) $4$.
   ],
@@ -841,13 +1261,20 @@ Sagt helt enkelt, med et eksempel fra grafen ovenfor (DFS fra $i$):
     + Tæl komponenterne.
   ],
   worked: [
-    Grafen her.
+    Find kredsene og smelt dem, der deler en knude.
 
-    + Kreds $A, B, E$ ($B arrow A$, $A arrow E$, $E arrow B$). Kreds $G, H, E$ ($G arrow E$, $E arrow H$, $H arrow G$) deler $E$ og smelter ind: ${A, B, E, G, H}$.
-    + Kreds $F, I, J$ ($F arrow I$, $I arrow J$, $J arrow F$): ${F, I, J}$.
-    + $C$ har $H arrow C$ ind, men ingen returvej: singleton. $D$ er singleton.
+    ```
+    B -> A -> E -> B     binder {A, B, E}
+    G -> E -> H -> G     deler E, smelter ind -> {A, B, E, G, H}
 
-    Komponenter: ${A, B, E, G, H}$, ${C}$, ${D}$, ${F, I, J}$ — i alt 4.
+    F -> I -> J -> F     egen kreds           -> {F, I, J}
+
+    Singletons (ingen returvej):
+      C: ind B->C, H->C; ud C->D, C->F -> {C}
+      D: ind C->D;       ud D->F       -> {D}
+    ```
+
+    Komponenter: ${A, B, E, G, H}$, ${C}$, ${D}$, ${F, I, J}$ — i alt $4$.
 
     Svar: (d) $4$.
   ],
@@ -874,11 +1301,31 @@ Sagt helt enkelt, med et eksempel fra grafen ovenfor (DFS fra $i$):
     + Saml alle par, der gør — opgaven har #swap[flere rigtige].
   ],
   worked: [
-    Grafen her.
+    Find først SCC'erne, slå derefter hvert par op.
 
-    + Tre SCC'er: ${a}$, ${i}$ og ${b, c, d, e, f, g, h}$. Den store kreds binder fx $d arrow e arrow b arrow d$, $e arrow g arrow d arrow e$, $e arrow f arrow h arrow e$, $f arrow c arrow e arrow f$.
-    + $a$ har kun udgående kanter ($a arrow d$, $a arrow b$) uden returvej: singleton. $i$ har kun indgående: singleton.
-    + Par: $a, f$ forskellige; $b, h$ samme; $c, d$ samme; $b, i$ forskellige; $a, i$ forskellige.
+    ```
+    Kredse:
+      d -> e -> b -> d     binder {b, d, e}
+      e -> g -> d -> e     trækker g ind     -> {b, d, e, g}
+      e -> f -> h -> e     trækker f, h ind  -> {b, d, e, f, g, h}
+      f -> c -> e -> f     trækker c ind     -> {b, c, d, e, f, g, h}
+
+    Singletons:
+      a: kun udgående (a->d, a->b), ingen retur -> {a}
+      i: kun indgående (g->h->i, f->i)          -> {i}
+
+    Tre SCC'er: {a}, {i}, {b,c,d,e,f,g,h}
+    ```
+
+    Slå parrene op:
+
+    ```
+    (a) a og f   {a} vs stor SCC   -> forskellige
+    (b) b og h   begge i stor SCC  -> SAMME
+    (c) c og d   begge i stor SCC  -> SAMME
+    (d) b og i   stor SCC vs {i}   -> forskellige
+    (e) a og i   {a} vs {i}        -> forskellige
+    ```
 
     Svar: (b) og (c).
   ],
@@ -906,11 +1353,29 @@ Sagt helt enkelt, med et eksempel fra grafen ovenfor (DFS fra $i$):
     + Test kandidaterne og vælg den, der giver netop 1 komponent.
   ],
   worked: [
-    Grafen her.
+    Find først SCC'erne i grundgrafen.
 
-    + Grundgrafen har SCC ${b, c, d, g, h}$ plus singletons $a, e, f, i$.
-    + $a$ nås fra kernen ($f arrow a$, $b arrow a$) men når intet; $e$ når alt ($e arrow i arrow h arrow c arrow dots.h$, $e arrow d$) men nås af intet.
-    + Kun $(a, e)$ føjer returkanten fra det universelle afløb $a$ til den universelle kilde $e$, så alle 9 knuder bliver gensidigt nåelige (1 SCC). De øvrige kandidater giver stadig flere komponenter.
+    ```
+    Kredse:
+      b -> c -> g -> b     binder {b, c, g}
+      c -> d -> h -> c     trækker d, h ind -> {b, c, d, g, h}
+
+    Singletons:
+      a: ind f->a, b->a;  ingen udgående  -> universelt AFLØB (når intet)
+      f: ind g->f, b->f;  ud f->a          -> {f}
+      i: ind e->i;        ud i->h, i->d    -> {i}
+      e: ud e->i, e->d;   intet peger ind  -> universel KILDE (nås af intet)
+    ```
+
+    Grundgrafen har SCC ${b, c, d, g, h}$ plus singletons $a, e, f, i$ — i alt 5. For at presse alt ned til 1 SCC skal hver knude kunne nå hver anden. Fra alle knuder kan man allerede nå afløbet $a$, og fra kilden $e$ kan man nå alle. Mangler kun returkanten fra $a$ tilbage til $e$:
+
+    ```
+    Tilføj (a,e): a (afløb) -> e (kilde)
+      vilkårlig u --...--> a --(ny)--> e --...--> vilkårlig v
+      => alle 9 knuder gensidigt nåelige -> 1 SCC
+    ```
+
+    De øvrige kandidater binder ikke afløb til kilde og efterlader stadig flere komponenter.
 
     Svar: (e) $(a, e)$.
   ],

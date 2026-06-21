@@ -384,11 +384,23 @@ Sletning bruger samme to værktøjer, men er tungere. Du fjerner knuden som i et
     + *Læg sammen.* Summen er de to indre dele plus de to nye kvadrerede mellemrum.
   ],
   worked: [
-    Inorder-nøglerne er $L + [v.x] + R$, hvor $L$'s største er $v.l."max"$ og $R$'s mindste er $v.r."min"$.
+    Inorder-nøglerne er $L + [v.x] + R$, hvor $L$'s største er $v.l."max"$ og $R$'s mindste er $v.r."min"$. Summen $"ssg"$ løber over *alle nabopar* i denne sorterede række.
 
-    + Mellemrummene inde i $L$ er $v.l."ssg"$, og inde i $R$ er $v.r."ssg"$.
-    + De eneste nye nabopar er $(v.l."max", v.x)$ og $(v.x, v.r."min")$. Kvadrering gør fortegnet ligegyldigt.
+    + Mellemrummene inde i $L$ er allerede talt i $v.l."ssg"$, og inde i $R$ i $v.r."ssg"$.
+    + De eneste nabopar, der ikke var med før, er de to overgange til $v$: $(v.l."max", v.x)$ og $(v.x, v.r."min")$. Kvadrering gør fortegnet ligegyldigt.
     + Altså $v."ssg" = v.l."ssg" + (v.x - v.l."max")^2 + (v.x - v.r."min")^2 + v.r."ssg"$.
+
+    Talkontrol. Lad $L = {1, 3}$, $v.x = 6$, $R = {10, 12}$, så hele rækken er $1, 3, 6, 10, 12$.
+
+    ```
+    par i L:        (3-1)^2 = 4              -> v.l.ssg = 4
+    par i R:        (12-10)^2 = 4            -> v.r.ssg = 4
+    overgang v.l.max=3 -> v.x=6:  (6-3)^2 = 9
+    overgang v.x=6 -> v.r.min=10: (10-6)^2 = 16
+    sum = 4 + 9 + 16 + 4 = 33
+    ```
+
+    Direkte over hele rækken: $(3-1)^2 + (6-3)^2 + (10-6)^2 + (12-10)^2 = 4+9+16+4 = 33$. Stemmer med formel (c).
 
     Mulighederne: (a) glemmer overgangene til $v$; (b) springer $v$ over og bruger ét forkert par; (d) og (e) bruger børnenes egne nøgler i stedet for deltræets ekstrem. Kun (c) rammer.
 
@@ -417,7 +429,19 @@ Sletning bruger samme to værktøjer, men er tungere. Du fjerner knuden som i et
     + *Sortér fra.* Smid svar uden $+1$ (glemmer $v$), svar der bytter sort/hvid, og svar der lægger sammen i stedet for $max$.
   ],
   worked: [
-    Sort $v$: $max{v.l."maxS", space v.r."maxS", space v.l."maxRS" + 1 + v.r."maxLS"}$. Hvid $v$: $max{v.l."maxS", space v.r."maxS"}$.
+    Den længste stime i $T(v)$ er den bedste af tre kandidater: helt inde i venstre deltræ ($v.l."maxS"$), helt inde i højre ($v.r."maxS"$), eller en der løber gennem $v$ selv. Den gennemgående findes kun, hvis $v$ er sort, og den binder det sorte løb der ender til venstre ($v.l."maxRS"$), $v$ selv ($+1$) og løbet der starter til højre ($v.r."maxLS"$).
+
+    *Sort $v$:* $max{v.l."maxS", space v.r."maxS", space v.l."maxRS" + 1 + v.r."maxLS"}$. *Hvid $v$:* $max{v.l."maxS", space v.r."maxS"}$ (stimen brydes ved $v$).
+
+    Et lille talsekempel for en *sort* $v$. Lad inorder af $T(v)$ være
+
+    ```
+    venstre deltræ:  sort sort hvid sort    (maxS=2, maxRS=1)
+    v (sort)
+    højre deltræ:    sort sort sort hvid    (maxS=3, maxLS=3)
+    ```
+
+    De tre kandidater: $v.l."maxS" = 2$, $v.r."maxS" = 3$, og den gennemgående $v.l."maxRS" + 1 + v.r."maxLS" = 1 + 1 + 3 = 5$ (det sammenhængende løb "sort, $v$, sort sort sort"). Maks er $5$ — netop hvad formel (b) giver. Uden $+1$'et fra (a) ville man få $4$ og misse, at $v$ selv hører med.
 
     - (a) glemmer $+1$ for $v$ selv. Forkert.
     - (c) bytter sort og hvid. Forkert.
@@ -448,9 +472,23 @@ Sletning bruger samme to værktøjer, men er tungere. Du fjerner knuden som i et
     + *Sortér fra.* Smid svar der betinger på $v.l."hasWhite"$ (forkert felt) eller dropper $+1$'et for $v$.
   ],
   worked: [
-    Hvid nøgle: $v."maxLS" = v.l."maxLS"$. Sort nøgle: $v.l."maxS" + 1 + v.r."maxLS"$.
+    $v."maxLS"$ er det længste sorte løb, der starter ved den *venstreste* nøgle i $T(v)$. Inorder er $L + [v] + R$, og det venstreste element ligger i $L$. To tilfælde efter $v$'s egen farve:
 
-    Kun (a) har både den rigtige betingelse (på $v$'s egen farve) og $+1$'et. (b) mangler $+1$; (c) og (d) betinger på $v.l."hasWhite"$.
+    *Hvid $v$:* løbet kan aldrig nå forbi $v$, fordi en hvid knude bryder det. Så er det præcis $L$'s eget venstre-løb, $v."maxLS" = v.l."maxLS"$.
+
+    *Sort $v$:* løbet kan kun nå forbi $v$ og ind i $R$, hvis *hele* $L$ er sort, for ellers brydes løbet et sted inde i $L$, før det når $v$. "Hele $L$ sort" er netop $v.l."maxS" = |L|$, og så er $v.l."maxLS" = v.l."maxS"$. Læg $1$ for $v$ og $v.r."maxLS"$ til: $v.l."maxS" + 1 + v.r."maxLS"$.
+
+    Konkret, sort $v$ med helt sort venstre deltræ:
+
+    ```
+    L:  sort sort sort      (maxS = maxLS = 3, hele L sort)
+    v:  sort
+    R:  sort sort hvid ...  (maxLS = 2)
+    ```
+
+    $v."maxLS" = 3 + 1 + 2 = 6$ — løbet fra venstreste nøgle gennem hele $L$, $v$, og to ind i $R$. Felterne bruger $v.l."maxS"$ (ikke barnets egen nøgle), så aggregatet kan vedligeholdes i $O(1)$.
+
+    Kun (a) har både den rigtige betingelse (på $v$'s egen farve) og $+1$'et. (b) mangler $+1$; (c) og (d) betinger fejlagtigt på $v.l."hasWhite"$.
 
     Svar: mulighed (a).
   ],
@@ -621,6 +659,21 @@ Sletning bruger samme to værktøjer, men er tungere. Du fjerner knuden som i et
     + *Sortér fra.* Smid svar der ignorerer $v$'s egen værdi (kun sammenligner børn), og svar der bruger `hasWhite` (forkert felt).
   ],
   worked: [
+    Rodens $"maxS"$ er det globale maksimum $M$, og for enhver knude gælder $v."maxS" = max(v.l."maxS", space v.r."maxS", space "stime gennem" v)$. Algoritmen følger kilden til $M$ ned i træet, ét niveau ad gangen ($O(log n)$ i et balanceret træ).
+
+    Algoritme (a): hvis $v."maxS"$ er strengt større end *begge* børns $"maxS"$, kommer maksimummet fra stimen gennem $v$ selv — returnér $v$. Ellers gå til det barn, hvis $"maxS"$ er lig $v."maxS"$.
+
+    Eksempel: antag $r."maxS" = 5$, og roden har $v.l."maxS" = 5$, $v.r."maxS" = 3$.
+
+    ```
+    v = rod:  v.maxS=5, v.l.maxS=5  => ikke > begge børn
+              5 = v.l.maxS, så gå til venstre barn
+    v = v.l:  antag v.maxS=5, børn 2 og 4
+              5 > 2 og 5 > 4  => returnér v.l (stimen er centreret her)
+    ```
+
+    Algoritmen ender på en knude, hvis $"maxS"$ overstiger begge børn, altså en knude, hvis egen nøgle indgår i en længste stime.
+
     + (a) returnerer $v$, når den længste stime er centreret på $v$, og følger ellers kilden til maksimummet. Rigtig.
     + (b) ignorerer $v$'s egen $"maxS"$ og kan misse stimer centreret på $v$. Forkert.
     + (c) og (d) bruger `hasWhite`, det forkerte felt. Forkert.
@@ -653,19 +706,27 @@ Sletning bruger samme to værktøjer, men er tungere. Du fjerner knuden som i et
     + *Saml svaret.* Behold de startværdier, hvis sekvens ender på den rigtige plads.
   ],
   worked: [
-    Optagne pladser før indsættelsen: $#swap[${0,2,4,6}$]$. Tomme: $#swap[${1,3,5}$]$. Nøglen 97 endte på plads #swap[1], og $m = #swap[7]$.
+    Tabellen før indsættelsen, og hvor $97$ faktisk endte ($m = 7$, probe-reglen $h(k,i) = (h'(k)+i) mod 7$):
 
-    Jeg prober hver startværdi frem til første tomme plads:
+    ```
+    indeks:   0    1    2    3    4    5    6
+    før:     12    .   10    .   22    .   31      optaget: {0,2,4,6}
+    efter:   12   97   10    .   22    .   31      97 landede på plads 1
+    ```
 
-    - $h'=0$: plads 0 er optaget, gå til 1. Tom, lander på 1. Passer.
-    - $h'=1$: plads 1 er tom, lander på 1. Passer.
-    - $h'=2$: 2 optaget, gå til 3. Tom, lander på 3. Forkert.
-    - $h'=3$: 3 tom, lander på 3. Forkert.
-    - $h'=4$: 4 optaget, gå til 5. Tom, lander på 5. Forkert.
-    - $h'=5$: 5 tom, lander på 5. Forkert.
-    - $h'=6$: 6 optaget, gå til 0 (wrap), også optaget, gå til 1. Tom, lander på 1. Passer.
+    For hvert tænkt $h'(97)$ følger jeg sekvensen $h', h'+1, h'+2, dots$ (mod 7) til den første tomme plads. Lander den på plads 1, er kandidaten gyldig.
 
-    Kun $0$, $1$ og $6$ rammer plads 1.
+    ```
+    h'=0:  0 optaget -> 1 TOM            => lander 1   PASSER
+    h'=1:  1 TOM                         => lander 1   PASSER
+    h'=2:  2 optaget -> 3 TOM            => lander 3   nej
+    h'=3:  3 TOM                         => lander 3   nej
+    h'=4:  4 optaget -> 5 TOM            => lander 5   nej
+    h'=5:  5 TOM                         => lander 5   nej
+    h'=6:  6 optaget -> 0 optaget -> 1 TOM (wrap) => lander 1   PASSER
+    ```
+
+    Kun $h' in {0, 1, 6}$ ender på plads 1.
 
     Svar: $h'(97) in {0, 1, 6}$, altså (a), (b) og (g).
   ],
@@ -695,19 +756,27 @@ Sletning bruger samme to værktøjer, men er tungere. Du fjerner knuden som i et
     + *Saml svaret.* Behold de startværdier, hvis sekvens ender på den rigtige plads.
   ],
   worked: [
-    Optagne pladser før indsættelsen: $#swap[${0,2,3,4,6}$]$. Tomme: $#swap[${1,5}$]$. Nøglen 99 endte på plads #swap[1], og $m = #swap[7]$.
+    Tabellen før og efter ($m = 7$, $h(k,i) = (h'(k)+i) mod 7$):
 
-    Jeg prober hver startværdi frem til første tomme plads:
+    ```
+    indeks:   0    1    2    3    4    5    6
+    før:     33    .   27   32   55    .   47      optaget: {0,2,3,4,6}
+    efter:   33   99   27   32   55    .   47      99 landede på plads 1
+    ```
 
-    - $h'=0$: plads 0 optaget, gå til 1. Tom, lander på 1. Passer.
-    - $h'=1$: plads 1 tom, lander på 1. Passer.
-    - $h'=2$: 2, 3, 4 optaget, gå til 5. Tom, lander på 5. Forkert.
-    - $h'=3$: ender på 5. Forkert.
-    - $h'=4$: ender på 5. Forkert.
-    - $h'=5$: 5 tom, lander på 5. Forkert.
-    - $h'=6$: 6 optaget, gå til 0 (wrap), også optaget, gå til 1. Tom, lander på 1. Passer.
+    For hvert tænkt $h'(99)$ følger jeg sekvensen til første tomme plads:
 
-    Kun $0$, $1$ og $6$ rammer plads 1.
+    ```
+    h'=0:  0 optaget -> 1 TOM                          => lander 1   PASSER
+    h'=1:  1 TOM                                       => lander 1   PASSER
+    h'=2:  2 -> 3 -> 4 optaget -> 5 TOM                => lander 5   nej
+    h'=3:  3 -> 4 optaget -> 5 TOM                     => lander 5   nej
+    h'=4:  4 optaget -> 5 TOM                          => lander 5   nej
+    h'=5:  5 TOM                                       => lander 5   nej
+    h'=6:  6 optaget -> 0 optaget -> 1 TOM (wrap)      => lander 1   PASSER
+    ```
+
+    Kun $h' in {0, 1, 6}$ ender på plads 1.
 
     Svar: $h'(99) in {0, 1, 6}$, altså (a), (b) og (g).
   ],
@@ -735,13 +804,43 @@ Sletning bruger samme to værktøjer, men er tungere. Du fjerner knuden som i et
     + *Behold dem, der matcher* måltabellen præcist.
   ],
   worked: [
-    Hjemmepladser: $9 -> 2$, $7 -> 2$, $17 -> 4$, $13 -> 3$. Mål: plads 2 $=$ 9, 3 $=$ 7, 4 $=$ 17, 5 $=$ 13.
+    Hjemmepladser ($m = 11$): $h'(9) = 2$, $h'(7) = 2$, $h'(13) = 3$, $h'(17) = 4$. Måltabellen:
 
-    + 9 sidder på hjemmeplads 2 og 7 er skubbet til 3, så 9 må indsættes før 7.
-    + 17 sidder på hjemmeplads 4 og 13 er skubbet til 5, så 17 må indsættes før 13.
-    + (c) $9,17,7,13$: $9->2$; $17->4$; $7->2$ optaget $->3$; $13->3,4$ optaget $->5$. Passer.
-    + (e) $9,7,17,13$: $9->2$; $7->2$ optaget $->3$; $17->4$; $13->3,4$ optaget $->5$. Passer.
-    + (a) giver $7,9$ på 2,3 (forkert); (b) giver 13 på 3 (forkert); (d) giver 7 på 5 (forkert).
+    ```
+    indeks:  2   3   4   5
+    mål:     9   7  17  13
+    ```
+
+    To afhængigheder: $9$ sidder på sin hjemmeplads 2, mens $7$ (samme hjem 2) er skubbet til 3, så $9$ må komme før $7$. Og $17$ sidder på hjemmeplads 4, mens $13$ (hjem 3) er skubbet forbi til 5, så $17$ må komme før $13$.
+
+    Jeg simulerer hver rækkefølge fra tom tabel (kun pladser 2–5 vises):
+
+    ```
+    (a) 7,9,13,17:
+      7 -> 2 TOM        : [.  7  .  .]
+      9 -> 2 opt -> 3   : [.  7  9  .]   forkert (mål har 9 på 2)
+
+    (b) 13,7,17,9:
+      13 -> 3 TOM       : [.  . 13  .]   forkert (mål har 7 på 3)
+
+    (c) 9,17,7,13:
+      9  -> 2 TOM       : [9  .  .  .]
+      17 -> 4 TOM       : [9  . 17  .]
+      7  -> 2 opt -> 3  : [9  7 17  .]
+      13 -> 3 opt,4 opt -> 5 : [9 7 17 13]   PASSER
+
+    (d) 17,13,9,7:
+      17 -> 4           ; 13 -> 3 ; 9 -> 2 ; 7 -> 2 opt,3,4,5 opt -> 6
+                           gier 7 på plads 6   forkert
+
+    (e) 9,7,17,13:
+      9  -> 2 TOM       : [9  .  .  .]
+      7  -> 2 opt -> 3  : [9  7  .  .]
+      17 -> 4 TOM       : [9  7 17  .]
+      13 -> 3 opt,4 opt -> 5 : [9 7 17 13]   PASSER
+    ```
+
+    Kun (c) og (e) gengiver måltabellen.
 
     Svar: (c) og (e).
   ],
@@ -769,14 +868,19 @@ Sletning bruger samme to værktøjer, men er tungere. Du fjerner knuden som i et
     + *Saml* alle nøgler, hvor de to falder sammen.
   ],
   worked: [
-    Hjemmeplads $->$ faktisk plads:
+    Den først indsatte nøgle møder en tom tabel og lander derfor præcis på sin hjemmeplads $h_1$ uden at probe. En nøgle kan altså kun være først, hvis dens faktiske plads $=$ dens hjemmeplads.
 
-    - $22$: hjem 6, men på plads 0 (wrappet). Kan ikke være først.
-    - $33$: hjem 1, men på plads 3. Kan ikke.
-    - $44$: hjem 4, på plads 4. Kan være først.
-    - $55$: hjem 1, men på plads 2. Kan ikke.
-    - $66$: hjem 6, på plads 6. Kan være først.
-    - $77$: hjem 1, på plads 1. Kan være først.
+    ```
+    nøgle:  hjem h1   faktisk plads   først muligt?
+     22       6           0 (wrap)        nej   (6 != 0)
+     33       1           3               nej   (1 != 3)
+     44       4           4               JA    (4  = 4)
+     55       1           2               nej   (1 != 2)
+     66       6           6               JA    (6  = 6)
+     77       1           1               JA    (1  = 1)
+    ```
+
+    Kun $44$, $66$ og $77$ sidder på deres egen hjemmeplads.
 
     Svar: $44$, $66$, $77$ — altså (c), (e) og (f).
   ],
@@ -805,14 +909,33 @@ Sletning bruger samme to værktøjer, men er tungere. Du fjerner knuden som i et
     + *Saml* alle, der består.
   ],
   worked: [
-    Hjemmeplads $->$ faktisk plads: $44 (2->2)$, $55 (5->6)$, $66 (1->1)$, $77 (2->3)$, $88 (5->5)$, $99 (6->0)$. Klyngen wrapper pladserne $5,6,0,1,2,3$ (plads 4 tom).
+    Hjemmeplads $->$ faktisk plads, og måltabellen ($m = 7$):
 
-    - $44$: 77 (hjem 2) kræver 44 allerede på plads 2 for at blive skubbet til 3. Fejler.
-    - $55$: uden den kan de andre ikke gengive klyngen omkring. Fejler.
-    - $66$: hjem 1, plads 1, nås uafhængigt. Kan.
-    - $77$: hjem 2 prober $2 (44), 3$ tom $-> 3$. Hale på 44-klyngen. Kan.
-    - $88$: 55 ville tage plads 5, hvis 88 var fjernet. Fejler.
-    - $99$: hjem 6 prober $6 (55), 0$ tom $-> 0$. Hale på wrap-klyngen. Kan.
+    ```
+    nøgle:  44  55  66  77  88  99
+    hjem:    2   5   1   2   5   6
+    plads:   2   6   1   3   5   0
+
+    indeks:  0   1   2   3   4   5   6
+    mål:    99  66  44  77   .  88  55
+    ```
+
+    En nøgle kan være sidst, hvis (1) probing fra dens hjem hen over de andre fem rammer dens egen plads, *og* (2) de andre fem kan gengive deres egne fem pladser uden den. Krav (1) holder for alle seks her, så krav (2) afgør det. Jeg fjerner kandidaten og spørger, om de fem øvrige stadig kan ende rigtigt:
+
+    ```
+    fjern 44: ingen anden nøgle lander på plads 2, så 77 (hjem 2)
+              ville lande på 2 i stedet for 3.            FEJLER
+    fjern 55: plads 6 bliver tom, så 99 (hjem 6) lander på 6
+              i stedet for at wrappe til 0.               FEJLER
+    fjern 66: plads 1 nås kun af 66; ingen anden afhænger
+              af 66, og 66 (hjem 1) -> 1 sidst.           KAN
+    fjern 77: 77 (hjem 2) prober 2(44 opt) -> 3 tom; 77 er
+              hale på 44, ingen afhænger af den.          KAN
+    fjern 88: plads 5 bliver tom, så 55 (hjem 5) lander på 5
+              i stedet for 6.                             FEJLER
+    fjern 99: 99 (hjem 6) prober 6(55 opt) -> 0 tom (wrap);
+              99 er hale på wrap-klyngen, ingen afhænger. KAN
+    ```
 
     Svar: $66$, $77$, $99$ — altså (c), (d) og (f).
   ],
@@ -838,11 +961,48 @@ Sletning bruger samme to værktøjer, men er tungere. Du fjerner knuden som i et
     + *Indsæt* og fortsæt med næste værdi på den nu opdaterede tabel.
   ],
   worked: [
-    + $22$: $h' = (66+5) mod 11 = 5$, tom. Plads 5.
-    + $16$: $h' = (48+5) mod 11 = 9$, optaget. $i=1$: $(9+3+1) mod 11 = 2$, tom. Plads 2.
-    + $17$: $h' = (51+5) mod 11 = 1$, optaget. $i=1$: $(1+3+1)=5$ optaget; $i=2$: $(1+6+4)=11 mod 11=0$ optaget; $i=3$: $(1+9+9)=19 mod 11=8$ optaget; $i=4$: $(1+12+16)=29 mod 11=7$ tom. Plads 7.
+    Probe-funktionen er $h(x,i) = (h'(x) + 3i + i^2) mod 11$ med $h'(x) = (3x+5) mod 11$. Starttabellen:
 
-    Slut: $0:13, 1:39, 2:16, 3:36, 5:22, 7:17, 8:23, 9:5$.
+    ```
+    idx:  0   1   2   3   4   5   6   7   8   9  10
+    val: 13  39   .  36   .   .   .   .  23   5   .
+    ```
+
+    *Indsæt $22$:* $h' = (3 dot 22 + 5) mod 11 = 71 mod 11 = 5$.
+
+    ```
+    i=0: slot (5+0+0) mod 11 = 5  TOM  -> 22 her
+    idx:  0   1   2   3   4   5   6   7   8   9  10
+    val: 13  39   .  36   .  22   .   .  23   5   .
+    ```
+
+    *Indsæt $16$:* $h' = (3 dot 16 + 5) mod 11 = 53 mod 11 = 9$.
+
+    ```
+    i=0: slot 9                 optaget (5)
+    i=1: slot (9+3+1) mod 11 = 2  TOM  -> 16 her
+    idx:  0   1   2   3   4   5   6   7   8   9  10
+    val: 13  39  16  36   .  22   .   .  23   5   .
+    ```
+
+    *Indsæt $17$:* $h' = (3 dot 17 + 5) mod 11 = 56 mod 11 = 1$.
+
+    ```
+    i=0: slot 1                   optaget (39)
+    i=1: slot (1+3+1)=5           optaget (22)
+    i=2: slot (1+6+4)=11 mod 11=0 optaget (13)
+    i=3: slot (1+9+9)=19 mod 11=8 optaget (23)
+    i=4: slot (1+12+16)=29 mod 11=7  TOM  -> 17 her
+    ```
+
+    Sluttabel:
+
+    ```
+    idx:  0   1   2   3   4   5   6   7   8   9  10
+    val: 13  39  16  36   .  22   .  17  23   5   .
+    ```
+
+    Det er $0:13, thin 1:39, thin 2:16, thin 3:36, thin 5:22, thin 7:17, thin 8:23, thin 9:5$.
 
     Svar: mulighed (c).
   ],
@@ -871,14 +1031,24 @@ Sletning bruger samme to værktøjer, men er tungere. Du fjerner knuden som i et
     + *Behold* de $h_2$, hvis første tomme plads er lig den observerede landingsplads.
   ],
   worked: [
-    Optagne før indsæt: $#swap[${0,2,3,4,6}$]$. 99 endte på plads #swap[1], $h_1 = #swap[2]$, $m = #swap[7]$.
+    Tabellen før indsæt ($m = 7$, $h_1 = 2$, sekvens $(2 + i dot h_2) mod 7$):
 
-    - $h_2=1$: $2(o),3(o),4(o),5$ tom $-> 5$. Forkert.
-    - $h_2=2$: $2(o),4(o),6(o),(8 mod 7=)1$ tom $-> 1$. Passer.
-    - $h_2=3$: $2(o),5$ tom $-> 5$. Forkert.
-    - $h_2=4$: $2(o),6(o),(10 mod 7=)3(o),0(o),4(o),1$ tom $-> 1$. Passer.
-    - $h_2=5$: $2(o),(7 mod 7=)0(o),5$ tom $-> 5$. Forkert.
-    - $h_2=6$: $2(o),(8 mod 7=)1$ tom $-> 1$. Passer.
+    ```
+    idx:  0   1   2   3   4   5   6
+    val: 33   .  27  32  55   .  47      optaget: {0,2,3,4,6}
+                                          99 skal lande på plads 1
+    ```
+
+    For hvert $h_2$ stepper jeg $i = 0,1,2,dots$ til første tomme plads (o $=$ optaget):
+
+    ```
+    h2=1:  2(o) 3(o) 4(o) 5 TOM                    => 5   nej
+    h2=2:  2(o) 4(o) 6(o) (8 mod 7=)1 TOM          => 1   PASSER
+    h2=3:  2(o) 5 TOM                              => 5   nej
+    h2=4:  2(o) 6(o) (10 mod7=)3(o) 0(o) 4(o) 1 TOM => 1  PASSER
+    h2=5:  2(o) (7 mod 7=)0(o) 5 TOM               => 5   nej
+    h2=6:  2(o) (8 mod 7=)1 TOM                    => 1   PASSER
+    ```
 
     Svar: $h_2(99) in {2, 4, 6}$ — altså (b), (d) og (f).
   ],
@@ -907,14 +1077,24 @@ Sletning bruger samme to værktøjer, men er tungere. Du fjerner knuden som i et
     + *Behold* de $h_2$, der lander på den observerede plads.
   ],
   worked: [
-    Optagne før indsæt: $#swap[${0,2,4,6}$]$. 97 endte på plads #swap[1], $h_1 = #swap[0]$, $m = #swap[7]$.
+    Tabellen før indsæt ($m = 7$, $h_1 = 0$, sekvens $(0 + i dot h_2) mod 7$):
 
-    - $h_2=1$: $0(o),1$ tom $-> 1$. Passer.
-    - $h_2=2$: $0,2,4,6$ alle optaget, $(8 mod 7=)1$ tom $-> 1$. Passer.
-    - $h_2=3$: $0(o),3$ tom $-> 3$. Forkert.
-    - $h_2=4$: $0(o),4(o),(8 mod 7=)1$ tom $-> 1$. Passer.
-    - $h_2=5$: $0(o),5$ tom $-> 5$. Forkert.
-    - $h_2=6$: $0(o),6(o),(12 mod 7=)5$ tom $-> 5$. Forkert.
+    ```
+    idx:  0   1   2   3   4   5   6
+    val: 12   .  10   .  22   .  31      optaget: {0,2,4,6}
+                                          97 skal lande på plads 1
+    ```
+
+    For hvert $h_2$ (o $=$ optaget):
+
+    ```
+    h2=1:  0(o) 1 TOM                      => 1   PASSER
+    h2=2:  0(o) 2(o) 4(o) 6(o) (8 mod7=)1 TOM => 1   PASSER
+    h2=3:  0(o) 3 TOM                      => 3   nej
+    h2=4:  0(o) 4(o) (8 mod 7=)1 TOM       => 1   PASSER
+    h2=5:  0(o) 5 TOM                      => 5   nej
+    h2=6:  0(o) 6(o) (12 mod 7=)5 TOM      => 5   nej
+    ```
 
     Svar: $h_2(97) in {1, 2, 4}$ — altså (a), (b) og (d).
   ],
@@ -944,15 +1124,25 @@ Sletning bruger samme to værktøjer, men er tungere. Du fjerner knuden som i et
     + *Behold* de $h_2$, der lander på den observerede plads.
   ],
   worked: [
-    Optagne før indsæt: $#swap[${0,1,3,4,6}$]$. 25 endte på plads #swap[5], $h_1 = #swap[3]$, $m = #swap[8]$.
+    Bemærk $m = 8$ her. Tabellen før indsæt ($h_1 = 3$, sekvens $(3 + i dot h_2) mod 8$):
 
-    - $h_2=1$: $3(o),4(o),5$ tom $-> 5$. Passer.
-    - $h_2=2$: $3(o),5$ tom $-> 5$. Passer.
-    - $h_2=3$: $3(o),6(o),(9 mod 8=)1(o),4(o),7$ tom $-> 7$. Forkert.
-    - $h_2=4$: $3(o),7$ tom $-> 7$. Forkert.
-    - $h_2=5$: $3(o),(8 mod 8=)0(o),5$ tom $-> 5$. Passer.
-    - $h_2=6$: $3(o),(9 mod 8=)1(o),7$ tom $-> 7$. Forkert.
-    - $h_2=7$: $3(o),(10 mod 8=)2$ tom $-> 2$. Forkert.
+    ```
+    idx:  0   1   2   3   4   5   6   7
+    val: 13  56   .  32  91   .  82   .      optaget: {0,1,3,4,6}
+                                              25 skal lande på plads 5
+    ```
+
+    For hvert $h_2$ (o $=$ optaget):
+
+    ```
+    h2=1:  3(o) 4(o) 5 TOM                          => 5   PASSER
+    h2=2:  3(o) 5 TOM                               => 5   PASSER
+    h2=3:  3(o) 6(o) (9 mod8=)1(o) 4(o) 7 TOM       => 7   nej
+    h2=4:  3(o) 7 TOM                               => 7   nej
+    h2=5:  3(o) (8 mod 8=)0(o) 5 TOM                => 5   PASSER
+    h2=6:  3(o) (9 mod 8=)1(o) 7 TOM                => 7   nej
+    h2=7:  3(o) (10 mod 8=)2 TOM                    => 2   nej
+    ```
 
     Svar: $h_2(25) in {1, 2, 5}$ — altså (a), (b) og (e).
   ],
@@ -982,15 +1172,25 @@ Sletning bruger samme to værktøjer, men er tungere. Du fjerner knuden som i et
     + *Behold* de $h_1$, der lander på den observerede plads.
   ],
   worked: [
-    Optagne før indsæt: $#swap[${0,1,4,5}$]$. 99 endte på plads #swap[2], $h_2 = #swap[2]$, $m = #swap[7]$. Sekvens $(h_1 + 2i) mod 7$:
+    Her er $h_2 = 2$ fast, og $h_1$ varierer. Tabellen før indsæt ($m = 7$, sekvens $(h_1 + 2i) mod 7$):
 
-    - $h_1=0$: $0(o),2$ tom $-> 2$. Passer.
-    - $h_1=1$: $1(o),3$ tom $-> 3$. Forkert.
-    - $h_1=2$: $2$ tom $-> 2$. Passer.
-    - $h_1=3$: $3$ tom $-> 3$. Forkert.
-    - $h_1=4$: $4(o),6$ tom $-> 6$. Forkert.
-    - $h_1=5$: $5(o),0(o),2$ tom $-> 2$. Passer.
-    - $h_1=6$: $6$ tom $-> 6$. Forkert.
+    ```
+    idx:  0   1   2   3   4   5   6
+    val: 47  50   .   .  35  21   .      optaget: {0,1,4,5}
+                                          99 skal lande på plads 2
+    ```
+
+    For hvert $h_1$ (o $=$ optaget):
+
+    ```
+    h1=0:  0(o) 2 TOM                   => 2   PASSER
+    h1=1:  1(o) 3 TOM                   => 3   nej
+    h1=2:  2 TOM                        => 2   PASSER
+    h1=3:  3 TOM                        => 3   nej
+    h1=4:  4(o) 6 TOM                   => 6   nej
+    h1=5:  5(o) (7 mod 7=)0(o) 2 TOM    => 2   PASSER
+    h1=6:  6 TOM                        => 6   nej
+    ```
 
     Svar: $h_1(99) in {0, 2, 5}$ — altså (a), (c) og (f).
   ],
@@ -1057,13 +1257,55 @@ Sletning bruger samme to værktøjer, men er tungere. Du fjerner knuden som i et
     + *Regel 5: ens sort-højde.* Tæl sorte knuder (NIL tæller som sort) på hver sti. Alle skal være ens.
   ],
   worked: [
-    Stier: $b "-" a "-" "NIL"$, $b "-" d "-" c "-" "NIL"$, $b "-" d "-" e "-" "NIL"$.
+    Træet med eksplicitte sorte NIL-blade. De tre rod-til-NIL-stier er:
 
-    - (a): rod $b$ sort, men $a$-stien har sort-højde 2 mod $d$-stiernes 3. Ulige. Ugyldig.
-    - (b): sorte $a,b,c,e$, rød $d$. Rod sort, $d$'s børn $c,e$ sorte (ingen rød-rød), alle stier sort-højde 3. Gyldig.
-    - (c): sorte $a,b,d$, røde $c,e$. Rod sort, $c,e$ har kun NIL-børn (ingen rød-rød), alle stier sort-højde 3. Gyldig.
-    - (d): $b,d$ røde, så rod ikke sort *og* $b "-" d$ rød-rød. Ugyldig.
-    - (e): alle sorte. $a$-sti sort-højde 3 mod $d$-stiernes 4. Ugyldig.
+    ```
+    sti P1:  b - a - NIL
+    sti P2:  b - d - c - NIL
+    sti P3:  b - d - e - NIL
+    ```
+
+    For hver kandidat tjekker jeg de tre regler og tæller sorte knuder pr. sti (NIL tæller som 1 sort). Sort-højden skal være ens på P1, P2, P3.
+
+    *(a) sorte $b,d$; røde $a,c,e$.* Rod $b$ sort: ok. Ingen rød-rød ($a,c,e$ har kun NIL-børn): ok.
+
+    ```
+    P1: b(B) a(R) NIL(B)            -> 2 sorte
+    P2: b(B) d(B) c(R) NIL(B)       -> 3 sorte
+    ```
+
+    $2 != 3$, sort-højden bryder. Ugyldig.
+
+    *(b) sorte $a,b,c,e$; rød $d$.* Rod sort: ok. $d$(R) har børn $c,e$ sorte: ingen rød-rød.
+
+    ```
+    P1: b(B) a(B) NIL(B)            -> 3 sorte
+    P2: b(B) d(R) c(B) NIL(B)       -> 3 sorte
+    P3: b(B) d(R) e(B) NIL(B)       -> 3 sorte
+    ```
+
+    Alle 3. Gyldig.
+
+    *(c) sorte $a,b,d$; røde $c,e$.* Rod sort: ok. $c,e$(R) har kun NIL-børn: ingen rød-rød.
+
+    ```
+    P1: b(B) a(B) NIL(B)            -> 3 sorte
+    P2: b(B) d(B) c(R) NIL(B)       -> 3 sorte
+    P3: b(B) d(B) e(R) NIL(B)       -> 3 sorte
+    ```
+
+    Alle 3. Gyldig.
+
+    *(d) sorte $a,c,e$; røde $b,d$.* Rod $b$ rød: bryder regel 2. Og $b$–$d$ er rød-rød. Ugyldig.
+
+    *(e) alle sorte.*
+
+    ```
+    P1: b(B) a(B) NIL(B)            -> 3 sorte
+    P2: b(B) d(B) c(B) NIL(B)       -> 4 sorte
+    ```
+
+    $3 != 4$. Ugyldig.
 
     Svar: (b) og (c).
   ],
@@ -1091,13 +1333,52 @@ Sletning bruger samme to værktøjer, men er tungere. Du fjerner knuden som i et
     + *Rapportér* hvert træ, der tillader mindst én lovlig farvelægning.
   ],
   worked: [
-    Gennemgang (brute-force over alle farvelægninger med de tre regler, NIL $=$ sort $=$ 1):
+    Nøgletal pr. træ: hvor mange indre knuder ligger på den korteste og den længste rod-til-NIL-sti. På en sti med $s$ indre knuder kan antallet af *sorte* indre knuder højst være $s$ (alle sorte) og mindst $ceil(s\/2)$ (røde og sorte skiftevis, da to røde i træk er forbudt). Alle stier skal ramme samme sorttælling. Lægger man den uniforme NIL-sort til, er det ligegyldigt; det er de indre sorte, der skal stemme.
 
-    - (a): gyldig.
-    - (b): zigzag-kæde med NIL-blade i dybde 1 mod 3+. Ingen sorttælling kan udligne stierne. Ugyldig.
-    - (c): gyldig.
-    - (d): 2-dyb venstre-sti mod 3-dyb højre-sti gennem enkelt-barn-knuder. Sort-højderne kan ikke matche. Ugyldig.
-    - (e): gyldig.
+    *(a)* korteste sti 1 indre, længste 2 indre.
+
+    ```
+    sti rod-NIL:        1 indre  -> sorte i [1, 1]
+    sti rod-højre-NIL:  2 indre  -> sorte i [1, 2]
+    ```
+
+    Begge kan ramme 1 sort: farv rod sort, højre rød. Gyldig.
+
+    *(b)* zigzag, korteste sti 1 indre, længste 3 indre.
+
+    ```
+    sti rod-NIL:            1 indre  -> sorte i [1, 1]
+    sti rod-r1-r2-NIL:      3 indre  -> sorte i [2, 3]
+    ```
+
+    Den korte sti kan højst give 1 sort, den lange kræver mindst 2 (ellers to røde i træk). Intervallerne $[1,1]$ og $[2,3]$ overlapper ikke. Ugyldig.
+
+    *(c)* korteste sti 2 indre, længste 3 indre.
+
+    ```
+    sti rod-R-NIL:          2 indre  -> sorte i [1, 2]
+    sti rod-L-Lbarn-NIL:    3 indre  -> sorte i [2, 3]
+    ```
+
+    Begge kan ramme 2 sorte. En konkret farvelægning: rod og begge dybde-2-knuder sorte, de yderste blade-knuder røde. Gyldig.
+
+    *(d)* fælden ligger i højre deltræ $R$ alene. $R = (R_("inner"), "NIL")$, og $R_("inner") = ("NIL", R_("inner2"))$. Stierne *inde i* $R$:
+
+    ```
+    R-NIL:                   1 indre (R)               -> sorte i [1, 1]
+    R-Rinner-Rinner2-NIL:    3 indre                   -> sorte i [2, 3]
+    ```
+
+    Allerede her overlapper $[1,1]$ og $[2,3]$ ikke, så $R$ kan ikke farves lovligt uanset resten. Ugyldig.
+
+    *(e)* korteste sti 3 indre, længste 4 indre.
+
+    ```
+    korteste:  3 indre  -> sorte i [2, 3]
+    længste:   4 indre  -> sorte i [2, 4]
+    ```
+
+    Begge kan ramme 2 (eller 3) sorte uden rød-rød-konflikt langs nogen delt sti. En lovlig farvelægning findes. Gyldig.
 
     Svar: (a), (c) og (e).
   ],
@@ -1125,11 +1406,51 @@ Sletning bruger samme to værktøjer, men er tungere. Du fjerner knuden som i et
     + *Behold* de delmængder, der består alle tre.
   ],
   worked: [
-    - (a) ${1,3,6,8,9}$: 9 rød med rødt barn 8. Rød-rød. Ugyldig.
-    - (b) ${1,5,8}$: rod 5 rød. Ugyldig.
-    - (c) ${1,3,7,8}$: rod sort, ingen rød-rød, alle sort-højder 3. Gyldig.
-    - (d) ${1,8}$: rod sort, ingen rød-rød, alle sort-højder 4. Gyldig.
-    - (e) ${1,2,4,7,8}$: 2 rød med rødt barn 1. Rød-rød. Ugyldig.
+    Træet med dybder (NIL-blade er sorte og tæller 1):
+
+    ```
+                 5
+               /   \
+              3     7
+             / \   / \
+            2   4 6   9
+           /         /
+          1         8
+    ```
+
+    De seks rod-til-NIL-stier: $5"-"3"-"2"-"1"-"N$, $5"-"3"-"2"-"N$, $5"-"3"-"4"-"N$, $5"-"7"-"6"-"N$, $5"-"7"-"9"-"8"-"N$, $5"-"7"-"9"-"N$.
+
+    *(a) ${1,3,6,8,9}$:* $9$ er rød og har rødt barn $8$. Rød-rød. Ugyldig.
+
+    *(b) ${1,5,8}$:* roden $5$ er rød. Bryder regel 2. Ugyldig.
+
+    *(c) ${1,3,7,8}$:* rod $5$ sort, ingen rød-rød (de røde $1,3,7,8$ har kun sorte/NIL-børn). Sort-tælling pr. sti (sorte indre $+$ NIL):
+
+    ```
+    5(B) 3(R) 2(B) 1(R) NIL   -> 3,2,N = 3
+    5(B) 3(R) 2(B) NIL        -> 5,2,N = 3
+    5(B) 3(R) 4(B) NIL        -> 5,4,N = 3
+    5(B) 7(R) 6(B) NIL        -> 5,6,N = 3
+    5(B) 7(R) 9(B) 8(R) NIL   -> 5,9,N = 3
+    5(B) 7(R) 9(B) NIL        -> 5,9,N = 3
+    ```
+
+    Alle 3. Gyldig.
+
+    *(d) ${1,8}$:* rod sort, kun $1$ og $8$ røde (begge blade, ingen rød-rød). Alle øvrige knuder sorte:
+
+    ```
+    5(B) 3(B) 2(B) 1(R) NIL   -> 5,3,2,N = 4
+    5(B) 3(B) 2(B) NIL        -> 5,3,2,N = 4
+    5(B) 3(B) 4(B) NIL        -> 5,3,4,N = 4
+    5(B) 7(B) 6(B) NIL        -> 5,7,6,N = 4
+    5(B) 7(B) 9(B) 8(R) NIL   -> 5,7,9,N = 4
+    5(B) 7(B) 9(B) NIL        -> 5,7,9,N = 4
+    ```
+
+    Alle 4. Gyldig.
+
+    *(e) ${1,2,4,7,8}$:* $2$ er rød og har rødt barn $1$. Rød-rød. Ugyldig.
 
     Svar: (c) og (d).
   ],
@@ -1157,13 +1478,51 @@ Sletning bruger samme to værktøjer, men er tungere. Du fjerner knuden som i et
     + *Behold* dem, der består alle tre.
   ],
   worked: [
-    Dybder: rod $5$; niveau 2 ${3,8}$; niveau 3 ${1,4,6,9}$; niveau 4 ${2,7}$.
+    Træet (NIL-blade er sorte, tæller 1):
 
-    - (a) ${2,7}$: rod sort. Røde 2 og 7 er dybest med sorte NIL-børn, ingen rød-rød. Alle stier sort-højde 4. Gyldig.
-    - (b) ${1,2,4,7,8}$: 1 rød med rødt barn 2. Rød-rød. Ugyldig.
-    - (c) ${2,5,7}$: rod 5 rød. Ugyldig.
-    - (d) ${2,3,6,7,9}$: 6 rød med rødt barn 7. Rød-rød. Ugyldig.
-    - (e) ${2,3,7,8}$: rod sort. Røde 3 (sorte børn 1,4), 8 (sorte børn 6,9), plus blade 2,7. Ingen rød-rød, alle stier sort-højde 3. Gyldig.
+    ```
+                 5
+               /   \
+              3     8
+             / \   / \
+            1   4 6   9
+             \   /
+              2 7
+    ```
+
+    Stierne: $5"-"3"-"1"-"2"-"N$, $5"-"3"-"1"-"N$, $5"-"3"-"4"-"N$, $5"-"8"-"6"-"7"-"N$, $5"-"8"-"6"-"N$, $5"-"8"-"9"-"N$.
+
+    *(a) ${2,7}$:* rod $5$ sort. Kun $2$ og $7$ røde — begge blade med sorte NIL-børn, ingen rød-rød. Alle øvrige knuder sorte:
+
+    ```
+    5(B) 3(B) 1(B) 2(R) NIL   -> 5,3,1,N = 4
+    5(B) 3(B) 1(B) NIL        -> 5,3,1,N = 4
+    5(B) 3(B) 4(B) NIL        -> 5,3,4,N = 4
+    5(B) 8(B) 6(B) 7(R) NIL   -> 5,8,6,N = 4
+    5(B) 8(B) 6(B) NIL        -> 5,8,6,N = 4
+    5(B) 8(B) 9(B) NIL        -> 5,8,9,N = 4
+    ```
+
+    Alle 4. Gyldig.
+
+    *(b) ${1,2,4,7,8}$:* $1$ er rød og har rødt barn $2$. Rød-rød. Ugyldig.
+
+    *(c) ${2,5,7}$:* roden $5$ er rød. Ugyldig.
+
+    *(d) ${2,3,6,7,9}$:* $6$ er rød og har rødt barn $7$. Rød-rød. Ugyldig.
+
+    *(e) ${2,3,7,8}$:* rod $5$ sort. Røde $3$ (sorte børn $1,4$), $8$ (sorte børn $6,9$), plus bladene $2,7$. Ingen rød-rød:
+
+    ```
+    5(B) 3(R) 1(B) 2(R) NIL   -> 5,1,N = 3
+    5(B) 3(R) 1(B) NIL        -> 5,1,N = 3
+    5(B) 3(R) 4(B) NIL        -> 5,4,N = 3
+    5(B) 8(R) 6(B) 7(R) NIL   -> 5,6,N = 3
+    5(B) 8(R) 6(B) NIL        -> 5,6,N = 3
+    5(B) 8(R) 9(B) NIL        -> 5,9,N = 3
+    ```
+
+    Alle 3. Gyldig.
 
     Svar: (a) og (e).
   ],
@@ -1191,12 +1550,25 @@ Sletning bruger samme to værktøjer, men er tungere. Du fjerner knuden som i et
     + *Konkludér.* Findes der ingen tildeling med ens sort-højde og ingen rød-rød, er svaret "på ingen måder".
   ],
   worked: [
-    Indre knuder: rod, $A$, $B$, $A_1$, $A_2$, $B_1$, $B_2$, $C$, $D$, $E$ (10 i alt). NIL-bladene er sorte.
+    Indre knuder: rod, $A$, $B$, $A_1$, $A_2$, $B_1$, $B_2$, $C$, $D$, $E$ (10 i alt). NIL-bladene er sorte og tæller 1.
 
-    + Korteste rod-til-NIL-sti går gennem 3 indre knuder (fx rod-$A$-$A_1$), længste gennem 5 (rod-$B$-$B_2$-$D$-$E$).
-    + En lovlig farvelægning kræver samme sort-højde overalt, rod sort og ingen to røde i træk.
-    + Den korte gren har kun 3 knuder at fordele sorte på, den lange 5. For at matche sort-højden måtte den lange gren gøre to af sine knuder røde i træk — det bryder regel 4.
-    + Gennemsøger man alle $2^(10)$ farvelægninger med rod sort, ingen rød-rød og fælles sort-højde, overlever ingen.
+    Det hurtige modbevis ligger i den højre kæde $B_2 - D - E$. Hver af knuderne $B_2$ og $D$ har et NIL-barn på den ene side og en længere gren på den anden:
+
+    ```
+    B2 = (NIL, D),  D = (NIL, E),  E = (NIL, NIL)
+    ```
+
+    Stierne *inde i* deltræet $B_2$ (talt i indre knuder):
+
+    ```
+    B2 - NIL:           1 indre (B2)      -> sorte i [1, 1]
+    B2 - D - NIL:       2 indre           -> sorte i [1, 2]
+    B2 - D - E - NIL:   3 indre           -> sorte i [2, 3]
+    ```
+
+    Den korteste sti ($B_2$-NIL) kan højst give 1 sort indre knude; den længste ($B_2$-$D$-$E$-NIL) kræver mindst 2 (ellers to røde i træk). Intervallerne $[1,1]$ og $[2,3]$ overlapper ikke, så deltræet $B_2$ kan ikke få ens sort-højde — uanset hvad resten af træet farves.
+
+    Da $B_2$ alene er ufarvbart, er hele træet det også. Gennemsøger man alle $2^(10)$ farvelægninger med rod sort, ingen rød-rød og fælles sort-højde, overlever ingen.
 
     Svar: mulighed (a), på ingen måder.
   ],
@@ -1224,12 +1596,53 @@ Sletning bruger samme to værktøjer, men er tungere. Du fjerner knuden som i et
     + *Til sidst:* tving roden sort, og match resultatet.
   ],
   worked: [
-    + BST-indsæt: $11 > 5,7,9,10$, så $11$ bliver rødt højrebarn af $10$.
-    + Rød-rød: forælder $10$(R), $z = 11$. Bedsteforælder $9$(B), onkel $= 8$(R), rød $->$ omfarv: $10 -> $B, $8 -> $B, $9 -> $R; $z$ rykker op til $9$.
-    + Ny rød-rød: $z = 9$(R), forælder $7$(R). Bedsteforælder $5$(B), onkel $= 3$(B), sort $->$ rotation. $9$ er højrebarn af $7$, og $7$ er højrebarn af $5$ (lige højre-højre-linje): farv $7 -> $B, $5 -> $R og venstrerotér om $5$.
-    + $7$ stiger op som rod; $5$ bliver $7$'s venstrebarn (gamle venstre $3$ følger med, gamle højre $6$ flyttes til $5$'s højre), $9$ forbliver $7$'s højrebarn. Tving rod $7$ sort.
+    Notation: knude(farve), B $=$ sort, R $=$ rød. Starttræet:
 
-    Slut: $7$(B); $5$(R), $9$(R) som børn; $3$(B)[$2$R,$4$R], $6$(B) under $5$; $8$(B), $10$(B) under $9$; $11$(R) under $10$. Det er mulighed (c).
+    ```
+                5(B)
+              /      \
+           3(B)      7(R)
+          /   \      /   \
+        2(R)  4(R) 6(B)  9(B)
+                        /   \
+                      8(R)  10(R)
+    ```
+
+    *Trin 1 — BST-indsæt $11$ som rødt blad.* Sti: $11 > 5 ->$ højre, $11 > 7 ->$ højre, $11 > 9 ->$ højre, $11 > 10 ->$ højre. $11$ bliver rødt højrebarn af $10$:
+
+    ```
+                      9(B)
+                     /   \
+                   8(R)  10(R)
+                            \
+                           11(R)     <- ny knude z, rød-rød med 10
+    ```
+
+    *Trin 2 — z = 11, forælder $10$(R): rød-rød.* Bedsteforælder $9$(B), onkel $= 8$(R) er rød. Tilfælde "onkel rød": farv forælder $10$ og onkel $8$ sorte, bedsteforælder $9$ rød, flyt $z$ op til $9$:
+
+    ```
+                      9(R)            <- z rykket hertil
+                     /   \
+                   8(B)  10(B)
+                            \
+                           11(R)
+    ```
+
+    *Trin 3 — z = 9(R), forælder $7$(R): ny rød-rød.* Bedsteforælder $5$(B), onkel $= 3$(B) er sort. $9$ er højrebarn af $7$, og $7$ er højrebarn af $5$: lige højre-højre-linje (yderside). Farv $7$ sort, $5$ rød, og venstrerotér om $5$. $7$ stiger op; $5$ bliver $7$'s venstrebarn og overtager $7$'s gamle venstre barn $6$ som sit nye højrebarn:
+
+    ```
+                7(B)
+              /      \
+           5(R)      9(R)
+          /   \      /   \
+        3(B)  6(B) 8(B)  10(B)
+        / \                  \
+      2(R)4(R)              11(R)
+    ```
+
+    *Trin 4 — tving roden sort.* $7$ er allerede sort. Færdig. Hver rod-til-NIL-sti møder nu to sorte indre knuder; sort-højden passer.
+
+    Det er mulighed (c).
   ],
 )
 
@@ -1254,10 +1667,39 @@ Sletning bruger samme to værktøjer, men er tungere. Du fjerner knuden som i et
     + *Match* slutkonfigurationen.
   ],
   worked: [
-    + BST-sti for $21$: $21 < 24$ venstre til $18$; $21 > 18$ højre til $20$; $21 > 20$ højre til $23$; $21 < 23$ indsæt $21$ som rødt venstrebarn af $23$.
-    + Rød-rød: $23$(R) og barn $21$(R). Forælder $23$ er højrebarn af bedsteforælder $20$(B); onkel ($20$'s venstre) er NIL/sort; $21$ er venstrebarn af $23$ — en venstre-højre zigzag.
-    + Trinode: median af ${20,21,23}$ er $21$, som rykker ind på $20$'s plads med $20$ som venstrebarn og $23$ som højrebarn; farv $21$ sort, $20$ og $23$ røde.
-    + Deltræet under $18$'s højre-link: $21$(B) med børn $20$(R) og $23$(R). Resten urørt.
+    Notation: knude(farve). Starttræet (kun det relevante venstre deltræ vist i detalje):
+
+    ```
+                  24(B)
+                /       \
+            18(R)       26(B)
+           /     \          \
+         5(B)    20(B)      27(R)
+        /  \        \
+      2(R) 7(R)    23(R)
+    ```
+
+    *Trin 1 — BST-indsæt $21$ som rødt blad.* Sti: $21 < 24 ->$ venstre, $21 > 18 ->$ højre, $21 > 20 ->$ højre, $21 < 23 ->$ venstre. $21$ bliver rødt venstrebarn af $23$:
+
+    ```
+            20(B)
+               \
+              23(R)
+              /
+            21(R)        <- ny knude z, rød-rød med 23
+    ```
+
+    *Trin 2 — z = 21(R), forælder $23$(R): rød-rød.* Bedsteforælder $20$(B), onkel $= 20$'s venstre $=$ NIL (sort). $23$ er højrebarn af $20$, og $21$ er venstrebarn af $23$: højre-venstre-knæk (zigzag, inderside).
+
+    *Trin 3 — rotation.* Knækket rettes med en trinode-omstrukturering af ${20, 21, 23}$. Medianen $21$ rykker op på $20$'s plads, $20$ bliver dens venstrebarn, $23$ dens højrebarn. Farv $21$ sort, $20$ og $23$ røde:
+
+    ```
+              21(B)
+              /   \
+           20(R)  23(R)
+    ```
+
+    Hængt tilbage under $18$'s højre-link, resten af træet urørt. Roden $24$ er stadig sort.
 
     Svar: mulighed (c).
   ],
@@ -1284,9 +1726,39 @@ Sletning bruger samme to værktøjer, men er tungere. Du fjerner knuden som i et
     + *Forælder rød, onkel sort/NIL?* Rotér. Den nye deltræs-rod bliver sort, dens børn røde. Hold roden sort.
   ],
   worked: [
-    + Indsæt: $25 > 18$ højre til $21$, $25 > 21$ højre til $24$, $25 > 24$ som rødt højrebarn af $24$.
-    + Rød-rød: $24$(R) forælder til $25$(R); bedsteforælder $21$(sort), onkel $= 21$'s venstre $=$ NIL (sort).
-    + $25$ er højrebarn af $24$, og $24$ er højrebarn af $21$: lige RR-linje. Venstrerotér om $21$: $24$ stiger op under $18$, $24 ->$ venstre $21$, højre $25$; farv $24$ sort, $21$ rød, $25$ forbliver rød.
+    Notation: knude(farve). Starttræet:
+
+    ```
+                  18(B)
+                /       \
+             9(R)       21(B)
+            /    \          \
+         7(B)    15(B)      24(R)
+         /       /   \
+       4(R)   11(R) 16(R)
+    ```
+
+    *Trin 1 — BST-indsæt $25$ som rødt blad.* Sti: $25 > 18 ->$ højre, $25 > 21 ->$ højre, $25 > 24 ->$ højre. $25$ bliver rødt højrebarn af $24$:
+
+    ```
+            21(B)
+               \
+              24(R)
+                 \
+                25(R)      <- ny knude z, rød-rød med 24
+    ```
+
+    *Trin 2 — z = 25(R), forælder $24$(R): rød-rød.* Bedsteforælder $21$(B), onkel $= 21$'s venstre $=$ NIL (sort). $25$ er højrebarn af $24$, og $24$ er højrebarn af $21$: lige højre-højre-linje (yderside).
+
+    *Trin 3 — venstrerotér om $21$.* $24$ stiger op under $18$'s højre-link; $21$ bliver $24$'s venstrebarn, $25$ forbliver højrebarn. Farv $24$ sort, $21$ rød, $25$ rød:
+
+    ```
+              24(B)
+              /   \
+           21(R)  25(R)
+    ```
+
+    Roden $18$ er stadig sort, sort-højden bevaret.
 
     Svar: mulighed (c).
   ],
@@ -1314,10 +1786,39 @@ Sletning bruger samme to værktøjer, men er tungere. Du fjerner knuden som i et
     + *Hold roden sort.*
   ],
   worked: [
-    + BST-indsæt $10$: $10 < 22$ venstre til $17$; $10 < 17$ venstre til $8$; $10 > 8$ højre til rødt $12$; $10 < 12$ venstre. Indsæt $10$ som rødt venstrebarn af $12$.
-    + Rød-rød: $10$(R) og forælder $12$(R). Bedsteforælder $8$(B); onkel $= 8$'s venstre $=$ NIL (sort) $->$ rotation.
-    + $12$ er højrebarn af $8$, og $10$ er venstrebarn af $12$ $->$ højre-venstre (RL): højrerotér om $12$, så venstrerotér om $8$, så $10$ bliver deltræs-rod med $8$ (venstre) og $12$ (højre).
-    + Omfarv: $10$ sort, børnene $8$ og $12$ røde, begge blade. Resten urørt, sort-højden bevaret.
+    Notation: knude(farve). Starttræet:
+
+    ```
+                  22(B)
+                /       \
+             17(R)      25(B)
+            /    \          \
+         8(B)    20(B)      26(R)
+            \    /   \
+          12(R)19(R)21(R)
+    ```
+
+    *Trin 1 — BST-indsæt $10$ som rødt blad.* Sti: $10 < 22 ->$ venstre, $10 < 17 ->$ venstre, $10 > 8 ->$ højre til $12$, $10 < 12 ->$ venstre. $10$ bliver rødt venstrebarn af $12$:
+
+    ```
+          8(B)
+             \
+            12(R)
+            /
+          10(R)        <- ny knude z, rød-rød med 12
+    ```
+
+    *Trin 2 — z = 10(R), forælder $12$(R): rød-rød.* Bedsteforælder $8$(B), onkel $= 8$'s venstre $=$ NIL (sort). $12$ er højrebarn af $8$, og $10$ er venstrebarn af $12$: højre-venstre-knæk (zigzag, inderside).
+
+    *Trin 3 — dobbeltrotation.* Højrerotér først om $12$, så de tre kommer på lige linje, derefter venstrerotér om $8$. $10$ bliver deltræs-rod med $8$ som venstrebarn og $12$ som højrebarn. Farv $10$ sort, $8$ og $12$ røde (begge nu blade):
+
+    ```
+              10(B)
+              /   \
+            8(R)  12(R)
+    ```
+
+    Højre side ($20, 19, 21$) og $25, 26, 22$ urørt; roden $22$ stadig sort.
 
     Svar: mulighed (d).
   ],

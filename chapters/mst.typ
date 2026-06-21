@@ -71,19 +71,30 @@ Hver tagen kant smelter to komponenter til én, så efter $k$ kanter gælder:
     + *Bliv ved* til du har $n - 1$ kanter. Den sidste du tog, er svaret.
   ],
   worked: [
-    9 knuder, så jeg skal bruge 8 kanter.
+    9 knuder, så jeg skal bruge 8 kanter. Sorteret kantliste:
 
-    + $a c (2)$ #sym.arrow.r tilføjes.
-    + $f g (3)$ #sym.arrow.r tilføjes.
-    + $b e (5)$ #sym.arrow.r tilføjes.
-    + $f h (6)$ #sym.arrow.r tilføjes.
-    + $b f (8)$ #sym.arrow.r tilføjes (binder ${b,e}$ og ${f,g,h}$ sammen).
-    + $e j (9)$ #sym.arrow.r tilføjes.
-    + $e h (11)$ #sym.arrow.r forkastes; $e$ og $h$ sidder allerede sammen via $e$–$b$–$f$–$h$.
-    + $i j (14)$ #sym.arrow.r tilføjes.
-    + $a b (15)$ #sym.arrow.r tilføjes; den hægter ${a,c}$ på resten og er kant nummer 8.
+    ```
+    ac=2  fg=3  be=5  fh=6  bf=8  ej=9  eh=11  ij=14  ab=15  hi=16  cj=17  gi=19  ce=20  hj=21
+    ```
 
-    Svar: $(a,b)$, den sidste kant ind.
+    Jeg starter med hver knude i sin egen komponent og kører listen igennem. Kolonnen "Komponenter" viser union-find-tilstanden efter skridtet; "taget" tæller MST-kanterne:
+
+    ```
+    start:           {a} {b} {c} {e} {f} {g} {h} {i} {j}        taget=0
+    ac=2   TAG       {a,c} {b} {e} {f} {g} {h} {i} {j}          taget=1
+    fg=3   TAG       {a,c} {b} {e} {f,g} {h} {i} {j}            taget=2
+    be=5   TAG       {a,c} {b,e} {f,g} {h} {i} {j}              taget=3
+    fh=6   TAG       {a,c} {b,e} {f,g,h} {i} {j}                taget=4
+    bf=8   TAG       {a,c} {b,e,f,g,h} {i} {j}                  taget=5
+    ej=9   TAG       {a,c} {b,e,f,g,h,j} {i}                    taget=6
+    eh=11  FORKAST   e,h allerede i {b,e,f,g,h,j} -> kreds      taget=6
+    ij=14  TAG       {a,c} {b,e,f,g,h,i,j}                      taget=7
+    ab=15  TAG       {a,b,c,e,f,g,h,i,j}  (alt samlet)          taget=8 <- sidste
+    ```
+
+    Kant nummer 8 er $a b = 15$, som hægter komponenten ${a,c}$ på resten. Det er den sidste kant ind.
+
+    Svar: $(a,b)$.
   ],
 )
 
@@ -103,20 +114,32 @@ Hver tagen kant smelter to komponenter til én, så efter $k$ kanter gælder:
     + *Bliv ved* til du har $n - 1$ kanter. Den sidste du accepterede, er svaret — også selvom der ligger flere kanter efter den i sorteringen.
   ],
   worked: [
-    8 knuder, så jeg skal bruge 7 kanter.
+    8 knuder, så jeg skal bruge 7 kanter. Sorteret kantliste:
 
-    + $e f (0)$ #sym.arrow.r tilføjes.
-    + $c d (2)$ #sym.arrow.r tilføjes.
-    + $g b (3)$ #sym.arrow.r tilføjes.
-    + $d b (5)$ #sym.arrow.r tilføjes.
-    + $a c (6)$ #sym.arrow.r tilføjes.
-    + $g d (7)$ #sym.arrow.r forkastes; $g$ og $d$ sidder allerede sammen.
-    + $e a (8)$ #sym.arrow.r tilføjes (kant nummer 6).
-    + $a g (9)$ #sym.arrow.r forkastes.
-    + $g h (10)$ #sym.arrow.r tilføjes; kant nummer 7 og dermed den sidste.
-    + $h b (11)$ og $f c (12)$ #sym.arrow.r forkastes begge.
+    ```
+    ef=0  cd=2  gb=3  db=5  ac=6  gd=7  ea=8  ag=9  gh=10  hb=11  fc=12
+    ```
 
-    Svar: $(g, h)$ med vægt 10, den sidste kant ind.
+    Pas på: kanter senere i sorteringen kan stadig blive forkastet, så svaret er den sidste *accepterede* kant. Union-find-tilstand efter hvert skridt:
+
+    ```
+    start:           {a} {b} {c} {d} {e} {f} {g} {h}           taget=0
+    ef=0   TAG       {a} {b} {c} {d} {e,f} {g} {h}             taget=1
+    cd=2   TAG       {a} {b} {c,d} {e,f} {g} {h}               taget=2
+    gb=3   TAG       {a} {b,g} {c,d} {e,f} {h}                 taget=3
+    db=5   TAG       {a} {b,c,d,g} {e,f} {h}                   taget=4
+    ac=6   TAG       {a,b,c,d,g} {e,f} {h}                     taget=5
+    gd=7   FORKAST   g,d allerede i {a,b,c,d,g} -> kreds        taget=5
+    ea=8   TAG       {a,b,c,d,e,f,g} {h}                       taget=6
+    ag=9   FORKAST   a,g allerede sammen -> kreds               taget=6
+    gh=10  TAG       {a,b,c,d,e,f,g,h}  (alt samlet)           taget=7 <- sidste
+    hb=11  -         (alt allerede samlet, ses ikke)            taget=7
+    fc=12  -         (alt allerede samlet, ses ikke)            taget=7
+    ```
+
+    Den sidste *accepterede* kant er $g h = 10$, selvom $h b$ og $f c$ ligger efter den i listen.
+
+    Svar: $(g, h)$ med vægt 10.
   ],
 )
 
@@ -135,12 +158,26 @@ Hver tagen kant smelter to komponenter til én, så efter $k$ kanter gælder:
     + *Aflæs svaret* som $n - k$ komponenter.
   ],
   worked: [
-    Her er $n = 9$. Jeg tager kanterne i vægtrækkefølge og tæller med.
+    Her er $n = 9$, samme graf som forrige spørgsmål. Sorteret kantliste:
 
-    + $a c (2)$, $f g (3)$, $b e (5)$, $f h (6)$, $b f (8)$, $e j (9)$ #sym.arrow.r seks kanter taget.
-    + $e h (11)$ #sym.arrow.r forkastes; $e$ og $h$ hænger allerede sammen via $e$–$b$–$f$–$h$. Det er den første kant der ryger ud.
+    ```
+    ac=2  fg=3  be=5  fh=6  bf=8  ej=9  eh=11  ...
+    ```
 
-    Med $k = 6$ tagne kanter: $9 - 6 = 3$.
+    Jeg kører Kruskal og stopper i det øjeblik en kant forkastes første gang. Union-find-tilstanden:
+
+    ```
+    start:           {a} {b} {c} {e} {f} {g} {h} {i} {j}       taget=0
+    ac=2   TAG       {a,c} {b} {e} {f} {g} {h} {i} {j}         taget=1
+    fg=3   TAG       {a,c} {b} {e} {f,g} {h} {i} {j}           taget=2
+    be=5   TAG       {a,c} {b,e} {f,g} {h} {i} {j}             taget=3
+    fh=6   TAG       {a,c} {b,e} {f,g,h} {i} {j}               taget=4
+    bf=8   TAG       {a,c} {b,e,f,g,h} {i} {j}                 taget=5
+    ej=9   TAG       {a,c} {b,e,f,g,h,j} {i}                   taget=6
+    eh=11  FORKAST   e,h allerede i {b,e,f,g,h,j} -> kreds      taget=6 <- første forkastning
+    ```
+
+    Lige før den første forkastning er der $k = 6$ tagne kanter, så antal komponenter er $n - k = 9 - 6 = 3$. De tre komponenter er ${a,c}$, ${b,e,f,g,h,j}$ og ${i}$.
 
     Svar: 3 komponenter.
   ],
@@ -162,14 +199,27 @@ Hver tagen kant smelter to komponenter til én, så efter $k$ kanter gælder:
     + *Aflæs svaret* som $n - k$ komponenter.
   ],
   worked: [
-    Her er $n = 9$. Jeg undersøger kanterne i vægtrækkefølge og tæller de otte første.
+    Her er $n = 9$. Her tælles der efter et fast antal *undersøgte* kanter (8 stk.), ikke ved første forkastning. Forkastede kanter tæller med i de undersøgte, men ikke i $A$. Sorteret kantliste:
 
-    + $i e (1)$ tages, $b c (1)$ tages, $g b (2)$ tages, $a f (3)$ tages, $a b (4)$ tages.
-    + $f b (5)$ #sym.arrow.r forkastes (kreds).
-    + $g c (6)$ #sym.arrow.r forkastes (kreds).
-    + $h d (6)$ #sym.arrow.r tages.
+    ```
+    bc=1  ie=1  gb=2  af=3  ab=4  fb=5  gc=6  hd=6  id=7  de=7  fg=8  cd=8  hc=9  hi=9
+    ```
 
-    Otte kanter undersøgt, heraf $k = 6$ taget: $9 - 6 = 3$. Komponenterne er ${a,b,c,f,g}$, ${h,d}$ og ${i,e}$.
+    Jeg undersøger de otte første og fører union-find. "und." tæller undersøgte, "tag" tæller tagne:
+
+    ```
+    start:           {a} {b} {c} {d} {e} {f} {g} {h} {i}       und=0  tag=0
+    bc=1   TAG       {a} {b,c} {d} {e} {f} {g} {h} {i}         und=1  tag=1
+    ie=1   TAG       {a} {b,c} {d} {e,i} {f} {g} {h}           und=2  tag=2
+    gb=2   TAG       {a} {b,c,g} {d} {e,i} {f} {h}             und=3  tag=3
+    af=3   TAG       {a,f} {b,c,g} {d} {e,i} {h}               und=4  tag=4
+    ab=4   TAG       {a,b,c,f,g} {d} {e,i} {h}                 und=5  tag=5
+    fb=5   FORKAST   f,b allerede i {a,b,c,f,g} -> kreds        und=6  tag=5
+    gc=6   FORKAST   g,c allerede i {a,b,c,f,g} -> kreds        und=7  tag=5
+    hd=6   TAG       {a,b,c,f,g} {d,h} {e,i}                   und=8  tag=6 <- stop
+    ```
+
+    Efter 8 undersøgte kanter er $k = 6$ taget, så $n - k = 9 - 6 = 3$. Komponenterne er ${a,b,c,f,g}$, ${d,h}$ og ${e,i}$.
 
     Svar: 3 komponenter.
   ],
@@ -191,24 +241,25 @@ Hver tagen kant smelter to komponenter til én, så efter $k$ kanter gælder:
     + *Gentag* til alle knuder er i $C$. Den knude der kom ind sidst, er svaret.
   ],
   worked: [
-    Jeg vokser $C$ ud fra $a$. Hvert skridt tager den letteste kant ud af $C$ og trækker en ny knude ind, og den kant er en MST-kant.
+    Jeg vokser træet $C$ ud fra $a$. Hvert skridt tager den letteste kant der krydser ud af $C$, trækker naboknuden ind og opdaterer nøglerne for de knuder der stadig står udenfor. Nøglen for en udenforstående knude er vægten af den letteste kant der forbinder den til $C$ ($infinity$ hvis ingen rører den endnu).
 
-    #table(
-      columns: 3,
-      align: (center, center, left),
-      stroke: 0.4pt + hair,
-      inset: (x: 9pt, y: 5pt),
-      table.header([*Skridt*], [*Knude ind*], [*Kant taget*]),
-      [1], [$h$], [$a h = 2$],
-      [2], [$d$], [$h d = 1$],
-      [3], [$i$], [$a i = 3$],
-      [4], [$f$], [$f i = 4$],
-      [5], [$e$], [$f e = 7$],
-      [6], [$g$], [$e g = 8$],
-      [7], [$c$], [$c h = 9$],
-      [8], [$b$], [$b c = 5$],
-    )
-    De otte kanter i højre kolonne er MST'et (9 knuder giver 8 kanter).
+    Naboer pr. knude: $a:{c 11, f 10, h 2, i 3}$, $h:{c 9, d 1, i 6}$, $d:{b 13}$, $i:{f 4, g 12}$, $f:{e 7}$, $e:{g 8}$, $c:{b 5}$.
+
+    ```
+    C           ind   via       nøgler udenfor C (efter opdatering)
+    -----------------------------------------------------------------
+    {a}          a    -         b=inf c=11 d=inf e=inf f=10 g=inf h=2 i=3
+    {a,h}        h    ah=2      b=inf c=9  d=1   e=inf f=10 g=inf      i=3
+    {a,h,d}      d    hd=1      b=13  c=9        e=inf f=10 g=inf      i=3
+    {a,h,d,i}    i    ai=3      b=13  c=9        e=inf f=4  g=12
+    {+f}         f    fi=4      b=13  c=9        e=7        g=12
+    {+e}         e    fe=7      b=13  c=9                   g=8
+    {+g}         g    eg=8      b=13  c=9
+    {+c}         c    ch=9      b=5
+    {+b}         b    bc=5      -                                  <- sidst
+    ```
+
+    Hver "ind"-knude er den med mindste nøgle blandt dem udenfor. Indrækkefølge: $a, h, d, i, f, e, g, c, b$. De otte kanter i "via"-kolonnen er MST'et (9 knuder giver 8 kanter).
 
     Svar: $b$ kommer ind sidst, så (a).
   ],
@@ -230,15 +281,20 @@ Hver tagen kant smelter to komponenter til én, så efter $k$ kanter gælder:
     + *Gentag* til køen er tom. Den sidst udtagne knude — den med størst nøgle til sidst — er svaret.
   ],
   worked: [
-    Jeg starter med $"key"[a] = 0$ og resten $infinity$.
+    Jeg starter med $"key"[a] = 0$ og resten $infinity$; alle knuder ligger i køen. Hvert Extract-Min tager knuden med mindste nøgle ud, og bagefter sænkes naboernes nøgler hvis kanten ind er lettere. Naboer: $a:{b 17, e 11, d 8}$, $d:{e 18, c 25}$, $e:{b 5, c 3}$, $c:{b 14}$.
 
-    + Extract $a$. Opdater: $b = 17$, $e = 11$, $d = 8$.
-    + Mindste nøgle er $d (8)$. Extract $d$. Naboer $e (18 > 11)$ og $c (25)$ giver ingen forbedring.
-    + Mindste nøgle er $e (11)$. Extract $e$. Opdater $b -> 5$, $c -> 3$.
-    + Mindste nøgle er $c (3)$. Extract $c$. $b (14)$ giver ingen forbedring.
-    + Tilbage er $b (5)$. Extract $b$ til sidst.
+    ```
+    ude    via       nøgler i køen (efter opdatering)
+    ---------------------------------------------------
+    -      -         a=0  b=inf c=inf d=inf e=inf
+    a      start     -    b=17  c=inf d=8   e=11
+    d      ad=8      -    b=17  c=25        e=11   (ed=18>11: nej)
+    e      ae=11     -    b=5   c=3                (be=5<17, ec=3<25)
+    c      ec=3      -    b=5                      (bc=14>5: nej)
+    b      eb=5      -    -                                  <- sidst
+    ```
 
-    Udtagsrækkefølge: $a, d, e, c, b$. Sidst ude er $b$.
+    Hver række udtager den mindste nøgle i køen. Udtagsrækkefølge: $a, d, e, c, b$. Sidst ude er $b$ med nøgle 5.
 
     Svar: $b$.
   ],
@@ -260,14 +316,24 @@ Hver tagen kant smelter to komponenter til én, så efter $k$ kanter gælder:
     + *Vælg alle* de muligheder hvis kant er med.
   ],
   worked: [
-    Prim fra $a$ tager den letteste kant ud af træet hvert skridt:
+    Samme graf som forrige spørgsmål, men nu skal jeg samle hele MST-kantmængden. Prim fra $a$ tager hvert skridt den letteste kant der krydser ud af træet $C$ og opdaterer nøglerne. Naboer: $a:{b 17, e 11, d 8}$, $d:{e 18, c 25}$, $e:{b 5, c 3}$, $c:{b 14}$.
 
-    + $a d = 8$ #sym.arrow.r ind.
-    + $a e = 11$ #sym.arrow.r ind.
-    + $e c = 3$ #sym.arrow.r ind.
-    + $e b = 5$ #sym.arrow.r ind.
+    ```
+    C           ind  via       nøgler udenfor C
+    ------------------------------------------------
+    {a}          a   -         b=17 c=inf d=8  e=11
+    {a,d}        d   ad=8      b=17 c=25       e=11   (ed=18>11: nej)
+    {a,d,e}      e   ae=11     b=5  c=3               (be=5<17, ec=3<25)
+    {a,d,e,c}    c   ec=3      b=5                    (bc=14>5: nej)
+    {a,d,e,c,b}  b   eb=5      -
+    ```
 
-    MST'et er ${(a,d), (a,e), (e,c), (b,e)}$ med samlet vægt $27$. Tjek mulighederne: $(a,b)$ nej, $(b,c)$ nej, $(c,d)$ nej, $(d,a)$ ja, $(b,e)$ ja, $(e,d)$ nej.
+    MST'ets kanter er "via"-kolonnen: ${(a,d), (a,e), (e,c), (e,b)}$ med samlet vægt $8 + 11 + 3 + 5 = 27$. Da alle vægte er forskellige, er træet entydigt. Tjek mulighederne mod kantmængden:
+
+    ```
+    (a,b)  nej   (b,c)  nej   (c,d)  nej
+    (d,a)  JA    (b,e)  JA    (e,d)  nej
+    ```
 
     Svar: $(d, a)$ og $(b, e)$.
   ],
@@ -288,16 +354,27 @@ Hver tagen kant smelter to komponenter til én, så efter $k$ kanter gælder:
     + *Den første kant hvor begge endepunkter allerede sidder i samme komponent* laver en kreds. Den er svaret; stop der.
   ],
   worked: [
-    Jeg tager kanterne i vægtrækkefølge og holder øje med komponenterne.
+    Samme graf $G_3$ som tidligere. Den først forkastede kant er den letteste kant hvis to endepunkter allerede ligger i samme komponent. Sorteret kantliste:
 
-    + $b c (1)$ #sym.arrow.r tilføjes.
-    + $i e (1)$ #sym.arrow.r tilføjes.
-    + $g b (2)$ #sym.arrow.r tilføjes.
-    + $a f (3)$ #sym.arrow.r tilføjes.
-    + $a b (4)$ #sym.arrow.r tilføjes; nu er ${a,b,c,f,g}$ samlet i én komponent.
-    + $f b (5)$ #sym.arrow.r forkastes; både $f$ og $b$ ligger i den komponent, så kanten laver en kreds.
+    ```
+    bc=1  ie=1  gb=2  af=3  ab=4  fb=5  gc=6  hd=6  ...
+    ```
 
-    Svar: $(b,f)$ med vægt 5, den første kant der springes over.
+    Union-find-tilstand, kør til første forkastning:
+
+    ```
+    start:           {a} {b} {c} {d} {e} {f} {g} {h} {i}       taget=0
+    bc=1   TAG       {a} {b,c} {d} {e} {f} {g} {h} {i}         taget=1
+    ie=1   TAG       {a} {b,c} {d} {e,i} {f} {g} {h}           taget=2
+    gb=2   TAG       {a} {b,c,g} {d} {e,i} {f} {h}             taget=3
+    af=3   TAG       {a,f} {b,c,g} {d} {e,i} {h}               taget=4
+    ab=4   TAG       {a,b,c,f,g} {d} {e,i} {h}                 taget=5
+    fb=5   FORKAST   f,b allerede i {a,b,c,f,g} -> kreds        taget=5 <- første forkastning
+    ```
+
+    Den første kant hvor begge endepunkter allerede sad i samme komponent er $f b = 5$.
+
+    Svar: $(b,f)$ med vægt 5.
   ],
 )
 
@@ -316,15 +393,26 @@ Hver tagen kant smelter to komponenter til én, så efter $k$ kanter gælder:
     + *Den første kant hvor begge endepunkter allerede sidder i samme komponent* laver en kreds. Den er svaret; stop der.
   ],
   worked: [
-    Jeg tager kanterne i vægtrækkefølge og holder øje med komponenterne.
+    Samme graf som spørgsmål 22. Den først forkastede kant er den letteste kant hvis to endepunkter allerede sidder i samme komponent. Sorteret kantliste:
 
-    + $e f (0)$ #sym.arrow.r tilføjes.
-    + $c d (2)$ #sym.arrow.r tilføjes.
-    + $g b (3)$ #sym.arrow.r tilføjes.
-    + $d b (5)$ #sym.arrow.r tilføjes; binder ${c,d}$ og ${g,b}$ sammen til ${c,d,g,b}$.
-    + $a c (6)$ #sym.arrow.r tilføjes; hægter $a$ på ${a,c,d,g,b}$.
-    + $g d (7)$ #sym.arrow.r forkastes; $g$ og $d$ ligger allerede i samme komponent.
+    ```
+    ef=0  cd=2  gb=3  db=5  ac=6  gd=7  ea=8  ag=9  gh=10  hb=11  fc=12
+    ```
 
-    Svar: $(g,d)$ med vægt 7, den første kant der springes over.
+    Union-find-tilstand, kør til første forkastning:
+
+    ```
+    start:           {a} {b} {c} {d} {e} {f} {g} {h}           taget=0
+    ef=0   TAG       {a} {b} {c} {d} {e,f} {g} {h}             taget=1
+    cd=2   TAG       {a} {b} {c,d} {e,f} {g} {h}               taget=2
+    gb=3   TAG       {a} {b,g} {c,d} {e,f} {h}                 taget=3
+    db=5   TAG       {a} {b,c,d,g} {e,f} {h}                   taget=4
+    ac=6   TAG       {a,b,c,d,g} {e,f} {h}                     taget=5
+    gd=7   FORKAST   g,d allerede i {a,b,c,d,g} -> kreds        taget=5 <- første forkastning
+    ```
+
+    Den første kant hvor begge endepunkter allerede lå i samme komponent er $g d = 7$.
+
+    Svar: $(g,d)$ med vægt 7.
   ],
 )

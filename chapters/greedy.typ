@@ -109,16 +109,26 @@ Skal du *bevise* greedy optimal, brug et ombytningsargument: tag en vilkårlig o
     + *Aflæs.* Kodeordslængden er bladets dybde, altså antallet af merges symbolet sidder under.
   ],
   worked: [
-    Sortér efter frekvens: q:25, t:50, u:75, p:100, r:125, o:150, s:200.
+    Læg alle blade i køen sorteret efter voksende frekvens. Hvert greedy-skridt tager de to mindste vægte, slår dem sammen, og lægger den nye knude tilbage i køen. Køen vises som indhold efter hvert merge:
 
-    + $q+t=75$
-    + $u+75=150$
-    + $p+r=225$
-    + $o+150=300$
-    + $s+225=425$
-    + $300+425=725$ #sym.arrow.r rod
+    ```
+    Start: [ q:25, t:50, u:75, p:100, r:125, o:150, s:200 ]
 
-    $q$ sidder under $(q+t)$, derefter $(u+75)$, så $(o+150)$ og til sidst roden. Det er 4 merges, så dybde 4.
+    m1: to mindste q:25 + t:50 = 75 (qt)
+        kø: [ u:75, (qt):75, p:100, r:125, o:150, s:200 ]
+    m2: to mindste u:75 + (qt):75 = 150 (uqt)
+        kø: [ p:100, r:125, (uqt):150, o:150, s:200 ]
+    m3: to mindste p:100 + r:125 = 225 (pr)
+        kø: [ (uqt):150, o:150, s:200, (pr):225 ]
+    m4: to mindste (uqt):150 + o:150 = 300 (uqto)
+        kø: [ s:200, (pr):225, (uqto):300 ]
+    m5: to mindste s:200 + (pr):225 = 425 (spr)
+        kø: [ (uqto):300, (spr):425 ]
+    m6: to mindste (uqto):300 + (spr):425 = 725 (rod)
+        kø: [ (rod):725 ]
+    ```
+
+    $q$ blev slugt i m1 (under $q t$), den knude i m2 (under $u q t$), den i m4 (under $u q t o$), og den i m6 (roden). Det er fire merges over bladet $q$, altså dybde 4.
 
     Svar: 4 bit.
   ],
@@ -140,14 +150,26 @@ Skal du *bevise* greedy optimal, brug et ombytningsargument: tag en vilkårlig o
     + *Tjek* eventuelt med $sum "freq" dot "depth"$ hvis du vil være sikker.
   ],
   worked: [
-    Genvejen er at lægge de interne vægte sammen. Merges gav:
+    Samme træ som forrige spørgsmål. Kør Huffman fra den sorterede kø og notér vægten af hver intern knude undervejs:
 
-    + $75, 150, 225, 300, 425, 725$
-    + $75+150+225+300+425+725 = 1900$
+    ```
+    Start: [ q:25, t:50, u:75, p:100, r:125, o:150, s:200 ]
 
-    Tjek med $sum "freq" dot "depth"$:
+    m1: q:25 + t:50   = 75    kø: [ u:75, 75, p:100, r:125, o:150, s:200 ]
+    m2: u:75 + 75      = 150   kø: [ p:100, r:125, 150, o:150, s:200 ]
+    m3: p:100 + r:125  = 225   kø: [ 150, o:150, s:200, 225 ]
+    m4: 150 + o:150    = 300   kø: [ s:200, 225, 300 ]
+    m5: s:200 + 225    = 425   kø: [ 300, 425 ]
+    m6: 300 + 425      = 725   kø: [ 725 ]  (rod)
+    ```
 
-    $ 150 dot 2 + 200 dot 2 + 100 dot 3 + 125 dot 3 + 75 dot 3 + 25 dot 4 + 50 dot 4 = 1900 $
+    De interne vægte er $75, 150, 225, 300, 425, 725$. Det samlede antal bit er deres sum:
+
+    #eq[$ 75+150+225+300+425+725 = 1900 $]
+
+    Kontrol via $sum "freq" dot "depth"$ med dybderne fra træet ($o,s$ på dybde 2, $u,p,r$ på dybde 3, $q,t$ på dybde 4):
+
+    #eq[$ 150 dot 2 + 200 dot 2 + 100 dot 3 + 125 dot 3 + 75 dot 3 + 25 dot 4 + 50 dot 4 = 1900 $]
 
     Svar: 1900 bit.
   ],
@@ -168,18 +190,22 @@ Skal du *bevise* greedy optimal, brug et ombytningsargument: tag en vilkårlig o
     + *Læg sammen.* Summen af alle merge-summerne er det samlede antal bit.
   ],
   worked: [
-    Sortér: 100, 200, 300, 400, 500, 600, 700.
+    Sortér bladene efter voksende frekvens og kør Huffman. Hvert skridt tager de to mindste vægte; køen vises efter hvert merge:
 
-    + $100+200=300$
-    + $300+300=600$
-    + $400+500=900$
-    + $600+600=1200$
-    + $700+900=1600$
-    + $1200+1600=2800$ #sym.arrow.r rod
+    ```
+    Start: [ a:100, b:200, c:300, d:400, e:500, f:600, g:700 ]
 
-    Læg de interne vægte sammen:
+    m1: a:100 + b:200 = 300   kø: [ 300, c:300, d:400, e:500, f:600, g:700 ]
+    m2: 300 + c:300   = 600   kø: [ d:400, e:500, 600, f:600, g:700 ]
+    m3: d:400 + e:500 = 900   kø: [ 600, f:600, g:700, 900 ]
+    m4: 600 + f:600   = 1200  kø: [ g:700, 900, 1200 ]
+    m5: g:700 + 900   = 1600  kø: [ 1200, 1600 ]
+    m6: 1200 + 1600   = 2800  kø: [ 2800 ]  (rod)
+    ```
 
-    $ 300+600+900+1200+1600+2800 = 7400 $
+    De interne vægte er $300, 600, 900, 1200, 1600, 2800$. Summen er det samlede antal bit:
+
+    #eq[$ 300+600+900+1200+1600+2800 = 7400 $]
 
     Svar: 7400 bit.
   ],
@@ -200,16 +226,24 @@ Skal du *bevise* greedy optimal, brug et ombytningsargument: tag en vilkårlig o
     + *Læg sammen.* Summen af alle merge-summerne er det samlede antal bit.
   ],
   worked: [
-    Sortér: c:100, a:200, b:250, d:350, e:400.
+    Sortér bladene efter voksende frekvens og kør Huffman. Hvert skridt tager de to mindste vægte; køen vises efter hvert merge:
 
-    + $c+a=300$
-    + $b+d=600$
-    + $300+e=700$
-    + $600+700=1300$ #sym.arrow.r rod
+    ```
+    Start: [ c:100, a:200, b:250, d:350, e:400 ]
 
-    Læg de interne vægte sammen:
+    m1: to mindste c:100 + a:200 = 300
+        kø: [ b:250, (ca):300, d:350, e:400 ]
+    m2: to mindste b:250 + (ca):300 = 550   (300 < d:350)
+        kø: [ d:350, e:400, (bca):550 ]
+    m3: to mindste d:350 + e:400 = 750
+        kø: [ (bca):550, (de):750 ]
+    m4: to mindste 550 + 750 = 1300
+        kø: [ (rod):1300 ]
+    ```
 
-    $ 300+600+700+1300 = 2900 $
+    De interne vægte er $300, 550, 750, 1300$. Summen er det samlede antal bit:
+
+    #eq[$ 300+550+750+1300 = 2900 $]
 
     Svar: 2900 bit.
   ],
@@ -230,17 +264,21 @@ Skal du *bevise* greedy optimal, brug et ombytningsargument: tag en vilkårlig o
     + *Læg sammen.* Summen af alle merge-summerne er det samlede antal bit.
   ],
   worked: [
-    Sortér: 15, 30, 35, 40, 90, 125.
+    Sortér bladene efter voksende frekvens og kør Huffman. Hvert skridt tager de to mindste vægte; køen vises efter hvert merge:
 
-    + $15+30=45$
-    + $35+40=75$
-    + $45+90=135$
-    + $75+125=200$
-    + $135+200=335$ #sym.arrow.r rod
+    ```
+    Start: [ c:15, f:30, h:35, d:40, b:90, g:125 ]
 
-    Læg de interne vægte sammen:
+    m1: c:15 + f:30   = 45    kø: [ h:35, d:40, 45, b:90, g:125 ]
+    m2: h:35 + d:40   = 75    kø: [ 45, 75, b:90, g:125 ]
+    m3: 45 + 75       = 120   kø: [ b:90, 120, g:125 ]
+    m4: b:90 + 120    = 210   kø: [ g:125, 210 ]
+    m5: g:125 + 210   = 335   kø: [ 335 ]  (rod)
+    ```
 
-    $ 45+75+135+200+335 = 785 $
+    De interne vægte er $45, 75, 120, 210, 335$. Summen er det samlede antal bit:
+
+    #eq[$ 45+75+120+210+335 = 785 $]
 
     Svar: 785 bit.
   ],
@@ -262,14 +300,18 @@ Skal du *bevise* greedy optimal, brug et ombytningsargument: tag en vilkårlig o
     + *Aflæs* dybden som kodeordslængden.
   ],
   worked: [
-    Sortér: c:100, a:200, b:250, d:350, e:400.
+    Sortér bladene efter voksende frekvens og kør Huffman. Hvert skridt tager de to mindste vægte; køen vises efter hvert merge:
 
-    + $c+a=300$
-    + $b+d=600$
-    + $300+e=700$
-    + $600+700=1300$ #sym.arrow.r rod
+    ```
+    Start: [ c:100, a:200, b:250, d:350, e:400 ]
 
-    $d$ er barn af $(b+d)$, og $(b+d)$ er barn af roden. Det er 2 merges over $d$, så dybde 2.
+    m1: c:100 + a:200 = 300   kø: [ b:250, 300, d:350, e:400 ]
+    m2: b:250 + 300   = 550   kø: [ d:350, e:400, 550 ]
+    m3: d:350 + e:400 = 750   kø: [ 550, 750 ]
+    m4: 550 + 750     = 1300  kø: [ 1300 ]  (rod)
+    ```
+
+    Bladet $d$ blev slugt i m3 (under $d e$), og den knude blev roden i m4. Det er to merges over $d$, så dybde 2.
 
     Svar: 2 bit.
   ],
@@ -291,15 +333,19 @@ Skal du *bevise* greedy optimal, brug et ombytningsargument: tag en vilkårlig o
     + *Aflæs* dybden som kodeordslængden.
   ],
   worked: [
-    Sortér: f:150, e:200, d:250, c:300, b:400, a:500.
+    Sortér bladene efter voksende frekvens og kør Huffman. Hvert skridt tager de to mindste vægte; køen vises efter hvert merge:
 
-    + $f+e=350$
-    + $d+c=550$
-    + $b+a=900$
-    + $350+550=900$
-    + $900+900=1800$ #sym.arrow.r rod
+    ```
+    Start: [ f:150, e:200, d:250, c:300, b:400, a:500 ]
 
-    $c$ sidder under $(d+c)$, så under $(350+550)$ og til sidst roden. Det er 3 merges, så dybde 3.
+    m1: f:150 + e:200 = 350   kø: [ d:250, c:300, 350, b:400, a:500 ]
+    m2: d:250 + c:300 = 550   kø: [ 350, b:400, a:500, 550 ]
+    m3: 350 + b:400   = 750   kø: [ a:500, 550, 750 ]
+    m4: a:500 + 550   = 1050  kø: [ 750, 1050 ]
+    m5: 750 + 1050    = 1800  kø: [ 1800 ]  (rod)
+    ```
+
+    $c$ blev slugt i m2 (under $d c$, vægt 550), den knude i m4 (under $a + 550$, vægt 1050), og den i m5 (roden). Det er tre merges over bladet $c$, så dybde 3.
 
     Svar: 3 bit.
   ],
@@ -321,15 +367,19 @@ Skal du *bevise* greedy optimal, brug et ombytningsargument: tag en vilkårlig o
     + *Aflæs* dybden som kodeordslængden.
   ],
   worked: [
-    Sortér: c:15, f:30, h:35, d:40, b:90, g:125.
+    Sortér bladene efter voksende frekvens og kør Huffman. Hvert skridt tager de to mindste vægte; køen vises efter hvert merge:
 
-    + $c+f=45$
-    + $h+d=75$
-    + $45+75=120$
-    + $90+120=210$
-    + $125+210=335$ #sym.arrow.r rod
+    ```
+    Start: [ c:15, f:30, h:35, d:40, b:90, g:125 ]
 
-    $d$ sidder under $(h+d)$, så under $(45+75)$, så under $(90+120)$ og til sidst roden. Det er 4 merges, så dybde 4.
+    m1: c:15 + f:30   = 45    kø: [ h:35, d:40, 45, b:90, g:125 ]
+    m2: h:35 + d:40   = 75    kø: [ 45, 75, b:90, g:125 ]
+    m3: 45 + 75       = 120   kø: [ b:90, 120, g:125 ]
+    m4: b:90 + 120    = 210   kø: [ g:125, 210 ]
+    m5: g:125 + 210   = 335   kø: [ 335 ]  (rod)
+    ```
+
+    $d$ blev slugt i m2 (under $h d$, vægt 75), den knude i m3 (vægt 120), den i m4 (vægt 210), og den i m5 (roden). Det er fire merges over bladet $d$, så dybde 4.
 
     Svar: 4 bit.
   ],
@@ -356,17 +406,25 @@ Skal du *bevise* greedy optimal, brug et ombytningsargument: tag en vilkårlig o
     + *Forkast* træer med en intern vægt Huffman aldrig ville lave, også selvom de er optimale.
   ],
   worked: [
-    Huffmans tvungne merges:
+    Sortér bladene efter voksende frekvens og kør Huffman. Hvert skridt tager de to mindste vægte; køen vises efter hvert merge:
 
-    + $100+150=250$
-    + $150+250=400$
-    + $250+350=600$
-    + $400+600=1000$ #sym.arrow.r rod
+    ```
+    Start: [ a:100, b:150, c:150, d:250, e:350 ]
 
-    Et producerbart træ må altså have de interne vægte $250, 400, 600, 1000$.
+    m1: a:100 + b:150 = 250   kø: [ c:150, 250, d:250, e:350 ]
+    m2: c:150 + 250   = 400   kø: [ d:250, e:350, 400 ]
+    m3: d:250 + e:350 = 600   kø: [ 400, 600 ]
+    m4: 400 + 600     = 1000  kø: [ 1000 ]  (rod)
+    ```
 
-    - H2 og H5 rammer netop de fire vægte og matcher.
-    - H3 og H4 giver $250, 500, 500, 1000$. De to 500-taller er parringer Huffman aldrig laver, så de er optimale men ikke producerbare.
+    Huffman tvinger altså de interne vægte $250, 400, 600, 1000$ frem. Et producerbart træ skal have præcis dette sæt. Aflæs hvert kandidat-træs egne interne vægte ved at summere bladene under hver intern knude:
+
+    - H2 $= ((c,d),((a,b),e))$: $a b = 100+150 = 250$, $a b e = 250+350 = 600$, $c d = 150+250 = 400$, rod $= 600+400 = 1000$. Sættet er $250, 400, 600, 1000$ — matcher.
+    - H5 $= ((b,(a,c)),(d,e))$: $a c = 100+150 = 250$, $b a c = 150+250 = 400$, $d e = 250+350 = 600$, rod $= 400+600 = 1000$. Sættet er $250, 400, 600, 1000$ — matcher.
+    - H3 $= ((b,e),((a,c),d))$: $a c = 100+150 = 250$, $a c d = 250+250 = 500$, $b e = 150+350 = 500$, rod $= 1000$. Sættet er $250, 500, 500, 1000$.
+    - H4 $= ((d,(a,b)),(c,e))$: $a b = 100+150 = 250$, $d a b = 250+250 = 500$, $c e = 150+350 = 500$, rod $= 1000$. Sættet er $250, 500, 500, 1000$.
+
+    H3 og H4 har to interne knuder med vægt 500. Huffman ville aldrig parre noget til vægt 500, fordi den efter den første merge (250) altid tager 150 + 250 = 400 før den rører de tunge blade. De er optimale, men ikke producerbare.
 
     Svar: kun H2 og H5.
   ],
@@ -387,11 +445,30 @@ Skal du *bevise* greedy optimal, brug et ombytningsargument: tag en vilkårlig o
     + *Læg sammen.* Summér kodeordslængderne over alle tegn i #swap[strengen].
   ],
   worked: [
-    Byg træet: $f+e=350$, $d+c=550$, $b+a=900$, $350+550=900$, $900+900=1800$. Det giver dybderne a=2, b=2, c=3, d=3, e=3, f=3.
+    Byg først træet. Sortér bladene efter voksende frekvens og kør Huffman; køen vises efter hvert merge:
 
-    Strengen "caffebad" er $c, a, f, f, e, b, a, d$:
+    ```
+    Start: [ f:150, e:200, d:250, c:300, b:400, a:500 ]
 
-    $ 3+2+3+3+3+2+2+3 = 21 $
+    m1: f:150 + e:200 = 350   kø: [ d:250, c:300, 350, b:400, a:500 ]
+    m2: d:250 + c:300 = 550   kø: [ 350, b:400, a:500, 550 ]
+    m3: 350 + b:400   = 750   kø: [ a:500, 550, 750 ]
+    m4: a:500 + 550   = 1050  kø: [ 750, 1050 ]
+    m5: 750 + 1050    = 1800  kø: [ 1800 ]  (rod)
+    ```
+
+    Aflæs dybden af hvert blad ved at tælle merges over det:
+
+    - $a$: under $a + 550$ (m4), under roden (m5). Dybde 2.
+    - $b$: under $350 + b$ (m3), under roden (m5). Dybde 2.
+    - $c$: under $d c$ (m2), under $a + 550$ (m4), under roden (m5). Dybde 3.
+    - $d$: under $d c$ (m2), under $a + 550$ (m4), under roden (m5). Dybde 3.
+    - $e$: under $f e$ (m1), under $350 + b$ (m3), under roden (m5). Dybde 3.
+    - $f$: under $f e$ (m1), under $350 + b$ (m3), under roden (m5). Dybde 3.
+
+    Strengen "caffebad" er tegnrækken $c, a, f, f, e, b, a, d$. Læg deres kodeordslængder sammen:
+
+    #eq[$ underbrace(3, c) + underbrace(2, a) + underbrace(3, f) + underbrace(3, f) + underbrace(3, e) + underbrace(2, b) + underbrace(2, a) + underbrace(3, d) = 21 $]
 
     Svar: 21 bit.
   ],

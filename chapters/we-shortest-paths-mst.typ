@@ -25,13 +25,53 @@ De skriftlige opgaver her falder i to slags. Den ene er korteste veje (shortest 
     + Negative vægte #emph[og] cykler? → Bellman-Ford.
   ],
   worked: [
-    + *$G_1$* — BFS fra $s$. Alle kanter koster 1, så afstand $=$ antal kanter. Afstande:
+    + *$G_1$* — alle kanter har vægt 1, så afstanden er bare antal kanter: brug *BFS*. Lag for lag fra $s = v_00$, hvor hvert nyt lag er ét længere væk:
+
+      ```
+      Lag 0:  {00}                  00=0
+      Lag 1:  {01}                  s->01            => 01=1
+      Lag 2:  {11, 12}              01->11, 01->12   => 11=2, 12=2
+      Lag 3:  {10, 02, 22}          11->10, 12->02,
+                                    12->22           => 10=3, 02=3, 22=3
+      Lag 4:  {20, 21}              10->20, 10->21   => 20=4, 21=4
+      ```
+      ($v_00$ nås igen via $10 arrow.r 00$, men ligger allerede på lag 0; $11 arrow.r 12$ rammer en allerede besøgt knude.) Afstande:
       #eq[$ v_00=0, v_01=1, v_02=3, v_10=3, v_11=2, v_12=2, v_20=4, v_21=4, v_22=3. $]
 
-    + *$G_2$* — DAG med negative vægte. Topo-orden $v_00, v_01, v_02, v_10, v_11, v_12, v_20, v_21, v_22$; ét gennemløb relakserer alt korrekt. Fx $v_02 = 3 + (-5) = -2$, $v_11 = min(3-5, 1+1) = -2$, $v_21 = min(1-2, -2+2) = -1$. Afstande:
+    + *$G_2$* — negative vægte, men acyklisk: relaksér i *topologisk orden* $v_00, v_01, v_02, v_10, v_11, v_12, v_20, v_21, v_22$. Ét gennemløb er nok. For hver knude tager vi minimum over alle indkommende kanter:
+
+      ```
+      00:  kilde                                          d=0
+      01:  s->01 = 0+3                                    d=3
+      02:  01->02 = 3+(-5)                                d=-2
+      10:  s->10 = 0+1                                    d=1
+      11:  min( 01->11=3-5=-2 , 10->11=1+1=2 )            d=-2
+      12:  min( 01->12=3+2=5 , 02->12=-2+4=2 ,
+               11->12=-2+1=-1 )                           d=-1
+      20:  10->20 = 1+4                                   d=5
+      21:  min( 10->21=1-2=-1 , 11->21=-2+2=0 ,
+               20->21=5+1=6 )                             d=-1
+      22:  min( 12->22=-1+2=1 , 21->22=-1+3=2 )           d=1
+      ```
+      Afstande:
       #eq[$ 0, 3, -2, 1, -2, -1, 5, -1, 1. $]
 
-    + *$G_3$* — ikke-negativ med cykler, så Dijkstra. BFS dur ikke (vægtene er forskellige), topo-orden dur ikke (cykler). Afstande:
+    + *$G_3$* — ikke-negative vægte med cykler, så *Dijkstra* (BFS dur ikke, vægtene er forskellige; topo-orden dur ikke, der er cykler). $d$ er afstandsfeltet, og hver Extract-Min gør en knude endelig:
+
+      ```
+      d-array (oo = uendelig); fed = netop trukket
+      init:    00=0   resten oo
+      ext 00:  01=1, 10=2
+      ext 01:  02=4, 11=3
+      ext 10:  20=4
+      ext 11:  12=8         (10 via 5 ikke bedre end 2)
+      ext 02:  12=8         (0+3+4 = 8, uændret)
+      ext 20:  21=5
+      ext 21:  22=7         (10,11 allerede endelige)
+      ext 12:  22=7         (8+4=12 ikke bedre)
+      ext 22:  færdig
+      ```
+      Trække-rækkefølge: $00,01,10,11,02,20,21,12,22$. Afstande i orden $v_00,v_01,...$:
       #eq[$ 0, 1, 4, 2, 3, 8, 4, 5, 7. $]
   ],
 )
@@ -56,9 +96,18 @@ De skriftlige opgaver her falder i to slags. Den ene er korteste veje (shortest 
     + *Dijkstra* kræver alle vægte $>= 0$; cykler er fine.
   ],
   worked: [
-    + *BFS* (alle vægte ens): $G_1$ ja (alt vægt 1); $G_2$ nej (10 og 1); $G_3$ nej (blandede). → *kun $G_1$*.
-    + *DAG-Shortest-Paths* (acyklisk): $G_1$ ja; $G_2$ nej (cykel $a arrow.r c arrow.r b arrow.r a$); $G_3$ ja (negativ kant er tilladt). → *$G_1, G_3$*.
-    + *Dijkstra* (vægte $>= 0$): $G_1$ ja; $G_2$ ja (cykel er ok); $G_3$ nej ($a arrow.r c = -3 < 0$). → *$G_1, G_2$*.
+    Først aflæses hver grafs egenskaber, så holdes de op mod hver algoritmes forudsætning:
+
+    ```
+    graf  alle vægte ens?   acyklisk?   alle vægte >=0?
+    G1    ja (alle = 1)     ja          ja
+    G2    nej (10 og 1)     nej (a->c->b->a)   ja
+    G3    nej (6,-3,...)    ja          nej (a->c = -3)
+    ```
+
+    + *BFS* kræver ens vægte (den tæller kanter): $G_1$ ja; $G_2$ nej (10 og 1); $G_3$ nej (blandede). → *kun $G_1$*.
+    + *DAG-Shortest-Paths* kræver acyklisk graf (negative vægte er fine): $G_1$ ja; $G_2$ nej (cyklen $a arrow.r c arrow.r b arrow.r a$); $G_3$ ja (den negative kant $-3$ er tilladt). → *$G_1, G_3$*.
+    + *Dijkstra* kræver vægte $>= 0$ (cykler er fine): $G_1$ ja; $G_2$ ja (cyklen gør ikke noget); $G_3$ nej ($a arrow.r c = -3 < 0$). → *$G_1, G_2$*.
   ],
 )
 
@@ -77,9 +126,50 @@ De skriftlige opgaver her falder i to slags. Den ene er korteste veje (shortest 
     + Ét ekstra gennemløb opdager en negativ cykel (negative cycle) (en kant kan stadig relakseres) — ellers er $v.d$ endelige.
   ],
   worked: [
-    Efter $|V|-1$ gennemløb stabiliserer afstandene sig:
+    Init $a.d = 0$, resten $oo$, alle forgængere $pi{=}-$. Relaksér så alle 13 kanter i den givne rækkefølge $|V|-1 = 7$ gange. En kant $(u,v,w)$ relakserer, hvis $u.d + w < v.d$; så sættes $v.d$ og $pi[v]=u$. Her er hvert enkelt relaksation i gennemløb 1, hvor $d$-feltet udvikler sig undervejs ($oo$ = uendelig):
+
+    ```
+    Gennemløb 1 (d-felt opdateres straks)
+                          a   b   c   d   e   f   g   h
+    start                 0   oo  oo  oo  oo  oo  oo  oo
+    a->e (0+8=8)          0   .   .   .   8   .   .   .   pi e=a
+    a->f (0+10=10)        0   .   .   .   8  10   .   .   pi f=a
+    a->b (0+17=17)        0   17  .   .   8  10   .   .   pi b=a
+    e->h (8-4=4)          0   17  .   .   8  10   .   4   pi h=e
+    f->h (10-10=0<4)      0   17  .   .   8  10   .   0   pi h=f
+    f->g (10+25=35)       0   17  .   .   8  10  35   0   pi g=f
+    g->h (35-12=23>0)     -   ingen
+    g->c (35-3=32)        0   17  32  .   8  10  35   0   pi c=g
+    b->g (17-5=12<35)     0   17  32  .   8  10  12   0   pi g=b
+    c->b (32+19=51>17)    -   ingen
+    c->d (32+2=34)        0   17  32  34  8  10  12   0   pi d=c
+    d->e (34+6=40>8)      -   ingen
+    h->d (0+1=1<34)       0   17  32  1   8  10  12   0   pi d=h
+    ```
+
+    Tilstanden efter hvert fuldt gennemløb:
+
+    ```
+              a    b    c    d    e    f    g    h
+    init      0    oo   oo   oo   oo   oo   oo   oo
+    pass 1    0    17   32   1    8    10   12   0
+    pass 2    0    17   9    1    7    10   12   0
+    pass 3    0    17   9    1    7    10   12   0   (ingen ændring)
+    ```
+
+    Ændringerne i gennemløb 2: $g arrow.r c$ giver $c = 12{-}3 = 9$ (slår $32$), $pi c=g$; og $d arrow.r e$ giver $e = 1{+}6 = 7$ (slår $a arrow.r e = 8$), $pi e=d$. Gennemløb 3 relakserer ingen kant.
+
+    Forgængere ved afslutning og de realiserende veje:
+    - $pi f=a$: $a arrow.r f$ ($f{=}10$).
+    - $pi h=f$: $a arrow.r f arrow.r h$ ($h{=}0$).
+    - $pi b=a$: $a arrow.r b$ ($b{=}17$).
+    - $pi g=b$: $a arrow.r b arrow.r g$ ($g{=}12$).
+    - $pi c=g$: $a arrow.r b arrow.r g arrow.r c$ ($c{=}9$).
+    - $pi d=h$: $a arrow.r f arrow.r h arrow.r d$ ($d{=}1$).
+    - $pi e=d$: $a arrow.r f arrow.r h arrow.r d arrow.r e$ ($e{=}7$).
+
+    Et ekstra (8.) gennemløb relakserer ingen kant, så ingen negativ cykel er nåelig fra $a$, og afstandene er endelige:
     #eq[$ a{=}0, quad b{=}17, quad c{=}9, quad d{=}1, quad e{=}7, quad f{=}10, quad g{=}12, quad h{=}0. $]
-    Vejene der realiserer dem: $a arrow.r f arrow.r h$ giver $h{=}0$; $a arrow.r b arrow.r g$ giver $g{=}12$; $g arrow.r c$ giver $c{=}9$; $h arrow.r d$ giver $d{=}1$; $d arrow.r e$ giver $e{=}7$. Ingen negativ cykel er nåelig fra $a$, så værdierne er endelige.
   ],
 )
 
@@ -99,17 +189,37 @@ De skriftlige opgaver her falder i to slags. Den ene er korteste veje (shortest 
     + Extract-Min-rækkefølgen $=$ rækkefølgen knuderne gøres endelige.
   ],
   worked: [
-    + $a(0)$: $i = 7$.
-    + $i(7)$: $h{=}24$, $b{=}13$, $d{=}25$.
-    + $b(13)$: $c = 13{+}2 = 15$.
-    + $c(15)$: $c arrow.r d = 26 > 25$, ingen ændring.
-    + $h(24)$: $g = 24{+}9 = 33$.
-    + $d(25)$: ingen ud-kanter.
-    + $g(33)$: $f = 33{+}10 = 43$.
-    + $f(43)$: $e = 43{+}15 = 58$.
-    + $e(58)$: alt allerede færdigt.
+    Init $d[a]{=}0$, resten $oo$, alle $pi{=}-$. Køen indeholder alle 9 knuder. Hver linje viser den netop trukne knude (fed), $d$-feltet og forgænger-feltet $pi$ bagefter, samt prioritetskøens indhold (de endnu ufærdige knuder med endelig nøgle):
 
-    Endelige $v.d$: $a{=}0, i{=}7, b{=}13, c{=}15, h{=}24, d{=}25, g{=}33, f{=}43, e{=}58$.
+    ```
+    d/pi efter hver Extract-Min  (oo = uendelig, [..] = kø-nøgler)
+
+    trukket   a  i  b  c  h  d  g  f  e    PQ (key)
+    init      0  oo oo oo oo oo oo oo oo   {alle oo}
+    EXT a=0   0  7  oo oo oo oo oo oo oo   [i:7]
+              pi: i<-a
+    EXT i=7   0 [7] 13 oo 24 25 oo oo oo   [b:13, h:24, d:25]
+              pi: b<-i, h<-i, d<-i
+    EXT b=13  0 [7][13]15 24 25 oo oo oo   [c:15, h:24, d:25]
+              pi: c<-b  (b->a=17>0, ingen)
+    EXT c=15  0 [7][13][15]24 25 oo oo oo  [h:24, d:25]
+              (c->d=26>25, ingen; c->i lukket)
+    EXT h=24  0 ...        [24]25 33 oo oo [d:25, g:33]
+              pi: g<-h  (h->a lukket)
+    EXT d=25  0 ...            [25]33 oo oo[g:33]
+              (d har ingen ud-kanter)
+    EXT g=33  0 ...                [33]43 oo[f:43]
+              pi: f<-g  (g->i lukket)
+    EXT f=43  0 ...                    [43]58[e:58]
+              pi: e<-f  (f->i lukket)
+    EXT e=58  0 ...                        [58] {}
+              (e->d, e->i begge lukket)
+    ```
+
+    Bemærk at $c arrow.r d = 15{+}11 = 26$ ikke slår det tidligere $d{=}25$ (sat fra $i arrow.r d$), så $d$ beholder forgænger $i$. Extract-Min-rækkefølgen er rækkefølgen knuderne lukkes:
+    #eq[$ a, i, b, c, h, d, g, f, e. $]
+    Endelige $v.d$:
+    #eq[$ a{=}0, quad i{=}7, quad b{=}13, quad c{=}15, quad h{=}24, quad d{=}25, quad g{=}33, quad f{=}43, quad e{=}58. $]
   ],
 )
 
@@ -128,9 +238,30 @@ De skriftlige opgaver her falder i to slags. Den ene er korteste veje (shortest 
     + Relaksér kun #emph[ud]-kanter $(u,v)$: hvis $d[u] + w(u,v) < d[v]$, opdatér $d[v]$. Grafen er rettet.
   ],
   worked: [
-    Extract-Min-rækkefølge med endelig afstand:
+    Init $d[a]{=}0$, resten $oo$, $pi{=}-$. Hver Extract-Min lukker en knude (fed), relakserer dens ud-kanter og opdaterer $d$ og $pi$. Kolonnerne er $d$-værdierne; under hver linje står de forgængere der blev sat, og prioritetskøens åbne nøgler:
+
+    ```
+    trukket    a  b  c  d  e  f  g  h  i  j
+    init       0  oo oo oo oo oo oo oo oo oo   PQ {oo}
+    EXT a=0    0   6 oo oo oo oo oo oo oo oo   b<-a        [b:6]
+    EXT b=6    0  [6] 15 oo 14 oo oo oo oo oo  c<-b,e<-b   [e:14,c:15]
+    EXT e=14   0  .  15 oo[14]35 oo oo oo oo   f<-e        [c:15,f:35]
+                                               (e->a=27>0 lukket)
+    EXT c=15   0  . [15]17 . 31 oo oo oo oo    d<-c, f<-c (31<35) [d:17,f:31]
+    EXT d=17   0  .  . [17]. 31 22 oo oo oo    g<-d        [g:22,f:31]
+    EXT g=22   0  .  .  .  . 31[22]oo 26 oo    i<-g        [i:26,f:31]
+                                               (g->c=29>15 lukket)
+    EXT i=26   0  .  .  .  . 29 . oo[26]38     f<-i(29<31),j<-i [f:29,j:38]
+    EXT f=29   0  .  .  .  .[29]. 44 .  38     h<-f        [j:38,h:44]
+                                               (f->g,f->b lukket)
+    EXT j=38   0  .  .  .  .  . . 39 . [38]    h<-j(39<44) [h:39]
+    EXT h=39   0  .  .  .  .  . .[39]. .       {}  (h->i,h->e lukket)
+    ```
+
+    De afgørende relaksationer hvor en kortere vej slår en tidligere: $f$ falder fra $35$ ($e arrow.r f$) til $31$ ($c arrow.r f$) til $29$ ($i arrow.r f$); $h$ falder fra $44$ ($f arrow.r h$) til $39$ ($j arrow.r h$). Extract-Min-rækkefølge:
     #eq[$ a(0), b(6), e(14), c(15), d(17), g(22), i(26), f(29), j(38), h(39). $]
-    Centrale relaksationer: $b$ via $a arrow.r b = 6$; $e$ via $b arrow.r e = 14$; $c$ via $b arrow.r c = 15$; $d$ via $c arrow.r d = 17$; $g$ via $d arrow.r g = 22$; $i$ via $g arrow.r i = 26$; $f$ via $i arrow.r f = 29$ (slår $c arrow.r f = 31$ og $e arrow.r f = 35$); $j$ via $i arrow.r j = 38$; $h$ via $j arrow.r h = 39$ (slår $f arrow.r h = 44$).
+    Endelige $v.d$:
+    #eq[$ a{=}0, b{=}6, c{=}15, d{=}17, e{=}14, f{=}29, g{=}22, h{=}39, i{=}26, j{=}38. $]
   ],
 )
 
@@ -149,12 +280,31 @@ De skriftlige opgaver her falder i to slags. Den ene er korteste veje (shortest 
     + Korteste-vej-træet er kanterne $(mono("prev")[v], v)$.
   ],
   worked: [
-    Afstand og forgænger (træ-forælder):
+    Init $d[s]{=}0$, resten $oo$. Hver Extract-Min settler den ufærdige knude med mindst $d$ (fed) og relakserer dens kanter; en forbedring sætter både $d[v]$ og forgængeren $pi[v]$. Tabellen viser $d$ efter hvert settle, og linjen under hver settle angiver de forgængere der blev sat:
+
+    ```
+    settle    s  A  B  C  D  E  F  G  H  I  P  Q  R
+    init      0  oo oo oo oo oo oo oo oo oo oo oo oo
+    s=0       0   1 12 .  .  .  .  .  .  .  .  .  .   A<-s, B<-s
+    A=1       0 [1]12 .  .  .  .  .  .  .  .  .  .   (A-B=14>12 ingen)
+    B=12      0  . [12]42 .  .  .  17 .  .  .  .  .   C<-B, G<-B
+    G=17      0  .  . 34 .  .  . [17]25 21 .  .  .   C<-G(34<42),H<-G,I<-G
+    I=21      0  .  . 34 .  . 36  . 25[21].  .  .   F<-I  (I-H=27>25)
+    H=25      0  .  . 34 .  . 36  .[25]. .  .  .   (H-I lukket)
+    C=34      0  .  .[34]41 . 36  . .  . . . 42   D<-C, R<-C
+    F=36      0  .  . . 41 50[36]. .  . . . 42   E<-F  (F-D=47>41)
+    D=41      0  .  . . [41]44 . . .  . . . 42   E<-D(44<50)  (D-R=56>42)
+    R=42      0  .  . . . 44 . . .  . 52 44[42]  Q<-R, P<-R
+    E=44/Q=44 0  .  . . . [44]. . . . 52[44].   (uafgjort; ingen forbedring)
+    P=52      0  .  . . . . . . .  .[52]. .   slut
+    ```
+
+    Endelig afstand og forgænger (træ-forælder):
     #eq[$
       &A{:}1{<-}s, quad B{:}12{<-}s, quad G{:}17{<-}B, quad I{:}21{<-}G, quad H{:}25{<-}G, \
       &C{:}34{<-}G, quad F{:}36{<-}I, quad D{:}41{<-}C, quad R{:}42{<-}C, quad E{:}44{<-}D, quad Q{:}44{<-}R, quad P{:}52{<-}R.
     $]
-    Træ-kanter (rod $s$): $s{-}A, s{-}B, B{-}G, G{-}I, G{-}H, G{-}C, I{-}F, C{-}D, C{-}R, D{-}E, R{-}Q, R{-}P$. Fx slår $s arrow.r B arrow.r G arrow.r C = 34$ den direkte $s arrow.r B arrow.r C = 42$. Dijkstra er korrekt fordi alle vægte er $>= 0$: en settlet knudes $d$ er endelig.
+    Træ-kanter (rod $s$): $s{-}A, s{-}B, B{-}G, G{-}I, G{-}H, G{-}C, I{-}F, C{-}D, C{-}R, D{-}E, R{-}Q, R{-}P$. Fx slår $s arrow.r B arrow.r G arrow.r C = 34$ den direkte $s arrow.r B arrow.r C = 42$, og $D arrow.r E = 44$ slår $F arrow.r E = 50$. Dijkstra er korrekt fordi alle vægte er $>= 0$: en settlet knudes $d$ er endelig.
   ],
 )
 
@@ -173,12 +323,28 @@ De skriftlige opgaver her falder i to slags. Den ene er korteste veje (shortest 
     + Forældrene udgør korteste-vej-træet.
   ],
   worked: [
-    Settle-orden $A, B, D, G, E, F, C, H, I$. Afstand og forælder:
+    Init $d[A]{=}0$, resten $oo$. Hvert settle (fed) relakserer kanterne; en forbedring sætter $d[v]$ og forælder $pi[v]$. $d$ efter hvert settle, med de satte forældre under linjen:
+
+    ```
+    settle   A  B  C  D  E  F  G  H  I
+    init     0  oo oo oo oo oo oo oo oo
+    A=0      0   2 oo  6 oo oo oo oo oo   B<-A, D<-A
+    B=2      0 [2] 9  6  7 oo oo oo oo   C<-B,E<-B (B-D=8>6 ingen)
+    D=6      0  . 9 [6] 7 oo  7 10 oo   G<-D,H<-D (D-E=11>7 ingen)
+    G=7      0  . 9  . 7 oo [7]10 oo   (kun D-G)
+    E=7      0  . 9  .[7] 8  . 10 oo   F<-E  (E-H=10 ikke <10)
+    F=8      0  . 9  .  .[8] . 10 12   I<-F  (F-C=13>9 ingen)
+    C=9      0  .[9] .  . . . 10 12   (C-F lukket)
+    H=10     0  . .  .  . . .[10]12   (H-I=12 ikke <12)
+    I=12     0  . .  .  . . . . [12]   slut
+    ```
+
+    Settle-orden $A, B, D, G, E, F, C, H, I$ (uafgjort $G{=}E{=}7$ brydes til $G$ først). Afstand og forælder:
     #eq[$
       &B{:}2{<-}A, quad D{:}6{<-}A, quad E{:}7{<-}B, quad G{:}7{<-}D, quad F{:}8{<-}E, \
       &C{:}9{<-}B, quad H{:}10{<-}D, quad I{:}12{<-}F.
     $]
-    $E$ nås billigst via $B$ ($2{+}5{=}7$), ikke via $D$ ($6{+}5{=}11$); $F$ via $E$ ($7{+}1{=}8$); $C$ via $B$ ($2{+}7{=}9$), ikke via $F$ ($8{+}5{=}13$).
+    $E$ nås billigst via $B$ ($2{+}5{=}7$), ikke via $D$ ($6{+}5{=}11$); $F$ via $E$ ($7{+}1{=}8$); $C$ via $B$ ($2{+}7{=}9$), ikke via $F$ ($8{+}5{=}13$); $I$ via $F$ ($8{+}4{=}12$), hvor $H arrow.r I = 12$ ikke er strengt mindre.
   ],
 )
 
@@ -197,17 +363,26 @@ De skriftlige opgaver her falder i to slags. Den ene er korteste veje (shortest 
     + Stop ved $|V| - 1$ kanter.
   ],
   worked: [
-    Sorteret: $(g,h){-}12, (f,h){-}10, (b,g){-}5, (e,h){-}4, (g,c){-}3, (h,d)1, (c,d)2, (d,e)6, (a,e)8, ...$
+    Sorteret stigende: $(g,h){-}12, (f,h){-}10, (b,g){-}5, (e,h){-}4, (g,c){-}3, (h,d)1, (c,d)2, (d,e)6, (a,e)8, (a,f)10, (a,b)17, (c,b)19, (g,f)25$.
 
-    + $(g,h){-}12$ — tilføj.
-    + $(f,h){-}10$ — tilføj.
-    + $(b,g){-}5$ — tilføj.
-    + $(e,h){-}4$ — tilføj.
-    + $(g,c){-}3$ — tilføj.
-    + $(h,d)1$ — tilføj. Derefter $(c,d)2$ og $(d,e)6$ springes over (kreds).
-    + $(a,e)8$ — tilføj. Nu 7 kanter, stop.
+    Scan i orden. Tilføj kun hvis endepunkterne ligger i forskellige union-find-komponenter; ellers kreds. 8 knuder, så stop ved 7 kanter. Komponent-mængderne efter hvert skridt (singletons udeladt):
 
-    Totalvægt $= -12-10-5-4-3+1+8 = -25$.
+    ```
+    kant       vægt  find(u)?find(v)?  handling   komponenter
+    init                               -          alle singletons
+    (g,h)      -12   g != h            TILFØJ      {g,h}
+    (f,h)      -10   f != {g,h}        TILFØJ      {f,g,h}
+    (b,g)       -5   b != {f,g,h}      TILFØJ      {b,f,g,h}
+    (e,h)       -4   e != {b,f,g,h}    TILFØJ      {b,e,f,g,h}
+    (g,c)       -3   {..} != c         TILFØJ      {b,c,e,f,g,h}
+    (h,d)        1   {..} != d         TILFØJ      {b,c,d,e,f,g,h}
+    (c,d)        2   samme komponent   KREDS       (uændret)
+    (d,e)        6   samme komponent   KREDS       (uændret)
+    (a,e)        8   a != {b..h}       TILFØJ      {a,b,c,d,e,f,g,h}  (7 kanter)
+    ```
+
+    7 kanter nået, stop. MST (i tilføjelsesorden): $(g,h), (f,h), (b,g), (e,h), (g,c), (h,d), (a,e)$. Totalvægt:
+    #eq[$ -12 - 10 - 5 - 4 - 3 + 1 + 8 = -25. $]
   ],
 )
 
@@ -226,12 +401,25 @@ De skriftlige opgaver her falder i to slags. Den ene er korteste veje (shortest 
     + Stop ved $|V| - 1 = 9$ kanter.
   ],
   worked: [
-    Scan i vægtorden (tilføj hvis komponenterne er forskellige):
-    #eq[$
-      &(j,h)1 ✓, quad (c,d)2 ✓, quad (i,f)3 ✓, quad (i,g)4 ✓, quad (g,d)5 ✓, \
-      &(a,b)6 ✓, quad (g,c)7 mono("(spring)"), quad (e,b)8 ✓, quad (b,c)9 ✓, quad (j,i)12 ✓.
-    $]
-    9 kanter nået, stop. Totalvægt $= 1{+}2{+}3{+}4{+}5{+}6{+}8{+}9{+}12 = 50$.
+    Sorteret stigende: $(j,h)1, (c,d)2, (i,f)3, (i,g)4, (g,d)5, (a,b)6, (g,c)7, (e,b)8, (b,c)9, (f,b)11, (j,i)12, ...$ 10 knuder, så stop ved 9 kanter. Scan i orden, tilføj hvis endepunkterne er i forskellige komponenter:
+
+    ```
+    kant     vægt  find-tjek            handling  komponenter (singletons udeladt)
+    (j,h)     1    j != h               TILFØJ    {h,j}
+    (c,d)     2    c != d               TILFØJ    {c,d}
+    (i,f)     3    i != f               TILFØJ    {f,i}
+    (i,g)     4    {f,i} != g           TILFØJ    {f,g,i}
+    (g,d)     5    {f,g,i} != {c,d}     TILFØJ    {c,d,f,g,i}
+    (a,b)     6    a != b               TILFØJ    {a,b}
+    (g,c)     7    g,c samme komponent  KREDS     (uændret)
+    (e,b)     8    e != {a,b}           TILFØJ    {a,b,e}
+    (b,c)     9    {a,b,e} != {c,d,..}  TILFØJ    {a,b,c,d,e,f,g,i}
+    (f,b)    11    samme komponent      KREDS     (uændret)
+    (j,i)    12    {h,j} != {a,b,..}    TILFØJ    {a,b,c,d,e,f,g,h,i,j}  (9 kanter)
+    ```
+
+    9 kanter nået, alle 10 knuder hænger sammen, stop. MST (i tilføjelsesorden): $(h,j),(c,d),(f,i),(g,i),(d,g),(a,b),(b,e),(b,c),(i,j)$. Totalvægt:
+    #eq[$ 1{+}2{+}3{+}4{+}5{+}6{+}8{+}9{+}12 = 50. $]
   ],
 )
 
@@ -250,12 +438,37 @@ De skriftlige opgaver her falder i to slags. Den ene er korteste veje (shortest 
     + Entydighed: tjek at gentagne vægte hver især tvinges (den anden af et par danner en kreds).
   ],
   worked: [
+    Sorteret stigende (13 knuder, stop ved 12 kanter): $s{-}A(1), Q{-}R(2), D{-}E(3), G{-}I(4), B{-}G(5), H{-}I(6), C{-}D(7), R{-}C(8), G{-}H(8), P{-}Q(9), P{-}R(10), D{-}F(11), s{-}B(12), A{-}B(13), E{-}F(14), R{-}D(15), F{-}I(15), C{-}G(17), B{-}C(30)$.
+
+    Scan i orden; tilføj hvis komponenterne er forskellige. Komponenter undervejs (singletons udeladt):
+
+    ```
+    kant     vægt  handling  komponenter (ikke-trivielle)
+    s-A       1    TILFØJ    {s,A}
+    Q-R       2    TILFØJ    {Q,R}
+    D-E       3    TILFØJ    {D,E}
+    G-I       4    TILFØJ    {G,I}
+    B-G       5    TILFØJ    {B,G,I}
+    H-I       6    TILFØJ    {B,G,H,I}
+    C-D       7    TILFØJ    {C,D,E}
+    R-C       8    TILFØJ    {C,D,E,Q,R}
+    G-H       8    KREDS     (begge i {B,G,H,I})
+    P-Q       9    TILFØJ    {C,D,E,P,Q,R}
+    P-R      10    KREDS     (begge i {C,D,E,P,Q,R})
+    D-F      11    TILFØJ    {C,D,E,F,P,Q,R}
+    s-B      12    TILFØJ    {s,A,B,G,H,I}
+    A-B      13    KREDS     (begge i {s,A,B,G,H,I})
+    E-F      14    KREDS     (begge i {C,D,E,F,..})
+    R-D      15    KREDS     (begge i {C,D,E,F,..})
+    F-I      15    TILFØJ    alle 13 knuder  (12 kanter)
+    ```
+
     Kruskal-orden ($n-1 = 12$ kanter):
     #eq[$
       &s{-}A(1), Q{-}R(2), D{-}E(3), G{-}I(4), B{-}G(5), H{-}I(6), C{-}D(7), R{-}C(8), \
       &P{-}Q(9), D{-}F(11), s{-}B(12), F{-}I(15).
     $]
-    Sprunget over som kredse: $G{-}H(8), P{-}R(10), A{-}B(13), E{-}F(14), R{-}D(15), C{-}G(17), B{-}C(30)$. Totalvægt $= 83$.
+    Sprunget over som kredse: $G{-}H(8), P{-}R(10), A{-}B(13), E{-}F(14), R{-}D(15), C{-}G(17), B{-}C(30)$. Totalvægt $= 1{+}2{+}3{+}4{+}5{+}6{+}7{+}8{+}9{+}11{+}12{+}15 = 83$.
 
     Entydighed: vægte gentages kun ved 8 ($R{-}C, G{-}H$) og 15 ($R{-}D, F{-}I$). I hvert par bruger Kruskal den ene, og den anden danner en kreds. Ingen kant af vægt $< 15$ broer de to halvdele, så $F{-}I = 15$ er tvunget. Hver valgt kant er minimumskanten over snittet for den hidtil byggede komponent, så ved snit-egenskaben er træet et MST.
   ],
@@ -303,17 +516,26 @@ De skriftlige opgaver her falder i to slags. Den ene er korteste veje (shortest 
     + For hver nabo $v$ stadig i køen med $w(u,v) < mono("key")[v]$: sæt $mono("key")[v] = w(u,v)$, $pi[v] = u$.
   ],
   worked: [
-    + $a(0)$: $b{=}4, h{=}8, i{=}7$.
-    + $b(4)$, kant $(a,b)$: $c{=}2, i{=}6$ ($6 < 7$).
-    + $c(2)$, kant $(b,c)$: $d{=}11$.
-    + $i(6)$, kant $(b,i)$: $f{=}5, e{=}14, g{=}13$.
-    + $f(5)$, kant $(i,f)$: $g{=}10$ ($10 < 13$).
-    + $h(8)$, kant $(a,h)$: $g{=}9$ ($9 < 10$).
-    + $g(9)$, kant $(h,g)$.
-    + $d(11)$, kant $(c,d)$.
-    + $e(14)$, kant $(i,e)$.
+    Init $mono("key")[a]{=}0$, resten $oo$, $pi{=}-$. Hver Extract-Min trækker knuden $u$ med mindst nøgle (fed), tilføjer kanten $(pi[u], u)$ til MST (for $u != a$) og opdaterer naboer $v$ stadig i køen med $w(u,v) < mono("key")[v]$. Nøgle-felter og prioritetskøen efter hvert Extract-Min:
 
-    MST-kanter: $(a,b),(b,c),(b,i),(i,f),(a,h),(h,g),(c,d),(i,e)$. Totalvægt $= 4{+}2{+}6{+}5{+}8{+}9{+}11{+}14 = 59$.
+    ```
+    trukket   a  b  c  d  e  f  g  h  i    PQ (key for åbne knuder)
+    init      0  oo oo oo oo oo oo oo oo   {alle oo}
+    EXT a=0   .  4 oo oo oo oo oo  8  7    [b:4,i:7,h:8]   pi: b,i,h <- a
+    EXT b=4   .  .  2 oo oo oo oo  8  6    [c:2,i:6,h:8]   pi c<-b, i<-b(6<7)
+    EXT c=2   .  .  . 11 oo oo oo  8  6    [i:6,h:8,d:11]  pi d<-c (i:22 ingen)
+    EXT i=6   .  .  . 11 14  5 13  8  .    [f:5,h:8,d:11,e:14,g:13] pi f,e,g,(d:18 ingen)<-i
+    EXT f=5   .  .  . 11 14  . 10  8  .    [h:8,g:10,d:11,e:14]  pi g<-f (10<13)
+    EXT h=8   .  .  . 11 14  .  9  .  .    [g:9,d:11,e:14]  pi g<-h (9<10)
+    EXT g=9   .  .  . 11 14  .  .  .  .    [d:11,e:14]  (f,i lukket)
+    EXT d=11  .  .  .  . 14  .  .  .  .    [e:14]  (c,i lukket; d-e:21 ingen)
+    EXT e=14  .  .  .  .  .  .  .  .  .    {}  alle med
+    ```
+
+    Extract-Min-rækkefølge: $a, b, c, i, f, h, g, d, e$. Tilføjede MST-kanter $(pi[u], u)$ i den orden:
+    #eq[$ (a,b), (b,c), (b,i), (i,f), (a,h), (h,g), (c,d), (i,e). $]
+    De afgørende opdateringer: $i$ falder fra $7$ ($a arrow.r i$) til $6$ ($b arrow.r i$); $g$ falder fra $13$ ($i arrow.r g$) til $10$ ($f arrow.r g$) til $9$ ($h arrow.r g$). Totalvægt:
+    #eq[$ 4{+}2{+}6{+}5{+}8{+}9{+}11{+}14 = 59. $]
   ],
 )
 
@@ -332,9 +554,25 @@ De skriftlige opgaver her falder i to slags. Den ene er korteste veje (shortest 
     + Stop når alle knuder er med.
   ],
   worked: [
-    Greedy fra $A$ — letteste kant ud af træet hver gang:
+    Init $mono("key")[A]{=}0$, resten $oo$, $pi{=}-$. Hver Extract-Min trækker knuden med mindst nøgle (fed), tilføjer $(pi[u], u)$ og opdaterer naboer stadig i køen. Nøgle-felter og kø efter hvert Extract-Min:
+
+    ```
+    trukket   A  B  C  D  E  F  G  H  I   PQ (åbne nøgler)
+    init      0  oo oo oo oo oo oo oo oo  {alle oo}
+    EXT A=0   .  2 oo  6 oo oo oo oo oo   [B:2,D:6]   pi B,D <- A
+    EXT B=2   .  . 7  6  5 oo oo oo oo    [E:5,D:6,C:7] pi C,E<-B (D:6 ikke<6)
+    EXT E=5   .  . 7  5  .  1 oo  3 oo    [F:1,H:3,D:5,C:7] pi D<-E(5<6),F,H<-E
+    EXT F=1   .  . 5  5  .  . oo  3  4    [H:3,I:4,D:5,C:5] pi C<-F(5<7),I<-F
+    EXT H=3   .  . 5  4  .  . oo  .  2    [I:2,D:4,C:5] pi D<-H(4<5),I<-H(2<4)
+    EXT I=2   .  . 5  4  .  . oo  .  .    [D:4,C:5]  (F lukket)
+    EXT D=4   .  . 5  .  .  .  1  .  .    [G:1,C:5] pi G<-D (B,E lukket)
+    EXT G=1   .  . 5  .  .  .  .  .  .    [C:5]
+    EXT C=5   .  .  .  .  .  .  .  .  .    {}  alle med
+    ```
+
+    Extract-Min-orden $A, B, E, F, H, I, D, G, C$. Den nøgle der vinder for hver knude giver træ-kanterne i valgrækkefølge:
     #eq[$ A{-}B(2), B{-}E(5), E{-}F(1), E{-}H(3), H{-}I(2), H{-}D(4), D{-}G(1), F{-}C(5). $]
-    Totalvægt $= 2{+}5{+}1{+}3{+}2{+}4{+}1{+}5 = 23$ (samme total som Kruskal giver).
+    Bemærk hvordan $D$ falder $6 arrow.r 5 arrow.r 4$ ($A arrow.r E arrow.r H$) og $I$ falder $4 arrow.r 2$ ($F arrow.r H$). Totalvægt $= 2{+}5{+}1{+}3{+}2{+}4{+}1{+}5 = 23$ (samme total som Kruskal giver).
   ],
 )
 
@@ -463,7 +701,21 @@ De skriftlige opgaver her falder i to slags. Den ene er korteste veje (shortest 
     + *(a) BFS.* Lag fra $s$: lag 0 $\{s\}$; lag 1 $\{T L, M L\}$; lag 2 $\{T R, C\}$; lag 3 $\{M R\}$; lag 4 $\{B R\}$; lag 5 $\{B L\}$. $B L$ nås kun via den lange vej $s arrow.r T L arrow.r T R arrow.r M R arrow.r B R arrow.r B L$, for de eneste kanter ind i $B L$ kommer fra $B R$.
       #eq[$ s{=}0, T L{=}1, M L{=}1, T R{=}2, C{=}2, M R{=}3, B R{=}4, B L{=}5. $]
 
-    + *(c) Dijkstra.* Extract-Min-orden med endelige afstande: $s{=}0$ (relaksér $T R{=}17, M L{=}15, C{=}35$) $arrow.r M L{=}10$ ($s arrow.r M L = 10$ slår $15$) $arrow.r T R{=}17$ ($M R{=}21, C{=}26$) $arrow.r M R{=}21$ ($B R{=}23, C{=}24$) $arrow.r B R{=}23$ ($C{=}24$) $arrow.r C{=}24$. $B L$ har ingen indkant fra det nåelige sæt, så $B L = oo$. Tjek $C$: bedste indgang er $B R arrow.r C$ med $23{+}1 = 24$.
+    + *(c) Dijkstra.* Init $d[s]{=}0$, resten $oo$. Hver Extract-Min (fed) relakserer ud-kanterne; $d$-felt efter hvert settle (forkortelser: TL, TR, ML, MR, C, BR, BL):
+
+      ```
+      settle    s  TL ML TR MR C  BR BL
+      init      0  oo oo oo oo oo oo oo
+      s=0       0   5 10 oo oo oo oo oo   (s->TL=5, s->ML=10)
+      TL=5      0  [5]10 17 oo 35 oo oo   TR=17, C=35 (ML:15>10 ingen)
+      ML=10     0  . [10]17 oo 30 oo oo   C=30 (ML->C=10+20)
+      TR=17     0  .  . [17]21 26 oo oo   MR=21, C=26 (slår 30)
+      MR=21     0  .  .  . [21]24 23 oo   C=24 (slår 26), BR=23
+      BR=23     0  .  .  .  . 24[23]oo   (BR->C=24 ikke<24)
+      C=24      0  .  .  .  .[24]. oo    (C har ingen ud-kant)
+      BL: oo    -  -  -  -  - -  -  oo    ingen indkant fra nåeligt sæt
+      ```
+      $B L$ har ingen indkant fra det nåelige sæt, så $B L = oo$. $C$'s bedste indgang er $B R arrow.r C$ med $23{+}1 = 24$.
       #eq[$ s{=}0, T L{=}5, M L{=}10, T R{=}17, M R{=}21, B R{=}23, C{=}24, B L{=}oo. $]
 
     + *(d) Kruskal.* Scan i vægtorden: tilføj $B R{-}C(1)$, $M R{-}B R(2)$, $B L{-}C(3)$; spring $M R{-}C(3)$ over (kreds); tilføj $T R{-}M R(4)$, $s{-}T L(5)$, $s{-}B L(6)$; spring $B L{-}B R(7)$ over; tilføj $M L{-}B L(8)$. Nu hænger alle 8 knuder sammen med 7 kanter.
@@ -556,13 +808,21 @@ De skriftlige opgaver her falder i to slags. Den ene er korteste veje (shortest 
     + For hver nabo $v$ stadig i køen med $w(u,v) < mono("key")[v]$: sæt $mono("key")[v] = w(u,v)$, $pi[v] = u$.
   ],
   worked: [
-    + $a(0)$: $b{<-}17, e{<-}11, d{<-}8$.
-    + $d(8)$, kant $(a,d)$: $c{<-}25$ ($e{:}18$ ikke $< 11$).
-    + $e(11)$, kant $(a,e)$: $b{<-}5, c{<-}3$.
-    + $c(3)$, kant $(e,c)$: ($b{:}14$ ikke $< 5$).
-    + $b(5)$, kant $(e,b)$.
+    Init $mono("key")[a]{=}0$, resten $oo$, $pi{=}-$. Hver Extract-Min trækker mindste nøgle (fed), tilføjer $(pi[u], u)$ og opdaterer naboer i køen. Nøgle-felter og kø:
 
-    Extract-Min-orden $a, d, e, c, b$. MST-kanter $(a,d){=}8, (a,e){=}11, (e,c){=}3, (e,b){=}5$, totalvægt $= 27$.
+    ```
+    trukket   a  b  c  d  e   PQ (åbne nøgler)
+    init      0  oo oo oo oo  {alle oo}
+    EXT a=0   .  17 oo  8 11  [d:8,e:11,b:17]  pi b,d,e <- a
+    EXT d=8   .  17 25  . 11  [e:11,b:17,c:25] pi c<-d (e:18 ikke<11)
+    EXT e=11  .   5  3  .  .   [c:3,b:5]  pi b<-e(5<17), c<-e(3<25)
+    EXT c=3   .   5  .  .  .   [b:5]  (b:14 ikke<5; d lukket)
+    EXT b=5   .   .  .  .  .   {}  alle med
+    ```
+
+    Extract-Min-orden $a, d, e, c, b$. For hver knude giver den vindende nøgle træ-kanten: $b$ og $c$ falder begge fra deres $d$-baserede nøgler ($17, 25$) ned til $e$-baserede ($5, 3$). MST-kanter:
+    #eq[$ (a,d){=}8, quad (a,e){=}11, quad (e,c){=}3, quad (e,b){=}5. $]
+    Totalvægt $= 8{+}11{+}3{+}5 = 27$.
   ],
 )
 

@@ -22,10 +22,82 @@ Søgestrukturer fylder i de skriftlige sæt, og opgaverne gentager sig år efter
     + *Slet.* Har noden $z$ to børn, så find efterfølgeren (successor) $y =$ minimum i højre undertræ (subtree). Flyt $y$ op på $z$'s plads (transplantér først $y$ ud, hvis $y$ ikke er direkte barn af $z$).
   ],
   worked: [
-    + *(a)* In-order: $1, 2, 4, 7, 8, 11, 14, 20, 25$. Strengt voksende, så det _er_ et binært søgetræ. ($8$ og $14$ ligger i venstre undertræ af $20$, begge $< 20$ og $> 4$; $11 < 14$ og $> 8$.)
-    + *(b)* $z = 5$ har to børn. Højre undertræ har rod $11$, og dets minimum er $6$ (uden venstre barn). Efterfølger $y = 6$. Da $6$ ikke er direkte barn af $5$, men har højre barn $8$: transplantér $6$ med $8$ (så $8$ bliver venstre barn af $11$), sæt $6."right" = 11$. Til sidst erstatter $6$ roden $5$ og får $6."left" = 2$. \
+    + *(a)* Træet, og in-order-gennemgangen node for node (venstre, node, højre):
+      ```
+                4
+              /   \
+             2     20
+            /     /  \
+           1     8    25
+                / \
+               7  14
+                  /
+                11
+
+      in-order: 1, 2, 4, 7, 8, 11, 14, 20, 25
+      ```
+      Hvert nabopar vokser: $1<2<4<7<8<11<14<20<25$. Ingen faldende skridt, så sekvensen er strengt voksende, og træet _er_ et binært søgetræ. (Tjek på de kritiske noder: $8, 14$ ligger i venstre undertræ af $20$, begge $> 4$ og $< 20$; $11 < 14$ og $> 8$.)
+    + *(b)* `TREE-DELETE` af $z = 5$. Starttræet:
+      ```
+                5
+              /   \
+             2     11
+            / \   /  \
+           1   4 6   12
+              /   \
+             3     8
+                  / \
+                 7  10
+      ```
+      $z = 5$ har to børn, så efterfølgeren $y = $ minimum i højre undertræ. Gå til $11$, så hele vejen ned ad venstre: $11 -> 6$, og $6$ har intet venstre barn, så $y = 6$. \
+      $y = 6$ er ikke direkte barn af $z$ (det er barnebarn). CLRS transplanterer derfor først $y$ ud med dens højre barn $x = 8$, så $8$ overtager $6$'s plads under $11$:
+      ```
+                5
+              /   \
+             2     11
+            / \   /  \
+           1   4 8   12
+              /  / \
+             3  7  10
+      ```
+      Sæt så $y."right" = $ det gamle højre undertræ af $z$ (rodet ved $11$), og transplantér $y = 6$ ind på $z$'s plads med $z."left" = 2$:
+      ```
+                6
+              /   \
+             2     11
+            / \   /  \
+           1   4 8   12
+              /  / \
+             3  7  10
+      ```
       Ny rod $6$; venstre $= 2$ (børn $1, 4$; $4$ har venstre barn $3$); højre $= 11$ (venstre barn $8$ med børn $7, 10$; højre barn $12$).
-    + *(c)* Sti for $16$: $16 > 10 ->$ højre til $21$; $16 < 21 ->$ venstre til $15$; $16 > 15 ->$ højre til $17$; $16 < 17 ->$ venstre for $17$ (tom). Så $16$ bliver venstre barn af $17$.
+    + *(c)* `TREE-INSERT` af $16$. Starttræet og søgestien:
+      ```
+                10
+              /    \
+             5      21
+            /      /  \
+           3     15    30
+                /  \
+               11  17
+
+      16 > 10  -> højre til 21
+      16 < 21  -> venstre til 15
+      16 > 15  -> højre til 17
+      16 < 17  -> venstre for 17 (tom)  -> indsæt her
+      ```
+      Resultat: $16$ bliver venstre barn af $17$:
+      ```
+                10
+              /    \
+             5      21
+            /      /  \
+           3     15    30
+                /  \
+               11  17
+                   /
+                  16
+      ```
   ],
 )
 
@@ -52,11 +124,65 @@ Søgestrukturer fylder i de skriftlige sæt, og opgaverne gentager sig år efter
   ],
   worked: [
     + *(a)* $T_1, T_2, T_3$: rod sort, intet rødt-rødt par, alle stier har samme antal sorte (her $3$ inkl. NIL). Gyldige. $T_4$: node $2$ er rød med rødt venstre barn $1$ — bryder reglen om at en rød node kun må have sorte børn. _Ikke_ gyldig.
-    + *(b)* BST-indsæt: $5 > 4 ->$ højre til $9$; $5 < 9 ->$ venstre til $7$; $5 < 7 ->$ venstre til $6$; $5 < 6 ->$ venstre for $6$. Indsæt $5$ rød. \
-      Fixup, trin 1: $z = 5$(R), forælder $6$(R) — brud. $6$ er venstre barn af $7$; onkel $= 8$(R). Onkel rød, Case 1: omfarv $6 -> $B, $8 ->$B, $7 ->$R. Ryk $z := 7$. \
-      Trin 2: $z = 7$(R), forælder $9$(R) — brud. Onkel $= 2$(R) (venstre barn af bedstefar $4$). Onkel rød, Case 1: omfarv $9 ->$B, $2 ->$B, $4 ->$R. Ryk $z := 4$. \
-      $z = 4$ er roden, løkken slutter. Farv roden sort: $4 ->$B. \
-      Slut: kun omfarvninger, ingen rotationer; $5$(R) er venstre barn af $6$(B), og sort-højden er bevaret.
+    + *(b)* Starttræet (suffiks B = sort, R = rød):
+      ```
+                4B
+              /    \
+            2R      9R
+           /  \    /  \
+         1B   3B  7B  10B
+                 /  \
+               6R    8R
+      ```
+      BST-indsæt: $5 > 4 ->$ højre til $9$; $5 < 9 ->$ venstre til $7$; $5 < 7 ->$ venstre til $6$; $5 < 6 ->$ venstre for $6$ (tom). Indsæt $5$ rød:
+      ```
+                4B
+              /    \
+            2R      9R
+           /  \    /  \
+         1B   3B  7B  10B
+                 /  \
+               6R    8R
+              /
+            5R          <- ny node z
+      ```
+      Fixup, trin 1: $z = 5$(R), forælder $6$(R) — rødt-rødt-brud. $6$ er venstre barn af $7$, så onkel $=$ $7$'s højre barn $= 8$(R). Onkel rød $=>$ Case 1: omfarv forælder $6 ->$ B, onkel $8 ->$ B, bedstefar $7 ->$ R; ryk $z := 7$.
+      ```
+                4B
+              /    \
+            2R      9R
+           /  \    /  \
+         1B   3B  7R  10B
+                 /  \
+               6B    8B
+              /
+            5R          <- z er rykket op til 7
+      ```
+      Trin 2: $z = 7$(R), forælder $9$(R) — brud. $9$ er højre barn af $4$, så onkel $=$ $4$'s venstre barn $= 2$(R). Onkel rød $=>$ Case 1: omfarv $9 ->$ B, $2 ->$ B, bedstefar $4 ->$ R; ryk $z := 4$.
+      ```
+                4R          <- z
+              /    \
+            2B      9B
+           /  \    /  \
+         1B   3B  7R  10B
+                 /  \
+               6B    8B
+              /
+            5R
+      ```
+      $z = 4$ er roden, så løkken slutter. Sidste skridt farver roden sort ($4 ->$ B):
+      ```
+                4B
+              /    \
+            2B      9B
+           /  \    /  \
+         1B   3B  7R  10B
+                 /  \
+               6B    8B
+              /
+            5R
+      ```
+      Kun omfarvninger, ingen rotationer. $5$(R) er venstre barn af $6$(B), intet rødt-rødt-par, og hver rod-til-NIL-sti har samme antal sorte.
   ],
 )
 
@@ -87,10 +213,51 @@ Søgestrukturer fylder i de skriftlige sæt, og opgaverne gentager sig år efter
   ],
   worked: [
     + *(a)* $T_2$: rød rod — fejler. $T_5$: rød $3$ har rødt barn $4$ — rødt-rødt. $T_6$: under $3$ har NIL-venstre sort-højde $1$, men stien gennem $4$(B) sort-højde $2$ — ulige. $T_7$: under $4$ har stien gennem $3$(B) sort-højde $2$, højre NIL kun $1$ — ulige. Resten ($T_1, T_3, T_4, T_8$) opfylder alt.
-    + *(b)* BST-indsæt: $3 < 7 ->$ venstre; $3 < 5 ->$ venstre; $3 > 2 ->$ højre til $4$; $3 < 4 ->$ venstre barn af $4$. Ny node $3$(R). \
-      Forælder $4$ rød, bedstefar $2$, onkel $= 1$(R). Onkel rød, Case 1: $1, 4 ->$B, $2 ->$R, ryk $z := 2$. \
-      Nu $z = 2$(R), forælder $5$(R), bedstefar $7$(B), onkel $8$ sort. $z$ er venstre-venstre, Case 3: farv $5$ sort, $7$ rød, højre-rotér om $7$. Så bliver $5$ rod; $7$ bliver $5$'s højre barn og overtager $6$ som venstre barn. \
-      Resultat: rod $5$(B); venstre $2$(R) [børn $1$(B), $4$(B); $3$(R) venstre barn af $4$]; højre $7$(R) [børn $6$(B), $8$(B); $9$(R) højre barn af $8$].
+    + *(b)* Starttræet (suffiks B = sort, R = rød):
+      ```
+              7B
+            /    \
+          5R      8B
+         /  \       \
+        2B   6B      9R
+       /  \
+      1R   4R
+      ```
+      BST-indsæt $3$: $3 < 7 ->$ venstre til $5$; $3 < 5 ->$ venstre til $2$; $3 > 2 ->$ højre til $4$; $3 < 4 ->$ venstre for $4$ (tom). Indsæt $3$ rød:
+      ```
+              7B
+            /    \
+          5R      8B
+         /  \       \
+        2B   6B      9R
+       /  \
+      1R   4R
+           /
+          3R          <- ny node z
+      ```
+      Fixup, trin 1: $z = 3$(R), forælder $4$(R) — rødt-rødt-brud. $4$ er højre barn af $2$, så onkel $=$ $2$'s venstre barn $= 1$(R). Onkel rød $=>$ Case 1: omfarv forælder $4 ->$ B, onkel $1 ->$ B, bedstefar $2 ->$ R; ryk $z := 2$.
+      ```
+              7B
+            /    \
+          5R      8B
+         /  \       \
+        2R   6B      9R
+       /  \
+      1B   4B
+           /
+          3R          <- z er rykket op til 2
+      ```
+      Trin 2: $z = 2$(R), forælder $5$(R) — brud. $5$ er venstre barn af $7$, så onkel $=$ $7$'s højre barn $= 8$(B). Onkel sort. $z = 2$ er venstre barn af $5$, og $5$ er venstre barn af $7$, så $z$ er "venstre-venstre" (ydre) $=>$ Case 3: omfarv forælder $5 ->$ B, bedstefar $7 ->$ R, og højre-rotér om $7$. Ved rotationen rykker $5$ op på $7$'s plads, $7$ bliver $5$'s højre barn, og $5$'s gamle højre barn $6$ flytter over som $7$'s venstre barn:
+      ```
+              5B
+            /    \
+          2R      7R
+         /  \    /  \
+        1B   4B 6B   8B
+            /          \
+           3R           9R
+      ```
+      $z$'s nye forælder $5$ er sort (efter Case 3 stopper løkken), og roden $5$ er allerede sort. Færdig. Resultat: rod $5$(B); venstre $2$(R) [børn $1$(B), $4$(B); $3$(R) venstre barn af $4$]; højre $7$(R) [børn $6$(B), $8$(B); $9$(R) højre barn af $8$]. Intet rødt-rødt-par, og hver rod-til-NIL-sti har samme antal sorte.
   ],
 )
 
@@ -110,10 +277,29 @@ Søgestrukturer fylder i de skriftlige sæt, og opgaverne gentager sig år efter
     + *Fixup.* Var $y$'s oprindelige farve _sort_, så kør `RB-Delete-Fixup($x$)`. Var den rød, behøves ingen fixup.
   ],
   worked: [
-    + $z =$ node $2$ har to børn. Efterfølger $y = "minimum"$ i højre undertræ (under $7$) $= 5$. $5$ er rød, $x = 5."right" = $NIL.
-    + Ryk $5$ op på $2$'s plads og giv den $2$'s farve (rød). $7$ beholder sort; $7$'s venstre barn bliver NIL (5 forlod den), højre er $8$(R). $1$(B) bliver $5$'s venstre barn.
-    + $y$'s oprindelige farve var _rød_ $->$ ingen fixup. \
-      Resultat: rod $9$(B); $5$(R) [børn $1$(B), $7$(B)]; $12$(B) [højre barn $15$(R)]; $7$ har kun rødt højre barn $8$. Sort-højderne stemmer, intet rødt-rødt par.
+    + Starttræet (suffiks B = sort, R = rød):
+      ```
+              9B
+            /    \
+          2R      12B
+         /  \        \
+        1B   7B       15R
+            /  \
+          5R    8R
+      ```
+    + $z =$ node $2$ har to børn, så efterfølgeren $y = "minimum"$ i $z$'s højre undertræ. Gå til $7$, så hele vejen ned ad venstre: $7 -> 5$, og $5$ har intet venstre barn, så $y = 5$. Husk $y$'s farve: _rød_. Lad $x = y."right" = $NIL (noden der rykker ind på $y$'s plads).
+    + $y = 5$ er ikke direkte barn af $z$, men ligger i $z$'s højre undertræ. CLRS klipper først $y$ ud (dens plads under $7$ bliver NIL), sætter $y."right" = z."right" = 7$, og transplanterer $y = 5$ ind på $z$'s plads med $z."left" = 1$ som venstre barn. Til sidst får $y$ farven $z$ havde (rød):
+      ```
+              9B
+            /    \
+          5R      12B
+         /  \        \
+        1B   7B       15R
+              \
+               8R
+      ```
+    + $y$'s oprindelige farve var _rød_ $->$ ingen `RB-Delete-Fixup`. \
+      Resultat: rod $9$(B); $5$(R) [børn $1$(B), $7$(B)]; $12$(B) [højre barn $15$(R)]; $7$ har kun rødt højre barn $8$. Sort-højderne stemmer (hver rod-til-NIL-sti har samme antal sorte), og der er intet rødt-rødt par.
   ],
 )
 
@@ -134,8 +320,42 @@ Søgestrukturer fylder i de skriftlige sæt, og opgaverne gentager sig år efter
   ],
   worked: [
     + *(a)* Stien $b -> a ->$NIL har $1$ indre node; stien $b -> d -> {c, e} ->$NIL har $2$. Gør $a, d$ sorte og $c, e$ røde. Så har hver rod-til-NIL-sti sort-højde $2$. (Gyldigt alternativ: sort ${b, a, c, e}$, rød ${d}$.)
-    + *(b)* Indsæt $11$ til højre for $5 -> 7 -> 9 -> 10$; bliver højre barn af $10$, rød. Forælder $10$ rød $->$ brud. Onkel $8$ (andet barn af $9$) er rød $->$ Case 1: omfarv $10, 8$ sorte, $9$ rød, ryk $z$ op til $9$. $z$'s forælder $7$ er sort $->$ slut. Roden forbliver sort. \
-      Resultat: $5$(B); venstre $3$(B): $2$(R), $4$(R); højre $7$(B): $6$(B), $9$(R); $9 -> 8$(B), $10$(B); $10 ->$ højre barn $11$(R). Dette er $T_2$.
+    + *(b)* Starttræet (suffiks B = sort, R = rød):
+      ```
+                5B
+              /    \
+            3B      7B
+           /  \    /  \
+          2R   4R 6B   9B
+                      /  \
+                    8R    10R
+      ```
+      BST-indsæt $11$: $11 > 5 ->$ højre til $7$; $11 > 7 ->$ højre til $9$; $11 > 9 ->$ højre til $10$; $11 > 10 ->$ højre for $10$ (tom). Indsæt $11$ rød:
+      ```
+                5B
+              /    \
+            3B      7B
+           /  \    /  \
+          2R   4R 6B   9B
+                      /  \
+                    8R    10R
+                            \
+                             11R   <- ny node z
+      ```
+      Fixup, trin 1: $z = 11$(R), forælder $10$(R) — rødt-rødt-brud. $10$ er højre barn af $9$, så onkel $=$ $9$'s venstre barn $= 8$(R). Onkel rød $=>$ Case 1: omfarv forælder $10 ->$ B, onkel $8 ->$ B, bedstefar $9 ->$ R; ryk $z := 9$.
+      ```
+                5B
+              /    \
+            3B      7B
+           /  \    /  \
+          2R   4R 6B   9R   <- z er rykket op til 9
+                      /  \
+                    8B    10B
+                            \
+                             11R
+      ```
+      Trin 2: $z = 9$(R), forælder $7$(B). Forælderen er sort, så der er intet brud $->$ løkken stopper. Roden $5$ er allerede sort. Færdig. \
+      Resultat: rod $5$(B); venstre $3$(B): $2$(R), $4$(R); højre $7$(B): $6$(B), $9$(R); $9 ->$ børn $8$(B), $10$(B); $10 ->$ højre barn $11$(R). Kun én Case-1-omfarvning, ingen rotationer. Dette er $T_2$.
   ],
 )
 

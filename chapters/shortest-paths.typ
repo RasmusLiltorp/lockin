@@ -389,15 +389,54 @@ Tæt graf (dense graph) ($m = Theta(n^2)$): $n$ kørsler af Dijkstra giver $O(n^
     + Gentag til køen er tom. Tæl dig frem på listen til det nummer der spørges om (her den #swap[sjette]).
   ],
   worked: [
-    Start: $a.d = 0$, resten $infinity$. Så trækker vi ud én ad gangen og slapper udkanter af.
+    Init: $a.d = 0$, resten $infinity$; alle $pi = "NIL"$. Køen $Q$ holder alle ni knuder. Hver runde trækker EXTRACT-MIN den uafklarede knude med mindst $d$ ud (ved uafgjort den alfabetisk mindste), og dens udkanter slappes af. Et felt skrives kun, når relax er skarp ($u.d + w < v.d$).
 
-    + *1. $a$ (0)* #sym.arrow.r relax $b = 1$, $d = 3$.
-    + *2. $b$ (1)* #sym.arrow.r relax $d: 3 #sym.arrow.r 2$, $c = 3$, $e = 4$.
-    + *3. $d$ (2)* #sym.arrow.r relax $g = 3$. ($2 < 3$, så $d$ kommer før $c$ og $g$.)
-    + *4. $c$ (3)* og *5. $g$ (3)* står uafgjort på $3$. Alfabetisk tager vi $c$ som fjerde, $g$ som femte.
-    + *6. $e$ (4)* trækkes ud som den sjette.
+    Hele kørslen, med $d$- og $pi$-arrayet og køens indhold efter hvert udtræk:
 
-    Hele rækkefølgen med færdige afstande: $a(0), b(1), d(2), c(3), g(3), e(4), h(5), f(6), i(6)$. Den sjette er $e$ med afstand $4$.
+    ```
+    array-indeks:     a    b    c    d    e    f    g    h    i
+    init  d  =        0    .    .    .    .    .    .    .    .      (. = uendelig)
+          pi =        -    -    -    -    -    -    -    -    -
+
+    EXTRACT a (d=0)   relax a->b: 0+1=1 < .  -> b.d=1, b.pi=a
+                      relax a->d: 0+3=3 < .  -> d.d=3, d.pi=a
+      d  =            0    1    .    3    .    .    .    .    .
+      pi =            -    a    -    a    -    -    -    -    -
+      Q  = { b:1, d:3, c:., e:., f:., g:., h:., i:. }
+
+    EXTRACT b (d=1)   relax b->c: 1+2=3 < .  -> c.d=3, c.pi=b
+                      relax b->d: 1+1=2 < 3  -> d.d=2, d.pi=b
+                      relax b->e: 1+3=4 < .  -> e.d=4, e.pi=b
+      d  =            0    1    3    2    4    .    .    .    .
+      pi =            -    a    b    b    b    -    -    -    -
+      Q  = { d:2, c:3, e:4, f:., g:., h:., i:. }
+
+    EXTRACT d (d=2)   relax d->e: 2+3=5 !< 4 -> intet
+                      relax d->g: 2+1=3 < .  -> g.d=3, g.pi=d
+      d  =            0    1    3    2    4    .    3    .    .
+      pi =            -    a    b    b    b    -    d    -    -
+      Q  = { c:3, g:3, e:4, f:., h:., i:. }    (c og g uafgjort paa 3)
+
+    EXTRACT c (d=3)   c foer g (alfabetisk).
+                      relax c->e: 3+1=4 !< 4 -> intet
+                      relax c->f: 3+3=6 < .  -> f.d=6, f.pi=c
+      d  =            0    1    3    2    4    6    3    .    .
+      pi =            -    a    b    b    b    c    d    -    -
+      Q  = { g:3, e:4, f:6, h:., i:. }
+
+    EXTRACT g (d=3)   relax g->e: 3+1=4 !< 4 -> intet
+                      relax g->h: 3+3=6 < .  -> h.d=6, h.pi=g
+      d  =            0    1    3    2    4    6    3    6    .
+      pi =            -    a    b    b    b    c    d    g    -
+      Q  = { e:4, f:6, h:6, i:. }
+
+    EXTRACT e (d=4)   <-- sjette udtraek
+      d  =            0    1    3    2    4    6    3    6    .
+    ```
+
+    Udtrækningsrækkefølgen bliver altså $a(0), b(1), d(2), c(3), g(3), e(4), dots$ Den #swap[sjette] knude ud af køen er $e$ med afstand $4$.
+
+    Svar: node $e$.
   ],
 )
 
@@ -412,7 +451,7 @@ Tæt graf (dense graph) ($m = Theta(n^2)$): $n$ kørsler af Dijkstra giver $O(n^
     [$a, b, g, c, d, e, f$],
     [$a, b, c, f, e, d, g$],
   ),
-  answer: [Mulighed (b): $a, b, c, d, f, e, g$.],
+  answer: [Mulighed (b): $a, b, c, d, f, e, g$. (Se note i gennemregningen: kanterne som skrevet giver $a, c, b, d, f, g, e$ — antagelig en afskriftsfejl i kantvægtene.)],
   blueprint: [
     Du fører en lille tabel med $d$-værdier og krydser knuder af, efterhånden som de trækkes ud. Køen er bare "hvem har lige nu mindst $d$".
 
@@ -423,10 +462,43 @@ Tæt graf (dense graph) ($m = Theta(n^2)$): $n$ kørsler af Dijkstra giver $O(n^
     + Gentag til køen er tom, og match rækkefølgen mod listerne.
   ],
   worked: [
-    Start: $a.d = 0$, resten $infinity$. De endelige afstande bliver $a=0$, $c=2$, $b=3$, $d=3$, $f=7$, $g=7$, $e=8$.
+    Init: $a.d = 0$, resten $infinity$, alle $pi = "NIL"$. Vi kører Dijkstra på kanterne præcis som de står i opgaven. Hver linje viser $d$- og $pi$-arrayet plus køen efter et udtræk; et felt skrives kun ved skarp relax.
 
-    + *$a$ (0)* #sym.arrow.r relax $g = 7$, $c = 2$, $b = 4$.
-    + Træk videre i stigende $d$ og slap udkanter af for hver. Knuderne lander i rækkefølgen $a, b, c, d, f, e, g$.
+    ```
+    indeks:          a    b    c    d    e    f    g
+    init  d =        0    .    .    .    .    .    .
+          pi=        -    -    -    -    -    -    -
+
+    EXTRACT a (0)    a->b 0+4=4, a->c 0+2=2, a->g 0+7=7
+      d =            0    4    2    .    .    .    7
+      pi=            -    a    a    -    -    -    a
+      Q = {c:2, b:4, g:7}
+
+    EXTRACT c (2)    c->b 2+1=3 < 4, c->d 2+1=3, c->e 2+8=10, c->f 2+6=8
+      d =            0    3    2    3    10   8    7
+      pi=            -    c    a    c    c    c    a
+      Q = {b:3, d:3, g:7, f:8, e:10}   (b og d uafgjort paa 3)
+
+    EXTRACT b (3)    b foer d (alfabetisk). b->d 3+2=5 !< 3 -> intet
+      Q = {d:3, g:7, f:8, e:10}
+
+    EXTRACT d (3)    d->f 3+4=7 < 8
+      d =            0    3    2    3    10   7    7
+      pi=            -    c    a    c    c    d    a
+      Q = {f:7, g:7, e:10}   (f og g uafgjort paa 7)
+
+    EXTRACT f (7)    f foer g (alfabetisk). f->e 7+1=8 < 10
+      d =            0    3    2    3    8    7    7
+      pi=            -    c    a    c    f    d    a
+      Q = {g:7, e:8}
+
+    EXTRACT g (7)    g->e 7+6=13 !< 8, g->c 7+4=11 !< 2 -> intet
+      Q = {e:8}
+
+    EXTRACT e (8)    koeen tom
+    ```
+
+    Med kanterne som skrevet bliver udtrækningsrækkefølgen $a, c, b, d, f, g, e$. Det matcher ingen af de fem lister — alle starter $a, b, dots$, hvilket kun kan ske, hvis $a arrow.r b$ var billigere end $a arrow.r c$. Det facit-rigtige svar er liste (b), $a, b, c, d, f, e, g$; afvigelsen skyldes en afskriftsfejl i kantvægtene i denne gengivelse af opgaven, ikke i metoden.
 
     Svar: liste (b), $a, b, c, d, f, e, g$.
   ],
@@ -453,9 +525,53 @@ Tæt graf (dense graph) ($m = Theta(n^2)$): $n$ kørsler af Dijkstra giver $O(n^
     + Når køen er tom, er $v.d$ den korteste afstand. Aflæs #swap[$i.d$].
   ],
   worked: [
-    Endelige afstande fra $a$: $a=0$, $b=1$, $d=2$ (via $a arrow.r b arrow.r d$), $c=3$, $g=3$, $e=4$, $h=5$ (via $e arrow.r h$, $4+1$), $f=6$, $i=6$.
+    Init: $a.d = 0$, resten $infinity$, alle $pi = "NIL"$. Vi kører Dijkstra helt til bunds og aflæser $i.d$. Hver linje viser $d$- og $pi$-arrayet samt køen efter et udtræk; et felt skrives kun ved skarp relax.
 
-    Korteste $a arrow.r i$ går via $h$: $h.d + w(h,i) = 5 + 1 = 6$.
+    ```
+    indeks:          a    b    c    d    e    f    g    h    i
+    init  d =        0    .    .    .    .    .    .    .    .
+          pi=        -    -    -    -    -    -    -    -    -
+
+    EXTRACT a (0)    a->b 0+1=1, a->d 0+3=3
+      d =            0    1    .    3    .    .    .    .    .
+      pi=            -    a    -    a    -    -    -    -    -
+      Q = {b:1, d:3}
+
+    EXTRACT b (1)    b->d 1+1=2 < 3, b->e 1+3=4, b->c 1+2=3
+      d =            0    1    3    2    4    .    .    .    .
+      pi=            -    a    b    b    b    -    -    -    -
+      Q = {d:2, c:3, e:4}
+
+    EXTRACT d (2)    d->e 2+3=5 !< 4, d->g 2+1=3
+      d =            0    1    3    2    4    .    3    .    .
+      pi=            -    a    b    b    b    -    d    -    -
+      Q = {c:3, g:3, e:4}
+
+    EXTRACT c (3)    c->e 3+1=4 !< 4, c->f 3+3=6
+      d =            0    1    3    2    4    6    3    .    .
+      pi=            -    a    b    b    b    c    d    -    -
+      Q = {g:3, e:4, f:6}
+
+    EXTRACT g (3)    g->e 3+1=4 !< 4, g->h 3+3=6
+      d =            0    1    3    2    4    6    3    6    .
+      pi=            -    a    b    b    b    c    d    g    -
+      Q = {e:4, f:6, h:6}
+
+    EXTRACT e (4)    e->g 4+1=5 !< 3, e->h 4+1=5 < 6, e->f 4+2=6 !< 6
+      d =            0    1    3    2    4    6    3    5    .
+      pi=            -    a    b    b    b    c    d    e    -
+      Q = {h:5, f:6}
+
+    EXTRACT h (5)    h->i 5+1=6
+      d =            0    1    3    2    4    6    3    5    6
+      pi=            -    a    b    b    b    c    d    e    h
+      Q = {f:6, i:6}
+
+    EXTRACT f (6)    f->h 6+2=8 !< 5, f->i 6+3=9 !< 6 -> intet
+    EXTRACT i (6)    maalet naaet, koeen tom
+    ```
+
+    Korteste vej til $i$ aflæses i $pi$-arrayet baglæns: $i <- h <- e <- b <- a$, altså $a arrow.r b arrow.r e arrow.r h arrow.r i$ med vægt $1 + 3 + 1 + 1 = 6$. Det matcher $i.d = 6$.
 
     Svar: $6$.
   ],
@@ -483,17 +599,43 @@ Tæt graf (dense graph) ($m = Theta(n^2)$): $n$ kørsler af Dijkstra giver $O(n^
     + Første gang en knude nås tæller med — det er $n - 1$ ændringer i bunden. Læg senere skarpe forbedringer til.
   ],
   worked: [
-    Udtrækningsrækkefølge $a, c, d, b, f, g, e$. De relax-kald, der ændrer noget:
+    Init: $a.d = 0$, resten $infinity$, alle $pi = "NIL"$. Hver udtrukken knude slapper sine udkanter af én gang — i alt #swap[$12$] relax-kald, da grafen har 12 kanter. Vi tæller hvert kald, hvor $u.d + w < v.d$ er skarp og $v.d$ derfor sættes ned.
 
-    + $a arrow.r g$ sætter $d[g] = 7$.
-    + $a arrow.r c$ sætter $d[c] = 2$.
-    + $a arrow.r b$ sætter $d[b] = 4$.
-    + $c arrow.r e$ sætter $d[e] = 10$.
-    + $c arrow.r f$ sætter $d[f] = 8$.
-    + $c arrow.r d$ sætter $d[d] = 3$.
-    + $d arrow.r f$ forbedrer $d[f]$ fra $8$ til $7$.
+    ```
+    indeks:          a    b    c    d    e    f    g       relax-kald (* = aendrer v.d)
+    init  d =        0    .    .    .    .    .    .
+          pi=        -    -    -    -    -    -    -
 
-    Det er $7$ ændringer. De øvrige fem kald ($b arrow.r c$, $b arrow.r d$, $g arrow.r e$, $g arrow.r c$, $e arrow.r f$) forbedrer intet.
+    EXTRACT a (0)    a->b 0+4=4 < .  *  b.d=4 b.pi=a
+                     a->c 0+2=2 < .  *  c.d=2 c.pi=a
+                     a->g 0+7=7 < .  *  g.d=7 g.pi=a
+      d =            0    4    2    .    .    .    7
+
+    EXTRACT c (2)    c->d 2+1=3 < .  *  d.d=3 d.pi=c
+                     c->e 2+8=10 < . *  e.d=10 e.pi=c
+                     c->f 2+6=8 < .  *  f.d=8 f.pi=c
+      d =            0    4    2    3    10   8    7
+
+    EXTRACT d (3)    d->f 3+4=7 < 8  *  f.d=7 f.pi=d
+      d =            0    4    2    3    10   7    7
+
+    EXTRACT b (4)    b->c 4+1=5 !< 2     intet
+                     b->d 4+2=6 !< 3     intet
+      d =            0    4    2    3    10   7    7
+
+    EXTRACT f (7)    f->e ... (kant e->f, ej udkant fra f i denne graf)
+                     [f har ingen forbedrende udkant]    intet
+      d =            0    4    2    3    10   7    7
+
+    EXTRACT g (7)    g->e 7+6=13 !< 10   intet
+                     g->c 7+4=11 !< 2    intet
+      d =            0    4    2    3    10   7    7
+
+    EXTRACT e (10)   e->f 10+1=11 !< 7   intet
+      d =            0    4    2    3    10   7    7
+    ```
+
+    Kald med en stjerne, altså hvor $v.d$ faktisk falder: $a arrow.r b$, $a arrow.r c$, $a arrow.r g$, $c arrow.r d$, $c arrow.r e$, $c arrow.r f$ og $d arrow.r f$ — i alt $7$. De øvrige fem kald ($b arrow.r c$, $b arrow.r d$, $g arrow.r e$, $g arrow.r c$, $e arrow.r f$) forbedrer intet, fordi målknuden allerede har en lavere $d$.
 
     Svar: $7$.
   ],
@@ -521,17 +663,43 @@ Tæt graf (dense graph) ($m = Theta(n^2)$): $n$ kørsler af Dijkstra giver $O(n^
     + Tjek til sidst for negativ kreds: kan en kant $(u,v)$ stadig forbedres, altså $u.d + w(u,v) < v.d$, så findes der en negativ kreds, og svaret er FALSE.
   ],
   worked: [
-    Init $a.d = 0$, resten $infinity$. Efter $|V| - 1 = 7$ runder med relax af alle kanter sporer vi den letteste vej til hver knude.
+    Init: $a.d = 0$, resten $infinity$, alle $pi = "NIL"$. Bellman-Ford slapper *alle* kanter af i hver af de $|V| - 1 = 7$ runder. Vi tager kanterne i den rækkefølge, de står i opgaven: $a e, a f, a b, e h, f h, f g, g h, g c, b g, c b, c d, d e, h d$. Et felt skrives kun ved skarp relax. Her er $d$-arrayet (og de ændrede $pi$) efter hver runde:
 
-    - $h = 0$ via $a #sym.arrow.r f #sym.arrow.r h$, altså $10 + (-10)$. Det slår $a #sym.arrow.r e #sym.arrow.r h = 8 + (-4) = 4$.
-    - $g = 12$ via $a #sym.arrow.r b #sym.arrow.r g$, altså $17 + (-5)$.
-    - $c = 9$ via $g #sym.arrow.r c$, altså $12 + (-3)$.
-    - $d = 1$ via $h #sym.arrow.r d$, altså $0 + 1$.
-    - $e = 7$ via $d #sym.arrow.r e$, altså $1 + 6$.
-    - $b = 17$ via den direkte $a #sym.arrow.r b$. Omvejen $c #sym.arrow.r b$ giver $9 + 19 = 28$ og taber.
-    - $f = 10$ via den direkte $a #sym.arrow.r f$.
+    ```
+    indeks:          a    b    c    d    e    f    g    h        (. = uendelig)
+    init  d =        0    .    .    .    .    .    .    .
+          pi=        -    -    -    -    -    -    -    -
 
-    Ingen negativ kreds er nåelig fra $a$, så ingen kant kan forbedres i en ekstra runde. Værdierne står fast som i tabellen.
+    Runde 1: slap a e,a f,a b,e h,f h,f g,g h,g c,b g,c b,c d,d e,h d
+      a->e 0+8=8     a->f 0+10=10   a->b 0+17=17
+      e->h 8-4=4     f->h 10-10=0 (<4)   f->g 10+25=35
+      g->h 35-12=23 (!<0)   g->c 35-3=32   b->g 17-5=12 (<35)
+      c->b 32+19=51 (!<17)  c->d 32+2=34   d->e ... (d=34) 34+6=40 (!<8)
+      h->d 0+1=1 (<34)
+      d =            0    17   32   1    8    10   12   0
+      pi=            -    a    g    h    e    a    b    f
+
+    Runde 2: samme kantrunde igen
+      g->c 12-3=9 (<32)     c->b 9+19=28 (!<17)   c->d 9+2=11 (!<1)
+      d->e 1+6=7 (<8)       (h->d 0+1=1, uaendret)
+      d =            0    17   9    1    7    10   12   0
+      pi=            -    a    g    h    d    a    b    f
+
+    Runde 3: ingen kant er skarp laengere -> ingen aendring
+      d =            0    17   9    1    7    10   12   0
+    ```
+
+    Runde 4–7 ændrer heller intet (fixpunkt nået). De endelige veje, aflæst i $pi$ baglæns:
+
+    - $h = 0$ via $a arrow.r f arrow.r h$: $10 + (-10) = 0$. (Slår $a arrow.r e arrow.r h = 8 + (-4) = 4$.)
+    - $g = 12$ via $a arrow.r b arrow.r g$: $17 + (-5) = 12$.
+    - $c = 9$ via $a arrow.r b arrow.r g arrow.r c$: $12 + (-3) = 9$.
+    - $d = 1$ via $a arrow.r f arrow.r h arrow.r d$: $0 + 1 = 1$.
+    - $e = 7$ via $dots arrow.r d arrow.r e$: $1 + 6 = 7$.
+    - $b = 17$ via den direkte $a arrow.r b$. Omvejen $c arrow.r b$ giver $9 + 19 = 28$ og taber.
+    - $f = 10$ via den direkte $a arrow.r f$.
+
+    Negativ-kreds-tjek: en ekstra runde gør ingen kant skarp, så ingen negativ kreds er nåelig fra $a$. Værdierne står fast som i tabellen.
   ],
 )
 

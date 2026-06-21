@@ -31,26 +31,28 @@ De store DP-opgaver fra de skriftlige eksamener. De spørger næsten altid om de
     + *Korrekthed.* Betragt en optimal fælles delsekvens $Z$. Matcher $Z$ det sidste lige par, så er resten optimal på $X_(i-1), Y_(j-1)$; ellers er den dækket af et af nabofelterne. Max'en dækker begge.
   ],
   worked: [
-    $X = a c b d$, $Y = b a c d a$. Rækker $i = 0..4$, søjler $j = 0..5$.
+    $X = a c b d$, $Y = b a c d a$, vægte $w(a) = 2$, $w(b) = 4$, $w(c) = 1$, $w(d) = 3$. Rækker $i = 0..4$ (tegnene i $X$), søjler $j = 0..5$ (tegnene i $Y$). Række 0 og søjle 0 er rand $= 0$.
 
-    #align(center)[
-      #table(
-        columns: 7,
-        align: center,
-        stroke: none,
-        inset: (x: 7pt, y: 4pt),
-        table.header([$i slash j$], [$0$], [$b$], [$a$], [$c$], [$d$], [$a$]),
-        table.hline(stroke: 0.4pt + hair),
-        [$0$], [0], [0], [0], [0], [0], [0],
-        [$a$], [0], [0], [2], [2], [2], [2],
-        [$c$], [0], [0], [2], [3], [3], [3],
-        [$b$], [0], [4], [4], [4], [4], [4],
-        [$d$], [0], [4], [4], [4], [*7*], [7],
-      )
-    ]
+    Her er hele tabellen. Hver celle er enten max af de to nabofelter (ovenfor $W(i-1,j)$, til venstre $W(i,j-1)$), eller — når $x_i = y_j$ — også diagonalen plus vægten:
 
-    + Eksempelcelle: $W(2, 3)$ har $x_2 = c = y_3$, så $max{W(1,3) = 2, W(2,2) = 2, W(1,2) + w(c) = 2 + 1 = 3} = 3$.
-    + Nederste højre celle: $W(4, 5) = 7$, realiseret af delsekvensen $b d$ med vægt $4 + 3 = 7$.
+    ```
+          j=0   b    a    c    d    a
+    i=0    0    0    0    0    0    0
+    a      0    0    2    2    2    2
+    c      0    0    2    3    3    3
+    b      0    4    4    4    4    4
+    d      0    4    4    4    7    7
+    ```
+
+    Udvalgte celler, regnet ud med rekursionen og de faktiske tal:
+
+    + Række $a$, $j = 2$ ($y_2 = a$): $x_1 = a = y_2$, match. $max{W(0,2) = 0, thin W(1,1) = 0, thin W(0,1) + w(a) = 0 + 2 = 2} = 2$. Resten af rækken arver de 2 fra venstre (ingen flere matches mod $a$).
+    + Række $c$, $j = 3$ ($y_3 = c$): $x_2 = c = y_3$, match. $max{W(1,3) = 2, thin W(2,2) = 2, thin W(1,2) + w(c) = 2 + 1 = 3} = 3$.
+    + Række $b$, $j = 1$ ($y_1 = b$): $x_3 = b = y_1$, match. $max{W(2,1) = 0, thin W(3,0) = 0, thin W(2,0) + w(b) = 0 + 4 = 4} = 4$. Den 4 breder sig til højre i hele rækken.
+    + Række $d$, $j = 4$ ($y_4 = d$): $x_4 = d = y_4$, match. $max{W(3,4) = 4, thin W(4,3) = 4, thin W(3,3) + w(d) = 4 + 3 = 7} = 7$.
+    + En ikke-match, fx række $d$, $j = 1$ ($x_4 = d != b = y_1$): bare $max{W(3,1) = 4, thin W(4,0) = 0} = 4$.
+
+    Nederste højre celle $W(4, 5) = 7$ er svaret. Backtrack fra $(4,5)$: diagonalen blev brugt ved $b$ (vægt 4) og ved $d$ (vægt 3), så delsekvensen er $b d$ med samlet vægt $4 + 3 = 7$.
 
     Algoritmen fylder $(n+1)(m+1)$ celler med $O(1)$ arbejde hver, så $Theta(n m)$ tid og plads (reducerbar til $Theta(min(n, m))$ med rullende rækker).
 
@@ -86,26 +88,24 @@ De store DP-opgaver fra de skriftlige eksamener. De spørger næsten altid om de
     + *Aflæs.* Svaret er $L[1][n]$.
   ],
   worked: [
-    $S = A L B A$, altså $x_1 = A$, $x_2 = L$, $x_3 = B$, $x_4 = A$.
+    $S = A L B A$, altså $x_1 = A$, $x_2 = L$, $x_3 = B$, $x_4 = A$. Kun den øvre trekant $i <= j$ bruges; fyld efter voksende delstrenglængde, så hvert delkald allerede står klar.
 
-    #align(center)[
-      #table(
-        columns: 5,
-        align: center,
-        stroke: none,
-        inset: (x: 8pt, y: 4pt),
-        table.header([], [$j=1$], [$j=2$], [$j=3$], [$j=4$]),
-        table.hline(stroke: 0.4pt + hair),
-        [$i=1$], [1], [1], [1], [*3*],
-        [$i=2$], [0], [1], [1], [1],
-        [$i=3$], [0], [0], [1], [1],
-        [$i=4$], [0], [0], [0], [1],
-      )
-    ]
+    ```
+          j=1  j=2  j=3  j=4
+    i=1    1    1    1    3
+    i=2    .    1    1    1
+    i=3    .    .    1    1
+    i=4    .    .    .    1
+    ```
 
-    + $"LP"(1, 4)$: $x_1 = x_4 = A$, så $2 + "LP"(2, 3)$.
-    + $"LP"(2, 3)$: $L != B$, så $max{"LP"(3, 3), "LP"(2, 2)} = 1$.
-    + Dermed $"LP"(1, 4) = 2 + 1 = 3$.
+    Sådan blev cellerne fyldt, lag for lag:
+
+    + *Længde 1 (diagonalen):* $"LP"(i,i) = 1$ for alle $i$. Én karakter er altid et palindrom.
+    + *Længde 2:* $"LP"(1,2)$: $x_1 = A != L = x_2$, så $max{"LP"(2,2) = 1, thin "LP"(1,1) = 1} = 1$. $"LP"(2,3)$: $L != B$, $max{1, 1} = 1$. $"LP"(3,4)$: $B != A$, $max{1, 1} = 1$.
+    + *Længde 3:* $"LP"(1,3)$: $x_1 = A != B = x_3$, så $max{"LP"(2,3) = 1, thin "LP"(1,2) = 1} = 1$. $"LP"(2,4)$: $L != A$, $max{"LP"(3,4) = 1, thin "LP"(2,3) = 1} = 1$.
+    + *Længde 4:* $"LP"(1,4)$: $x_1 = A = x_4$, match! $2 + "LP"(2,3) = 2 + 1 = 3$. Det indre $"LP"(2,3) = 1$ er allerede regnet (giver enten $B$ eller $L$ som midte), så palindromet er $A B A$ eller $A L A$.
+
+    Svaret står i $L[1][4] = 3$.
 
     $O(n^2)$ tabelceller à $O(1)$ giver $Theta(n^2)$ tid og $Theta(n^2)$ plads (reducerbar til $Theta(n)$ med to rækker, hvis kun længden ønskes).
 
@@ -137,22 +137,24 @@ De store DP-opgaver fra de skriftlige eksamener. De spørger næsten altid om de
     + *Naiv optælling.* Følg pseudokoden: kald kun videre når karakteren matcher, og husk at $or$ kortslutter — er venstre gren sand, springes højre over.
   ],
   worked: [
-    $x = a k t$ ($n = 3$), $y = b e a t e$ ($m = 5$), $z = a b e k a t t e$ (S = sand, F = falsk):
+    $x = a k t$ ($n = 3$), $y = b e a t e$ ($m = 5$), $z = a b e k a t t e$. Celle $T[i][j]$ ser på $z[i+j]$: er det $= x_i$ og feltet ovenfor sandt, eller $= y_j$ og feltet til venstre sandt. Rand $T[0][0] = "sand"$ (S = sand, F = falsk):
 
-    #align(center)[
-      #table(
-        columns: 7,
-        align: center,
-        stroke: none,
-        inset: (x: 7pt, y: 4pt),
-        table.header([$i slash j$], [$0$], [$1$], [$2$], [$3$], [$4$], [$5$]),
-        table.hline(stroke: 0.4pt + hair),
-        [$0$], [S], [F], [F], [F], [F], [F],
-        [$1$], [S], [S], [S], [F], [F], [F],
-        [$2$], [F], [F], [S], [S], [S], [F],
-        [$3$], [F], [F], [F], [S], [S], [S],
-      )
-    ]
+    ```
+          j=0  j=1  j=2  j=3  j=4  j=5
+    i=0    S    F    F    F    F    F
+    i=1    S    S    S    F    F    F
+    i=2    F    F    S    S    S    F
+    i=3    F    F    F    S    S    S
+    ```
+
+    Udvalgte celler, regnet med rekursionen ($z = a b e k a t t e$, så $z[1..8] = a,b,e,k,a,t,t,e$):
+
+    + $T[0][1]$: $z[1] = a$, men $y_1 = b != a$ og $i = 0$ udelukker $x$-grenen. Falsk. Hele række 0 falder, undtagen randen.
+    + $T[1][1]$: $z[2] = b$. $x$-gren: $b != x_1 = a$, nej. $y$-gren: $b = y_1$ og $T[1][0] = S$, ja. Sand.
+    + $T[1][2]$: $z[3] = e$. $x$-gren: $e != a$. $y$-gren: $e = y_2$ og $T[1][1] = S$. Sand.
+    + $T[2][2]$: $z[4] = k$. $x$-gren: $k = x_2$ og $T[1][2] = S$, ja. Sand. (Her bidrager $x$, ikke $y$.)
+    + $T[3][3]$: $z[6] = t$. $x$-gren: $t = x_3$ og $T[2][3] = S$, ja. Sand.
+    + $T[3][5]$: $z[8] = e$. $x$-gren: $e != x_3 = t$, nej. $y$-gren: $e = y_5$ og $T[3][4] = S$, ja. Sand — det er nederste højre celle.
 
     + (a) $T[3][5] = "sand"$, så $a b e k a t t e$ er en fletning af $a k t$ og $b e a t e$.
     + (b) Trace fra $(3, 5)$: $z[8] = e = y_5$, kald $(3, 4)$; $z[7] = t = x_3$, kald $(2, 4)$; $z[6] = t = y_4$, kald $(2, 3)$ — kald nr. 1. Derfra synker stien $(2,3) -> (2,2) -> (1,2) -> (1,1) -> (1,0) -> (0,0)$, alt returnerer sandt og kortslutter opad. Ingen anden gren rammer $(2, 3)$. Svar: $1$ kald.
@@ -190,24 +192,34 @@ De store DP-opgaver fra de skriftlige eksamener. De spørger næsten altid om de
     + *Korrekthed.* En optimal $F$ enten ignorerer det matchende par (de to nabofelter) eller slutter med en blok, der dækker det fælles suffiks (tredje led). Max'en dækker begge.
   ],
   worked: [
-    $S = b b c b a$ (rækker $i$), $T = b c c b b a$ (søjler $j$).
+    $S = b b c b a$ (rækker $i = 1..5$), $T = b c c b b a$ (søjler $j = 1..6$). Forbereg først suffikstabellen $L[i][j]$ (længste fælles suffiks af $S_i$ og $T_j$): $L[i][j] = L[i-1][j-1] + 1$ ved match, ellers 0.
 
-    #align(center)[
-      #table(
-        columns: 8,
-        align: center,
-        stroke: none,
-        inset: (x: 6pt, y: 4pt),
-        table.header([$i slash j$], [$0$], [$b$], [$c$], [$c$], [$b$], [$b$], [$a$]),
-        table.hline(stroke: 0.4pt + hair),
-        [$0$], [0], [0], [0], [0], [0], [0], [0],
-        [$b$], [0], [0], [0], [0], [0], [0], [0],
-        [$b$], [0], [0], [0], [0], [0], [1], [1],
-        [$c$], [0], [0], [1], [1], [1], [1], [1],
-        [$b$], [0], [0], [1], [1], [1], [1], [1],
-        [$a$], [0], [0], [1], [1], [1], [1], [*2*],
-      )
-    ]
+    ```
+    L:    j: b  c  c  b  b  a
+    i= b     1  0  0  1  1  0
+       b     1  0  0  1  2  0
+       c     0  2  1  0  0  0
+       b     1  0  0  2  1  0
+       a     0  0  0  0  0  2
+    ```
+
+    Selve $B$-tabellen. Rand $= 0$. Ved ikke-match: $max$ af nabofelterne. Ved match: også $B[i-m][j-m] + m - 1$ med $m = L[i][j]$:
+
+    ```
+          j=0  b  c  c  b  b  a
+    i=0    0   0  0  0  0  0  0
+    b      0   0  0  0  0  0  0
+    b      0   0  0  0  0  1  1
+    c      0   0  1  1  1  1  1
+    b      0   0  1  1  1  1  1
+    a      0   0  1  1  1  1  2
+    ```
+
+    Repræsentative celler (blok-leddet for en match med suffikslængde $m$ er $B(i-m, j-m) + m - 1$):
+
+    + $B(2,5)$ ($s_2 = b = t_5$, match, $m = L[2][5] = 2$, suffikset $b b$): kandidater $B(2,4) = 0$, $B(1,5) = 0$, og blok-leddet $B(0, 3) + 2 - 1 = 0 + 1 = 1$. Max $= 1$. (Blokken $b b$ er 2 tegn i én blok, scorer $2 - 1 = 1$.)
+    + $B(3,2)$ ($s_3 = c = t_2$, match, $m = L[3][2] = 2$, suffikset $b c$): blok-leddet $B(1, 0) + 2 - 1 = 0 + 1 = 1$, mens nabofelterne $B(3,1) = 0$ og $B(2,2) = 0$. Max $= 1$.
+    + $B(5,6)$ ($s_5 = a = t_6$, match, $m = L[5][6] = 2$, suffikset $b a$): nabofelterne $B(5,5) = 1$ og $B(4,6) = 1$; blok-leddet $B(3, 4) + 2 - 1 = 1 + 1 = 2$. Max $= 2$. Her lægges $a$-blokken oven på det $B(3,4) = 1$, der allerede dækker $b b$ — netop delsekvensen $b b b a$ delt $b b | b a$.
 
     + $B(5, 6) = 2$: den bedste fælles delsekvens er $F = b b b a$, delt i 2 blokke $b b | b a$, begge sammenhængende i $S$ og $T$. Score $|F| - b = 4 - 2 = 2$.
     + Køretid: $Theta(m n)$ celler, men hver matchcelle kan skanne op til $min(i, j)$ tegn tilbage efter $m_(i j)$, så naivt $O(m n dot min(m, n))$. Forbereg suffikslængderne med en ekstra $Theta(m n)$-tabel ($L[i][j] = L[i-1][j-1] + 1$ ved match, ellers 0), så bliver hver celle $O(1)$ og det hele $Theta(m n)$.
@@ -239,22 +251,24 @@ De store DP-opgaver fra de skriftlige eksamener. De spørger næsten altid om de
     + *Backtrack.* Følg $"pred"$ fra $k = n$ tilbage til 1 for at læse delfølgen.
   ],
   worked: [
-    $X = chevron.l 2, 6, 8, 10, 14, 15, 20, 21 chevron.r$, $W = 7$.
+    $X = chevron.l 2, 6, 8, 10, 14, 15, 20, 21 chevron.r$, $W = 7$. $U(k)$ kigger tilbage på hver forgænger $j < k$ og tager $min_j [U(j) + (x_k - x_j - W)^2]$. $U(1) = 0$.
 
-    #align(center)[
-      #table(
-        columns: 9,
-        align: center,
-        stroke: none,
-        inset: (x: 6pt, y: 4pt),
-        table.header([$k$], [1], [2], [3], [4], [5], [6], [7], [8]),
-        table.hline(stroke: 0.4pt + hair),
-        [$x_k$], [2], [6], [8], [10], [14], [15], [20], [21],
-        [$U(k)$], [*0*], [9], [1], [1], [2], [1], [3], [*2*],
-      )
-    ]
+    ```
+    k:      1   2   3   4   5   6   7   8
+    x_k:    2   6   8  10  14  15  20  21
+    U(k):   0   9   1   1   2   1   3   2
+    pred:   -   1   1   1   3   3   5   5
+    ```
 
-    + Stikprøver: $U(2) = (6-2-7)^2 = 9$. $U(3) = min(U(1) + (8-2-7)^2 = 1, U(2) + (8-6-7)^2 = 34) = 1$. $U(8) = U(5) + (21-14-7)^2 = 2 + 0 = 2$.
+    Hver $U(k)$ regnet ud (kun de led, der konkurrerer om minimum):
+
+    + $U(2)$: kun $j = 1$. $U(1) + (6-2-7)^2 = 0 + (-3)^2 = 9$. pred $= 1$.
+    + $U(3)$: $j=1$: $0 + (8-2-7)^2 = (-1)^2 = 1$. $j=2$: $9 + (8-6-7)^2 = 9 + 25 = 34$. Min $= 1$, pred $= 1$.
+    + $U(4)$: $j=1$: $0 + (10-2-7)^2 = 1$. $j=3$: $1 + (10-8-7)^2 = 1 + 25 = 26$. Min $= 1$, pred $= 1$.
+    + $U(5)$: $j=3$: $1 + (14-8-7)^2 = 1 + 1 = 2$. $j=4$: $1 + (14-10-7)^2 = 1 + 9 = 10$. Min $= 2$, pred $= 3$.
+    + $U(6)$: $j=3$: $1 + (15-8-7)^2 = 1 + 0 = 1$. Min $= 1$, pred $= 3$.
+    + $U(7)$: $j=5$: $2 + (20-14-7)^2 = 2 + 1 = 3$. $j=6$: $1 + (20-15-7)^2 = 1 + 4 = 5$. Min $= 3$, pred $= 5$.
+    + $U(8)$: $j=5$: $2 + (21-14-7)^2 = 2 + 0 = 2$. $j=6$: $1 + (21-15-7)^2 = 1 + 1 = 2$. $j=7$: $3 + (21-20-7)^2 = 3 + 36 = 39$. Min $= 2$, pred $= 5$.
     + (b) Følg argmin-forgængerne fra $k = 8$: $8 <- 5 <- 3 <- 1$, altså $x$-værdierne $21, 14, 8, 2$. Delfølge $Y = chevron.l 2, 8, 14, 21 chevron.r$ med $U = 1 + 1 + 0 = 2$.
     + (c) Dobbeltløkken kører $sum_(k=2)^n (k-1) = O(n^2)$ iterationer à konstant arbejde, så $O(n^2)$ tid og $O(n)$ plads (et $U$-array, plus et $"pred"$-array, hvis delfølgen skal findes).
 
@@ -286,7 +300,21 @@ De store DP-opgaver fra de skriftlige eksamener. De spørger næsten altid om de
     + *Korrekthed.* En optimal løsning for $n$ fjerner ét led $a^2$ og efterlader en optimal løsning for $n - a^2$ (cut-and-paste).
   ],
   worked: [
-    $K(19)$: prøv $a = 1, 2, 3, 4$. $19 = 1 + 9 + 9 = 1^2 + 3^2 + 3^2$ med 3 led, og 2 led er umuligt, så $K(19) = 3$.
+    Byg $"dp"[0..19]$ nedefra. $"dp"[0] = 0$; for hvert $m$ prøves alle kvadrater $a^2 <= m$, og $"dp"[m] = 1 + min_a "dp"[m - a^2]$. $"choice"[m]$ gemmer det vindende $a$:
+
+    ```
+    m:        0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19
+    dp[m]:    0  1  2  3  1  2  3  4  2  1  2  3  3  2  3  4  1  2  2  3
+    choice:   -  1  1  1  2  1  1  1  2  3  1  1  2  2  1  1  4  1  3  1
+    ```
+
+    Repræsentative indgange:
+
+    + $"dp"[4]$: $a=1$ giver $1 + "dp"[3] = 1 + 3 = 4$; $a=2$ giver $1 + "dp"[0] = 1$. Min $= 1$, choice $= 2$. ($4 = 2^2$.)
+    + $"dp"[9]$: $a=1: 1 + "dp"[8] = 3$; $a=2: 1 + "dp"[5] = 3$; $a=3: 1 + "dp"[0] = 1$. Min $= 1$, choice $= 3$.
+    + $"dp"[19]$: $a=1: 1 + "dp"[18] = 1 + 2 = 3$; $a=2: 1 + "dp"[15] = 1 + 4 = 5$; $a=3: 1 + "dp"[10] = 1 + 2 = 3$; $a=4: 1 + "dp"[3] = 1 + 3 = 4$. Min $= 3$, choice $= 1$.
+
+    Så $K(19) = 3$. Walk via $"choice"$: $m = 19 -> a = 1$, $m = 18 -> a = 3$, $m = 9 -> a = 3$, $m = 0$. Altså $19 = 1^2 + 3^2 + 3^2 = 1 + 9 + 9$. To led er umuligt (intet par kvadrater summer til 19), så minimum er 3.
 
     + (b) Pseudokode:
       #eq[$
@@ -347,23 +375,21 @@ De store DP-opgaver fra de skriftlige eksamener. De spørger næsten altid om de
       )
     ]
 
-    + Stikprøver: $C(2, 4) = max(9, C(2,2)+C(2,2) = 10, ...) = 10$. $C(3, 3) = max(10, C(3,1)+C(3,2) = 11) = 11$. $C(4, 4) = max(21, C(4,1)+C(4,3) = 5 + 17 = 22) = 22$.
-    + Resultattabel $C$:
+    Fyld $C$ i voksende areal. Hver celle starter som $P(i,j)$ (sælg usnittet) og prøver så alle vandrette snit $C(s,j)+C(i-s,j)$ og lodrette snit $C(i,t)+C(i,j-t)$. Resultattabel:
 
-    #align(center)[
-      #table(
-        columns: 5,
-        align: center,
-        stroke: none,
-        inset: (x: 8pt, y: 4pt),
-        table.header([$i slash j$], [1], [2], [3], [4]),
-        table.hline(stroke: 0.4pt + hair),
-        [1], [1], [2], [3], [4],
-        [2], [2], [5], [7], [10],
-        [3], [3], [8], [11], [16],
-        [4], [5], [10], [17], [*22*],
-      )
-    ]
+    ```
+    C:    j=1  j=2  j=3  j=4
+    i=1    1    2    3    4
+    i=2    2    5    7   10
+    i=3    3    8   11   16
+    i=4    5   10   17   22
+    ```
+
+    Repræsentative celler:
+
+    + $C(2,4)$: $P(2,4) = 9$; lodret $t=2$: $C(2,2) + C(2,2) = 5 + 5 = 10$; lodret $t=1$: $C(2,1)+C(2,3) = 2 + 7 = 9$; vandret $s=1$: $C(1,4)+C(1,4) = 4 + 4 = 8$. Max $= 10$ (del på langs i to $2 times 2$).
+    + $C(3,3)$: $P(3,3) = 10$; lodret $t=1$: $C(3,1)+C(3,2) = 3 + 8 = 11$; vandret $s=1$: $C(1,3)+C(2,3) = 3 + 7 = 10$. Max $= 11$.
+    + $C(4,4)$: $P(4,4) = 21$; lodret $t=1$: $C(4,1)+C(4,3) = 5 + 17 = 22$; alle vandrette og øvrige lodrette snit giver $<= 21$. Max $= 22$ (skær en $4 times 1$-strimmel af for 5 og sælg resten $4 times 3$ for 17).
 
     + (b) $n m$ celler, hver med $O(i) + O(j) = O(n + m)$ arbejde i de to snitløkker. Tid $Theta(n m (n + m))$, plads $Theta(n m)$.
     + (c) Et optimalt snit er enten ingen snit (sælg for $P(i, j)$) eller har et første snit, der går helt igennem — vandret ved række $s$ eller lodret ved søjle $t$. Bagefter skæres de to delbjælker uafhængigt og hver for sig optimalt, så de bidrager $C(s, j) + C(i-s, j)$ hhv. $C(i, t) + C(i, j-t)$. Max over alt giver rekursionen.
@@ -508,7 +534,28 @@ De store DP-opgaver fra de skriftlige eksamener. De spørger næsten altid om de
   worked: [
     Interne knuder: $x_1, x_2, x_3, x_4$. Blade: $x_5 = C, x_6 = A, x_7 = C, x_8 = A, x_9 = B$.
 
-    + (a) Sæt alle interne knuder til $C$. Kanter med forskellige tegn: $x_3 - x_6 (C slash A)$, $x_4 - x_8 (C slash A)$, $x_4 - x_9 (C slash B)$ — netop 3 overgangskanter. Brute force over alle $3^4$ tildelinger bekræfter minimum $= 3$.
+    + (a) Fyld DP-tabellen $C[k][a]$ i post-order. Blade: $0$ for eget tegn, $infinity$ ellers. Intern knude: $C[k][a] = min_b ("trans"(a,b) + C["v"][b]) + min_b ("trans"(a,b) + C["h"][b])$.
+
+    ```
+    Knude    C[.][A]  C[.][B]  C[.][C]
+    x8 (A)      0       inf      inf
+    x9 (B)     inf       0       inf
+    x5 (C)     inf      inf       0
+    x6 (A)      0       inf      inf
+    x7 (C)     inf      inf       0
+    x4           1        1        2
+    x3           1        2        1
+    x2           2        2        2
+    x1           3        4        3
+    ```
+
+    Repræsentative interne knuder:
+
+    + $x_4$ (børn $x_8 = A$, $x_9 = B$): for $a = A$ er venstre $min_b("trans"(A,b) + C[x_8][b]) = "trans"(A,A) + 0 = 0$ og højre $min_b("trans"(A,b) + C[x_9][b]) = "trans"(A,B) + 0 = 1$, så $C[x_4][A] = 0 + 1 = 1$. For $a = C$: venstre $"trans"(C,A) + 0 = 1$, højre $"trans"(C,B) + 0 = 1$, sum $2$.
+    + $x_3$ (børn $x_6 = A$, $x_7 = C$): for $a = C$ er venstre $"trans"(C,A) + 0 = 1$, højre $"trans"(C,C) + 0 = 0$, så $C[x_3][C] = 1$. For $a = A$: $0 + "trans"(A,C) = 0 + 1 = 1$.
+    + $x_1$ (børn $x_2$, $x_3$): for $a = C$ er venstre $min_b("trans"(C,b) + C[x_2][b]) = "trans"(C,C) + 2 = 2$, højre $min_b("trans"(C,b) + C[x_3][b]) = "trans"(C,C) + 1 = 1$, så $C[x_1][C] = 2 + 1 = 3$.
+
+    Svaret er $min_a C[x_1][a] = min(3, 4, 3) = 3$. Et minimerende valg: alle interne knuder $= C$, hvilket giver overgangskanterne $x_3 - x_6 (C slash A)$, $x_4 - x_8 (C slash A)$, $x_4 - x_9 (C slash B)$ — netop 3.
     + (b) $x_4$ ligger i dybde 2 ($x_1 -> x_2 -> x_4$), så kald $= |Sigma|^(2+1) = 3^3 = 27$.
     + (c) En knude i dybde $d$ får $|Sigma|^(d+1)$ kald à $>= 1$ arbejde. Et balanceret fuldt binært træ har højde $h = Theta(log_2 n)$, og de dybeste knuder alene får $|Sigma|^(h+1) >= |Sigma|^(log_2 n)$ kald. Altså $T(n) in Omega(|Sigma|^(log_2 n))$. Bemærk $|Sigma|^(log_2 n) = n^(log_2 |Sigma|)$ — polynomielt i $n$, men med eksponent voksende i $|Sigma|$.
     + (d) Fyld $C$ i post-order. Hver intern knude beregner $|Sigma|$ indgange, hver et $min$ over $|Sigma|$ for venstre og $|Sigma|$ for højre barn, så $Theta(|Sigma|^2)$ pr. knude. Med $n$ knuder: $Theta(n |Sigma|^2)$ tid og $Theta(n |Sigma|)$ plads.

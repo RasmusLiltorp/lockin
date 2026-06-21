@@ -81,14 +81,55 @@ Sorteringsopgaverne kommer i nogle få varianter. Nogle beder dig designe en sor
     + Stabilitet (bevar tidligere-ankomne først i samme spand) er det der gør hele algoritmen korrekt.
   ],
   worked: [
-    Tallene har 3 cifre, så 3 pass.
+    Tallene har 3 cifre, så 3 pass. Hvert pass fordeler tallene stabilt i spande $0..9$ efter ét ciffer (i den rækkefølge de står) og læser så spandene tomme i orden $0,1,...,9$.
 
-    + *Pass 1, enere* (cifre $7,5,4,4,1,1,2$):
-      #eq[$ 431, 231, 222, 544, 754, 765, 747. $]
-    + *Pass 2, tiere* (cifre $3,3,2,4,5,6,4$):
-      #eq[$ 222, 431, 231, 544, 747, 754, 765. $]
-    + *Pass 3, hundreder* (cifre $2,4,2,5,7,7,7$):
-      #eq[$ 222, 231, 431, 544, 747, 754, 765. $]
+    *Pass 1 — enere.* Aktuelt ciffer understreget, læst i inputrækkefølgen:
+
+    ```
+    74[7] 76[5] 54[4] 75[4] 43[1] 23[1] 22[2]
+
+    spand 0: -
+    spand 1: 431, 231
+    spand 2: 222
+    spand 3: -
+    spand 4: 544, 754
+    spand 5: 765
+    spand 6: -
+    spand 7: 747
+    spand 8: -
+    spand 9: -
+
+    => 431, 231, 222, 544, 754, 765, 747
+    ```
+
+    *Pass 2 — tiere.* Læs forrige resultat, kig på tier-cifret:
+
+    ```
+    4[3]1 2[3]1 2[2]2 5[4]4 7[5]4 7[6]5 7[4]7
+
+    spand 2: 222
+    spand 3: 431, 231
+    spand 4: 544, 747
+    spand 5: 754
+    spand 6: 765
+    (spand 0,1,7,8,9 tomme)
+
+    => 222, 431, 231, 544, 747, 754, 765
+    ```
+
+    *Pass 3 — hundreder.* Læs forrige resultat, kig på hundrede-cifret:
+
+    ```
+    [2]22 [4]31 [2]31 [5]44 [7]47 [7]54 [7]65
+
+    spand 2: 222, 231
+    spand 4: 431
+    spand 5: 544
+    spand 7: 747, 754, 765
+    (spand 0,1,3,6,8,9 tomme)
+
+    => 222, 231, 431, 544, 747, 754, 765
+    ```
 
     Endeligt sorteret: $222, 231, 431, 544, 747, 754, 765$.
   ],
@@ -110,12 +151,69 @@ Sorteringsopgaverne kommer i nogle få varianter. Nogle beder dig designe en sor
     + Gentag for næste mere betydende ciffer.
   ],
   worked: [
-    + *Iter 1 (enere):* $[1830, 5001, 7112, 2222, 9112, 6363, 8345, 4345]$.
-    + *Iter 2 (tiere):* $[5001, 7112, 9112, 2222, 1830, 8345, 4345, 6363]$.
-    + *Iter 3 (hundreder):* $[5001, 7112, 9112, 2222, 8345, 4345, 6363, 1830]$.
-    + *Iter 4 (tusinder), færdig:* $[1830, 2222, 4345, 5001, 6363, 7112, 8345, 9112]$.
+    Fire pass, ét pr. ciffer fra enere til tusinder. Hvert pass er en stabil fordeling i spande $0..9$ efter det aktuelle ciffer, læst i den rækkefølge tallene står; derefter tømmes spandene i orden.
 
-    Tre af de fire mellemtilstande besvarer opgaven.
+    *Iter 1 — enere.* Start: $[8345, 7112, 1830, 5001, 4345, 2222, 9112, 6363]$.
+
+    ```
+    834[5] 711[2] 183[0] 500[1] 434[5] 222[2] 911[2] 636[3]
+
+    spand 0: 1830
+    spand 1: 5001
+    spand 2: 7112, 2222, 9112
+    spand 3: 6363
+    spand 5: 8345, 4345
+
+    => [1830, 5001, 7112, 2222, 9112, 6363, 8345, 4345]
+    ```
+
+    *Iter 2 — tiere.* Læs forrige resultat:
+
+    ```
+    18[3]0 50[0]1 71[1]2 22[2]2 91[1]2 83[4]5 43[4]5 63[6]3
+
+    spand 0: 5001
+    spand 1: 7112, 9112
+    spand 2: 2222
+    spand 3: 1830
+    spand 4: 8345, 4345
+    spand 6: 6363
+
+    => [5001, 7112, 9112, 2222, 1830, 8345, 4345, 6363]
+    ```
+
+    *Iter 3 — hundreder.* Læs forrige resultat:
+
+    ```
+    5[0]01 7[1]12 9[1]12 2[2]22 1[8]30 8[3]45 4[3]45 6[3]63
+
+    spand 0: 5001
+    spand 1: 7112, 9112
+    spand 2: 2222
+    spand 3: 8345, 4345, 6363
+    spand 8: 1830
+
+    => [5001, 7112, 9112, 2222, 8345, 4345, 6363, 1830]
+    ```
+
+    *Iter 4 — tusinder (færdig).* Læs forrige resultat:
+
+    ```
+    [5]001 [7]112 [9]112 [2]222 [8]345 [4]345 [6]363 [1]830
+
+    spand 1: 1830
+    spand 2: 2222
+    spand 4: 4345
+    spand 5: 5001
+    spand 6: 6363
+    spand 7: 7112
+    spand 8: 8345
+    spand 9: 9112
+
+    => [1830, 2222, 4345, 5001, 6363, 7112, 8345, 9112]
+    ```
+
+    De tre første mellemtilstande besvarer opgaven; sidste pass er taget med for fuldstændighed.
   ],
 )
 
@@ -135,11 +233,41 @@ Sorteringsopgaverne kommer i nogle få varianter. Nogle beder dig designe en sor
     + Den kumulative `C[i]` er antallet af elementer med nøgle $<= i$.
   ],
   worked: [
-    + *Tæl pr. værdi $0..7$:* $0 -> 1,  1 -> 1,  2 -> 2,  3 -> 0,  4 -> 5,  5 -> 0,  6 -> 1,  7 -> 2$, altså
-      #eq[$ C = [1, 1, 2, 0, 5, 0, 1, 2]. $]
-    + *Præfikssummer:*
-      #eq[$ C = [1, 2, 4, 4, 9, 9, 10, 12]. $]
-    Sidste indgang $12$ = antal elementer, hvilket passer.
+    *Trin 1 — tæl forekomster.* Gennemløb $A = 7,4,1,2,6,4,0,4,4,4,7,2$ og bump `C[A[j]]`. Tælleren udvikler sig så her (indeks $0..7$ vandret, ét læst element pr. linje):
+
+    ```
+    index:        0  1  2  3  4  5  6  7
+    start:        0  0  0  0  0  0  0  0
+    læs 7:        0  0  0  0  0  0  0  1
+    læs 4:        0  0  0  0  1  0  0  1
+    læs 1:        0  1  0  0  1  0  0  1
+    læs 2:        0  1  1  0  1  0  0  1
+    læs 6:        0  1  1  0  1  0  1  1
+    læs 4:        0  1  1  0  2  0  1  1
+    læs 0:        1  1  1  0  2  0  1  1
+    læs 4:        1  1  1  0  3  0  1  1
+    læs 4:        1  1  1  0  4  0  1  1
+    læs 4:        1  1  1  0  5  0  1  1
+    læs 7:        1  1  1  0  5  0  1  2
+    læs 2:        1  1  2  0  5  0  1  2
+    ```
+
+    Efter optællingen: $C = [1, 1, 2, 0, 5, 0, 1, 2]$ (antal forekomster af hver værdi).
+
+    *Trin 2 — kumulativ løkke* `C[i] = C[i] + C[i-1]` for $i = 1..7$, så `C[i]` bliver antal elementer $<= i$:
+
+    ```
+    udgangspunkt:        1   1   2   0   5   0   1   2
+    C[1]=1+1   = 2:      1   2   2   0   5   0   1   2
+    C[2]=2+2   = 4:      1   2   4   0   5   0   1   2
+    C[3]=0+4   = 4:      1   2   4   4   5   0   1   2
+    C[4]=5+4   = 9:      1   2   4   4   9   0   1   2
+    C[5]=0+9   = 9:      1   2   4   4   9   9   1   2
+    C[6]=1+9   = 10:     1   2   4   4   9   9  10   2
+    C[7]=2+10  = 12:     1   2   4   4   9   9  10  12
+    ```
+
+    Resultat: $C = [1, 2, 4, 4, 9, 9, 10, 12]$. Sidste indgang $12$ = antal elementer i $A$, hvilket passer.
   ],
 )
 

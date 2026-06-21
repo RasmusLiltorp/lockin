@@ -101,16 +101,21 @@ MaxSum3(n)                              // Kadane, Theta(n)
     + Vælg den case, sammenligningen peger på, og læs $Theta$-grænsen af.
   ],
   worked: [
-    + Her er $a = #swap[$8$]$, $b = #swap[$2$]$ og $f(n) = n^2$.
+    Master Theorem på formen $T(n) = a thin T(n/b) + f(n)$. Jeg aflæser tallene, regner skellet $alpha = log_b a$ og sammenligner $f(n)$ med $n^alpha$.
 
-    + Skellet bliver $alpha = log_2 8 = 3$, så
-      #eq[$ n^alpha = n^3. $]
+    + Aflæs koefficienterne direkte fra rekursionen $T(n) = #swap[$8$] thin T(n\/#swap[$2$]) + n^2$:
+      #eq[$ a = #swap[$8$], quad b = #swap[$2$], quad f(n) = n^2. $]
 
-    + Sammenlign: $f(n) = n^2$ ligger under $n^3$. Mere præcist $f(n) = O(n^(3 - epsilon))$ med $epsilon = 1$, altså polynomielt mindre.
+    + Regn skellet. Per definition er $alpha = log_b a$, og $log_2 8 = 3$ fordi $2^3 = 8$:
+      #eq[$ alpha = log_2 8 = 3 quad ==> quad n^alpha = n^3. $]
 
-    + Det er case 1, og den giver $Theta(n^alpha)$.
+    + Sammenlign $f(n) = n^2$ med $n^alpha = n^3$. Forholdet er
+      #eq[$ f(n) / n^alpha = n^2 / n^3 = n^(-1) -> 0 quad (n -> oo), $]
+      så $f$ vokser langsommere. Mere præcist er $f(n) = n^(3 - 1) = O(n^(alpha - epsilon))$ med $epsilon = 1 > 0$, altså polynomielt mindre end $n^alpha$.
 
-    Svar: $T(n) = Theta(n^3)$, det samme som den kubiske metode laver i forvejen.
+    + Polynomielt mindre $f$ er case 1, og case 1 giver $T(n) = Theta(n^alpha) = Theta(n^3)$.
+
+    Svar: $T(n) = Theta(n^3)$, det samme som den kubiske metode laver i forvejen. Otte delprodukter giver ingen gevinst.
   ],
 )
 
