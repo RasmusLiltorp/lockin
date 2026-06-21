@@ -91,14 +91,35 @@ Et *Hasse-diagram (Hasse diagram)* tegner en partiel ordning uden støj. Fjern a
     + Saml op: refleksiv + symmetrisk + transitiv giver ækvivalensrelation, refleksiv + antisymmetrisk + transitiv giver partiel ordning.
   ],
   worked: [
-    Relationen er #swap[${(a,a),(a,b),(b,a),(c,c)}$] på ${a,b,c}$.
+    Relationen er #swap[${(a,a),(a,b),(b,a),(c,c)}$] på ${a,b,c}$. Grundmængden er ${a,b,c}$, så jeg går alle tre elementer og alle par igennem.
 
-    - *Refleksiv?* $(b,b)$ mangler #sym.arrow.r nej.
-    - *Symmetrisk?* $(a,b)$ har sin makker $(b,a)$, og løkkerne $(a,a),(c,c)$ er deres egne makkere #sym.arrow.r ja.
-    - *Antisymmetrisk?* $(a,b)$ og $(b,a)$ er begge med med $a != b$ #sym.arrow.r nej.
-    - *Transitiv?* $(b,a)$ og $(a,b)$ kræver $(b,b)$, som mangler #sym.arrow.r nej.
+    *Refleksiv?* Hvert element skal have sin løkke $(x,x)$:
 
-    Ækvivalensrelation kræver refleksiv, og partiel ordning kræver antisymmetrisk. Begge fejler, så ingen af dem holder.
+    - $a$: $(a,a) in R$ #sym.arrow.r ok.
+    - $b$: $(b,b) in.not R$ #sym.arrow.r mangler.
+    - $c$: $(c,c) in R$ #sym.arrow.r ok.
+
+    Løkken på $b$ mangler #sym.arrow.r *ikke refleksiv.*
+
+    *Symmetrisk?* Hvert par $(x,y)$ skal have sin modsatte $(y,x)$:
+
+    - $(a,a)$: modsat er $(a,a)$ selv #sym.arrow.r ok.
+    - $(a,b)$: modsat $(b,a) in R$ #sym.arrow.r ok.
+    - $(b,a)$: modsat $(a,b) in R$ #sym.arrow.r ok.
+    - $(c,c)$: modsat er $(c,c)$ selv #sym.arrow.r ok.
+
+    Alle par har deres makker #sym.arrow.r *symmetrisk.*
+
+    *Antisymmetrisk?* Find to forskellige elementer med pile begge veje. Her er både $(a,b)$ og $(b,a)$ med, og $a != b$ #sym.arrow.r *ikke antisymmetrisk.*
+
+    *Transitiv?* Tjek hver to-trins-kæde $(x,y),(y,z)$ for genvejen $(x,z)$:
+
+    - $(a,b),(b,a) ==> (a,a)$: $(a,a) in R$ #sym.arrow.r ok.
+    - $(b,a),(a,b) ==> (b,b)$: $(b,b) in.not R$ #sym.arrow.r mangler.
+
+    Genvejen $(b,b)$ mangler #sym.arrow.r *ikke transitiv.*
+
+    Klassificering: ækvivalensrelation kræver refleksiv (fejler) og partiel ordning kræver antisymmetrisk (fejler). Begge falder.
 
     Svar: kun (b).
   ],
@@ -130,12 +151,35 @@ Et *Hasse-diagram (Hasse diagram)* tegner en partiel ordning uden støj. Fjern a
   worked: [
     Relationen er #swap[${(a,a),(a,b),(a,c),(b,b),(b,c),(c,c)}$] på ${a,b,c}$.
 
-    - *Refleksiv?* $(a,a),(b,b),(c,c)$ er alle med #sym.arrow.r ja.
-    - *Symmetrisk?* $(a,b)$ er med, men $(b,a)$ mangler #sym.arrow.r nej.
-    - *Antisymmetrisk?* De eneste tovejspar er på diagonalen, så $x = y$ holder #sym.arrow.r ja.
-    - *Transitiv?* $(a,b),(b,c)$ lukker med $(a,c)$, som er der; alle kæder lukker #sym.arrow.r ja.
+    *Refleksiv?* Tjek løkken på hvert element:
 
-    Ækvivalensrelation kræver symmetri, som fejler. Partiel ordning kræver refleksiv, antisymmetrisk og transitiv, som alle holder.
+    - $a$: $(a,a) in R$ #sym.arrow.r ok.
+    - $b$: $(b,b) in R$ #sym.arrow.r ok.
+    - $c$: $(c,c) in R$ #sym.arrow.r ok.
+
+    Hele diagonalen er der #sym.arrow.r *refleksiv.*
+
+    *Symmetrisk?* Tjek modsat par for de par der ikke ligger på diagonalen:
+
+    - $(a,b)$: modsat $(b,a) in.not R$ #sym.arrow.r mangler.
+
+    Ét par uden makker er nok #sym.arrow.r *ikke symmetrisk.*
+
+    *Antisymmetrisk?* Find to forskellige elementer med pile begge veje. De eneste tovejspar her er $(a,a),(b,b),(c,c)$, og de ligger alle på diagonalen ($x = y$). Intet par $(x,y),(y,x)$ med $x != y$ #sym.arrow.r *antisymmetrisk.*
+
+    *Transitiv?* Tjek hver to-trins-kæde for sin genvej:
+
+    - $(a,a),(a,b) ==> (a,b)$: $in R$ #sym.arrow.r ok.
+    - $(a,a),(a,c) ==> (a,c)$: $in R$ #sym.arrow.r ok.
+    - $(a,b),(b,b) ==> (a,b)$: $in R$ #sym.arrow.r ok.
+    - $(a,b),(b,c) ==> (a,c)$: $in R$ #sym.arrow.r ok.
+    - $(b,b),(b,c) ==> (b,c)$: $in R$ #sym.arrow.r ok.
+    - $(b,c),(c,c) ==> (b,c)$: $in R$ #sym.arrow.r ok.
+    - $(a,c),(c,c) ==> (a,c)$: $in R$ #sym.arrow.r ok.
+
+    Alle kæder lukker #sym.arrow.r *transitiv.*
+
+    Klassificering: ækvivalensrelation kræver symmetri (fejler). Partiel ordning kræver refleksiv, antisymmetrisk og transitiv — alle tre holder #sym.arrow.r partiel ordning.
 
     Svar: (a), (c), (d), (f).
   ],
@@ -164,14 +208,25 @@ Et *Hasse-diagram (Hasse diagram)* tegner en partiel ordning uden støj. Fjern a
     + Sammenlign din mængde med påstanden par for par. Stemmer de præcist, er udsagnet sandt.
   ],
   worked: [
-    Grundmængden er $A = {a,b,c,d}$. Tjek hvert udsagn for sig.
+    Grundmængden er $A = {a,b,c,d}$. Jeg regner hver lukning selv og sammenligner med påstanden par for par.
 
-    - *(a)* Refleksiv lukning af $emptyset$ er præcis diagonalen ${(a,a),(b,b),(c,c),(d,d)}$ #sym.arrow.r passer.
-    - *(b)* Refleksiv lukning tilføjer løkker, ikke genvejen $(a,c)$ #sym.arrow.r falsk.
-    - *(c)* Symmetrisk lukning tilføjer kun modsatte par, ikke løkkerne $(b,b),(c,c),(d,d)$ #sym.arrow.r falsk.
-    - *(d)* $(b,c)$ skal blive til $(b,c),(c,b)$, men begge mangler i påstanden #sym.arrow.r falsk.
-    - *(e)* Langs kæden $a -> b -> c -> d$ får du genvejene $(a,c),(b,d),(a,d)$, og det er netop mængden #sym.arrow.r passer.
-    - *(f)* $(a,b)$ og $(c,d)$ kan ikke kædes sammen, så relationen er uændret #sym.arrow.r passer.
+    *(a)* Refleksiv lukning af $emptyset$: tilføj $(x,x)$ for hvert element i $A$, og der er intet andet at beholde. Det giver ${(a,a),(b,b),(c,c),(d,d)}$ — netop diagonalen #sym.arrow.r *passer.*
+
+    *(b)* Refleksiv lukning af ${(a,b),(b,c)}$: behold de to par og tilføj diagonalen, altså $r(R) = {(a,b),(b,c),(a,a),(b,b),(c,c),(d,d)}$. Påstanden er ${(a,c)}$ — hverken de oprindelige par, løkkerne eller blot $(a,c)$ (som ikke engang er en refleksiv tilføjelse) #sym.arrow.r *falsk.*
+
+    *(c)* Symmetrisk lukning af ${(a,a),(a,b),(c,d)}$: tilføj kun modsatte par. $(a,a)$ er sin egen modsatte, $(a,b)$ giver $(b,a)$, $(c,d)$ giver $(d,c)$. Resultat: ${(a,a),(a,b),(b,a),(c,d),(d,c)}$. Påstanden indeholder også løkkerne $(b,b),(c,c),(d,d)$, men dem tilføjer symmetrisk lukning ikke #sym.arrow.r *falsk.*
+
+    *(d)* Symmetrisk lukning af ${(a,b),(b,a),(b,c)}$: $(a,b)$ og $(b,a)$ er hinandens modsatte og allerede der; $(b,c)$ kræver $(c,b)$. Resultat: ${(a,b),(b,a),(b,c),(c,b)}$. Påstanden er kun ${(a,b),(b,a)}$ — den har tabt $(b,c)$ og mangler $(c,b)$ #sym.arrow.r *falsk.*
+
+    *(e)* Transitiv lukning af #swap[${(a,b),(b,c),(c,d)}$]: følg kæden $a -> b -> c -> d$ og tilføj genveje.
+
+    - $a -> b -> c$ #sym.arrow.r $(a,c)$.
+    - $b -> c -> d$ #sym.arrow.r $(b,d)$.
+    - $a -> c -> d$ (ny kant $(a,c)$) #sym.arrow.r $(a,d)$.
+
+    Resultat: ${(a,b),(b,c),(c,d),(a,c),(b,d),(a,d)}$ — netop den påståede mængde #sym.arrow.r *passer.*
+
+    *(f)* Transitiv lukning af ${(a,b),(c,d)}$: den ene kant ender i $b$, den anden starter i $c$. Ingen kæde $(x,y),(y,z)$ findes, så intet tilføjes og relationen er uændret #sym.arrow.r *passer.*
 
     Svar: (a), (e) og (f).
   ],
@@ -192,15 +247,26 @@ Et *Hasse-diagram (Hasse diagram)* tegner en partiel ordning uden støj. Fjern a
     + Stop når en hel runde ikke tilføjer noget. Resultatet: $(x,z)$ er med præcis når der findes en sti fra $x$ til $z$.
   ],
   worked: [
-    Relationen er #swap[${(a,b),(b,a),(b,b),(b,c)}$] på ${a,b,c}$.
+    Relationen er #swap[${(a,b),(b,a),(b,b),(b,c)}$] på ${a,b,c}$. Som graf: $a -> b$, $b -> a$, $b -> b$ (løkke), $b -> c$. Bemærk at $a$ og $b$ peger på hinanden, så der er en cykel, og den giver løkker i lukningen.
 
-    Se på hvor $b$ kan nå hen: $b$ peger på $a$, $b$ og $c$.
+    *Runde 1.* Tag hver kæde $(x,y),(y,z)$ og tilføj $(x,z)$:
 
-    - $(a,b)$ + $(b,a)$ #sym.arrow.r tilføj $(a,a)$.
-    - $(a,b)$ + $(b,c)$ #sym.arrow.r tilføj $(a,c)$.
-    - $(a,b)$ + $(b,b)$ #sym.arrow.r giver $(a,b)$, som allerede er der.
+    - $(a,b),(b,a) ==> (a,a)$ #sym.arrow.r ny.
+    - $(a,b),(b,b) ==> (a,b)$ #sym.arrow.r findes.
+    - $(a,b),(b,c) ==> (a,c)$ #sym.arrow.r ny.
+    - $(b,a),(a,b) ==> (b,b)$ #sym.arrow.r findes.
+    - $(b,b),(b,a) ==> (b,a)$ #sym.arrow.r findes.
+    - $(b,b),(b,c) ==> (b,c)$ #sym.arrow.r findes.
 
-    $c$ har ingen udgående kanter, så den åbner ingen nye genveje. En runde mere tilføjer intet.
+    Efter runde 1: ${(a,a),(a,b),(a,c),(b,a),(b,b),(b,c)}$.
+
+    *Runde 2.* De nye kanter er $(a,a)$ og $(a,c)$. Tjek om de åbner genveje:
+
+    - $(a,a),(a,b) ==> (a,b)$ #sym.arrow.r findes.
+    - $(a,a),(a,c) ==> (a,c)$ #sym.arrow.r findes.
+    - $(a,c),(c,?)$: $c$ har ingen udgående kant #sym.arrow.r intet.
+
+    Runde 2 tilføjer intet, så vi stopper.
 
     Svar: $t(R) = {(a,a),(a,b),(a,c),(b,a),(b,b),(b,c)}$.
   ],
@@ -234,15 +300,26 @@ Et *Hasse-diagram (Hasse diagram)* tegner en partiel ordning uden støj. Fjern a
     + Stop når en hel runde ikke tilføjer noget. Sammenlign så med mulighederne og vælg den, der matcher præcist.
   ],
   worked: [
-    Relationen er #swap[${(a,b),(a,c),(b,b),(c,d),(d,e)}$].
+    Relationen er #swap[${(a,b),(a,c),(b,b),(c,d),(d,e)}$]. Som graf: $a -> b$, $a -> c$, $b -> b$ (løkke), $c -> d$, $d -> e$. Hovedstien er $a -> c -> d -> e$.
 
-    Følg stierne og tilføj genveje:
+    *Runde 1.* Tag hver kæde $(x,y),(y,z)$ og tilføj $(x,z)$:
 
-    - $a -> c -> d$ #sym.arrow.r tilføj $(a,d)$.
-    - $a -> d -> e$ #sym.arrow.r tilføj $(a,e)$.
-    - $c -> d -> e$ #sym.arrow.r tilføj $(c,e)$.
+    - $(a,b),(b,b) ==> (a,b)$ #sym.arrow.r findes.
+    - $(a,c),(c,d) ==> (a,d)$ #sym.arrow.r ny.
+    - $(c,d),(d,e) ==> (c,e)$ #sym.arrow.r ny.
 
-    $(b,b)$ er en løkke og åbner ingen nye genveje. En runde mere tilføjer intet.
+    Efter runde 1: ${(a,b),(a,c),(a,d),(b,b),(c,d),(c,e),(d,e)}$.
+
+    *Runde 2.* De nye kanter er $(a,d)$ og $(c,e)$:
+
+    - $(a,d),(d,e) ==> (a,e)$ #sym.arrow.r ny.
+    - $(c,e),(e,?)$: $e$ har ingen udgående kant #sym.arrow.r intet.
+
+    Efter runde 2: tilføj $(a,e)$.
+
+    *Runde 3.* Den nye kant er $(a,e)$; $e$ har ingen udgående kant, så intet tilføjes. Stop.
+
+    Løkken $(b,b)$ peger kun tilbage på $b$, som ellers ingen udgående kant har, så den åbner aldrig nye genveje.
 
     Svar: $t(R) = {(a,b),(a,c),(a,d),(a,e),(b,b),(c,d),(c,e),(d,e)}$.
   ],
@@ -263,16 +340,16 @@ Et *Hasse-diagram (Hasse diagram)* tegner en partiel ordning uden støj. Fjern a
     + Tilføj ingen ekstra diagonalløkker, og kæd ikke par sammen. Det hører til den refleksive og den transitive lukning.
   ],
   worked: [
-    Relationen er #swap[${(a,b),(b,b),(c,d),(d,e)}$].
+    Relationen er $T = #swap[${(a,b),(b,b),(c,d),(d,e)}$]$. Formlen er $s(T) = T union T^(-1)$: behold alt i $T$, og tilføj den modsatte $(y,x)$ for hvert par $(x,y)$.
 
-    Vend hvert par om og tilføj det modsatte:
+    Gå hvert par igennem:
 
-    - $(a,b)$ #sym.arrow.r tilføj $(b,a)$.
-    - $(b,b)$ er sin egen modsatte, intet nyt.
-    - $(c,d)$ #sym.arrow.r tilføj $(d,c)$.
-    - $(d,e)$ #sym.arrow.r tilføj $(e,d)$.
+    - $(a,b)$: modsat $(b,a) in.not T$ #sym.arrow.r tilføj $(b,a)$.
+    - $(b,b)$: modsat er $(b,b)$ selv #sym.arrow.r intet nyt.
+    - $(c,d)$: modsat $(d,c) in.not T$ #sym.arrow.r tilføj $(d,c)$.
+    - $(d,e)$: modsat $(e,d) in.not T$ #sym.arrow.r tilføj $(e,d)$.
 
-    Ingen løkker udover dem der allerede var der, og ingen kædning.
+    De fire oprindelige par plus $(b,a),(d,c),(e,d)$. Ingen ekstra diagonalløkker (det hører til den refleksive lukning), og ingen kædning (det hører til den transitive).
 
     Svar: $s(T) = {(a,b),(b,a),(b,b),(c,d),(d,c),(d,e),(e,d)}$.
   ],
@@ -294,14 +371,23 @@ Et *Hasse-diagram (Hasse diagram)* tegner en partiel ordning uden støj. Fjern a
     + Klassificér: ækvivalensrelation og de to ordninger kræver hver tre af egenskaberne. Fejler en af de nødvendige, falder klassificeringen med.
   ],
   worked: [
-    Aflæs digrafen for $S$ knude for knude.
+    Skriv digrafen ud som parmængde. Løkker på $a,b,e,f$ giver $(a,a),(b,b),(e,e),(f,f)$; de enkeltrettede kanter giver $(a,b),(a,c),(a,d),(a,e),(b,e),(c,d),(f,d)$; tovejsparret $e<->f$ giver $(e,f),(f,e)$.
 
-    - *Refleksiv?* $c$ og $d$ har ingen løkke #sym.arrow.r nej.
-    - *Symmetrisk?* $a -> b$ findes, men ikke $b -> a$ #sym.arrow.r nej.
-    - *Antisymmetrisk?* $e <-> f$ med $e != f$ #sym.arrow.r nej.
-    - *Transitiv?* $e -> f$ og $f -> d$, men $e -> d$ mangler #sym.arrow.r nej.
+    *Refleksiv?* Hvert af de seks elementer skal have en løkke:
 
-    Alle fire grundegenskaber fejler. Ækvivalensrelation kræver de første tre, og begge ordninger kræver refleksiv og transitiv, så de falder også.
+    - $a,b,e,f$: løkke #sym.arrow.r ok.
+    - $c$: ingen løkke #sym.arrow.r mangler.
+    - $d$: ingen løkke #sym.arrow.r mangler.
+
+    Løkker på $c$ og $d$ mangler #sym.arrow.r *ikke refleksiv.*
+
+    *Symmetrisk?* Tag en enkeltrettet kant: $(a,b) in S$, men $(b,a) in.not S$ #sym.arrow.r *ikke symmetrisk.*
+
+    *Antisymmetrisk?* Find to forskellige knuder med pile begge veje: $(e,f)$ og $(f,e)$ er begge med, og $e != f$ #sym.arrow.r *ikke antisymmetrisk.*
+
+    *Transitiv?* Find en to-trins-sti uden genvej: $(e,f),(f,d) ==> (e,d)$, men $(e,d) in.not S$ #sym.arrow.r *ikke transitiv.*
+
+    Alle fire grundegenskaber fejler. Ækvivalensrelation kræver refleksiv, symmetrisk og transitiv; begge ordninger kræver refleksiv og transitiv. Da refleksiv allerede fejler, falder alle tre klassificeringer.
 
     Svar: ingen af dem.
   ],
@@ -329,15 +415,31 @@ Et *Hasse-diagram (Hasse diagram)* tegner en partiel ordning uden støj. Fjern a
     + Overlever en kandidat alle tre, er den en ækvivalensrelation. Klasserne er så elementerne grupperet efter hvad de er relateret til.
   ],
   worked: [
-    Grundmængden er ${a,b,c}$. Hver kandidat skal klare refleksiv, symmetrisk og transitiv.
+    Grundmængden er ${a,b,c}$. Hver kandidat skal klare refleksiv, symmetrisk og transitiv; den ryger ud så snart én fejler.
 
-    - *(a)* Bare diagonalen ${(a,a),(b,b),(c,c)}$. Refleksiv, symmetrisk og transitiv #sym.arrow.r ja.
-    - *(b)* $(c,c)$ mangler #sym.arrow.r ikke refleksiv.
-    - *(c)* $(a,b)$ uden $(b,a)$ #sym.arrow.r ikke symmetrisk.
-    - *(d)* $(a,b)$ uden $(b,a)$ #sym.arrow.r ikke symmetrisk.
-    - *(e)* Refleksiv, symmetrisk via $(a,b),(b,a)$, og transitiv med ${a,b}$ som blok og $c$ for sig #sym.arrow.r ja.
+    *(a)* ${(a,a),(b,b),(c,c)}$ — kun diagonalen.
 
-    Klasserne i (e): $[a] = [b] = {a,b}$ og $[c] = {c}$. De er disjunkte og dækker hele mængden.
+    - Refleksiv: $(a,a),(b,b),(c,c)$ alle med #sym.arrow.r ok.
+    - Symmetrisk: hvert par er sin egen modsatte #sym.arrow.r ok.
+    - Transitiv: eneste kæder er $(x,x),(x,x) ==> (x,x)$, alle med #sym.arrow.r ok.
+
+    Alle tre holder #sym.arrow.r *ækvivalensrelation.*
+
+    *(b)* ${(a,a),(a,b),(b,a),(b,b)}$ — løkken $(c,c)$ mangler #sym.arrow.r *ikke refleksiv.*
+
+    *(c)* ${(a,a),(a,b),(b,b),(c,c)}$ — $(a,b) in R$ men $(b,a) in.not R$ #sym.arrow.r *ikke symmetrisk.*
+
+    *(d)* ${(a,a),(a,b),(b,b),(b,c),(c,c)}$ — $(a,b) in R$ men $(b,a) in.not R$ #sym.arrow.r *ikke symmetrisk.* (Også ikke transitiv: $(a,b),(b,c) ==> (a,c)$, som mangler.)
+
+    *(e)* ${(a,a),(a,b),(b,a),(b,b),(c,c)}$.
+
+    - Refleksiv: $(a,a),(b,b),(c,c)$ alle med #sym.arrow.r ok.
+    - Symmetrisk: $(a,b)$ har $(b,a)$; resten er på diagonalen #sym.arrow.r ok.
+    - Transitiv: tjek kæderne. $(a,b),(b,a) ==> (a,a)$ ok; $(b,a),(a,b) ==> (b,b)$ ok; $(a,b),(b,b) ==> (a,b)$ ok; $(b,a),(a,a) ==> (b,a)$ ok #sym.arrow.r ok.
+
+    Alle tre holder #sym.arrow.r *ækvivalensrelation.*
+
+    Klasserne i (e): $[a] = {x mid(|) (a,x) in R} = {a,b}$, $[b] = {a,b}$, $[c] = {c}$. Altså to klasser ${a,b}$ og ${c}$ — de er disjunkte og dækker hele ${a,b,c}$.
 
     Svar: (a) og (e).
   ],

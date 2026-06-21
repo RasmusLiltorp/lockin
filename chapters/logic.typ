@@ -87,13 +87,59 @@ Biimplikation (biconditional):
     + *Skriv svaret af* for hver påstand.
   ],
   worked: [
-    Her er de fem påstande, kørt igennem hver for sig.
+    De fem påstande tages én ad gangen, og hver kolonne fyldes ud række for række.
 
-    + (0) $(p and q) or (p and not q) = p and (q or not q) = p$. Sand.
-    + (1) Prøv $p=F, q=T$. Så bliver $p <-> not q$ til $F <-> F = T$, men $p and not q = F$. Sand antagelse, falsk konklusion, så påstanden er falsk.
-    + (2) Er $p$ sand, er $p or q$ sand. Er $p$ falsk, er implikationen sand af sig selv. Tautologi.
-    + (3) Med $q=T, r=F$ skrumper formlen til $not p$. Vælg $p=F$, så er den sand. Opfyldelig.
-    + (4) Tre variable giver $2^3 = 8$ rækker. Sand.
+    *(0) $(p and q) or (p and not q) equiv p$?* Stil de to sider op over alle fire rækker:
+
+    ```
+    p q | p∧q  ¬q  p∧¬q | (p∧q)∨(p∧¬q) | p
+    ----+------------------+-------------+--
+    T T |  T    F    F   |      T       | T
+    T F |  F    T    T   |      T       | T
+    F T |  F    F    F   |      F       | F
+    F F |  F    T    F   |      F       | F
+    ```
+
+    Den sammensatte kolonne og $p$-kolonnen er ens i alle fire rækker. Algebraisk: $(p and q) or (p and not q) = p and (q or not q) = p and T = p$. Sand.
+
+    *(1) Hvis $p <-> not q$ er sand, så er $p and not q$ sand?* Find de rækker, hvor forleddet $p <-> not q$ er sandt, og se på bagleddet der:
+
+    ```
+    p q | ¬q  p↔¬q | p∧¬q
+    ----+----------+-----
+    T T |  F    F   |  F
+    T F |  T    T   |  T
+    F T |  F    T   |  F   <- forled sandt, bagled falsk
+    F F |  T    F   |  F
+    ```
+
+    I rækken $p=F, q=T$ er forleddet sandt, men bagleddet falsk. Et modeksempel, så implikationen holder ikke. Falsk.
+
+    *(2) $p -> (p or q)$ tautologi?* Sidste kolonne skal være T overalt:
+
+    ```
+    p q | p∨q | p→(p∨q)
+    ----+-----+--------
+    T T |  T  |   T
+    T F |  T  |   T
+    F T |  T  |   T
+    F F |  F  |   T
+    ```
+
+    Alle fire rækker er T. Når $p$ er sand er $p or q$ sand, og når $p$ er falsk er implikationen vakuøst sand. Tautologi. Sand.
+
+    *(3) Med $q=T, r=F$: kan $p$ vælges, så $(not p and q) or (p and r)$ er sand?* Indsæt $q=T, r=F$ og prøv begge værdier af $p$:
+
+    ```
+    p | ¬p∧q  p∧r | (¬p∧q)∨(p∧r)
+    --+-------------+------------
+    T | F∧T=F  T∧F=F |     F
+    F | T∧T=T  F∧F=F |     T   <- sand
+    ```
+
+    Med $p=F$ bliver udtrykket sandt. Opfyldelig. Sand.
+
+    *(4) Tabellen for $(p -> q) and r$ har 8 rækker?* Tre forskellige variable $p, q, r$, så antal rækker er $2^3 = 8$. Sand.
 
     Svar: 0, 2, 3, 4 er sande, og 1 er falsk.
   ],
@@ -126,18 +172,69 @@ Biimplikation (biconditional):
     + *Find et modeksempel.* En "hvis ... så"-påstand er falsk, hvis du kan gøre forleddet sandt og bagleddet falsk på samme tid.
   ],
   worked: [
-    Ti påstande, en linje per styk.
+    Ti påstande, hver afgjort med de relevante rækker fyldt ud.
 
-    + (0) $p$ sand gør disjunktionen (disjunction) sand. Sand.
-    + (1) $p and q$ er falsk i 3 rækker, $p or q$ kun i 1, så de falder ikke sammen. Falsk.
-    + (2) $p and not q$ tvinger $p$ sand, så $p or not q$ er sand. Sand.
-    + (3) De Morgan, præcis ens. Sand.
-    + (4) $p <-> q$ betyder $p = q$, så $not p -> not q$ gælder altid. Sand.
-    + (5) $p$ falsk gør $p -> q$ sand for begge værdier af $q$. Falsk.
-    + (6) Fire forskellige variable giver $2^4 = 16$ rækker, ikke 8. Falsk.
-    + (7) Én variabel giver $2^1 = 2$ rækker, ikke 4. Falsk.
-    + (8) $<->$ og $plus.o$ er hinandens negation, så konjunktionen (conjunction) er aldrig sand. Falsk.
-    + (9) $p=T, q=F$ giver $T and (F or T) = T$. Sand.
+    *(0) Hvis $p=T, q=F$, er $p or q or r$ sand?* Forleddet binder $p=T$. En disjunktion er sand, så snart ét led er sandt, og $p=T$, så $p or q or r = T$ uanset $r$. Sand.
+
+    *(1) $p and q$ falsk $<->$ $p or q$ falsk?* Stil de to "falskhedsbetingelser" op:
+
+    ```
+    p q | p∧q | p∨q
+    ----+-----+----
+    T T |  T  |  T
+    T F |  F  |  T
+    F T |  F  |  T
+    F F |  F  |  F
+    ```
+
+    $p and q$ er falsk i 3 rækker, $p or q$ er falsk i kun 1. Tag $p=T, q=F$: $p and q$ falsk, men $p or q$ sand. Bikonditionalen kræver, at "$p and q$ falsk" og "$p or q$ falsk" altid følges ad, og det gør de ikke. Falsk.
+
+    *(2) Hvis $p and not q$ sand, så $p or not q$ sand?* $p and not q$ er kun sand i én række, $p=T, q=F$. Der er $not q=T$, så $p or not q = T or T = T$. Forled sandt medfører bagled sandt. Sand.
+
+    *(3) $not p or not q equiv not(p and q)$?* De Morgan, tjekket række for række:
+
+    ```
+    p q | ¬p  ¬q  ¬p∨¬q | p∧q  ¬(p∧q)
+    ----+-------------------+-----------
+    T T |  F   F    F    |  T     F
+    T F |  F   T    T    |  F     T
+    F T |  T   F    T    |  F     T
+    F F |  T   T    T    |  F     T
+    ```
+
+    Kolonnerne $not p or not q$ og $not(p and q)$ er ens i alle fire rækker. Sand.
+
+    *(4) Hvis $p <-> q$ sand, så $not p -> not q$ sand?* $p <-> q$ sand betyder $p$ og $q$ ens, altså rækkerne $(T,T)$ og $(F,F)$. Tjek $not p -> not q$ i begge:
+
+    ```
+    p q | ¬p  ¬q | ¬p→¬q   (kun rækker hvor p↔q sand)
+    ----+--------+------
+    T T |  F   F |   T
+    F F |  T   T |   T
+    ```
+
+    I begge rækker er $not p -> not q$ sand. Sand.
+
+    *(5) Hvis $p -> q$ sand og $p$ falsk, så $q$ falsk?* Sæt $p=F$. Så er $p -> q$ sand for begge værdier af $q$. Vælg $q=T$: forleddet ($p->q$ sand, $p$ falsk) holder, men bagleddet "$q$ falsk" er forkert. Modeksempel. Falsk.
+
+    *(6) Tabellen for $p or q <-> r and s$ har 8 rækker?* Fire forskellige variable $p,q,r,s$, så $2^4 = 16$ rækker, ikke 8. Falsk.
+
+    *(7) Tabellen for $p or not p$ har 4 rækker?* Kun én forskellig variabel, $p$, så $2^1 = 2$ rækker, ikke 4. Falsk.
+
+    *(8) Kan $p$ vælges, så $(p <-> q) and (p plus.o q)$ er sand?* $<->$ og $plus.o$ er hinandens negation, så de er aldrig sande samtidig:
+
+    ```
+    p q | p↔q  p⊕q | (p↔q)∧(p⊕q)
+    ----+----------+-----------
+    T T |  T    F   |     F
+    T F |  F    T   |     F
+    F T |  F    T   |     F
+    F F |  T    F   |     F
+    ```
+
+    Konjunktionen er falsk i alle rækker. Ikke opfyldelig. Falsk.
+
+    *(9) Hvis $p$ sand, kan $q$ vælges, så $p and (not p or not q)$ er sand?* Sæt $p=T$, så bliver $not p = F$, og udtrykket reducerer til $T and (F or not q) = not q$. Vælg $q=F$: $not q = T$. Så $p and (not p or not q) = T$. Opfyldelig. Sand.
 
     Svar: 0, 2, 3, 4, 9 er sande, resten falske.
   ],
@@ -168,16 +265,73 @@ Biimplikation (biconditional):
     + *Aflæs slutkolonnen.* Kun T er tautologi, kun F er kontradiktion, blandet er kontingens.
   ],
   worked: [
-    Otte påstande, en linje hver.
+    Otte påstande, hver afgjort med de relevante rækker.
 
-    + (0) $p=T, q=F$ giver $not q = T$, så $p or T = T$. Sand.
-    + (1) $p plus.o p = F$ altid. Falsk.
-    + (2) $p plus.o q$ har to variable, altså $2^2 = 4$ rækker, ikke to. Falsk.
-    + (3) $(p or not q) and q$ har to variable, altså 4 rækker, ikke 8. Falsk.
-    + (4) Ved $p=T, q=F$ er $not(T and F) = T$, men $not T and not F = F$. Den rigtige lov er $not(p and q) equiv not p or not q$. Falsk.
-    + (5) $p -> q equiv not p or q$, ikke $p or not q$. Ved $p=F, q=T$ er de forskellige. Falsk.
-    + (6) Ved $p=F, q=F$ er $p -> q = T$, så $(p -> q) -> p$ bliver $T -> F = F$. Falsk.
-    + (7) $p and q$ er kun sand ved $(T,T)$, falsk ellers. Blandet, altså kontingens. Sand.
+    *(0) Hvis $p=T, q=F$, er $p or not q$ sand?* Indsæt: $not q = not F = T$, så $p or not q = T or T = T$. Sand.
+
+    *(1) Hvis $p$ sand, er $p plus.o p$ sand?* XOR er sand, når de to led er forskellige. Her er begge led $p$, altså ens, så $p plus.o p = F$ for begge værdier af $p$:
+
+    ```
+    p | p⊕p
+    --+----
+    T |  F
+    F |  F
+    ```
+
+    Ved $p=T$ er $p plus.o p = F$. Falsk.
+
+    *(2) Tabellen for $p plus.o q$ har to rækker?* To forskellige variable, så $2^2 = 4$ rækker, ikke 2. Falsk.
+
+    *(3) Tabellen for $(p or not q) and q$ har 8 rækker?* To forskellige variable $p, q$, så $2^2 = 4$ rækker, ikke 8. Falsk.
+
+    *(4) $not(p and q) equiv not p and not q$?* Tjek begge sider:
+
+    ```
+    p q | p∧q  ¬(p∧q) | ¬p  ¬q  ¬p∧¬q
+    ----+------------+-----------------
+    T T |  T     F    |  F   F    F
+    T F |  F     T    |  F   T    F   <- afviger
+    F T |  F     T    |  T   F    F   <- afviger
+    F F |  F     T    |  T   T    T
+    ```
+
+    Allerede ved $p=T, q=F$ er $not(p and q) = T$ men $not p and not q = F$. Den rigtige De Morgan er $not(p and q) equiv not p or not q$. Falsk.
+
+    *(5) $p -> q equiv p or not q$?* Den korrekte materielle implikation er $p -> q equiv not p or q$. Tjek den påståede ækvivalens:
+
+    ```
+    p q | p→q | ¬q  p∨¬q
+    ----+-----+----------
+    T T |  T  |  F    T
+    T F |  F  |  T    T
+    F T |  T  |  F    F   <- afviger
+    F F |  T  |  T    T
+    ```
+
+    Ved $p=F, q=T$ er $p -> q = T$ men $p or not q = F$. Falsk.
+
+    *(6) $(p -> q) -> p$ tautologi?* Søg en falsk række. En implikation er kun falsk ved sandt forled og falsk bagled, altså $p -> q$ sand og $p$ falsk. Tag $p=F, q=F$:
+
+    ```
+    p q | p→q | (p→q)→p
+    ----+-----+--------
+    F F |  T  |  T→F = F   <- falsk
+    ```
+
+    Der findes en falsk række, så det er ingen tautologi. Falsk.
+
+    *(7) $p and q$ kontingens?* En kontingens er hverken altid sand eller altid falsk:
+
+    ```
+    p q | p∧q
+    ----+----
+    T T |  T   <- sand her
+    T F |  F
+    F T |  F
+    F F |  F   <- falsk her
+    ```
+
+    Sand i én række, falsk i tre. Blandet, altså kontingens. Sand.
 
     Svar: 0 og 7 er sande, resten falske.
   ],
@@ -208,16 +362,114 @@ Biimplikation (biconditional):
     + *Et udsagn er ækvivalent*, hvis det matcher i alle rækker. Én afvigende række er nok til at forkaste det.
   ],
   worked: [
-    Målet $not(p and q)$ er falsk i præcis én række, $(T,T)$, og sand i de tre andre. Hold hver kandidat op mod det.
+    Læg først målets kolonne fast. $not(p and q)$ er falsk netop dér, hvor $p and q$ er sand, altså kun ved $(T,T)$:
 
-    + (0) $p or q$ er sand ved $(T,T)$, hvor målet er falsk. Nej.
-    + (1) $not p or q$ er falsk ved $(T,F)$, hvor målet er sand. Nej.
-    + (2) De Morgan, præcis ens. Ja.
-    + (3) Sand undtagen ved $(T,T)$, altså samme mønster. Ja.
-    + (4) $p -> q$ er falsk ved $(T,F)$. Nej.
-    + (5) $p -> not q equiv not p or not q$, samme som målet. Ja.
-    + (6) $q -> not p equiv not q or not p$, igen samme. Ja.
-    + (7) $p <-> not q$ er falsk ved $(T,T)$ og $(F,F)$. Nej.
+    ```
+    p q | p∧q | ¬(p∧q)  = MÅL
+    ----+-----+--------
+    T T |  T  |   F
+    T F |  F  |   T
+    F T |  F  |   T
+    F F |  F  |   T
+    ```
+
+    Målmønstret er altså $F, T, T, T$ ned gennem rækkerne. Hver kandidat fyldes ud og holdes op mod det.
+
+    *(0) $p or q$*:
+
+    ```
+    p q | p∨q | MÅL
+    ----+-----+----
+    T T |  T  |  F   <- afviger
+    T F |  T  |  T
+    F T |  T  |  T
+    F F |  F  |  T   <- afviger
+    ```
+    Afviger ved $(T,T)$. Nej.
+
+    *(1) $not p or q$*:
+
+    ```
+    p q | ¬p  ¬p∨q | MÅL
+    ----+----------+----
+    T T |  F    T  |  F   <- afviger
+    T F |  F    F  |  T   <- afviger
+    F T |  T    T  |  T
+    F F |  T    T  |  T
+    ```
+    Afviger ved $(T,T)$ og $(T,F)$. Nej.
+
+    *(2) $not p or not q$* — De Morgan:
+
+    ```
+    p q | ¬p  ¬q  ¬p∨¬q | MÅL
+    ----+-------------------+----
+    T T |  F   F    F    |  F
+    T F |  F   T    T    |  T
+    F T |  T   F    T    |  T
+    F F |  T   T    T    |  T
+    ```
+    Ens i alle fire. Ja.
+
+    *(3) $(p plus.o q) or (not p and not q)$*:
+
+    ```
+    p q | p⊕q  ¬p∧¬q | (p⊕q)∨(¬p∧¬q) | MÅL
+    ----+------------+--------------+----
+    T T |  F     F   |      F        |  F
+    T F |  T     F   |      T        |  T
+    F T |  T     F   |      T        |  T
+    F F |  F     T   |      T        |  T
+    ```
+    Ens i alle fire. Ja.
+
+    *(4) $p -> q$* (materiel implikation $= not p or q$):
+
+    ```
+    p q | p→q | MÅL
+    ----+-----+----
+    T T |  T  |  F   <- afviger
+    T F |  F  |  T   <- afviger
+    F T |  T  |  T
+    F F |  T  |  T
+    ```
+    Afviger. Nej.
+
+    *(5) $p -> not q$* $equiv not p or not q$:
+
+    ```
+    p q | ¬q  p→¬q | MÅL
+    ----+----------+----
+    T T |  F    F  |  F
+    T F |  T    T  |  T
+    F T |  F    T  |  T
+    F F |  T    T  |  T
+    ```
+    Ens i alle fire (samme kolonne som (2)). Ja.
+
+    *(6) $q -> not p$* $equiv not q or not p$:
+
+    ```
+    p q | ¬p  q→¬p | MÅL
+    ----+----------+----
+    T T |  F    F  |  F
+    T F |  F    T  |  T
+    F T |  T    T  |  T
+    F F |  T    T  |  T
+    ```
+    Ens i alle fire. Ja.
+
+    *(7) $p <-> not q$*:
+
+    ```
+    p q | ¬q  p↔¬q | MÅL
+    ----+----------+----
+    T T |  F    F  |  F
+    T F |  T    T  |  T
+    F T |  F    F  |  T   <- afviger
+    F F |  T    F  |  T   <- afviger
+    ```
+    Afviger ved $(F,T)$ og $(F,F)$. Nej.
 
     Svar: 2, 3, 5, 6 er ækvivalente med $not(p and q)$.
   ],

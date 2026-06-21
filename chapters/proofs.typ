@@ -70,14 +70,25 @@ Et fjerde greb dækker "bevis eller modbevis" om en for-alle-påstand: ét modek
     + *Konkludér.* Udtrykket har formen, konklusionen kræver. $#sym.arrow.r$ påstanden gælder.
   ],
   worked: [
-    Her er $m = 2a+1$ og $n = 2b+1$ for heltal $a, b$.
+    Vi skal vise: er $m$ og $n$ begge ulige, så er $m + n$ lige. Det er en implikation $P arrow.r Q$, så vi antager forudsætningen $P$ (begge ulige) og regner os frem til konklusionen $Q$ (summen lige).
 
-    + Læg de to sammen:
-      #eq[$ m + n = (2a+1) + (2b+1) = 2a + 2b + 2 = 2(a+b+1). $]
-    + $a+b+1$ er et heltal, kald det $t$, så $m + n = 2t$.
-    + Et tal på formen $2t$ er lige.
+    + *Oversæt forudsætningen til algebra.* "Ulige" betyder "to gange et heltal, plus én". De to tal behøver ikke det samme heltal, så hvert får sit eget:
+      #eq[$ m = 2a + 1, quad n = 2b + 1, quad a\, b in ZZ. $]
 
-    Svar: summen er lige. $qed$
+    + *Byg udtrykket, påstanden handler om.* Påstanden er om #swap[summen], så vi stiller $m + n$ op og indsætter:
+      #eq[$ m + n = (2a + 1) + (2b + 1). $]
+
+    + *Reducer.* Fjern parenteserne og saml leddene. De to ettaller giver $2$:
+      #eq[$ (2a + 1) + (2b + 1) = 2a + 2b + 1 + 1 = 2a + 2b + 2. $]
+
+    + *Sæt $2$ uden for parentes.* Alle tre led er delelige med $2$:
+      #eq[$ 2a + 2b + 2 = 2(a + b + 1). $]
+
+    + *Konkludér.* Sæt $t = a + b + 1$. Summen af heltal er et heltal, så $t in ZZ$, og
+      #eq[$ m + n = 2t. $]
+      Et tal på formen $2t$ med $t$ heltal er per definition lige. Dermed er $m + n$ lige, og $Q$ gælder.
+
+    Svar: summen af to ulige heltal er lige. $qed$
   ],
 )
 
@@ -98,21 +109,25 @@ Et fjerde greb dækker "bevis eller modbevis" om en for-alle-påstand: ét modek
       + Når det krakelerer, må $not Q$ falde, så $Q$ står tilbage.
   ],
   worked: [
-    Påstand: er #swap[$n^3+5$] ulige, så er #swap[$n$] lige.
+    Påstanden er $P arrow.r Q$ med $P:$ "$n^3+5$ er ulige" og $Q:$ "$n$ er lige".
 
-    *(a) Kontraposition.* Vis i stedet: er $n$ ulige, så er $n^3+5$ lige.
+    *(a) Kontraposition.* Den kontraponerede er $not Q arrow.r not P$. Negationerne er $not Q:$ "$n$ er ulige" og $not P:$ "$n^3+5$ er lige". Vi skal altså vise: er $n$ ulige, så er $n^3+5$ lige.
 
-    + Sæt $n = 2k+1$. Så er $n^3$ ulige, sig $n^3 = 2j+1$.
-    + Læg $5$ til:
-      #eq[$ n^3 + 5 = 2j + 6 = 2(j+3), $]
-      som er lige.
-    + Den kontraponerede holder, så det oprindelige holder også. $qed$
+    + *Antag $not Q$.* Sæt $n = 2k+1$ for et heltal $k$.
+    + *Regn $n^3$ ud.* Brug $(2k+1)^3 = 8k^3 + 12k^2 + 6k + 1$:
+      #eq[$ n^3 = 8k^3 + 12k^2 + 6k + 1 = 2(4k^3 + 6k^2 + 3k) + 1. $]
+      Med $j = 4k^3 + 6k^2 + 3k in ZZ$ er $n^3 = 2j + 1$, altså ulige.
+    + *Læg $5$ til.* Da $5 = 2 dot 2 + 1$:
+      #eq[$ n^3 + 5 = (2j + 1) + 5 = 2j + 6 = 2(j + 3). $]
+      Med $j + 3 in ZZ$ har $n^3+5$ formen $2 dot ("heltal")$, så det er lige. Det er $not P$.
+    + *Konkludér.* Vi har vist $not Q arrow.r not P$, som er logisk ækvivalent med $P arrow.r Q$. Altså holder det oprindelige. $qed$
 
-    *(b) Modstrid.* Antag $n^3+5$ ulige og samtidig $n$ ulige.
+    *(b) Modstrid.* Antag $P$ og $not Q$ samtidig, og jagt en modsigelse. Altså: $n^3+5$ er ulige (det er $P$), og $n$ er ulige (det er $not Q$).
 
-    + Ulige $n$ gør $n^3$ ulige.
-    + Så er $n^3 + 5 = "ulige" + "ulige" = "lige"$.
-    + Det strider mod, at $n^3+5$ skulle være ulige.
+    + *Brug $not Q$.* Som i (a) giver $n = 2k+1$ at $n^3 = 2j+1$ er ulige.
+    + *Læg $5$ til.* Igen $n^3 + 5 = 2j + 6 = 2(j+3)$, altså lige.
+    + *Find modstriden.* Vi har nu udledt, at $n^3+5$ er lige. Men antagelsen $P$ siger, at $n^3+5$ er ulige. Et tal kan ikke være både lige og ulige. Modstrid.
+    + *Konkludér.* Antagelsen $P and not Q$ kan ikke holde. Da $P$ er givet, må $not Q$ falde, så $Q$ gælder: $n$ er lige.
 
     Svar: $n$ er lige. $qed$
   ],
@@ -133,16 +148,22 @@ Et fjerde greb dækker "bevis eller modbevis" om en for-alle-påstand: ét modek
     + *Vis den kommer ud som brøk.* Hvis den ender som heltal over heltal med nævner $!= 0$, er den rationel. Det modsiger antagelsen, som dermed falder.
   ],
   worked: [
-    Lad $r$ være rationel og $!= 0$, og lad $x$ være irrationel.
+    Påstanden er sand. Der findes ingen formel for "irrationel", så vi beviser den ved modstrid: antag det modsatte og udled noget umuligt.
 
-    + Skriv $r = a/b$ med heltal $a != 0$ og $b != 0$.
-    + Antag for modstrid, at $r x$ er rationel, sig $r x = c/d$ med heltal $c, d$ og $d != 0$.
-    + Isolér $x$:
-      #eq[$ x = (r x)/r = (c\/d)/(a\/b) = (c b)/(d a). $]
-    + Her er $d a != 0$, fordi $a != 0$ og $d != 0$, og både $c b$ og $d a$ er heltal. Så er $x$ rationel.
-    + Det strider mod, at $x$ er irrationel.
+    Lad $r$ være rationel med $r != 0$, og lad $x$ være irrationel. Vi vil vise, at produktet $r x$ er irrationelt.
 
-    Svar: $r x$ er irrationel. $qed$
+    + *Skriv det rationale på brøkform.* Da $r$ er rationel og $!= 0$:
+      #eq[$ r = a/b, quad a\, b in ZZ, quad b != 0, quad a != 0. $]
+      Bemærk $a != 0$: var $a = 0$, ville $r = 0$, og det er udelukket. Denne "$!= 0$"-detalje bærer hele beviset.
+    + *Antag modstrid.* Antag, at $r x$ alligevel er rationel. Så kan den skrives som en brøk:
+      #eq[$ r x = c/d, quad c\, d in ZZ, quad d != 0. $]
+    + *Isolér $x$.* Da $r != 0$ kan vi dividere med $r$, dvs. gange med $1/r = b/a$:
+      #eq[$ x = (r x)/r = c/d dot b/a = (c b)/(d a). $]
+    + *Vis, at $x$ kommer ud som brøk.* Tælleren $c b$ er et heltal (produkt af heltal), og nævneren $d a$ er et heltal. Nævneren er ikke nul: $d != 0$ og $a != 0$, så $d a != 0$. Dermed er $x$ skrevet som heltal over heltal med nævner $!= 0$, altså rationel.
+    + *Find modstriden.* Vi forudsatte, at $x$ er irrationel, men har netop udledt, at $x$ er rationel. Et tal er enten det ene eller det andet, aldrig begge. Modstrid.
+    + *Konkludér.* Antagelsen om at $r x$ er rationel kan ikke holde. Altså er $r x$ irrationel.
+
+    Svar: produktet $r x$ er irrationelt. $qed$
   ],
 )
 
@@ -168,18 +189,22 @@ Et fjerde greb dækker "bevis eller modbevis" om en for-alle-påstand: ét modek
     + *Sortér fælderne fra.* Pas på den omvendte $Q #sym.arrow.r P$, en sjusket negation og skarpe uligheder, der er smuttet ind.
   ],
   worked: [
-    Her er $P: a+b>c$ og $Q: a > c/2 or b > c/2$.
+    Her er $P: a+b>c$ og $Q: a > c/2 or b > c/2$. Et gyldigt kontrapositionsbevis viser $not Q arrow.r not P$.
 
-    + Negér med De Morgan: $not Q$ er $a <= c/2 and b <= c/2$, og $not P$ er $a+b <= c$.
-    + Antag $not Q$ og læg de to uligheder sammen:
-      #eq[$ a + b <= c/2 + c/2 = c, $]
-      altså $not P$. Det er præcis mulighed (d).
-    + Tjek resten:
-      - (a) dropper $b$ undervejs.
-      - (b) negerer forkert med De Morgan.
-      - (c) beviser den omvendte $Q arrow.r P$.
-      - (e) bruger skarp $<$ og en forkert negation.
+    + *Negér begge sider med De Morgan.* I $Q$ står et *eller*, så $not Q$ bliver et *og*, og hver skarpe $>$ vendes til $<=$:
+      #eq[$ not Q: quad a <= c/2 and b <= c/2. $]
+      $not P$ er negationen af $a+b>c$:
+      #eq[$ not P: quad a + b <= c. $]
+    + *Bevis $not Q arrow.r not P$ direkte.* Antag $not Q$. Begge uligheder peger samme vej ($<=$), så de må lægges sammen led for led:
+      #eq[$ a + b <= c/2 + c/2 = c. $]
+      Det er netop $not P$. Kæden $a <= c/2 and b <= c/2 arrow.r a+b <= c/2 + c/2 arrow.r a+b <= c$ er præcis mulighed (d).
 
-    Svar: mulighed (d). $qed$
+    + *Sortér fælderne fra, mulighed for mulighed:*
+      - *(a)* $a+b>c arrow.r a > c - c/2 arrow.r a > c/2 or ...$: skridtet $a + b > c arrow.r a > c - c/2$ kræver, at man erstatter $b$ med $c/2$, men der er ingen grund til $b <= c/2$. $b$ tabes undervejs. Ugyldigt.
+      - *(b)* $a + b <= c arrow.r a <= c - b arrow.r a <= c/2 or b <= c/2$: negationen af $Q$ skal give et *og*, ikke et *eller*. Forkert De Morgan. Ugyldigt.
+      - *(c)* $a > c/2 or b > c/2 arrow.r a+b > c$: dette starter fra $Q$ og slutter i $P$, altså den omvendte $Q arrow.r P$. Den omvendte er ikke det samme som $P arrow.r Q$. Desuden følger $a+b>c$ ikke af, at kun ét af tallene er $> c/2$. Ugyldigt.
+      - *(e)* $a < c/2 or b < c/2 arrow.r 2a < c or 2b < c arrow.r a+b<c$: bruger skarp $<$ (skal være $<=$) og en forkert negation, og $a+b<c$ følger ikke af, at ét tal er lille. Ugyldigt.
+
+    Svar: mulighed (d) er det eneste gyldige kontrapositionsbevis. $qed$
   ],
 )

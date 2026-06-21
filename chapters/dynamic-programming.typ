@@ -96,7 +96,33 @@ Tabellen rummer kun den optimale værdi. Vil du have løsningen, så gem det vin
     + *Gang de to tal sammen.* Køretid $= ("celler") times ("arbejde per celle")$.
   ],
   worked: [
-    Her er tallene for $b(m, n)$.
+    For at se hvad én celle koster, fyld et lille tilfælde. Tag $m = n = 3$ med omkostningerne $c_(i j)$:
+
+    ```
+    c | j=1  j=2  j=3
+    --+----------------
+    1 |  4    2    7
+    2 |  3    5    1
+    3 |  6    2    4
+    ```
+
+    Tabellen $b(i,j)$ fyldes række for række. Række $0$ og søjle $0$ er $0$ (basistilfældet). For $i,j > 0$ er $b(i,j) = c_(i j) + min{b(i-1,k) : 0 <= k < j}$ — altså mindste celle i *hele præfikset* af forrige række, ikke kun nabocellen:
+
+    ```
+    b | k=0  j=1  j=2  j=3
+    --+---------------------
+    0 |  0    0    0    0
+    1 |  0    4    2    7
+    2 |  0    3    5    1
+    3 |  0    6    2    4
+    ```
+
+    To celler regnet ud med tallene:
+
+    - $b(1,3) = c_(13) + min{b(0,0), b(0,1), b(0,2)} = 7 + min{0,0,0} = 7$.
+    - $b(2,3) = c_(23) + min{b(1,0), b(1,1), b(1,2)} = 1 + min{0, 4, 2} = 1 + 0 = 1$.
+
+    Læg mærke til at $b(2,3)$ kigger på $j = 3$ celler i forrige række. Det er arbejdet per celle:
 
     + Celler: $i$ i $0..m$ og $j$ i $0..n$, altså $Theta(m n)$.
     + Arbejde per celle: min'en løber over $k in {0, ..., j-1}$, op til $j = Theta(n)$ led.
@@ -124,11 +150,34 @@ Tabellen rummer kun den optimale værdi. Vil du have løsningen, så gem det vin
     + *Tjek den nedre grænse.* Kræver cellen et helt præfiks af rækken, kan du ikke gå under #swap[rækkens bredde].
   ],
   worked: [
-    Her er fronten for $b(m, n)$.
+    Brug samme lille tilfælde, $m = n = 3$. Pointen er hvor lidt du behøver at holde på ad gangen. Hver celle $b(i,j) = c_(i j) + min{b(i-1,k) : 0 <= k < j}$ læser kun række $i-1$, aldrig længere tilbage.
+
+    Kør med ét rullende array `prev`, der hele tiden er den senest færdige række:
+
+    ```
+    Start (række 0):  prev = [ 0, 0, 0, 0 ]   (k=0..3)
+
+    Beregn række 1:   b(1,1)=4+min{0}        =4
+                      b(1,2)=2+min{0,4}      =2
+                      b(1,3)=7+min{0,4,2}    =7
+    prev <- række 1:  prev = [ 0, 4, 2, 7 ]   række 0 smides væk
+
+    Beregn række 2:   b(2,1)=3+min{0}        =3
+                      b(2,2)=5+min{0,4}      =5
+                      b(2,3)=1+min{0,4,2}    =1
+    prev <- række 2:  prev = [ 0, 3, 5, 1 ]   række 1 smides væk
+
+    Beregn række 3:   b(3,1)=6+min{0}        =6
+                      b(3,2)=2+min{0,3}      =2
+                      b(3,3)=4+min{0,3,5}    =4
+    prev <- række 3:  prev = [ 0, 6, 2, 4 ]
+    ```
+
+    Hele tiden ligger kun ét array på $n+1$ tal i hukommelsen.
 
     + Hver celle i række $i$ læser kun række $i-1$.
     + Et rullende array på én række er nok. Når række $i$ står færdig, kan række $i-1$ smides væk.
-    + Lavere går ikke, for cellen kræver et præfiks af alle $n$ søjler i forrige række.
+    + Lavere går ikke, for hver celle kræver et helt præfiks af forrige række — fx $b(3,3)$ ovenfor bruger alle af $0, 3, 5$.
 
     Mindste plads bliver $Theta(n)$, mens den fulde tabel ville koste $Theta(m n)$.
   ],
@@ -154,11 +203,26 @@ Tabellen rummer kun den optimale værdi. Vil du have løsningen, så gem det vin
     + *Find fronten.* Kan ingen indgang frigives, skal hele tabellen på $n+1$ celler stå — altså $Theta(n)$.
   ],
   worked: [
-    Her er fronten for $B(n)$.
+    Fyld tabellen for $n = 5$, så det bliver klart hvad hver ny celle læser. Bottom-up med $B(0) = 1$ og $B(n) = sum_(i=0)^(n-1) B(i) dot B(n-i-1)$:
+
+    ```
+    B[0] = 1
+    B[1] = B0*B0                      = 1*1                       = 1
+    B[2] = B0*B1 + B1*B0              = 1*1 + 1*1                 = 2
+    B[3] = B0*B2 + B1*B1 + B2*B0      = 1*2 + 1*1 + 2*1           = 5
+    B[4] = B0*B3 + B1*B2 + B2*B1 + B3*B0
+                                      = 1*5 + 1*2 + 2*1 + 5*1     = 14
+    B[5] = B0*B4 + B1*B3 + B2*B2 + B3*B1 + B4*B0
+                                      = 1*14 + 1*5 + 2*2 + 5*1 + 14*1 = 42
+
+    tabel: [ 1, 1, 2, 5, 14, 42 ]      (indeks 0..5)
+    ```
+
+    Se på $B[5]$: foldningen parrer $B[0]$ med $B[4]$, $B[1]$ med $B[3]$, og så videre — den rører *hver* tidligere indgang. Derfor kan ingen smides væk undervejs.
 
     + Bottom-up fylder en 1-D-tabel $B[0..n]$.
     + $B(n)$ kræver $B(0)$ til $B(n-1)$ på én gang (hele foldningen), så ingen indgang kan smides væk.
-    + Det giver $Theta(n)$ — ikke $Theta(1)$ (et konstant vindue som i Fibonacci dur ikke) og ikke $Theta(n^2)$ (tabellen er 1-D).
+    + Det giver $Theta(n)$ — ikke $Theta(1)$ (et konstant vindue som i Fibonacci dur ikke, for foldningen rører hele tabellen) og ikke $Theta(n^2)$ (tabellen er 1-D).
 
     Mindste plads bliver $Theta(n)$.
   ],
@@ -187,7 +251,33 @@ Tabellen rummer kun den optimale værdi. Vil du have løsningen, så gem det vin
     + *Vælg den korte side.* Lad arrayet spænde den mindste dimension, så længden bliver $min(m,n)+1$.
   ],
   worked: [
-    Her er fronten for $W(m, n)$.
+    Fyld et lille tilfælde, $m = n = 3$, med disse $w(i,j)$ (nogle negative):
+
+    ```
+    w | j=1  j=2  j=3
+    --+----------------
+    1 |  3   -2    4
+    2 | -1    5   -3
+    3 |  2    1   -4
+    ```
+
+    Hver celle er $W(i,j) = max{0, w(i,j)} + max{W(i-1,j), W(i,j-1)}$. Fyld række for række:
+
+    ```
+    W | j=0  j=1  j=2  j=3
+    --+---------------------
+    0 |  0    0    0    0
+    1 |  0    3    3    7
+    2 |  0    3    8    8
+    3 |  0    5    9    9
+    ```
+
+    To celler regnet med tallene:
+
+    - $W(2,2) = max{0, 5} + max{W(1,2), W(2,1)} = 5 + max{3, 3} = 8$.
+    - $W(1,3) = max{0, 4} + max{W(0,3), W(1,2)} = 4 + max{0, 3} = 7$.
+
+    Hver celle ser kun på to naboer, ovenfor og til venstre, og det er dét, der afgør pladsen.
 
     + $W(i,j)$ læser kun $W(i-1,j)$ (ovenfor) og $W(i,j-1)$ (til venstre).
     + Ét rullende 1-D-array er nok: pladsen holder stadig $W(i-1,j)$, og den netop skrevne nabo til venstre holder $W(i,j-1)$.
@@ -220,7 +310,26 @@ Tabellen rummer kun den optimale værdi. Vil du have løsningen, så gem det vin
     + *Mål fronten.* Mindste plads er den største front, du skal holde på. En diagonal rummer op til $n$ celler.
   ],
   worked: [
-    Her er fronten for $L(1, n)$.
+    Fyld den øvre trekant for $n = 4$ med $c = (c_1, c_2, c_3, c_4) = (2, 3, 1, 2)$. Diagonalen $i = j$ er basistilfældet $L(i,i) = c_i$; for $i < j$ er $L(i,j) = i dot L(i+1,j) + j dot L(i,j-1)$.
+
+    Udfyld diagonal for diagonal, $d = j - i = 0, 1, 2, 3$:
+
+    ```
+    L | j=1  j=2  j=3  j=4
+    --+---------------------
+    1 |  2    7   32  192     <- mål L(1,4) i hjørnet
+    2 |  .    3   11   64
+    3 |  .    .    1   10
+    4 |  .    .    .    2
+    (d=0 diagonal: 2,3,1,2   d=1: 7,11,10   d=2: 32,64   d=3: 192)
+    ```
+
+    To celler regnet med tallene:
+
+    - $L(2,3) = 2 dot L(3,3) + 3 dot L(2,2) = 2 dot 1 + 3 dot 3 = 2 + 9 = 11$.
+    - $L(1,2) = 1 dot L(2,2) + 2 dot L(1,1) = 1 dot 3 + 2 dot 2 = 3 + 4 = 7$.
+
+    Begge naboer ($L(i+1,j)$ nedenunder og $L(i,j-1)$ til venstre) ligger på den forrige diagonal $d-1$. Så du behøver kun at holde én diagonal ad gangen.
 
     + Gyldige tilstande er par $1 <= i <= j <= n$, en øvre trekant på $n(n+1)\/2 = Theta(n^2)$ celler.
     + Ordn efter diagonalen $d = j - i$. For $d > 0$ er $L(i, i+d) = i dot L(i+1, i+d) + (i+d) dot L(i, i+d-1)$, og begge naboer ligger på diagonal $d-1$.
@@ -250,7 +359,21 @@ Tabellen rummer kun den optimale værdi. Vil du have løsningen, så gem det vin
     + *Læg arbejdet sammen.* En stigende sum giver $sum_(k=1)^n k = n(n+1)\/2 = Theta(n^2)$.
   ],
   worked: [
-    Her er tallene for $B(n)$.
+    Fyld tabellen for $n = 5$ og tæl led i hver sum. $B[k] = sum_(i=0)^(k-1) B[i] dot B[k-i-1]$ er en foldning, så $B[k]$ koster netop $k$ produkter:
+
+    ```
+    B[0] = 1                                              (0 produkter)
+    B[1] = B0*B0                          = 1             (1 produkt)
+    B[2] = B0*B1 + B1*B0                  = 1+1 = 2        (2 produkter)
+    B[3] = B0*B2 + B1*B1 + B2*B0          = 2+1+2 = 5      (3 produkter)
+    B[4] = B0*B3 + B1*B2 + B2*B1 + B3*B0  = 5+2+2+5 = 14   (4 produkter)
+    B[5] = B0*B4 + B1*B3 + B2*B2 + B3*B1 + B4*B0
+                                          = 14+5+4+5+14 = 42 (5 produkter)
+
+    tabel: [ 1, 1, 2, 5, 14, 42 ]
+    ```
+
+    Antallet af produkter vokser $0, 1, 2, 3, 4, 5$ — én mere for hver celle. Det samlede arbejde er summen af disse:
 
     + Tabel $B[0..n]$ har $Theta(n)$ celler.
     + $B[k]$ summerer $k$ produkter $B[i] dot B[k-i-1]$, så $Theta(k)$ arbejde.
@@ -285,7 +408,33 @@ Tabellen rummer kun den optimale værdi. Vil du have løsningen, så gem det vin
     + *Gang de to tal sammen.* Køretid $= ("celler") times ("arbejde per celle")$.
   ],
   worked: [
-    Her er tallene for $W(m, n)$.
+    Fyld et lille tilfælde, $m = n = 3$, med disse $w(i,j)$:
+
+    ```
+    w | j=1  j=2  j=3
+    --+----------------
+    1 |  3   -2    4
+    2 | -1    5   -3
+    3 |  2    1   -4
+    ```
+
+    $W(i,j) = max{0, w(i,j)} + max{W(i-1,j), W(i,j-1)}$, fyldt række for række:
+
+    ```
+    W | j=0  j=1  j=2  j=3
+    --+---------------------
+    0 |  0    0    0    0
+    1 |  0    3    3    7
+    2 |  0    3    8    8
+    3 |  0    5    9    9
+    ```
+
+    To celler regnet med tallene:
+
+    - $W(2,2) = max{0, 5} + max{W(1,2), W(2,1)} = 5 + max{3, 3} = 8$.
+    - $W(3,3) = max{0, -4} + max{W(2,3), W(3,2)} = 0 + max{8, 9} = 9$.
+
+    Hver celle gør et fast stykke arbejde: ét $max$ med nul, og ét $max$ over to færdige naboer. Ingen løkke, ingen sum.
 
     + Celler: $i$ i $0..m$ og $j$ i $0..n$, altså $(m+1)(n+1) = Theta(m n)$.
     + Arbejde per celle: $max{0, w(i,j)}$ plus max af to allerede beregnede naboer. Det er $Theta(1)$.
@@ -318,7 +467,23 @@ Tabellen rummer kun den optimale værdi. Vil du have løsningen, så gem det vin
     + *Gang de to tal sammen.* Køretid $= ("trekantens celler") times ("arbejde per celle")$.
   ],
   worked: [
-    Her er tallene for $L(1, n)$.
+    Fyld den øvre trekant for $n = 4$ med $c = (2, 3, 1, 2)$. Basistilfælde $L(i,i) = c_i$; ellers $L(i,j) = i dot L(i+1,j) + j dot L(i,j-1)$.
+
+    ```
+    L | j=1  j=2  j=3  j=4
+    --+---------------------
+    1 |  2    7   32  192     <- mål L(1,4)
+    2 |  .    3   11   64
+    3 |  .    .    1   10
+    4 |  .    .    .    2
+    ```
+
+    To celler regnet med tallene:
+
+    - $L(3,4) = 3 dot L(4,4) + 4 dot L(3,3) = 3 dot 2 + 4 dot 1 = 6 + 4 = 10$.
+    - $L(1,3) = 1 dot L(2,3) + 3 dot L(1,2) = 1 dot 11 + 3 dot 7 = 11 + 21 = 32$.
+
+    Hver celle med $i < j$ ganger to færdige naboer med konstanter og lægger sammen — fast arbejde. Antallet af celler er trekantens størrelse.
 
     + Gyldige tilstande er par $1 <= i <= j <= n$, en øvre trekant på $n(n+1)\/2 = Theta(n^2)$ celler.
     + Hver celle med $i < j$ læser to værdier plus $O(1)$ aritmetik, så $Theta(1)$ arbejde.
@@ -353,12 +518,33 @@ Tabellen rummer kun den optimale værdi. Vil du have løsningen, så gem det vin
     + *Test hver mulighed.* Kør hver kandidat på eksemplet og på mange små tilfældige par; behold dem, der rammer rigtigt på alle.
   ],
   worked: [
-    Standardrekursionen: match $-> 1 + l(i-1,j-1)$; mismatch $-> 1 + min{l(i-1,j), l(i,j-1)}$.
+    Standardrekursionen, som er mulighed (c): match ($x_i = y_j$) $-> 1 + l(i-1,j-1)$; mismatch $-> 1 + min{l(i-1,j), l(i,j-1)}$.
 
-    + På eksemplet $X = c c a c c$, $Y = a c a c a a$ er den sande længde $m + n - "LCS" = 5 + 6 - 3 = 8$.
-    + Hver mulighed på eksemplet giver: (a)=5, (b)=4, (c)=8, (d)=11, (e)=8, (f)=6. Kun (c) og (e) rammer 8.
-    + Tjekket mod orakel på mange tilfældige strengpar: kun (c) og (e) matcher overalt.
-    + (e) er rigtig, fordi $l(i-1,j-1)$ er mindst af de tre led, når $x_i = y_j$, så $1 + min{...} = 1 + l(i-1,j-1)$. De øvrige fejler: (a) dropper $+1$ ved match, (b) dropper $+1$ ved mismatch, (d) lægger $+2$ til ved match, (f) tillader altid diagonalen, også når tegnene er forskellige.
+    Fyld tabellen med eksemplet $X = c c a c c$ ($m = 5$) og $Y = a c a c a a$ ($n = 6$). Basistilfælde: $l(0,j) = j$ (top-række) og $l(i,0) = i$ (venstre søjle). Rækker er indekseret med $x_i$, søjler med $y_j$:
+
+    ```
+    l   |  -  a  c  a  c  a  a     <- Y
+    ----+-----------------------
+     -  |  0  1  2  3  4  5  6
+     c  |  1  2  2  3  4  5  6
+     c  |  2  3  3  4  4  5  6
+     a  |  3  3  4  4  5  5  6
+     c  |  4  4  4  5  5  6  7
+     c  |  5  5  5  6  6  7  8     <- l(5,6) = 8
+    ```
+
+    To celler regnet med tegnene:
+
+    - $l(1,2)$: $x_1 = c$, $y_2 = c$, match, så $1 + l(0,1) = 1 + 1 = 2$.
+    - $l(3,2)$: $x_3 = a$, $y_2 = c$, mismatch, så $1 + min{l(2,2), l(3,1)} = 1 + min{3, 3} = 4$.
+
+    Nederste højre hjørne er $l(5,6) = 8$. Den sande længde kan tjekkes uafhængigt: en korteste fælles supersekvens har længde $m + n - "LCS"(X,Y) = 5 + 6 - 3 = 8$. De passer.
+
+    Nu testes hver mulighed ved at fylde samme tabel med dens egen regel og aflæse hjørnet:
+
+    + Hjørneværdierne bliver: (a)=5, (b)=4, (c)=8, (d)=11, (e)=8, (f)=6. Kun (c) og (e) rammer den sande $8$.
+    + Tjekket mod et orakel på mange tilfældige strengpar: kun (c) og (e) matcher overalt.
+    + (e) er rigtig, fordi $l(i-1,j-1)$ er mindst af de tre led, når $x_i = y_j$, så $1 + min{l(i-1,j), l(i,j-1), l(i-1,j-1)} = 1 + l(i-1,j-1)$ — netop (c). De øvrige fejler: (a) dropper $+1$ ved match, (b) dropper $+1$ ved mismatch, (d) lægger $+2$ til ved match, (f) tillader altid diagonalen, også når tegnene er forskellige.
 
     Svar: (c) og (e).
   ],

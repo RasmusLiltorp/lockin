@@ -31,19 +31,33 @@ De skriftlige eksamener vender den samme skabelon igen og igen: en lille iterati
     + *Køretid.* $d$ halveres hver runde fra $n$ til 0, altså $Theta(log n)$ runder med $O(1)$ arbejde hver.
   ],
   worked: [
-    + *(a)* $n = 55$: $d$ løber $55, 27, 13, 6, 3, 1$, og bittene bliver $b_0 ... b_5 = 1,1,1,0,1,1$. Stop ved $d = 0$, så $k = 5$ og $b_5 b_4 b_3 b_2 b_1 b_0 = 110111$. Tjek: $32+16+4+2+1 = 55$.
+    + *(a)* Kør på $n = 55$. Hver runde læser $b_i = d mod 2$ og halverer derefter $d$ med heltalsdivision. Tabellen viser tilstanden lige før hver løkketest, med den bit der skrives i runden:
+
+      ```
+      test   i   d    b_i = d mod 2   d div 2
+      ----------------------------------------
+       1     0  55         1            27
+       2     1  27         1            13
+       3     2  13         1             6
+       4     3   6         0             3
+       5     4   3         1             1
+       6     5   1         1             0
+       7     6   0   <- d = 0, stop; sæt k = i-1 = 5
+      ```
+
+      Bittene er $b_0 ... b_5 = 1,1,1,0,1,1$, altså $b_5 b_4 b_3 b_2 b_1 b_0 = 110111$. Tjek: $32+16+4+2+1 = 55$. Svar: $k = 5$, bits $110111$.
 
     + *(b) Initialisering.* Før første test er $i = 0$, $d = n$, og summen tom, så
       #eq[$ d dot 2^i + sum_(j=0)^(i-1) b_j dot 2^j = n dot 2^0 + 0 = n. $]
-      $d = n >= 0$, så (ii) holder.
+      Begge dele holder ved start: (i) er $n = n$, og (ii) er $d = n >= 0$.
 
-    + *(b) Vedligehold.* Antag invarianten ved en test med $d > 0$. Kroppen sætter $b_i = d mod 2$, $d' = d mono("div") 2$, $i' = i + 1$. Med identiteten er $d = 2 d' + b_i$, så
-      #eq[$ d' dot 2^(i') + sum_(j=0)^(i'-1) b_j dot 2^j = (2 d' + b_i) dot 2^i + sum_(j=0)^(i-1) b_j dot 2^j = d dot 2^i + sum_(j=0)^(i-1) b_j dot 2^j = n. $]
-      $d > 0$ heltal giver $d' >= 0$.
+    + *(b) Vedligehold.* Antag invarianten ved en test med $d > 0$. Kroppen sætter $b_i = d mod 2$, $d' = d mono("div") 2$, $i' = i + 1$. Heltalsidentiteten med $y = 2$ giver $d = 2 d' + b_i$, så den nye venstreside bliver
+      #eq[$ d' dot 2^(i') + sum_(j=0)^(i'-1) b_j dot 2^j = d' dot 2^(i+1) + sum_(j=0)^(i) b_j dot 2^j = 2 d' dot 2^i + b_i dot 2^i + sum_(j=0)^(i-1) b_j dot 2^j. $]
+      Sæt $2 d' dot 2^i + b_i dot 2^i = (2 d' + b_i) dot 2^i = d dot 2^i$, og resten er den gamle sum, så udtrykket er $d dot 2^i + sum_(j=0)^(i-1) b_j dot 2^j = n$ pr. antagelsen. (i) er bevaret. For (ii): $d > 0$ heltal giver $d' = d mono("div") 2 >= 0$.
 
-    + *(c) Afslutning.* $d$ er et ikke-negativt heltal og aftager strengt ($d mono("div") 2 < d$ for $d >= 1$), så løkken stopper ved $d = 0$. Invarianten giver da $n = sum_(j=0)^(k) b_j dot 2^j$ med hvert $b_j in {0,1}$. Den sidste runde havde $d = 1$ ved indgang, så $b_k = 1$ — ingen førende nul. Outputtet er præcis $n$'s binære form.
+    + *(c) Afslutning.* $d$ er et ikke-negativt heltal (ved (ii)) og aftager strengt, for $d mono("div") 2 < d$ når $d >= 1$. En strengt aftagende følge af ikke-negative heltal kan ikke køre uendeligt, så løkken stopper, og den stopper netop første gang $d = 0$. Sæt $d = 0$ ind i (i): leddet $d dot 2^i$ falder væk, så $n = sum_(j=0)^(i-1) b_j dot 2^j = sum_(j=0)^(k) b_j dot 2^j$ med $k = i - 1$ og hvert $b_j in {0,1}$. Den sidste runde havde $d = 1$ ved indgang, så $b_k = 1 mod 2 = 1$, dvs. ingen førende nul. Outputtet er præcis $n$'s binære repræsentation.
 
-    + *(d) Køretid.* $approx floor(log_2 n) + 1 = Theta(log n)$ runder, $O(1)$ arbejde hver. Svar: $Theta(log n)$.
+    + *(d) Køretid.* $d$ halveres fra $n$ til 0, hvilket sker efter $floor(log_2 n) + 1$ runder (for $n = 55$ var det 6 runder, jf. tabellen). Hver runde er $O(1)$ arbejde. Svar: $Theta(log n)$.
   ],
 )
 
@@ -74,18 +88,36 @@ De skriftlige eksamener vender den samme skabelon igen og igen: en lille iterati
     + *Køretid.* Tæl runderne: $floor(log n)$ halveringer, hver fulgt af højst én $-1$, altså $Theta(log n)$.
   ],
   worked: [
-    + *(a)* $n = 53$: $(i, k)$ ved testene er $(53,0), (52,0), (26,1), (13,2), (12,2), (6,3), (3,4), (2,4), (1,5)$. Stop ved $i = 1$, returnerer $k = 5$. Tjek: $2^5 = 32 <= 53 < 64$.
+    + *(a)* Kør på $n = 53$. Hver runde: er $i$ lige, halvér og tæl op; er $i$ ulige, træk 1 fra (det gør $i$ lige til næste runde). Tabellen viser $(i, k)$ lige før hver løkketest og hvad grenen gør:
 
-    + *(b) Initialisering.* Før første test: $i = n$, $k = 0$, så $floor(log i) + k = floor(log n)$. $i = n$ er heltal.
+      ```
+      test    i    k    gren
+      ---------------------------------------
+       1     53    0    ulige: i <- 52
+       2     52    0    lige:  i <- 26, k <- 1
+       3     26    1    lige:  i <- 13, k <- 2
+       4     13    2    ulige: i <- 12
+       5     12    2    lige:  i <- 6,  k <- 3
+       6      6    3    lige:  i <- 3,  k <- 4
+       7      3    4    ulige: i <- 2
+       8      2    4    lige:  i <- 1,  k <- 5
+       9      1    5    i = 1, stop; return k = 5
+      ```
 
-    + *(b) Vedligehold.* Antag invarianten ved en test med $i > 1$.
-      - $i$ lige: $i' = i\/2$ (heltal), $k' = k + 1$, så
-        #eq[$ floor(log(i\/2)) + (k+1) = (floor(log i) - 1) + k + 1 = floor(log i) + k = floor(log n). $]
-      - $i$ ulige ($i >= 3$): $i' = i - 1$ (heltal), $k$ uændret, og $floor(log(i-1)) = floor(log i)$, så summen er bevaret.
+      Returnerer $k = 5$. Tjek: $2^5 = 32 <= 53 < 64$, så $floor(log 53) = 5$. ✓
 
-    + *(c) Afslutning.* Hvert skridt tæller det positive heltal $i$ strengt ned, så løkken stopper ved $i = 1$. Invarianten giver $floor(log 1) + k = floor(log n)$, og $floor(log 1) = 0$, så $k = floor(log n)$.
+    + *(b) Initialisering.* Før første test: $i = n$, $k = 0$, så (i) er $floor(log i) + k = floor(log n) + 0 = floor(log n)$, og (ii) holder, da $i = n$ er heltal.
 
-    + *(d) Køretid.* Mellem to halveringer er der højst én $-1$, og der er $floor(log n)$ halveringer fra $n$ til 1. Altså $<= 2 floor(log n) + O(1) = Theta(log n)$ runder. Svar: $Theta(log n)$.
+    + *(b) Vedligehold.* Antag invarianten ved en test med $i > 1$. Der er to grene:
+      - $i$ lige: $i' = i\/2$ er heltal, $k' = k + 1$. Med det givne faktum $floor(log(i\/2)) = floor(log i) - 1$:
+        #eq[$ floor(log i') + k' = floor(log(i\/2)) + (k+1) = (floor(log i) - 1) + k + 1 = floor(log i) + k = floor(log n). $]
+      - $i$ ulige (og $i > 1$, så $i >= 3$): $i' = i - 1$ er heltal, $k$ uændret. Med $floor(log(i-1)) = floor(log i)$ for ulige $i$:
+        #eq[$ floor(log i') + k' = floor(log(i-1)) + k = floor(log i) + k = floor(log n). $]
+      Begge grene bevarer (i), og begge holder $i'$ som heltal, så (ii) er bevaret.
+
+    + *(c) Afslutning.* $i$ er et positivt heltal og aftager strengt hver runde (lige-grenen halverer, ulige-grenen trækker 1 fra), så løkken kan ikke køre uendeligt og stopper netop ved $i = 1$. Sæt $i = 1$ i (i): $floor(log 1) + k = floor(log n)$, og $floor(log 1) = 0$, så $k = floor(log n)$. Det er præcis returværdien.
+
+    + *(d) Køretid.* Der er $floor(log n)$ halveringer fra $n$ ned til 1, og mellem to halveringer kan der højst ligge én $-1$ (et $-1$ gør $i$ lige, så næste runde halverer). Altså $<= 2 floor(log n) + O(1)$ runder med $O(1)$ arbejde hver. Svar: $Theta(log n)$.
   ],
 )
 
@@ -112,12 +144,27 @@ De skriftlige eksamener vender den samme skabelon igen og igen: en lille iterati
     + *Afslutning.* Kombinér exit-betingelsen med invarianten (som holder ved den fejlende test) og læs #swap[returværdien] af.
   ],
   worked: [
-    + *Initialisering.* Før første test er $i = 0$, $s = 0$, så $s = 0 = 0^2 = i^2$.
+    Hele idéen er, at $s$ altid står på det kvadrattal $i$ peger på, fordi $2i+1$ netop er springet fra $i^2$ til $(i+1)^2$. Her er løkken på $n = 12$ med tilstanden $(i, s)$ lige før hver test. Bemærk at $s = i^2$ i hver række:
 
-    + *Vedligehold.* Antag $s = i^2$. Kroppen sætter $s' = s + 2i + 1$ og $i' = i + 1$, så
+    ```
+    test   i    s     test s <= 12 ?     krop: s <- s + 2i+1, i <- i+1
+    ----------------------------------------------------------------
+     1     0    0      0 <= 12 ja         s <- 1,  i <- 1
+     2     1    1      1 <= 12 ja         s <- 4,  i <- 2
+     3     2    4      4 <= 12 ja         s <- 9,  i <- 3
+     4     3    9      9 <= 12 ja         s <- 16, i <- 4
+     5     4   16     16 <= 12 nej -> stop; r = i-1 = 3
+    ```
+
+    $floor(sqrt(12)) = 3$, og algoritmen giver $r = 3$. Nu beviset.
+
+    + *Initialisering.* Før første test er $i = 0$, $s = 0$, så $s = 0 = 0^2 = i^2$. Invarianten holder.
+
+    + *Vedligehold.* Antag $s = i^2$ ved en test, der består ($s <= n$). Kroppen sætter $s' = s + 2i + 1$ og $i' = i + 1$, så
       #eq[$ s' = i^2 + 2i + 1 = (i+1)^2 = (i')^2. $]
+      Altså holder $s' = (i')^2$ ved næste test — invarianten er bevaret.
 
-    + *Afslutning.* Løkken stopper første gang $s > n$. Invarianten giver $i^2 = s > n$, så $i > sqrt(n)$. Forrige test gik igennem, så $(i-1)^2 <= n$, altså $i - 1 <= sqrt(n)$. Dermed
+    + *Afslutning.* $s$ vokser strengt hver runde ($2i + 1 >= 1 > 0$), så $s$ overskrider før eller siden ethvert endeligt $n$, og løkken stopper første gang $s > n$. Ved den fejlende test giver invarianten $i^2 = s > n$, altså $i > sqrt(n)$. Den foregående test bestod, så dengang var $s = (i-1)^2 <= n$, altså $i - 1 <= sqrt(n)$. Tilsammen:
       #eq[$ i - 1 <= sqrt(n) < i quad => quad i - 1 = floor(sqrt(n)). $]
       Svar: $r = i - 1 = floor(sqrt(n))$.
   ],
@@ -148,15 +195,28 @@ De skriftlige eksamener vender den samme skabelon igen og igen: en lille iterati
     + *Afslutning.* Efter runden $i = 0$ er $c = a^(B_0) = a^b$. Løkken kører $k+1$ runder, så den terminerer.
   ],
   worked: [
-    + *(a) Initialisering.* Ved $i = k$, før kroppen, er $c = 1$. Invarianten kræver $c = a^(B_(k+1)) = a^0 = 1$. Sandt.
+    + *Konkret kør.* Tag $a = 3$, $b = 13 = 1101_2$, så $k = 3$ og bittene fra MSB er $B = [1,1,0,1]$. $B_(i+1)$ er præfikset af de mest betydende bits, læst som tal. Tabellen viser $c$ (som potens af 3) lige efter hver runde, og at $c = a^(B_i)$ holder:
 
-    + *(a) Vedligehold.* Antag $c = a^(B_(i+1))$ ved start af runde $i$. Kroppen:
+      ```
+      i   B[i]   c <- c*c        if B[i]: c <- c*a     B_i (præfiks)   c
+      ----------------------------------------------------------------------
+      3    1     3^0 -> 3^0      B=1: 3^0 -> 3^1        1   (1)         3^1
+      2    1     3^1 -> 3^2      B=1: 3^2 -> 3^3        11  (3)         3^3
+      1    0     3^3 -> 3^6      B=0: ingen             110 (6)         3^6
+      0    1     3^6 -> 3^12     B=1: 3^12 -> 3^13      1101(13)        3^13
+      ```
+
+      Efter $i = 0$ er $c = 3^13 = a^b$. ✓
+
+    + *(a) Initialisering.* Ved $i = k$, før kroppen kører første gang, er $c = 1$. Invarianten kræver $c = a^(B_(k+1)) = a^0 = 1$, da $B_(k+1) = 0$ (tomt præfiks). Sandt.
+
+    + *(a) Vedligehold.* Antag $c = a^(B_(i+1))$ ved start af runde $i$. Nøglerelationen er $B_i = 2 B_(i+1) + b_i$: at tilføje bit $b_i$ til præfikset svarer til at skifte det ét til venstre (gange med 2) og lægge $b_i$ til. Kroppen:
       - $c <- c dot c$ giver $c = (a^(B_(i+1)))^2 = a^(2 B_(i+1))$.
-      - $mono("if") B[i]=1: c <- c dot a$ ganger med $a^(b_i)$, så
+      - $mono("if") B[i]=1: c <- c dot a$ ganger med $a^(b_i)$ (hvis $b_i = 0$ sker intet, hvilket også er $dot a^0$), så
         #eq[$ c = a^(2 B_(i+1)) dot a^(b_i) = a^(2 B_(i+1) + b_i) = a^(B_i). $]
       Tælleren bliver $i - 1$, og invarianten ved næste runde kræver $c = a^(B_((i-1)+1)) = a^(B_i)$. Passer.
 
-    + *(b) Korrekthed.* Løkken kører $i = k, k-1, ..., 0$, altså $k + 1$ runder — endeligt, så den stopper. Efter runden $i = 0$ giver vedligehold $c = a^(B_0) = a^b$, og det returneres. Køretid: $Theta(k) = Theta(log b)$ multiplikationer.
+    + *(b) Korrekthed og terminering.* `for`-løkken kører $i = k, k-1, ..., 0$, altså præcis $k + 1$ runder — et endeligt, fast antal, så den stopper. Efter den sidste runde ($i = 0$) giver vedligehold $c = a^(B_0) = a^b$, fordi $B_0 = b$ pr. definition. Det er returværdien. Køretid: $k + 1 = Theta(k) = Theta(log b)$ multiplikationer.
   ],
 )
 
@@ -182,13 +242,28 @@ De skriftlige eksamener vender den samme skabelon igen og igen: en lille iterati
     + *Køretid.* Tæl $O(1)$-arbejdet uden for kaldet; argumentet skrumper $a -> floor(a\/2)$. Skriv $T(a) = T(floor(a\/2)) + Theta(1)$ og løs.
   ],
   worked: [
-    + *(a) Basis.* $a = 1$: returnerer $b = 1 dot b$.
+    + *Konkret kør.* $mono("Mult")(6, 7)$ folder ud nedad til basis og samler op på vej tilbage:
 
-    + *(a) Skridt.* $a >= 2$: antag $mono("Mult")(a', b') = a' b'$ for alle $a' < a$. Da $floor(a\/2) < a$, giver hypotesen $mono("Mult")(floor(a\/2), 2b) = floor(a\/2) dot 2b$. Returværdien er
-      #eq[$ 2b dot floor(a\/2) + b dot (a mod 2) = b dot (2 floor(a\/2) + (a mod 2)) = b dot a, $]
-      hvor $2 floor(a\/2) + (a mod 2) = a$ er heltalsdivisionsidentiteten. Ved induktion gælder $mono("Mult")(a,b) = a b$ for alle $a >= 1$.
+      ```
+      Mult(6,7)  = Mult(3,14) + 7*(6 mod 2=0) = Mult(3,14) + 0
+      Mult(3,14) = Mult(1,28) + 14*(3 mod 2=1) = Mult(1,28) + 14
+      Mult(1,28) = 28                              (basis a=1)
 
-    + *(b) Køretid.* $T(1) = Theta(1)$ og $T(a) = T(floor(a\/2)) + Theta(1)$ for $a >= 2$. Argumentet halveres hvert niveau, så dybden er $approx log_2 a$ med $O(1)$ arbejde per niveau. Master Theorem med $a_M = 1$, $b_M = 2$, $f(n) = Theta(1)$: $n^(log_b a) = n^0 = 1 = f$, tilfælde 2, altså $T(a) = Theta(log a)$.
+      tilbage:  Mult(3,14) = 28 + 14 = 42
+                Mult(6,7)  = 42 + 0  = 42 = 6*7   ✓
+      ```
+
+    + *(a) Basis.* $a = 1$: algoritmen returnerer $b = 1 dot b$, så påstanden $mono("Mult")(a,b) = a b$ holder.
+
+    + *(a) Skridt.* Lad $a >= 2$ og antag (stærk induktion) at $mono("Mult")(a', b') = a' b'$ for alle $a' < a$ og alle $b'$. Da $floor(a\/2) < a$ for $a >= 2$, giver hypotesen med $a' = floor(a\/2)$ og $b' = 2b$:
+      #eq[$ mono("Mult")(floor(a\/2), 2b) = floor(a\/2) dot 2b. $]
+      Returværdien fra `else`-grenen er derfor
+      #eq[$ floor(a\/2) dot 2b + b dot (a mod 2) = b dot (2 floor(a\/2) + (a mod 2)) = b dot a, $]
+      hvor $2 floor(a\/2) + (a mod 2) = a$ er heltalsdivisionsidentiteten ($x = y dot (x mono("div") y) + (x mod y)$ med $y = 2$). Ved induktion gælder $mono("Mult")(a,b) = a b$ for alle $a >= 1$.
+
+    + *(b) Køretid.* Ét kald laver $O(1)$ arbejde (en sammenligning, et `floor`, en multiplikation, en addition) og laver ét rekursivt kald på $floor(a\/2)$. Så
+      #eq[$ T(1) = Theta(1), quad T(a) = T(floor(a\/2)) + Theta(1) quad (a >= 2). $]
+      Master-sætningen med $a_M = 1$, $b_M = 2$, $f(n) = Theta(1)$: kritisk eksponent $log_(b_M) a_M = log_2 1 = 0$, så $n^(log_b a) = n^0 = 1 = Theta(f(n))$ — tilfælde 2. Altså $T(a) = Theta(n^0 log n) = Theta(log a)$.
   ],
 )
 
@@ -215,13 +290,25 @@ De skriftlige eksamener vender den samme skabelon igen og igen: en lille iterati
     + Behold de udsagn, der er sande ved hver test, exit-testen inklusive.
   ],
   worked: [
-    Værdierne ved testen er $(i, r) = (n, 1)$, så $(n-1, n)$, $(n-2, n(n-1))$, og videre ned til $(1, n!)$.
+    Skriv tilstanden $(i, r)$ op ved hver løkketest. Kroppen sætter $r <- r dot i$ og derefter $i <- i - 1$, så efter $m$ runder er $i = n - m$ og $r$ er produktet af de tal, $i$ har stået på indtil nu: $r = n (n-1) dots.c (n-m+1)$, dvs. $r = n! \/ (n-m)!$.
 
-    - *(i)* $i >= 1$: invariant. $i$ løber $n, n-1, ..., 1$ og kommer aldrig under 1.
-    - *(ii)* $r = i!$: nej. Ved første test er $r = 1$, men $i! = n!$.
-    - *(iii)* $r! dot i! = n!$: nej. Sand ved første test ($1! dot n! = n!$), men efter ét skridt er $(r, i) = (n, n-1)$, og $n! dot (n-1)! != n!$ for $n > 2$.
-    - *(iv)* $r = n!\/i!$: invariant. Ved første test er $n!\/n! = 1 = r$. Kroppen sætter $r <- r dot i$ og tæller $i$ ned, hvilket bevarer det.
-    - *(v)* $r = n!$: nej. Kun sand ved sidste test; $r = 1$ i starten.
+    ```
+    test   i       r                     r = n!/i?
+    ------------------------------------------------
+     1     n       1                      n!/n!
+     2     n-1     n                      n!/(n-1)!
+     3     n-2     n(n-1)                 n!/(n-2)!
+     ...
+    sidste 1       n(n-1)...2 = n!        n!/1!
+    ```
+
+    Test nu hver kandidat mod tabellen — den skal være sand i *hver* række, exit-testen ($i = 1$) inklusive:
+
+    - *(i)* $i >= 1$: invariant. $i$ løber $n, n-1, ..., 1$ og kommer aldrig under 1 (testen stopper ved $i = 1$, hvor den stadig holder).
+    - *(ii)* $r = i!$: nej. Ved første test er $r = 1$, men $i! = n!$, som kun er $1$ når $n = 1$. Falder allerede ved start.
+    - *(iii)* $r! dot i! = n!$: nej. Sand ved første test ($1! dot n! = n!$), men efter ét skridt er $(r, i) = (n, n-1)$, og $n! dot (n-1)! != n!$ for $n > 2$. Brydes efter første runde.
+    - *(iv)* $r = n!\/i!$: invariant. Det er netop kolonnen længst til højre. Tjek: ved start $n!\/n! = 1 = r$; kroppen ganger $r$ med det aktuelle $i$ og tæller så $i$ ned, hvilket flytter præcis én faktor fra nævneren op i $r$ og bevarer $r = n!\/i!$.
+    - *(v)* $r = n!$: nej. Kun sand ved sidste test ($i = 1$); ved start er $r = 1 != n!$ for $n > 1$.
 
     Svar: (i) og (iv).
   ],
@@ -250,13 +337,25 @@ De skriftlige eksamener vender den samme skabelon igen og igen: en lille iterati
     + Behold de udsagn, der er sande ved hver test, både første og sidste inklusive.
   ],
   worked: [
-    Ved den $k$'te test ($k = 0, 1, ..., n$) er $x = n - k$ og $r = 7k$, med $0 <= k <= n$.
+    Kroppen sætter $x <- x - 1$ og $r <- r + 7$, så efter $k$ runder er $x = n - k$ og $r = 7k$. Løkken testes for $k = 0, 1, ..., n$ (ved $k = n$ er $x = 0$ og testen fejler). Tabellen:
+
+    ```
+    test (k)   x       r       7x + r      x >= 0?
+    -----------------------------------------------
+       0       n       0        7n          ja
+       1      n-1      7        7n          ja
+       2      n-2     14        7n          ja
+      ...
+       n       0      7n        7n          ja (x=0, stop)
+    ```
+
+    Test hver kandidat mod hver række, både første ($k = 0$) og exit ($k = n$):
 
     - *(i)* $r = 7n$: nej. Ved første test ($k = 0$) er $r = 0$, hvilket kun rammer $7n$ når $n = 0$.
     - *(ii)* $r < 7n$: nej. Ved exit-testen ($k = n$) er $r = 7n$, altså ikke strengt mindre.
-    - *(iii)* $n - x = 7r$: nej. $n - x = k$, men $7r = 49k$, og de er kun ens ved $k = 0$.
-    - *(iv)* $7x + r = 7n$: invariant. $7(n - k) + 7k = 7n$ for alle $k$. Det er netop invarianten, der viser korrekthed.
-    - *(v)* $x >= 0$: invariant. $x = n - k$ med $k <= n$, så $x >= 0$ ved hver test.
+    - *(iii)* $n - x = 7r$: nej. Her er $n - x = k$, men $7r = 7 dot 7k = 49k$, og $k = 49k$ kun ved $k = 0$. Brydes efter første runde.
+    - *(iv)* $7x + r = 7n$: invariant. $7(n - k) + 7k = 7n - 7k + 7k = 7n$ for alle $k$ (kolonnen er konstant $7n$). Det er netop invarianten, der viser korrekthed: ved exit er $x = 0$, så $r = 7n$.
+    - *(v)* $x >= 0$: invariant. $x = n - k$ med $k <= n$, så $x >= 0$ ved hver test, inkl. exit hvor $x = 0$.
 
     Svar: (iv) og (v).
   ],

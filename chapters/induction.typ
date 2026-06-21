@@ -67,13 +67,21 @@ Tjek at to sider er lig hinanden, før du kæder dem sammen.]
     + *Algebra.* Tjek hver lighed for sig. Ét forkert led vælter beviset.
   ],
   worked: [
-    IA: vi antager $3^m - 1 = 2k$ for et $k in ZZ$.
+    Påstanden $P(n)$: $3^n - 1$ er lige, dvs. $3^n - 1 = 2k$ for et $k in ZZ$. Startværdi $n_0 = 0$, da $NN$ inkluderer $0$.
 
-    - *(a) gyldig.* Basis $n = 0$ rammer rigtigt. Skridtet går forlæns, og $2$ er sat uden for parentes korrekt.
-    - *(b) gyldig.* Den ekstra basis $n = 1$ er overflødig, men gør ingen skade. Skridtet dækker stadig alle $n$.
-    - *(c) ugyldig.* Basis starter ved $n = 2$, så $n = 0$ og $n = 1$ bliver aldrig dækket. Hul i bunden.
-    - *(d) gyldig.* En reversibel kæde fra IA, der lander på $3^(n+1) - 1 = 2(3k+1)$, altså lige.
-    - *(e) ugyldig.* Skridtet kræver $3^(n+1) - 1 = 2k$, men det er jo netop påstanden, ikke IA. Og $k/3 in ZZ$ står uden begrundelse.
+    *Det korrekte bevis (skabelon).* Basis $n = 0$: $3^0 - 1 = 1 - 1 = 0 = 2 dot 0$, lige. IA: antag $3^k - 1 = 2k'$ for et $k' in ZZ$ ved et fast $k >= 0$. Skridt, $P(k) arrow.r.double P(k+1)$, forlæns:
+
+    #eq[$ 3^(k+1) - 1 = 3 dot 3^k - 1 = 3(3^k - 1) + 2 = 3 dot 2k' + 2 = 2(3k' + 1). $]
+
+    Det første lighedstegn bruger $3^(k+1) = 3 dot 3^k$; det tredje lægger $-3 + 2 = -1$ til, så $3 dot 3^k - 1 = 3(3^k - 1) + 2$; det fjerde indsætter IA. Resultatet $2(3k'+1)$ er lige, så $P(k+1)$ holder. Det er præcis kandidat (a).
+
+    Nu de fem kandidater holdt op mod skabelonen:
+
+    - *(a) gyldig.* Identisk med skabelonen. Basis $n = 0$ rammer $n_0$, skridtet går forlæns, IA bruges ved indeks $n$, og $2$ er sat korrekt uden for parentes ($2(3k+1)$).
+    - *(b) gyldig.* Skridtet er det samme regnestykke, bare skrevet som $n-1 arrow.r.double n$: $3^n - 1 = 3(3^(n-1) - 1) + 2 = 3 dot 2k + 2 = 2(3k+1)$. Den ekstra basis $n = 1$ ($3^1 - 1 = 2$, lige) er overflødig oven på $n = 0$, men skader ikke. Alle $n >= 0$ er dækket.
+    - *(c) ugyldig.* Skridtets algebra er fin, men basis starter ved $n = 2$ ($3^2 - 1 = 8$). Så $n = 0$ og $n = 1$ bliver aldrig dækket — hul i bunden, og dominokæden falder aldrig om for de to mindste.
+    - *(d) gyldig.* En reversibel kæde: $3^n - 1 = 2k <==> 3^n = 2k + 1 <==> 3^(n+1) = 6k + 3 <==> 3^(n+1) - 1 = 6k + 2 = 2(3k+1)$. Hvert skridt er en biimplikation (gang med $3$, læg $-1$ til), så fra IA ($3^n - 1 = 2k$) følger $3^(n+1) - 1 = 2(3k+1)$, lige. Basis $n = 0$ er rigtig.
+    - *(e) ugyldig.* Skridtet skriver $3^n - 1 = 1/3 dot 3^(n+1) - 1$, men det er forkert: $1/3 dot 3^(n+1) = 3^n$, så højresiden er $3^n - 1$ — kun sandt fordi det er en omskrivning af venstresiden, ikke et brug af IA. Det sætter så $= 1/3 dot 2k$, hvilket forudsætter $3^(n+1) - 1 = 2k$, altså netop påstanden ved $n+1$ (IA gælder kun ved $n$). Desuden hævdes $k/3 in ZZ$ uden begrundelse. To fejl.
 
     Svar: gyldige er (a), (b) og (d).
   ],
@@ -103,15 +111,26 @@ Tjek at to sider er lig hinanden, før du kæder dem sammen.]
     + *Pas på gangetricket.* At gange IA med en konstant giver sjældent det næste led. Tjek at to sider faktisk er ens, før du kæder dem.
   ],
   worked: [
-    Først finder vi hvor uligheden begynder at holde. $2^n + 3^n < 4^n$ fejler ved $n = 0, 1$ og holder først ved $n = 2$ ($13 < 16$), så $n_0 = 2$.
+    *Startpunktet.* Sæt små $n$ ind i $2^n + 3^n < 4^n$:
 
-    - *(a) ugyldig.* $4(2^n + 3^n) != 2^(n+1) + 3^(n+1)$, for venstresiden er $2^(n+2) + dots$. Sidste implikation hænger i luften.
-    - *(b) ugyldig.* Basis $n = 3$ springer $n = 2$ over.
-    - *(c) ugyldig.* Samme gangefejl som (a), bare skrevet med $n-1 arrow.r n$.
-    - *(d) ugyldig.* Går baglæns fra målet til hypotesen.
-    - *(e) ugyldig.* Antager konklusionen ved $n+1$ og udleder det mindre tilfælde.
-    - *(f) gyldig.* Hvert trin holder: $2 dot 2^n < 3 dot 2^n$, så IA ved indeks $n$, så $3 dot 4^n < 4 dot 4^n$. Rent forlæns.
-    - *(g) ugyldig.* Kræver $1/2 < 1/3$ på $2^(n+1)$-leddet, som er falsk, og bruger desuden IA ved $n+1$.
+    #eq[$ n=0: 1+1=2 >= 1; quad n=1: 2+3=5 >= 4; quad n=2: 4+9=13 < 16. $]
+
+    Uligheden fejler ved $n = 0$ og $n = 1$ og holder først ved $n = 2$, så $n_0 = 2$.
+
+    *Det korrekte bevis (kandidat (f)).* Basis $n = 2$: $13 < 16$, sandt. IA: antag $2^k + 3^k < 4^k$ ved et fast $k >= 2$. Skridt, forlæns, hvor jeg begrænser $(k+1)$-siden trin for trin:
+
+    #eq[$ 2^(k+1) + 3^(k+1) = 2 dot 2^k + 3 dot 3^k < 3 dot 2^k + 3 dot 3^k = 3(2^k + 3^k) < 3 dot 4^k < 4 dot 4^k = 4^(k+1). $]
+
+    Led for led: $2 dot 2^k < 3 dot 2^k$ (skift $2$ op til $3$ på $2^k$-leddet), så IA giver $3(2^k + 3^k) < 3 dot 4^k$, og til sidst $3 dot 4^k < 4 dot 4^k = 4^(k+1)$. Alle uligheder peger samme vej, og IA er brugt ved indeks $k$. Gyldigt.
+
+    De øvrige kandidater holdt op mod dette:
+
+    - *(a) ugyldig.* Gangetricket: at gange IA med $4$ giver $4(2^k + 3^k) = 2^(k+2) + 3 dot 4 dot 3^k$, ikke $2^(k+1) + 3^(k+1)$. De to sider er forskellige (jf. fælden $4(2^n + 3^n) != 2^(n+1) + 3^(n+1)$), så det sidste spring hænger i luften.
+    - *(b) ugyldig.* Skridtet er fint, men basis $n = 3$ springer $n = 2$ over, og $n = 2$ er netop $n_0$. Hul i bunden.
+    - *(c) ugyldig.* Samme gangefejl som (a), bare skrevet $n-1 arrow.r n$: $4(2^(n-1) + 3^(n-1)) != 2^n + 3^n$.
+    - *(d) ugyldig.* Baglæns: starter ved målet $2^n + 3^n < 4^n$ og udleder hypotesen $2^(n-1) + 3^(n-1) < 4^(n-1)$. At udlede det mindre tilfælde fra det større beviser intet.
+    - *(e) ugyldig.* Starter ved $2^(n+1) + 3^(n+1) < 4^(n+1)$ (selve konklusionen ved $n+1$) og udleder det mindre tilfælde — antager det, der skal vises.
+    - *(g) ugyldig.* Skriver $2^n + 3^n = 1/2 dot 2^(n+1) + 1/3 dot 3^(n+1)$ (korrekt) og påstår så $< 1/3(2^(n+1) + 3^(n+1))$. Men på $2^(n+1)$-leddet kræver det $1/2 < 1/3$, som er falsk. Desuden bruges IA ved indeks $n+1$.
 
     Svar: kun (f) er gyldig.
   ],
@@ -137,13 +156,27 @@ Tjek at to sider er lig hinanden, før du kæder dem sammen.]
     + *Retning.* Skridtet skal gå opad, $k-1 arrow.r.double k$. Går det nedad fra $k$ til $k-1$, er det ikke induktion.
   ],
   worked: [
-    Identiteten teleskoperer, så leddene ophæver hinanden parvis. Indsættelsen i skridtet ser sådan ud:
+    Påstanden $P(n)$: $sum_(i=1)^n ((1/2)^(i-1) - (1/2)^i) = 1 - (1/2)^n$ for $n >= 1$, så $n_0 = 1$.
 
-    #eq[$ (1 - (1/2)^(k-1)) + ((1/2)^(k-1) - (1/2)^k) = 1 - (1/2)^k. $]
+    *Basis $n = 1$.* Venstreside: $sum_(i=1)^1 ((1/2)^(i-1) - (1/2)^i) = (1/2)^0 - (1/2)^1 = 1 - 1/2 = 1/2$. Højreside: $1 - (1/2)^1 = 1 - 1/2 = 1/2$. De er ens.
 
-    - *(a) gyldig.* Basis $n = 1, 2$, hvor $n = 2$ er overflødigt. Forlæns skridt $k-1 arrow.r.double k$ med korrekt algebra.
-    - *(b) gyldig.* Basis $n = 1$ og samme forlæns skridt.
-    - *(c) ugyldig.* Algebraen er fin, men den antager resultatet ved $k$ og går tilbage til $k-1$. Induktion skal gå opad fra basis.
+    *IA.* Antag $sum_(i=1)^(k-1) ((1/2)^(i-1) - (1/2)^i) = 1 - (1/2)^(k-1)$ ved et fast $k$ (mindst $2$, så $k-1 >= 1$).
+
+    *Skridt, $k-1 arrow.r.double k$.* Træk det sidste led ud af summen op til $k$ og sæt IA ind for resten:
+
+    #eq[$ sum_(i=1)^k ((1/2)^(i-1) - (1/2)^i) = underbrace((sum_(i=1)^(k-1) ((1/2)^(i-1) - (1/2)^i)), "IA") + ((1/2)^(k-1) - (1/2)^k). $]
+
+    Indsæt IA og se leddene teleskopere:
+
+    #eq[$ = (1 - (1/2)^(k-1)) + ((1/2)^(k-1) - (1/2)^k) = 1 - (1/2)^k. $]
+
+    De to $(1/2)^(k-1)$-led ophæver hinanden, og tilbage står $1 - (1/2)^k$, præcis $P(k)$. Forlæns og gyldigt.
+
+    De tre kandidater holdt op mod dette:
+
+    - *(a) gyldig.* Basis $n = 1, 2$ (hvor $n = 2$ er overflødigt), forlæns skridt $k-1 arrow.r.double k$ med netop denne algebra.
+    - *(b) gyldig.* Basis $n = 1$ og samme forlæns skridt. Ingen unødig ekstrabasis.
+    - *(c) ugyldig.* Algebraen er den samme og korrekt, men retningen er forkert: den antager resultatet ved $k$ (IA op til $k$) og udleder udsagnet ved $k-1$, altså $k arrow.r.double k-1$. Induktion skal gå opad fra basis; at udlede det mindre tilfælde af det større beviser intet.
 
     Svar: gyldige er (a) og (b).
   ],

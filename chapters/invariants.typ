@@ -59,17 +59,43 @@ Initialisering er basistilfældet (base case), vedligeholdelse er induktionsskri
     + *Afslutning.* Skriv exit-betingelsen op. Kombinér den med invarianten (som holder ved den fejlende test) og læs #swap[returværdien] af.
   ],
   worked: [
-    Løkken tæller $i$ op og holder $s = i^2$ undervejs.
+    Invarianten er $s = i^2$ ved hver løkketest. Først et konkret gennemløb for $n = 10$, så de tre dele kan ses i tal. Her er $(i, s)$ aflæst lige før hver test, og kroppen sætter $s <- s + 2i + 1$ efterfulgt af $i <- i + 1$:
 
-    + *Initialisering.* Før første test er $i = 0$ og $s = 0$, så
+    ```
+    test #   i   s     s <= n ?   s = i^2 ?
+    1        0   0      0<=10 ja    0 = 0^2  ja
+    2        1   1      1<=10 ja    1 = 1^2  ja
+    3        2   4      4<=10 ja    4 = 2^2  ja
+    4        3   9      9<=10 ja    9 = 3^2  ja
+    5        4  16     16<=10 NEJ  16 = 4^2  ja  -> stop
+    ```
+
+    Løkken stopper ved test 5 med $i = 4$, $s = 16$. Bagefter $r <- i - 1 = 3$, og $floor(sqrt(10)) = 3$. Invarianten $s = i^2$ holdt ved samtlige fem tests, exit-testen inklusive. Nu det generelle bevis.
+
+    *(a) Bevis af invarianten $s = i^2$.*
+
+    + *Initialisering.* Lige før første test er $i = 0$ og $s = 0$ (sat i linje 1). Indsæt:
       #eq[$ s = 0 = 0^2 = i^2. $]
+      Invarianten holder ved første test.
 
-    + *Vedligehold.* Antag $s = i^2$ ved en test. Kroppen sætter $s' = s + 2i + 1$ og $i' = i + 1$, så
-      #eq[$ s' = i^2 + 2i + 1 = (i+1)^2 = (i')^2. $]
-      Invarianten holder altså ved hver test.
+    + *Vedligeholdelse.* Antag $s = i^2$ ved en vilkårlig test, hvor kroppen kører (dvs. $s <= n$). Kald værdierne efter kroppen $i'$ og $s'$. Kroppen sætter først $s' = s + 2i + 1$, derefter $i' = i + 1$. Indsæt induktionsantagelsen $s = i^2$:
+      #eq[$ s' = s + 2i + 1 = i^2 + 2i + 1. $]
+      Højresiden er kvadratet på en sum: $i^2 + 2i + 1 = (i+1)^2$. Og $i + 1 = i'$, så
+      #eq[$ s' = (i+1)^2 = (i')^2. $]
+      Altså holder $s = i^2$ igen ved næste test. Ved induktion holder den ved hver test.
 
-    + *Afslutning.* Løkken stopper første gang $s > n$. Her giver invarianten $i^2 = s > n$, så $i > sqrt(n)$. Forrige test gik igennem, så $(i-1)^2 <= n$, altså $i - 1 <= sqrt(n)$. Dermed
-      #eq[$ i - 1 <= sqrt(n) < i quad => quad i - 1 = floor(sqrt(n)). $]
+    *(b) Aflæsning af returværdien.*
+
+    + *Terminering.* Hver iteration øger $s$ med $2i + 1 >= 1 > 0$, så $s$ vokser strengt. Da $s$ er et voksende heltal, overskrider det før eller siden $n$, og løkken stopper. Den stopper første gang $s > n$.
+    + *Kombinér exit-test og invariant.* Ved exit holder invarianten stadig: $s = i^2$. Exit-betingelsen er $s > n$, så
+      #eq[$ i^2 = s > n quad => quad i > sqrt(n). $]
+    + *Brug den sidste vellykkede test.* Iterationen før exit gik igennem, dvs. ved den test var $s <= n$ med $s = (i-1)^2$ (værdien af $s$ svarende til det dengang ét-mindre $i$). Altså
+      #eq[$ (i-1)^2 <= n quad => quad i - 1 <= sqrt(n). $]
+    + *Klem $sqrt(n)$ inde.* De to uligheder giver
+      #eq[$ i - 1 <= sqrt(n) < i. $]
+      Det største heltal $<= sqrt(n)$ er netop $i - 1$, så $floor(sqrt(n)) = i - 1$.
+
+    Til sidst sætter koden $r <- i - 1$ og returnerer $r$.
 
     Svar: $r = i - 1 = floor(sqrt(n))$.
   ],
@@ -105,13 +131,29 @@ Initialisering er basistilfældet (base case), vedligeholdelse er induktionsskri
     + Behold de udsagn der er sande ved hver test, exit-testen inklusive.
   ],
   worked: [
-    Værdierne ved testen er $(i, r) = (n, 1)$, så $(n-1, n)$, $(n-2, n(n-1))$, og videre ned til $(1, n!)$.
+    Kroppen sætter $r <- r dot i$ og derefter $i <- i - 1$, og kører så længe $i > 1$. Først et konkret gennemløb for $n = 4$. Værdierne $(i, r)$ er aflæst lige før hver while-test:
 
-    - *(a)* $i >= 1$: invariant. $i$ løber $n, n-1, ..., 1$ og kommer aldrig under 1.
-    - *(b)* $r = i!$: nej. Ved første test er $r = 1$, men $i! = n!$.
-    - *(c)* $r! dot i! = n!$: nej. Sand ved første test ($1! dot n! = n!$), men efter ét skridt er $(r, i) = (n, n-1)$, og $n! dot (n-1)! != n!$ for $n > 2$.
-    - *(d)* $r = n!\/i!$: invariant. Ved første test er $n!\/n! = 1 = r$. Kroppen sætter $r <- r dot i$ og tæller $i$ ned, hvilket bevarer det.
-    - *(e)* $r = n!$: nej. Kun sand ved sidste test; $r = 1$ i starten.
+    ```
+    test #   i   r         i > 1 ?
+    1        4   1          4>1 ja   -> r=1*4=4,  i=3
+    2        3   4          3>1 ja   -> r=4*3=12, i=2
+    3        2  12          2>1 ja   -> r=12*2=24,i=1
+    4        1  24          1>1 NEJ  -> stop
+    ```
+
+    Returnerer $r = 24 = 4!$. Vi tjekker hver kandidat mod denne tabel og argumenterer så generelt. En kandidat er kun invariant, hvis den er sand ved *hver* test (alle fire rækker), exit-testen inklusive.
+
+    - *(a) $i >= 1$.* Tjek rækkerne: $i = 4, 3, 2, 1$, alle $>= 1$. Generelt starter $i$ på $n >= 1$, og kroppen kører kun mens $i > 1$; så længe $i > 1$ er $i - 1 >= 1$, så $i$ falder aldrig under $1$. Sand ved hver test. *Invariant.*
+
+    - *(b) $r = i!$.* Ved første test er $r = 1$ og $i = n$, så kandidaten kræver $1 = n!$. Det er falsk for $n >= 2$ (i tabellen: $1 = 4! = 24$ er falsk). Falder allerede ved første test. *Ikke invariant.*
+
+    - *(c) $r! dot i! = n!$.* Første test: $r = 1$, $i = n$, så $1! dot n! = n! $, sand. Men efter ét skridt (anden test) er $(i, r) = (n-1, n)$, og kandidaten kræver $n! dot (n-1)! = n!$, dvs. $(n-1)! = 1$. Det holder kun for $n - 1 <= 1$. I tabellen ($n=4$): anden test har $r = 4$, $i = 3$, og $4! dot 3! = 24 dot 6 = 144 != 24$. Falder ved anden test. *Ikke invariant.*
+
+    - *(d) $r = n! \/ i!$.* Tjek rækkerne for $n = 4$ ($n! = 24$): test 1 $24\/4! = 24\/24 = 1 = r$; test 2 $24\/3! = 24\/6 = 4 = r$; test 3 $24\/2! = 24\/2 = 12 = r$; test 4 $24\/1! = 24\/1 = 24 = r$. Alle passer. Generelt: ved første test $r = 1 = n!\/n!$. Antag $r = n!\/i!$ ved en test, hvor kroppen kører. Kroppen sætter $r' = r dot i$ og $i' = i - 1$:
+      #eq[$ r' = r dot i = n!/i! dot i = n!/(i-1)! = n!/(i')!. $]
+      Bevaret. *Invariant.*
+
+    - *(e) $r = n!$.* Ved første test er $r = 1$, så kandidaten kræver $1 = n!$, falsk for $n >= 2$ (i tabellen $1 != 24$). $r = n!$ er først sandt ved exit. Falder ved første test. *Ikke invariant.*
 
     Svar: (a) og (d).
   ],
@@ -141,17 +183,43 @@ Initialisering er basistilfældet (base case), vedligeholdelse er induktionsskri
     + *Afslutning.* Vis at en heltalsstørrelse aftager strengt, så løkken stopper. Aflæs #swap[returværdien] af invarianten ved exit.
   ],
   worked: [
-    Invarianten balancerer det resterende $floor(log i)$ mod tælleren $k$.
+    Invarianten er $floor(log i) + k = floor(log n)$ ved hver test. Den balancerer det resterende $floor(log i)$ mod tælleren $k$: hvert skridt flytter præcis så meget fra $i$ til $k$, at summen står stille. Først et konkret gennemløb for $n = 12$, hvor $floor(log_2 12) = 3$ (da $2^3 = 8 <= 12 < 16 = 2^4$). Værdierne $(i, k)$ er aflæst lige før hver test:
 
-    + *Initialisering.* Før første test er $i = n$ og $k = 0$, så
+    ```
+    test #   i    k    gren        floor(log i)+k
+    1       12    0    lige        3 + 0 = 3
+    2        6    1    lige        2 + 1 = 3
+    3        3    2    ulige       1 + 2 = 3
+    4        2    2    lige        1 + 2 = 3
+    5        1    3    -> stop     0 + 3 = 3
+    ```
+
+    Summen er konstant $3 = floor(log 12)$ i alle fem rækker. Løkken stopper ved $i = 1$ med $k = 3$, og returnerer $k = 3 = floor(log 12)$. Nu det generelle bevis.
+
+    *(b) Bevis af invarianten.*
+
+    + *Initialisering.* Lige før første test er $i = n$ og $k = 0$:
       #eq[$ floor(log i) + k = floor(log n) + 0 = floor(log n). $]
+      Sand ved første test.
 
-    + *Vedligehold.* Antag den holder ved en test med $i > 1$.
-      - $i$ lige: $i' = i\/2$ og $k' = k+1$, så
-        #eq[$ floor(log(i\/2)) + (k+1) = (floor(log i) - 1) + k + 1 = floor(log i) + k. $]
-      - $i$ ulige ($i >= 3$): $i' = i - 1$ og $k$ er uændret, og $floor(log(i-1)) = floor(log i)$.
+    + *Vedligeholdelse.* Antag $floor(log i) + k = floor(log n)$ ved en test, hvor kroppen kører (dvs. $i > 1$). Kroppen har to grene; vis bevarelse for hver. Kald de nye værdier $i', k'$.
+      - *$i$ lige.* Da sætter kroppen $i' = i\/2$ og $k' = k + 1$. Brug det givne faktum $floor(log(i\/2)) = floor(log i) - 1$:
+        #eq[$ floor(log i') + k' = floor(log(i\/2)) + (k+1) = (floor(log i) - 1) + (k+1) = floor(log i) + k. $]
+        Højresiden er induktionsantagelsen $= floor(log n)$. Bevaret.
+      - *$i$ ulige.* Da $i > 1$ og $i$ ulige er $i >= 3$, så $i' = i - 1 >= 2$. Kroppen sætter $i' = i - 1$ og lader $k$ være, $k' = k$. Brug faktummet $floor(log(i-1)) = floor(log i)$ for ulige $i$:
+        #eq[$ floor(log i') + k' = floor(log(i-1)) + k = floor(log i) + k = floor(log n). $]
+        Bevaret.
+      I begge grene holder invarianten ved næste test. Ved induktion holder den ved hver test.
 
-    + *Afslutning.* Hvert skridt tæller det positive heltal $i$ strengt ned, så løkken stopper ved $i = 1$. Her er $floor(log 1) = 0$, så invarianten giver $k = floor(log n)$.
+    *(c) Aflæsning af returværdien.*
+
+    + *Terminering.* I begge grene aftager $i$ strengt: lige-grenen halverer ($i\/2 < i$ for $i > 1$), ulige-grenen trækker $1$ fra. $i$ er et positivt heltal, så en strengt aftagende følge af positive heltal når nedad og rammer $i = 1$, hvor testen $i > 1$ fejler. Løkken stopper.
+    + *Kombinér exit-test og invariant.* Ved exit er $i = 1$, og invarianten holder stadig:
+      #eq[$ floor(log 1) + k = floor(log n). $]
+      Da $floor(log 1) = floor(0) = 0$, reducerer dette til
+      #eq[$ k = floor(log n). $]
+
+    Koden returnerer $k$.
 
     Svar: returværdien er $k = floor(log n)$.
   ],
@@ -187,13 +255,28 @@ Initialisering er basistilfældet (base case), vedligeholdelse er induktionsskri
     + Behold de udsagn der er sande ved hver test.
   ],
   worked: [
-    Start er $x = 1$ og $r = 0$. Kroppen fordobler $x$ og tæller $r$ én op.
+    Start er $x = 1$, $r = 0$. Kroppen fordobler $x$ ($x <- 2x$) og tæller $r$ én op, og kører mens $x < n$. Først et konkret gennemløb for $n = 3$ (vælges fordi den afslører exit-overshoot). Værdierne $(x, r)$ er aflæst lige før hver test:
 
-    - *(d)* $2^r = x$: invariant. $x$ starter som $2^0 = 1$, og hvert skridt fordobler $x$ mens $r$ vokser med 1.
-    - *(e)* $x < 2n$: invariant. Inde i kroppen var $x < n$, så efter fordobling er $x < 2n$, og det gælder også ved exit-testen.
-    - *(a)* $x = r + 1$: nej. $x$ vokser eksponentielt, $r$ lineært.
-    - *(b)* $2^r dot log_2 n = log_2(n\/x)$: nej, falsk ved simulation.
-    - *(c)* $x <= n$: nej. Exit-testen skyder forbi: $n = 3$ giver $x = 4 > 3$.
+    ```
+    test #   x   r    x < n=3 ?
+    1        1   0     1<3 ja   -> x=2, r=1
+    2        2   1     2<3 ja   -> x=4, r=2
+    3        4   2     4<3 NEJ  -> stop
+    ```
+
+    Returnerer $r = 2 = ceil(log_2 3)$. Bemærk: ved exit (test 3) er $x = 4 > n = 3$, så løkken skyder forbi grænsen. Det afgør flere kandidater. En invariant skal være sand ved *hver* test, exit-testen (række 3) inklusive.
+
+    - *(d) $2^r = x$.* Tjek rækkerne: $2^0 = 1 = x$; $2^1 = 2 = x$; $2^2 = 4 = x$. Alle passer. Generelt: ved første test $2^0 = 1 = x$. Antag $2^r = x$ ved en test, hvor kroppen kører. Kroppen sætter $x' = 2x$ og $r' = r + 1$:
+      #eq[$ 2^(r') = 2^(r+1) = 2 dot 2^r = 2 dot x = x'. $]
+      Bevaret ved hver test. *Invariant.*
+
+    - *(e) $x < 2n$.* Tjek rækkerne ($2n = 6$): $1 < 6$, $2 < 6$, $4 < 6$. Alle passer, exit-testen med. Generelt: ved første test $x = 1 < 2n$ (da $n >= 1$). Antag $x < 2n$ ved en test, hvor kroppen kører; så var betingelsen $x < n$ opfyldt for at komme ind, og kroppen sætter $x' = 2x < 2n$. Ved exit-testen kommer $x$ fra en iteration, hvor $x_("før") < n$, så $x = 2 x_("før") < 2n$. Sand ved hver test, også exit. *Invariant.*
+
+    - *(a) $x = r + 1$.* Tjek rækkerne: test 1 $1 = 0 + 1$ ja; test 2 $2 = 1 + 1$ ja; test 3 $4 = 2 + 1 = 3$? Nej, $4 != 3$. $x$ vokser eksponentielt ($1, 2, 4, 8, ...$), mens $r + 1$ vokser lineært ($1, 2, 3, 4, ...$). Falder ved tredje test. *Ikke invariant.*
+
+    - *(b) $2^r dot log_2 n = log_2(n\/x)$.* Tjek ved første test ($x = 1$, $r = 0$): venstre $2^0 dot log_2 n = log_2 n$; højre $log_2(n\/1) = log_2 n$. Lige nu sande. Anden test ($x = 2$, $r = 1$, stadig $n = 3$): venstre $2^1 dot log_2 3 = 2 log_2 3 approx 3.17$; højre $log_2(3\/2) approx 0.585$. $3.17 != 0.585$. Falder ved anden test. *Ikke invariant.*
+
+    - *(c) $x <= n$.* Tjek rækkerne: test 1 $1 <= 3$ ja; test 2 $2 <= 3$ ja; test 3 $4 <= 3$? Nej. Exit-testen skyder forbi: inde i kroppen gælder $x < n$, men efter den sidste fordobling kan $x$ overskride $n$, og netop den værdi aflæses ved exit-testen. Falder ved exit. *Ikke invariant.*
 
     Svar: (d) og (e).
   ],
