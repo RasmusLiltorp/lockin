@@ -8,7 +8,13 @@ De to kvantorer er $forall$ ("for alle") og $exists$ ("der findes mindst ét"). 
 
 #eq[$ forall x : P(x) quad quad exists x : P(x) $]
 
-Domænet afgør alt: samme prædikat kan skifte sandhedsværdi, når domænet ændres.
+De domæner du møder i opgaverne:
+- $ZZ$ — heltal (integers): $dots, -2, -1, 0, 1, 2, dots$. Negative tal, nul og positive tal, men ingen brøker.
+- $NN$ — naturlige tal (naturals): $0, 1, 2, 3, dots$. Heltallene fra og med nul og opefter (nogle bøger starter ved $1$; her tæller $0$ med).
+- $ZZ^+$ — de positive heltal: $1, 2, 3, dots$. Det samme som $NN$, bare uden $0$.
+- $RR$ — reelle tal (reals): alle tal på tallinjen, også brøker og irrationale tal som $1.5$, $sqrt(2)$ og $pi$.
+
+Domænet afgør alt: samme prædikat kan skifte sandhedsværdi, når domænet ændres. "$exists x : x^2 = 2$" er falsk over $ZZ$ (intet heltal går op), men sand over $RR$ (det er $sqrt(2)$).
 
 Eksamen spørger om tre ting: sandhedsværdien af et (ofte indlejret) udsagn over et givet domæne; fornægtelsen (negation) af et udsagn uden $not$ tilbage; og rækkefølgen i en kvantorrække (quantifier sequence). I MCQ-versionerne vurderes hvert valg sand/falsk for sig, og flere kan være rigtige.
 

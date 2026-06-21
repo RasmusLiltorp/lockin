@@ -17,16 +17,26 @@ Læs relationen som en graf: hvert element er en knude, og $(a,b) in R$ er en pi
   title: "Tjek de fire egenskaber",
   [*Refleksiv (reflexive).* Hvert element peger på sig selv.
   #eq[$ (a,a) in R "for alle" a in A $]
-  Graf: løkke på hver knude. Matrix: hele diagonalen er $1$. Mangler bare én løkke, er den ikke refleksiv.],
+  Graf: løkke på hver knude. Matrix: hele diagonalen er $1$. Mangler bare én løkke, er den ikke refleksiv.
+
+  Matrix over $A = {a, b, c}$ (række $=$ fra, søjle $=$ til, i rækkefølgen $a, b, c$; felt $(i,j) = 1$ betyder $(i,j) in R$):
+  #eq[$ mat(1, 1, 0; 0, 1, 0; 0, 0, 1) $]
+  Diagonalen — felterne $(a,a), (b,b), (c,c)$ — er lutter $1$, så hvert element har sin løkke. Den er refleksiv, uanset hvad der står uden for diagonalen. Ét $0$ på diagonalen ville vælte det.],
   [*Symmetrisk (symmetric).* Går en pil den ene vej, går den også den anden.
   #eq[$ (a,b) in R ==> (b,a) in R $]
-  Hver pil skal have sin modsatte. Én pil uden makker vælter det.],
+  Hver pil skal have sin modsatte. Én pil uden makker vælter det.
+  #eq[$ mat(0, 1, 0; 1, 0, 1; 0, 1, 0) $]
+  Matricen er spejlet i diagonalen (lig sin egen transponerede): felt $(a,b)$ og felt $(b,a)$ er begge $1$, og det samme for $(b,c)$ og $(c,b)$. Stod der et enligt $1$ uden sit spejlfelt, fejlede den.],
   [*Antisymmetrisk (antisymmetric).* To forskellige elementer peger aldrig begge veje.
   #eq[$ (a,b) in R and (b,a) in R ==> a = b $]
-  Find ét par $(a,b)$ og $(b,a)$ med $a != b$, så fejler den. Løkker er tilladt.],
+  Find ét par $(a,b)$ og $(b,a)$ med $a != b$, så fejler den. Løkker er tilladt.
+  #eq[$ mat(1, 1, 1; 0, 1, 1; 0, 0, 1) $]
+  Øvre trekant må gerne være fyldt, men så skal spejlfeltet under diagonalen være $0$: aldrig $1$ i både felt $(i,j)$ og felt $(j,i)$ når $i != j$. Diagonalen (løkkerne) er ligegyldig her. Stod der $1$ i både $(a,b)$ og $(b,a)$, fejlede den.],
   [*Transitiv (transitive).* Kan du gå $a -> b -> c$, skal genvejen $a -> c$ også være der.
   #eq[$ (a,b) in R and (b,c) in R ==> (a,c) in R $]
-  Tjek hver to-trins-kæde for sin genvej. Ét hul vælter det.],
+  Tjek hver to-trins-kæde for sin genvej. Ét hul vælter det.
+  #eq[$ mat(0, 1, 1; 0, 0, 1; 0, 0, 0) $]
+  Felt $(a,b) = 1$ og felt $(b,c) = 1$, så genvejen, felt $(a,c)$, skal også være $1$ — og det er den. Var $(a,c)$ et $0$, manglede kæden sin genvej, og relationen fejlede.],
 )
 
 Antisymmetrisk er ikke det modsatte af symmetrisk. En relation kan være begge dele ($=$) eller ingen af delene.
