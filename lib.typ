@@ -24,6 +24,40 @@
     content((a, 50%, b), box(fill: white, inset: 0.6pt, text(size: 6pt)[#w]))
   }
 }
+// A directed edge between two node centres, clipped to the node boundary so the
+// arrowhead is visible. `both: true` draws an arrowhead at each end.
+#let garrow(p, q, both: false) = {
+  import cetz.draw: *
+  let (px, py) = p
+  let (qx, qy) = q
+  let dx = qx - px
+  let dy = qy - py
+  let len = calc.sqrt(dx * dx + dy * dy)
+  let ux = dx / len
+  let uy = dy / len
+  let g = 0.26 // node radius + small margin
+  let s = (px + ux * g, py + uy * g)
+  let e = (qx - ux * g, qy - uy * g)
+  let m = if both {
+    (start: "stealth", end: "stealth", fill: ink, scale: 0.32)
+  } else {
+    (end: "stealth", fill: ink, scale: 0.32)
+  }
+  line(s, e, mark: m, stroke: 0.55pt + ink)
+}
+// A self-loop on the node at `p`, bulging out in direction `ang`.
+#let gloop(p, ang: 90deg) = {
+  import cetz.draw: *
+  let (x, y) = p
+  let nr = 0.18
+  let a1 = ang - 38deg
+  let a2 = ang + 38deg
+  let s = (x + nr * calc.cos(a1), y + nr * calc.sin(a1))
+  let e = (x + nr * calc.cos(a2), y + nr * calc.sin(a2))
+  let c1 = (x + 0.62 * calc.cos(a1), y + 0.62 * calc.sin(a1))
+  let c2 = (x + 0.62 * calc.cos(a2), y + 0.62 * calc.sin(a2))
+  bezier(s, e, c1, c2, mark: (end: "stealth", fill: ink, scale: 0.3), stroke: 0.55pt + ink)
+}
 // Wrap a set of gnode/gedge calls into a centred mini-canvas.
 #let gdiag(body) = align(center, cetz.canvas(length: 0.8cm, body))
 
