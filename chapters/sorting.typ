@@ -615,16 +615,17 @@ $[21, 12, 11]$ sorteres først på enere til $[21, 11, 12]$, så på tiere til $
     [$28$],
     [$37$],
   ),
-  answer: [(f) $37$.],
+  answer: [(e) $28$.],
   blueprint: [
-    Fælden er at $C$ ikke ender med de rå tællinger. CLRS overskriver $C$ med prefix-summer, og det er dem du skal regne på.
+    Dobbeltfælden: $C$ ender hverken med de rå tællinger eller med prefix-summerne. CLRS' sidste løkke (placeringen) tæller $C$ ned igen, så ved terminering er $C[i]$ antallet af værdier mindre end $i$.
 
-    + *Tæl forekomster.* Løb arrayet igennem og tæl hver værdi. Det giver det rå $C$.
-    + *Lav prefix-summer.* Sæt $C[i] "+=" C[i-1]$ fra venstre. Nu er $C[i]$ antallet af værdier $<= i$.
-    + *Læs svaret af det rigtige $C$.* Det opgaven spørger om (her summen) regnes på det kumulative $C$, ikke det rå.
+    + *Tæl forekomster.* $C[i]$ = antal elementer lig $i$.
+    + *Lav prefix-summer.* $C[i] "+=" C[i-1]$ fra venstre giver antal $<= i$.
+    + *Placeringen tæller ned.* Hvert element trækker $1$ fra sin $C$-plads, så plads $i$ mister $"tæl"[i]$. Tilbage står $C[i] = $ antal $< i$ — det er $C$ ved terminering.
+    + *Regn så det opgaven spørger om* (her summen) på dette $C$.
   ],
   worked: [
-    Array: #swap[$[2, 0, 6, 2, 3, 5, 5, 1, 2]$], værdier $0..6$. CLRS overskriver $C$ med prefix-summer inden placeringen, så det er det kumulative $C$ vi skal summere — ikke de rå tællinger.
+    Array: #swap[$[2, 0, 6, 2, 3, 5, 5, 1, 2]$], værdier $0..6$. COUNTING-SORT stopper ikke ved prefix-summerne: placeringsløkken til sidst ($C[A[j]] "-=" 1$ for hvert element) tæller hver plads ned igen. Det er det nedtalte $C$, vi skal summere.
 
     + *Tæl forekomster.* Løb $A$ igennem og tæl hver værdi (indeks $0..6$ i $C$):
 
@@ -633,25 +634,32 @@ $[21, 12, 11]$ sorteres først på enere til $[21, 11, 12]$, så på tiere til $
       tæl:    1   1   3   1   0   2   1
       ```
 
-      Tjek: $1 + 1 + 3 + 1 + 0 + 2 + 1 = 9 = n$, som det skal være efter tælle-fasen.
+      Tjek: $1 + 1 + 3 + 1 + 0 + 2 + 1 = 9 = n$.
 
-    + *Lav prefix-summer.* Sæt $C[i] "+=" C[i-1]$ fra venstre, så $C[i]$ bliver antallet af værdier $<= i$:
+    + *Lav prefix-summer.* $C[i] "+=" C[i-1]$ fra venstre, så $C[i]$ er antal værdier $<= i$:
 
       ```
-      C[0] = 1
-      C[1] = 1 + 1 = 2
-      C[2] = 2 + 3 = 5
-      C[3] = 5 + 1 = 6
-      C[4] = 6 + 0 = 6
-      C[5] = 6 + 2 = 8
-      C[6] = 8 + 1 = 9
+      C[0]=1   C[1]=2   C[2]=5   C[3]=6   C[4]=6   C[5]=8   C[6]=9
       ```
 
-      Altså $C = [1, 2, 5, 6, 6, 8, 9]$.
+    + *Placeringsløkken tæller ned.* For hvert af de $9$ elementer: $B[C[A[j]]] = A[j]$, dernæst $C[A[j]] "-=" 1$. Plads $i$ tælles ned $"tæl"[i]$ gange, så slut-værdien er $"prefix"[i] - "tæl"[i]$, dvs. antal værdier $< i$:
 
-    + *Summér det kumulative $C$.* $1 + 2 + 5 + 6 + 6 + 8 + 9 = 37$.
+      ```
+      C_slut[i] = prefix[i] - tæl[i]:
+      C[0] = 1 - 1 = 0
+      C[1] = 2 - 1 = 1
+      C[2] = 5 - 3 = 2
+      C[3] = 6 - 1 = 5
+      C[4] = 6 - 0 = 6
+      C[5] = 8 - 2 = 6
+      C[6] = 9 - 1 = 8
+      ```
 
-    Svar: $37$.
+      Altså $C = [0, 1, 2, 5, 6, 6, 8]$ ved terminering.
+
+    + *Summér.* $0 + 1 + 2 + 5 + 6 + 6 + 8 = 28$. Genvej: sum af prefix minus sum af tæl, $37 - 9 = 28$.
+
+    Svar: $28$.
   ],
 )
 
@@ -669,22 +677,22 @@ $[21, 12, 11]$ sorteres først på enere til $[21, 11, 12]$, så på tiere til $
     [$32$],
     [$34$],
   ),
-  answer: [Mulighed (c): $11$.],
+  answer: [(e) $23$.],
   blueprint: [
-    Her spørges der om $C$ efter tælle-fasen, hvor $C[i]$ er antallet af elementer lig $i$. Hvert af de $n$ input-elementer tæller præcis én tæller op, så summen af alle tællere er bare $n$.
+    Samme fælde som i nabokortet: COUNTING-SORT er ikke færdig efter tælle-fasen. Prefix-summerne og dernæst placeringsløkkens nedtælling kører bagefter, så ved terminering er $C[i]$ antallet af værdier mindre end $i$.
 
-    + *Tæl forekomster.* $C[i]$ tæller hvor mange elementer i $A$ der er lig $i$.
-    + *Én optælling per element.* Hvert af de $n$ elementer øger præcis én tæller.
-    + *Summen er $n$.* Derfor er summen af alle tællere lig $n$.
-    + *Aflæs $n$.* Læs antallet af elementer i opgaven.
+    + *Tæl forekomster.* $C[i]$ = antal elementer lig $i$ (summen her er $n$).
+    + *Lav prefix-summer.* $C[i] "+=" C[i-1]$ giver antal $<= i$.
+    + *Placeringen tæller ned.* Plads $i$ mister $"tæl"[i]$, så $C[i] = $ antal $< i$.
+    + *Summér* det nedtalte $C$.
   ],
   worked: [
-    Array: #swap[$[2, 2, 5, 1, 3, 5, 2, 3, 2, 5, 2]$], værdier $0..5$. Opgaven spørger om $C$ ved terminering af tælle-fasen, hvor $C[i]$ er antallet af elementer lig $i$ (ikke prefix-summen).
+    Array: #swap[$[2, 2, 5, 1, 3, 5, 2, 3, 2, 5, 2]$], værdier $0..5$. "Ved terminering" betyder efter hele COUNTING-SORT — også prefix-summer og placeringsløkkens nedtælling, ikke kun tælle-fasen.
 
     + *Tæl forekomster.* Gå rækken igennem og før streg ved hver værdi:
 
       - værdi $0$: optræder $0$ gange.
-      - værdi $1$: optræder $1$ gang (det ene $1$).
+      - værdi $1$: optræder $1$ gang (position $4$).
       - værdi $2$: optræder $5$ gange (positionerne $1, 2, 7, 9, 11$).
       - værdi $3$: optræder $2$ gange (positionerne $5, 8$).
       - værdi $4$: optræder $0$ gange.
@@ -692,12 +700,34 @@ $[21, 12, 11]$ sorteres først på enere til $[21, 11, 12]$, så på tiere til $
 
       ```
       værdi:  0   1   2   3   4   5
-      C[i]:   0   1   5   2   0   3
+      tæl:    0   1   5   2   0   3
       ```
 
-    + *Summér.* $0 + 1 + 5 + 2 + 0 + 3 = 11$. Det er ingen tilfældighed: hvert af de $n$ input-elementer øger præcis én tæller, så summen af alle tællere er altid $n$. Her $n = 11$.
+      Tjek: $0 + 1 + 5 + 2 + 0 + 3 = 11 = n$.
 
-    Svar: $11$.
+    + *Lav prefix-summer.* $C[i] "+=" C[i-1]$ giver antal værdier $<= i$:
+
+      ```
+      C[0]=0   C[1]=1   C[2]=6   C[3]=8   C[4]=8   C[5]=11
+      ```
+
+    + *Placeringsløkken tæller ned.* Plads $i$ tælles ned $"tæl"[i]$ gange, så slut-værdien er $"prefix"[i] - "tæl"[i]$, dvs. antal værdier $< i$:
+
+      ```
+      C_slut[i] = prefix[i] - tæl[i]:
+      C[0] =  0 - 0 = 0
+      C[1] =  1 - 1 = 0
+      C[2] =  6 - 5 = 1
+      C[3] =  8 - 2 = 6
+      C[4] =  8 - 0 = 8
+      C[5] = 11 - 3 = 8
+      ```
+
+      Altså $C = [0, 0, 1, 6, 8, 8]$ ved terminering.
+
+    + *Summér.* $0 + 0 + 1 + 6 + 8 + 8 = 23$. Genvej: sum af prefix minus sum af tæl, $34 - 11 = 23$.
+
+    Svar: $23$.
   ],
 )
 
