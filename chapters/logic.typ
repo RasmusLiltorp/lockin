@@ -59,6 +59,8 @@ Biimplikation (biconditional):
 
 #eq[$ p <-> q equiv (p -> q) and (q -> p) $]
 
+#note(title: [De Morgan for kvantorer])[De Morgan gælder også for kvantorer. $not forall x : P(x)$ er det samme som $exists x : not P(x)$, og $not exists x : P(x)$ er $forall x : not P(x)$. Tænk på $forall$ som et stort $and$ over hele domænet og $exists$ som et stort $or$, så er kvantor-reglerne bare De Morgan i det uendelige. Den fulde gennemgang står i prædikatlogik-kapitlet.]
+
 #trap(title: [Tæl forskellige variable])[Tæl *forskellige* variable. $p or not p$ har én, altså 2 rækker, ikke 4. $(p or not q) and q$ har to, altså 4, ikke 8.]
 
 #trap(title: [Omvendt og invers])[Kontrapositionen (contrapositive) $not q -> not p$ er ækvivalent med $p -> q$. Den omvendte (converse) $q -> p$ og den inverse (inverse) $not p -> not q$ er det ikke, men er ækvivalente med hinanden.]

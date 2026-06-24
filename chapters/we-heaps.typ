@@ -129,7 +129,7 @@ Skriftlige opgaver om binære hobe falder i tre slags: kør `Build-Max-Heap` på
 #qcard(
   tag: [Hob: Heap-Extract-Min/Max (Extract-Max)],
   source: "DM507 juni 2012, Opg. 2b (5%)",
-  theory: <th-heap-extract>,
+  theory: <th-heap-extract-min>,
   prompt: [
     Min-hoben #swap[$A_5 = [1,2,5,3,7,9,6,8,4,10]$]. Kør én `Heap-Extract-Min`. Angiv arrayet bagefter og den udtrukne værdi.
   ],

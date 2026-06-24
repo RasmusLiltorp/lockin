@@ -40,6 +40,7 @@ Rækkefølgen er ikke ligegyldig. $forall x exists y$ lader $y$ afhænge af $x$ 
 #recipe(
   title: [Fornægt et kvantificeret udsagn (intet $not$ i svaret)],
   [Skub $not$ indad én kvantor ad gangen. Hver kvantor vender.],
+  [Rammer $not$ et sammensat prædikat, så fortsæt med De Morgan indeni. $and$ bliver $or$ og $or$ bliver $and$, og $not(P -> Q)$ bliver $P and not Q$. Først når $not$ står helt inde ved en enkelt relation, bytter du den ud.],
   [Når $not$ er inde ved prædikatet, byt relationen ud med sin modsætning uden at efterlade et $not$. $not(a < b)$ bliver #swap[$a >= b$]; $not(a = b)$ bliver $a != b$.],
   [Tjek: fornægtelsen skal have modsat sandhedsværdi af originalen.],
 )
@@ -49,6 +50,10 @@ Vending-reglerne er:
 #eq[$ not forall x : P(x) quad equiv quad exists x : not P(x) $]
 
 #eq[$ not exists x : P(x) quad equiv quad forall x : not P(x) $]
+
+Når $not$ er skubbet forbi alle kvantorer og rammer et sammensat prædikat, vender du videre med De Morgan og implikationsreglen indeni:
+
+#eq[$ not(P and Q) equiv not P or not Q quad quad not(P or Q) equiv not P and not Q quad quad not(P -> Q) equiv P and not Q $]
 
 #trap(title: [Vend alle kvantorer])[De Morgan for kvantorer vender alle kvantorer i rækken. Fornægtelsen af $exists x exists y : P$ er $forall x forall y : not P$, ikke $forall x exists y : not P$. En "ækvivalens" med kun den ene kvantor vendt er et klassisk falsk MCQ-svar (juni 2021 Spm. 35, juni 2023 Spm. 34).]
 

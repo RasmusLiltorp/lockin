@@ -2,13 +2,15 @@
 
 == Matematisk induktion <th-ind-main>
 
-Induktion (induction) beviser, at $P(n)$ gælder for alle heltal fra et startpunkt og opefter. Du viser det for det mindste $n$, og at det gælder for det næste tal når det gælder for ét. Så vælter de som dominobrikker.
+Induktion (induction) viser, at en påstand $P(n)$ gælder for alle hele tal fra et startpunkt og opefter. Billedet er en uendelig række dominobrikker: vælter du den første, og sørger du for at hver brik vælter den næste, så falder hele rækken af sig selv. Det er hele idéen.
 
-To dele skal på plads.
+Du skal vise præcis to ting, og intet andet:
 
 #eq[$ "Basis:" quad P(n_0) "er sand." $]
 
 #eq[$ "Induktionsskridt:" quad P(k) arrow.r.double P(k+1) quad "for alle" k >= n_0. $]
+
+Først tjekker du, at påstanden passer for det første tal. Så viser du, at når den passer for ét tal $k$, passer den også for det næste, $k+1$. Så er du i mål.
 
 Til eksamen skriver du sjældent et bevis selv. Du får flere kandidat-"beviser" for samme påstand og skal afgøre, hvilke der holder. Du leder efter fejl: en basis der starter forkert, et skridt der går den forkerte vej, eller et algebraskridt der ikke passer.
 
@@ -16,15 +18,15 @@ Til eksamen skriver du sjældent et bevis selv. Du får flere kandidat-"beviser"
 
 #recipe(
   title: "Skriv et induktionsbevis",
-  [Skriv $P(n)$ op og find startværdien #swap[$n_0$], det mindste $n$ påstanden skal gælde for.],
-  [*Basis* (base case)*.* Sæt $n = n_0$ ind på begge sider og tjek at det stemmer.],
-  [*Induktionsantagelse (IA)* (induction hypothesis)*.* Antag $P(k)$ sand for et fast $k >= n_0$.],
-  [*Induktionsskridt* (induction step)*.* Vis $P(k+1)$ med IA. For en sum trækker du det sidste led ud og erstatter resten med IA:],
+  [Skriv påstanden $P(n)$ op, og find det mindste tal den skal gælde for. Det kalder vi startværdien #swap[$n_0$].],
+  [*Basis* (base case)*.* Sæt $n = n_0$ ind på begge sider og tjek, at det passer.],
+  [*Antagelse (IA)* (induction hypothesis)*.* Antag at $P(k)$ passer for ét fast tal $k >= n_0$. Det er det eneste, du må gå ud fra.],
+  [*Skridt* (induction step)*.* Vis, at $P(k+1)$ så også passer. Tricket er at få $P(k+1)$ til at indeholde $P(k)$, så du kan sætte antagelsen ind. For en sum trækker du det sidste led ud:],
   [
     #eq[$ sum_(i=1)^(k+1) f(i) = (sum_(i=1)^k f(i)) + f(k+1). $]
-    For en ulighed begrænser du $(k+1)$-siden med IA og kendte fakta, fx $3^(k+1) = 3 dot 3^k$.
+    For en ulighed skriver du $(k+1)$-siden om med kendte fakta som $3^(k+1) = 3 dot 3^k$, og bruger antagelsen til at begrænse resten.
   ],
-  [*Konkluder.* Basis plus induktionsskridt giver $P(n)$ for alle $n >= n_0$.],
+  [*Konkluder.* Basis vælter den første brik, skridtet vælter resten. Altså gælder $P(n)$ for alle $n >= n_0$.],
 )
 
 #recipe(

@@ -63,6 +63,19 @@ Hver operation har sin egen opskrift herunder. De er skrevet for en *max-heap* (
   [Efter byttet står din nøgle på barnets plads. Gentag fra trin 3 derfra, indtil intet barn er større, eller knuden ingen børn har. Aflæs arrayet.],
 )
 
+==== Heap-Extract-Min$(A)$ — træk den mindste ud <th-heap-extract-min>
+
+*Hvad det gør:* i en min-heap er roden (plads 1) altid den mindste. Du fjerner den, sætter en ny værdi i roden og lader den "synke nedad", til heap-ordenen passer igen. Det er Extract-Max spejlvendt. Hvor Extract-Max bytter mod det største barn, bytter Extract-Min mod det mindste.
+
+#recipe(
+  title: "Extract-Min — synk ned",
+  [Roden $A[1]$ er svaret (den mindste). Den fjernes.],
+  [Flyt det *sidste* element op på plads 1. Heapen bliver nu én plads kortere (den sidste plads findes ikke længere).],
+  [Kig på plads 1's to børn (plads $2$ og $3$). Find den *mindste* af de tre: forælder, venstre barn, højre barn.],
+  [Er et *barn* mindst, *byt* forælder med det barn. Er *forælderen* mindst, *stop*.],
+  [Efter byttet står din nøgle på barnets plads. Gentag fra trin 3 derfra, indtil intet barn er mindre, eller knuden ingen børn har. Aflæs arrayet.],
+)
+
 ==== Insert$(A, k)$ — indsæt en ny nøgle <th-heap-insert>
 
 *Hvad det gør:* lægger en ny nøgle ind og bobler den op, præcis som Increase-Key.
@@ -308,7 +321,7 @@ Hver operation har sin egen opskrift herunder. De er skrevet for en *max-heap* (
 #qcard(
   tag: [Heap: trace Extract-Min skridt for skridt (synk ned)],
   source: "MCQ juni 2023, Spm. 7",
-  theory: <th-heap-extract>,
+  theory: <th-heap-extract-min>,
   prompt: [Udfør Extract-Min på min-heapen $A = #swap[$[3,5,6,10,11,8,7,18,16,15]$]$ (1-indekseret, positioner $1..10$). Hvilken position i $A$ ender $#swap[$15$]$ på bagefter?],
   options: ([$1$], [$2$], [$3$], [$4$], [$5$], [$8$], [$9$]),
   answer: [(d) position 4.],

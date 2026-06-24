@@ -67,6 +67,12 @@ Sagt helt enkelt, med et eksempel fra grafen ovenfor (DFS fra $i$):
 - #strong[forward]: en genvej ned til en knude, du allerede har nået ad en længere vej. $i arrow h$ går direkte fra $i$ til $h$, men du fandt $h$ først langt nede via $g arrow h$.
 - #strong[cross]: en kant over til en helt anden gren, der allerede er færdig. Ved $d arrow c$ ligger $c$ under $b$ og $d$ under $i$, og $c$ blev færdig længe før du nåede $d$.
 
+#note(title: [Cross-kant: tænk fætter])[
+  Cross-kant er den, der driller flest. Forfader og efterkommer ligger på din egen linje gennem træet, lige op eller lige ned. En cross-kant rammer derimod en knude, der hverken er over eller under dig, altså en fætter ude i en sidegren, som var pakket helt sammen, før du overhovedet nåede frem. Pilen findes i grafen, men DFS brugte den aldrig til at opdage noget, fordi målet allerede var sort.
+
+  Tag det mindste eksempel: $1 arrow 2$, $1 arrow 3$, $2 arrow 4$, $3 arrow 4$. DFS fra $1$ går $1 arrow 2 arrow 4$, lukker $4$, bakker op og tager $1 arrow 3$. Så kigger den på $3 arrow 4$, men $4$ er for længst færdig nede i $2$'s gren. $3$ og $4$ er fætre, og $3 arrow 4$ hopper på tværs. Det er en cross-kant. Bemærk, at der kun skal være én pil. $4$ behøver ikke pege tilbage på $3$.
+]
+
 #trap(title: [Uorienteret kanttype])[En uorienteret graf (undirected graph) har kun tree- og back-kanter. Forward- og cross-kanter kræver en orienteret graf. Nævner en MCQ "én kant af hver type", er grafen orienteret.]
 
 #trap(title: [Back-kant og kredse])[En orienteret graf har en kreds netop hvis DFS finder en back-kant; ingen back-kanter betyder en DAG (directed acyclic graph). Forveksl ikke back-kant med cross-kant.]
